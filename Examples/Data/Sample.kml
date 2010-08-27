@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Based on:
+  http://code.google.com/apis/kml/documentation/KML_Samples.kml
+-->
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root-document">
+    <name>KML Samples</name>
+    <open>1</open>
+    <description>Unleash your creativity with the help of these examples!</description>
+    <Style id="downArrowIcon">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon28.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="globeIcon">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal3/icon19.png</href>
+        </Icon>
+      </IconStyle>
+      <LineStyle>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    <Style id="transPurpleLineGreenPoly">
+      <LineStyle>
+        <color>7fff00ff</color>
+        <width>4</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7f00ff00</color>
+      </PolyStyle>
+    </Style>
+    <Style id="yellowLineGreenPoly">
+      <LineStyle>
+        <color>7f00ffff</color>
+        <width>4</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7f00ff00</color>
+      </PolyStyle>
+    </Style>
+    <Style id="thickBlackLine">
+      <LineStyle>
+        <color>87000000</color>
+        <width>10</width>
+      </LineStyle>
+    </Style>
+    <Style id="redLineBluePoly">
+      <LineStyle>
+        <color>ff0000ff</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ffff0000</color>
+      </PolyStyle>
+    </Style>
+    <Style id="blueLineRedPoly">
+      <LineStyle>
+        <color>ffff0000</color>
+      </LineStyle>
+      <PolyStyle>
+        <color>ff0000ff</color>
+      </PolyStyle>
+    </Style>
+    <Style id="transRedPoly">
+      <LineStyle>
+        <width>1.5</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7d0000ff</color>
+      </PolyStyle>
+    </Style>
+    <Style id="transBluePoly">
+      <LineStyle>
+        <width>1.5</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7dff0000</color>
+      </PolyStyle>
+    </Style>
+    <Style id="transGreenPoly">
+      <LineStyle>
+        <width>1.5</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7d00ff00</color>
+      </PolyStyle>
+    </Style>
+    <Style id="transYellowPoly">
+      <LineStyle>
+        <width>1.5</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7d00ffff</color>
+      </PolyStyle>
+    </Style>
+    <Style id="noDrivingDirections">
+      <BalloonStyle>
+        <text>
+          <![CDATA[
+          <b>$[name]</b>
+          <br /><br />
+          $[description]
+        ]]>
+        </text>
+      </BalloonStyle>
+    </Style>
+    <Folder id="placemarks-folder">
+      <name>Placemarks</name>
+      <description>
+        These are just some of the different kinds of placemarks with
+        which you can mark your favorite places
+      </description>
+      <LookAt>
+        <longitude>-122.083959714577</longitude>
+        <latitude>37.4222290452523</latitude>
+        <altitude>0</altitude>
+        <heading>-148.412292262804</heading>
+        <tilt>40.5575073395506</tilt>
+        <range>500.656664107225</range>
+      </LookAt>
+      <Placemark id="simple-placemark">
+        <name>Simple placemark</name>
+        <description>
+          Attached to the ground. Intelligently places itself at the
+          height of the underlying terrain.
+        </description>
+        <Point>
+          <coordinates>
+            -122.082203542568,37.4222899014025,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="floating-placemark">
+        <name>Floating placemark</name>
+        <visibility>0</visibility>
+        <description>Floats a defined distance above the ground.</description>
+        <LookAt>
+          <longitude>-122.083959714577</longitude>
+          <latitude>37.4222290452523</latitude>
+          <altitude>0</altitude>
+          <heading>-148.412292262804</heading>
+          <tilt>40.5575073395506</tilt>
+          <range>500.656664107225</range>
+        </LookAt>
+        <styleUrl>#downArrowIcon</styleUrl>
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>
+            -122.084075,37.4220033612141,50
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="extruded-placemark">
+        <name>Extruded placemark</name>
+        <visibility>0</visibility>
+        <description>
+          <![CDATA[Tethered to the ground by a customizable
+          "tail"]]>
+        </description>
+        <LookAt>
+          <longitude>-122.084578742153</longitude>
+          <latitude>37.4221507873776</latitude>
+          <altitude>0</altitude>
+          <heading>-148.412668494623</heading>
+          <tilt>40.5575073391805</tilt>
+          <range>365.264660698032</range>
+        </LookAt>
+        <styleUrl>#globeIcon</styleUrl>
+        <Point>
+          <extrude>1</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>
+            -122.085766700618,37.4215692786755,50
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
