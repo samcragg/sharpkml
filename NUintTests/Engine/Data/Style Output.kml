@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Document id="AllStylesTest">
+      <Style id="allstyles">
+        <IconStyle id="iconstyle">
+          <scale>1.2</scale>
+          <heading>90.5</heading>
+          <Icon>
+            <href>http://example.com/image.png</href>
+          </Icon>
+          <hotSpot x="0.1" xunits="fraction" y="10" yunits="pixels"/>
+        </IconStyle>
+        <LabelStyle id="labelstyle">
+          <scale>0.8</scale>
+        </LabelStyle>
+        <LineStyle id="linestyle">
+          <width>2</width>
+        </LineStyle>
+        <PolyStyle id="polystyle">
+          <fill>0</fill>
+          <outline>0</outline>
+        </PolyStyle>
+        <BalloonStyle id="balloonstyle">
+          <bgColor>00112233</bgColor>
+          <textColor>33221100</textColor>
+          <text><![CDATA[<b>$[name]</b><br /><br />$[description]]]></text>
+          <displayMode>hide</displayMode>
+        </BalloonStyle>
+        <ListStyle id="liststyle">
+          <listItemType>checkHideChildren</listItemType>
+          <bgColor>10112233</bgColor>
+          <ItemIcon>
+            <state>open closed</state>
+            <href>http://example.com/image.png</href>
+          </ItemIcon>
+          <ItemIcon>
+            <state>closed</state>
+            <href>http://example.com/image.png</href>
+          </ItemIcon>
+        </ListStyle>
+      </Style>
+    </Document>
+    <Document id="DuplicateIdTest">
+      <Style id="dup-style">
+        <IconStyle id="red-L-paddle">
+          <scale>1.1</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/paddle/L.png</href>
+          </Icon>
+          <hotSpot x="32" xunits="pixels" y="1" yunits="pixels"/>
+        </IconStyle>
+        <LineStyle id="thin-blue-line">
+          <color>ffff0000</color>
+          <width>1</width>
+        </LineStyle>
+      </Style>
+    </Document>
+    <Document id="InlineStyleMapTest-Highlight">
+      <Style>
+        <PolyStyle>
+          <color>01234567</color>
+          <colorMode>random</colorMode>
+          <fill>1</fill>
+        </PolyStyle>
+        <BalloonStyle>
+          <bgColor>ff332211</bgColor>
+        </BalloonStyle>
+      </Style>
+    </Document>
+    <Document id="InlineStyleMapTest-Normal">
+      <Style>
+        <LineStyle>
+          <color>01234567</color>
+          <colorMode>random</colorMode>
+          <width>2.34</width>
+        </LineStyle>
+        <BalloonStyle>
+          <bgColor>ff112233</bgColor>
+        </BalloonStyle>
+      </Style>
+    </Document>
+    <Document id="InlineStylesTest">
+      <Placemark>
+        <LookAt>
+          <longitude>12.487995</longitude>
+          <latitude>47.969918</latitude>
+          <range>1000</range>
+          <altitudeMode>relativeToGround</altitudeMode>
+        </LookAt>
+        <StyleMap>
+          <Pair>
+            <key>normal</key>
+            <Style>
+              <IconStyle>
+                <scale>1.1</scale>
+                <Icon>
+                  <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+                </Icon>
+                <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+              </IconStyle>
+            </Style>
+          </Pair>
+          <Pair>
+            <key>highlight</key>
+            <Style>
+              <IconStyle>
+                <scale>1.3</scale>
+                <Icon>
+                  <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+                </Icon>
+                <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+              </IconStyle>
+            </Style>
+          </Pair>
+        </StyleMap>
+        <Point>
+          <coordinates>12.487995,47.969918</coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+    <Document id="InlineTest">
+      <Style>
+        <ListStyle>
+          <listItemType>checkHideChildren</listItemType>
+        </ListStyle>
+      </Style>
+    </Document>
+    <Document id="SharedTest-Highlight">
+      <Style id="sh_ylw-pushpin">
+        <IconStyle>
+          <scale>1.3</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+    </Document>
+    <Document id="SharedTest-Normal">
+      <Style id="sn_ylw-pushpin">
+        <IconStyle>
+          <scale>1.1</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" xunits="pixels" y="2" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+    </Document>
+    <Document id="SimpleTest">
+      <Style>
+        <LineStyle>
+          <color>ff112233</color>
+        </LineStyle>
+      </Style>
+    </Document>
+    <Document id="UnknownTest">
+      <Style id="hist2_b">
+        <IconStyle id="khIconStyle671">
+          <color>ff00f6ff</color>
+          <scale>0.7</scale>
+          <Icon>
+            <href>root://icons/palette-4.png</href>
+            <x>64</x>
+            <y>128</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <LabelStyle id="khLabelStyle673"/>
+        <LineStyle id="khLineStyle674">
+          <width>0.400000005960464</width>
+        </LineStyle>
+        <PolyStyle id="khPolyStyle675"/>
+        <BalloonStyle>
+          <bgColor>ffaf835a</bgColor>
+          <textColor>ffffffff</textColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+          <color>FFAF835A</color>
+        </BalloonStyle>
+      </Style>
+    </Document>
+  </Document>
+</kml>

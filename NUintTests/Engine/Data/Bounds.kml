@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="root">
+    <Folder id="placemarks-folder">
+      <Placemark id="simple-placemark">
+        <Point>
+          <coordinates>
+            -122.082203542568,37.4222899014025,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="floating-placemark">
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>
+            -122.084075,37.4220033612141,50
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="extruded-placemark">
+        <Point>
+          <extrude>1</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>
+            -122.085766700618,37.4215692786755,50
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <Placemark id="tessellated-linestring-placemark">
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            -112.081423783034,36.1067787047714,0
+            -112.087026775269,36.0905099328766,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="purple-line-placemark">
+        <LineString>
+          <tessellate>1</tessellate>
+          <altitudeMode>absolute</altitudeMode>
+          <coordinates>
+            -112.265654928602,36.0944767260255,2357
+            -112.266038452824,36.0934260883867,2357
+            -112.266813901345,36.0925105877688,2357
+            -112.267782683444,36.09189827358,2357
+            -112.268855751095,36.0913137941187,2357
+            -112.269481071722,36.0903677207521,2357
+            -112.269526855561,36.0893217148729,2357
+            -112.269014456728,36.0885091606047,2357
+            -112.268152881534,36.0875381359796,2357
+            -112.267058817603,36.0868268526257,2357
+            -112.265737458732,36.086463123013,2357
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="b41">
+        <Polygon>
+          <extrude>1</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -122.085741277148,37.4222703315526,17
+                -122.085816976848,37.4223140883235,17
+                -122.085852582875,37.4223033746974,17
+                -122.085879994564,37.4222568613879,17
+                -122.085886010141,37.4222311076138,17
+                -122.085806915729,37.4222025017386,17
+                -122.085837954265,37.4221402705868,17
+                -122.085673264052,37.4220869021441,17
+                -122.085602292641,37.4221488542904,17
+                -122.085590277844,37.422128290487,17
+                -122.085584167224,37.4220817196725,17
+                -122.085485206574,37.42210455875,17
+                -122.085506726435,37.4221426794982,17
+                -122.085443071291,37.4221278384617,17
+                -122.08509907149,37.422512824076,17
+                -122.085676981863,37.4228181532365,17
+                -122.086016227378,37.4224491885872,17
+                -122.0857260327,37.4222923960425,17
+                -122.085741277148,37.4222703315526,17
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark id="pentagon">
+        <Polygon>
+          <extrude>1</extrude>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -77.0578845766097,38.8725325989282,100
+                -77.054659737567,38.872910162817,100
+                -77.0531553685479,38.8705326779439,100
+                -77.0555262249352,38.868757801256,100
+                -77.0584405629039,38.8699620650694,100
+                -77.0578845766097,38.8725325989282,100
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+          <innerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                -77.0566805501913,38.8715423979846,100
+                -77.0554262596082,38.8716789034408,100
+                -77.0548512590102,38.8707653539779,100
+                -77.0557767743315,38.8700868658145,100
+                -77.0569116201754,38.8705444696335,100
+                -77.0566805501913,38.8715423979846,100
+              </coordinates>
+            </LinearRing>
+          </innerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark id="model">
+        <Model id="model_4">
+          <altitudeMode>relativeToGround</altitudeMode>
+          <Location>
+            <longitude>-105.272774533734</longitude>
+            <latitude>40.009993372683</latitude>
+            <altitude>0</altitude>
+          </Location>
+          <Orientation>
+            <heading>0</heading>
+            <tilt>0</tilt>
+            <roll>0</roll>
+          </Orientation>
+          <Scale>
+            <x>1</x>
+            <y>1</y>
+            <z>1</z>
+          </Scale>
+        </Model>
+      </Placemark>
+      <PhotoOverlay id="photooverlay">
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>
+            7.71792711000002,45.968226693,496.979999997134
+          </coordinates>
+        </Point>
+      </PhotoOverlay>
+    </Folder>
+  </Document>
+</kml>

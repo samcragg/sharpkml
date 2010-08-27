@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{79EB5185-F17B-4BB0-B633-48DBFE807384}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NUintTests</RootNamespace>
+    <AssemblyName>NUintTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\Color32Test.cs" />
+    <Compile Include="Base\ElementWalkerTest.cs" />
+    <Compile Include="Base\KmlFactoryTest.cs" />
+    <Compile Include="Base\MathHelpersTest.cs" />
+    <Compile Include="Base\ParserTest.cs" />
+    <Compile Include="Base\SerializerTest.cs" />
+    <Compile Include="Base\TypeBrowserTest.cs" />
+    <Compile Include="Base\ValueConverterTest.cs" />
+    <Compile Include="Base\VectorTest.cs" />
+    <Compile Include="Base\XmlComponentTest.cs" />
+    <Compile Include="Base\XmlExtractorTest.cs" />
+    <Compile Include="Dom\AtomTest.cs" />
+    <Compile Include="Dom\CoordinateCollectionTest.cs" />
+    <Compile Include="Dom\ElementTest.cs" />
+    <Compile Include="Dom\IHtmlContentTest.cs" />
+    <Compile Include="Dom\ItemIconTest.cs" />
+    <Compile Include="Dom\LatLonAltBoxTest.cs" />
+    <Compile Include="Engine\BoundingBoxTest.cs" />
+    <Compile Include="Engine\ElementExtensionsTest.cs" />
+    <Compile Include="Engine\EntityMapperTest.cs" />
+    <Compile Include="Engine\FeatureExtensionsTest.cs" />
+    <Compile Include="Engine\KmlFileTest.cs" />
+    <Compile Include="Engine\KmzFileTest.cs" />
+    <Compile Include="Engine\LinkResolverTest.cs" />
+    <Compile Include="Engine\StyleResolverTest.cs" />
+    <Compile Include="Engine\UpdateExtensionsTest.cs" />
+    <Compile Include="Engine\UriExtensionsTest.cs" />
+    <Compile Include="SampleData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpKml\SharpKml.csproj">
+      <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
+      <Name>SharpKml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Entities.kml" />
+    <EmbeddedResource Include="Engine\Data\Entity Data.kml" />
+    <EmbeddedResource Include="Engine\Data\Schema Data.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Style Data.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Style Output.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Bounds.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Update.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Links.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Doc.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\NoKml.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\MultiKml.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
