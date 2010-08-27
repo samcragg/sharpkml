@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document id="Root">
+    <Document id="Source">
+      <Document id="California">
+        <Style id="red-icon">
+          <IconStyle>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Style id="yellow-line">
+          <LineStyle>
+            <color>ff00ffff</color>
+          </LineStyle>
+        </Style>
+        <Folder>
+          <name>corners</name>
+          <Placemark id="placemark-a">
+            <name>A</name>
+            <Point>
+              <coordinates>-124.351985,42.026641</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-b">
+            <name>B</name>
+            <Point>
+              <coordinates>-117.170966,32.493215</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-c">
+            <name>C</name>
+            <Point>
+              <coordinates>-114.686335,32.749747</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-d">
+            <name>D</name>
+            <Point>
+              <coordinates>-120.049643,42.002328</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-l">
+            <name>A-B</name>
+            <LineString id="linestring">
+              <tessellate>true</tessellate>
+              <coordinates>
+                -124.351985,42.026641
+                -117.170966,32.493215
+              </coordinates>
+            </LineString>
+          </Placemark>
+        </Folder>
+      </Document>
+      <Folder id="Placemark">
+        <Placemark id="placemark123">
+          <name>My name is placemark123</name>
+          <description>I have no Point</description>
+        </Placemark>
+      </Folder>
+    </Document>
+    <Document id="Update">
+      <!-- Update can only be a child of NetworkLinkControl but we'll put it in a Folder
+           and access it through the internal Orphans property -->
+      <Folder id="ChangeCalifornia-A">
+        <Update>
+          <targetHref/>
+          <Change>
+            <Placemark targetId="placemark-a">
+              <styleUrl>#red-icon</styleUrl>
+            </Placemark>
+            <Placemark targetId="placemark-l">
+              <styleUrl>#yellow-line</styleUrl>
+            </Placemark>
+          </Change>
+        </Update>
+      </Folder>
+      <Folder id="ChangeGeometry">
+        <Update>
+          <targetHref/>
+          <Change>
+            <Placemark targetId="placemark123">
+              <name>This is a Point</name>
+              <Point>
+                <coordinates>1,2,3</coordinates>
+              </Point>
+            </Placemark>
+          </Change>
+        </Update>
+      </Folder>
+      <Folder id="ChangeGeometry2">
+        <Update>
+          <targetHref/>
+          <Change>
+            <Placemark targetId="placemark123">
+              <name>This is name of the Point</name>
+            </Placemark>
+            <Placemark targetId="placemark123">
+              <description>This is the description of the Point</description>
+              <Point>
+                <extrude>1</extrude>
+                <altitudeMode>relativeToGround</altitudeMode>
+                <coordinates>1,2,3</coordinates>
+              </Point>
+            </Placemark>
+          </Change>
+        </Update>
+      </Folder>
+      <Folder id="ChangeLineString">
+        <Update>
+          <Change>
+            <Placemark targetId="placemark-l">
+              <name>NEW A-B</name>
+              <LineString id="linestring">
+                <tessellate>true</tessellate>
+                <coordinates>
+                  -124,42
+                  -117,32
+                </coordinates>
+              </LineString>
+            </Placemark>
+          </Change>
+        </Update>
+      </Folder>
+      <Folder id="ChangeStyle">
+        <Update>
+          <targetHref/>
+          <Change>
+            <Placemark targetId="placemark123">
+              <styleUrl>http://example.com/style.kml#pretty</styleUrl>
+            </Placemark>
+          </Change>
+        </Update>
+      </Folder>
+      <Folder id="DeleteAD">
+        <Update>
+          <targetHref/>
+          <Delete>
+            <Placemark targetId="placemark-a"/>
+            <Placemark targetId="placemark-d"/>
+          </Delete>
+        </Update>
+      </Folder>
+    </Document>
+    <Document id="Output">
+      <Document id="ChangeCalifornia-ACheck">
+        <Style id="red-icon">
+          <IconStyle>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Style id="yellow-line">
+          <LineStyle>
+            <color>ff00ffff</color>
+          </LineStyle>
+        </Style>
+        <Folder>
+          <name>corners</name>
+          <Placemark id="placemark-a">
+            <name>A</name>
+            <styleUrl>#red-icon</styleUrl>
+            <Point>
+              <coordinates>
+                -124.351985,42.026641,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-b">
+            <name>B</name>
+            <Point>
+              <coordinates>
+                -117.170966,32.493215,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-c">
+            <name>C</name>
+            <Point>
+              <coordinates>
+                -114.686335,32.749747,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-d">
+            <name>D</name>
+            <Point>
+              <coordinates>
+                -120.049643,42.002328,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-l">
+            <name>A-B</name>
+            <styleUrl>#yellow-line</styleUrl>
+            <LineString id="linestring">
+              <tessellate>1</tessellate>
+              <coordinates>
+                -124.351985,42.026641,0
+                -117.170966,32.493215,0
+              </coordinates>
+            </LineString>
+          </Placemark>
+        </Folder>
+      </Document>
+      <Folder id="ChangeGeometryCheck">
+        <Placemark id="placemark123">
+          <name>This is a Point</name>
+          <description>I have no Point</description>
+          <Point>
+            <coordinates>1,2,3</coordinates>
+          </Point>
+        </Placemark>
+      </Folder>
+      <Folder id="ChangeGeometry2Check">
+        <Placemark id="placemark123">
+          <name>This is name of the Point</name>
+          <description>This is the description of the Point</description>
+          <Point>
+            <extrude>1</extrude>
+            <altitudeMode>relativeToGround</altitudeMode>
+            <coordinates>1,2,3</coordinates>
+          </Point>
+        </Placemark>
+      </Folder>
+      <Document id="ChangeLineStringCheck">
+        <Style id="red-icon">
+          <IconStyle>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Style id="yellow-line">
+          <LineStyle>
+            <color>ff00ffff</color>
+          </LineStyle>
+        </Style>
+        <Folder>
+          <name>corners</name>
+          <Placemark id="placemark-a">
+            <name>A</name>
+            <Point>
+              <coordinates>
+                -124.351985,42.026641,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-b">
+            <name>B</name>
+            <Point>
+              <coordinates>
+                -117.170966,32.493215,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-c">
+            <name>C</name>
+            <Point>
+              <coordinates>
+                -114.686335,32.749747,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-d">
+            <name>D</name>
+            <Point>
+              <coordinates>
+                -120.049643,42.002328,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-l">
+            <name>NEW A-B</name>
+            <LineString id="linestring">
+              <tessellate>1</tessellate>
+              <coordinates>
+                -124,42,0
+                -117,32,0
+              </coordinates>
+            </LineString>
+          </Placemark>
+        </Folder>
+      </Document>
+      <Folder id="ChangeStyleCheck">
+        <Placemark id="placemark123">
+          <name>My name is placemark123</name>
+          <description>I have no Point</description>
+          <styleUrl>http://example.com/style.kml#pretty</styleUrl>
+        </Placemark>
+      </Folder>
+      <Document id="DeleteADCheck">
+        <Style id="red-icon">
+          <IconStyle>
+            <Icon>
+              <href>http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png</href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Style id="yellow-line">
+          <LineStyle>
+            <color>ff00ffff</color>
+          </LineStyle>
+        </Style>
+        <Folder>
+          <name>corners</name>
+          <Placemark id="placemark-b">
+            <name>B</name>
+            <Point>
+              <coordinates>
+                -117.170966,32.493215,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-c">
+            <name>C</name>
+            <Point>
+              <coordinates>
+                -114.686335,32.749747,0
+              </coordinates>
+            </Point>
+          </Placemark>
+          <Placemark id="placemark-l">
+            <name>A-B</name>
+            <LineString id="linestring">
+              <tessellate>1</tessellate>
+              <coordinates>
+                -124.351985,42.026641,0
+                -117.170966,32.493215,0
+              </coordinates>
+            </LineString>
+          </Placemark>
+        </Folder>
+      </Document>
+    </Document>
+  </Document>
+</kml>

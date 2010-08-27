@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Placemark xmlns="http://www.opengis.net/kml/2.2">
+<ExtendedData>
+<Data name="data1">
+<displayName>1st display name</displayName>
+<value>1st</value>
+</Data>
+<Data name="data2">
+<displayName>2nd display name</displayName>
+<value>2nd</value>
+</Data>
+<!-- The below are legal, but are in Google Earth they are overridden by
+the Feature's name and description for the balloon text replacements. -->
+<Data name="name"><value>data name</value></Data>
+<Data name="description"><value>data description</value></Data>
+</ExtendedData>
+</Placemark>

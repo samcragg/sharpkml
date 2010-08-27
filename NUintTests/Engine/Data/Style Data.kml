@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Document id="AllStylesTest">
+      <Style id="allstyles">
+        <IconStyle id="iconstyle">
+          <scale>1.2</scale>
+          <heading>90.5</heading>
+          <Icon>
+            <href>http://example.com/image.png</href>
+          </Icon>
+          <hotSpot x="0.1" y="10" xunits="fraction" yunits="pixels"/>
+        </IconStyle>
+        <LabelStyle id="labelstyle">
+          <scale>0.8</scale>
+        </LabelStyle>
+        <LineStyle id="linestyle">
+          <width>2</width>
+        </LineStyle>
+        <PolyStyle id="polystyle">
+          <fill>0</fill>
+          <outline>0</outline>
+        </PolyStyle>
+        <BalloonStyle id="balloonstyle">
+          <bgColor>00112233</bgColor>
+          <textColor>33221100</textColor>
+          <!--
+        XHTML in CDATA must conform to the HTML Compatibility guidelines as
+        detailed in http://www.w3.org/TR/xhtml1/#guidelines. See in particular section
+        C2, which requires <br /> over <br>.
+        -->
+          <text><![CDATA[<b>$[name]</b><br /><br />$[description]]]></text>
+          <displayMode>hide</displayMode>
+        </BalloonStyle>
+        <ListStyle id="liststyle">
+          <listItemType>checkHideChildren</listItemType>
+          <bgColor>10112233</bgColor>
+          <ItemIcon>
+            <state>open closed</state>
+            <href>http://example.com/image.png</href>
+          </ItemIcon>
+          <ItemIcon>
+            <state>closed</state>
+            <href>http://example.com/image.png</href>
+          </ItemIcon>
+        </ListStyle>
+      </Style>
+      <Folder id="f0">
+        <styleUrl>#allstyles</styleUrl>
+      </Folder>
+      <Folder id="f1">
+        <styleUrl>#no-such-style</styleUrl>
+      </Folder>
+    </Document>
+    <Document id="DuplicateIdTest">
+      <Style id="dup-style">
+        <IconStyle id="default-yellow-pushpin">
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+        <LineStyle id="thick-red-line">
+          <color>ff0000ff</color>
+          <width>4</width>
+        </LineStyle>
+      </Style>
+      <Style id="dup-style">
+        <IconStyle id="red-L-paddle">
+          <scale>1.1</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/paddle/L.png</href>
+          </Icon>
+          <hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+        <LineStyle id="thin-blue-line">
+          <color>ffff0000</color>
+          <width>1</width>
+        </LineStyle>
+      </Style>
+      <Placemark id="line">
+        <!-- GE 4.3.7284.3916 (Mac OS X 10.5.5) draws a thin blue line -->
+        <styleUrl>#dup-style</styleUrl>
+        <LineString>
+          <!-- from "Paths" in
+           http://code.google.com/apis/kml/documentation/kml_tut.html -->
+          <coordinates>
+            -112.2550785337791,36.07954952145647,2357
+            -112.2549277039738,36.08117083492122,2357 -112.2552505069063,36.08260761307279,2357
+            -112.2564540158376,36.08395660588506,2357 -112.2580238976449,36.08511401044813,2357
+            -112.2595218489022,36.08584355239394,2357 -112.2608216347552,36.08612634548589,2357
+            -112.262073428656,36.08626019085147,2357 -112.2633204928495,36.08621519860091,2357
+            -112.2644963846444,36.08627897945274,2357 -112.2656969554589,36.08649599090644,2357
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark id="point">
+        <!-- GE 4.3.7284.3916 (Mac OS X 10.5.5) draws a red L paddle -->
+        <styleUrl>#dup-style</styleUrl>
+        <Point>
+          <coordinates>-112.2594359071773,36.08469720347697,0</coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+    <Document id="InlineStyleMapTest">
+      <Placemark id="pm0">
+        <StyleMap>
+          <Pair>
+            <key>normal</key>
+            <Style>
+              <LineStyle>
+                <color>01234567</color>
+                <colorMode>random</colorMode>
+                <width>2.34</width>
+              </LineStyle>
+              <BalloonStyle>
+                <bgColor>ff112233</bgColor>
+              </BalloonStyle>
+            </Style>
+          </Pair>
+          <Pair>
+            <key>highlight</key>
+            <Style>
+              <PolyStyle>
+                <color>01234567</color>
+                <colorMode>random</colorMode>
+                <fill>true</fill>
+              </PolyStyle>
+              <BalloonStyle>
+                <bgColor>ff332211</bgColor>
+              </BalloonStyle>
+            </Style>
+          </Pair>
+        </StyleMap>
+        <MultiGeometry>
+          <LineString>
+            <coordinates>1,2,3 4,5,6</coordinates>
+          </LineString>
+          <Polygon>
+            <outerBoundaryIs>
+              <LinearRing>
+                <coordinates>1,2,3 4,5,6 7,8,9 1,2,3</coordinates>
+              </LinearRing>
+            </outerBoundaryIs>
+          </Polygon>
+        </MultiGeometry>
+      </Placemark>
+    </Document>
+    <Document id="InlineStylesTest">
+      <StyleMap id="msn_ylw-pushpin">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#sn_ylw-pushpin</styleUrl>
+        </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#sh_ylw-pushpin</styleUrl>
+        </Pair>
+      </StyleMap>
+      <Style id="sh_ylw-pushpin">
+        <IconStyle>
+          <scale>1.3</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+      <Style id="sn_ylw-pushpin">
+        <IconStyle>
+          <scale>1.1</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+      <Placemark>
+        <LookAt>
+          <longitude>12.487995</longitude>
+          <latitude>47.969918</latitude>
+          <range>1000</range>
+          <altitudeMode>relativeToGround</altitudeMode>
+        </LookAt>
+        <styleUrl>#msn_ylw-pushpin</styleUrl>
+        <Point>
+          <coordinates>12.487995,47.969918</coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+    <Document id="InlineTest">
+      <Folder id="f0">
+        <name>folder</name>
+        <Style>
+          <ListStyle>
+            <listItemType>checkHideChildren</listItemType>
+          </ListStyle>
+        </Style>
+        <Folder/>
+        <Folder/>
+      </Folder>
+    </Document>
+    <Document id="NestingTest">
+      <StyleMap id="loop">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#loop</styleUrl>
+        </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#loop</styleUrl>
+        </Pair>
+      </StyleMap>
+      <StyleMap id="loop2">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#loop3</styleUrl>
+        </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#loop3</styleUrl>
+        </Pair>
+      </StyleMap>
+      <StyleMap id="loop3">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#loop2</styleUrl>
+        </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#loop2</styleUrl>
+        </Pair>
+      </StyleMap>
+      <Placemark id="p0">
+        <styleUrl>#loop</styleUrl>
+      </Placemark>
+      <Placemark id="p1">
+        <styleUrl>#loop2</styleUrl>
+      </Placemark>
+    </Document>
+    <Document id="SharedTest">
+      <name>KmlFile</name>
+      <StyleMap id="msn_ylw-pushpin">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#sn_ylw-pushpin</styleUrl>
+        </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#sh_ylw-pushpin</styleUrl>
+        </Pair>
+      </StyleMap>
+      <Style id="sn_ylw-pushpin">
+        <IconStyle>
+          <scale>1.1</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+      <Style id="sh_ylw-pushpin">
+        <IconStyle>
+          <scale>1.3</scale>
+          <Icon>
+            <href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+          </Icon>
+          <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+        </IconStyle>
+      </Style>
+      <Placemark id="pm0">
+        <name>Untitled Placemark</name>
+        <LookAt>
+          <longitude>-84.9685883948144</longitude>
+          <latitude>40.80358609429204</latitude>
+          <altitude>0</altitude>
+          <heading>7.124237035088234</heading>
+          <tilt>0</tilt>
+          <range>11001000</range>
+        </LookAt>
+        <styleUrl>#msn_ylw-pushpin</styleUrl>
+        <Point>
+          <coordinates>-84.9685883948144,40.80358609429204,0</coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+    <Document id="SimpleTest">
+      <Placemark id="pm0">
+        <Style>
+          <LineStyle>
+            <color>ff112233</color>
+          </LineStyle>
+        </Style>
+        <LineString>
+          <coordinates>1,2,3 4,5,6 7,8,9</coordinates>
+        </LineString>
+      </Placemark>
+    </Document>
+    <Document id="UnknownTest">
+      <Style id="hist1_b">
+        <IconStyle id="khIconStyle671">
+          <color>ff00f6ff</color>
+          <scale>.7</scale>
+          <Icon>
+            <href>root://icons/palette-4.png</href>
+            <x>64</x>
+            <y>128</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <LabelStyle id="khLabelStyle673">
+        </LabelStyle>
+        <LineStyle id="khLineStyle674">
+          <width>0.4000000059604645</width>
+        </LineStyle>
+        <PolyStyle id="khPolyStyle675">
+        </PolyStyle>
+        <BalloonStyle>
+          <textColor>ffffffff</textColor>
+          <color>FFAF835A</color>
+          <bgColor>FFAF835A</bgColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+        </BalloonStyle>
+      </Style>
+      <Style id="hist1_p">
+        <IconStyle id="khIconStyle641">
+          <color>ff00f6ff</color>
+          <Icon>
+            <href>root://icons/palette-4.png</href>
+            <y>128</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <BalloonStyle>
+          <textColor>ffffffff</textColor>
+          <color>FFAF835A</color>
+          <bgColor>FFAF835A</bgColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+        </BalloonStyle>
+      </Style>
+      <Style id="hist2_b">
+        <IconStyle id="khIconStyle671">
+          <color>ff00f6ff</color>
+          <scale>.7</scale>
+          <Icon>
+            <href>root://icons/palette-4.png</href>
+            <x>64</x>
+            <y>128</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <LabelStyle id="khLabelStyle673">
+        </LabelStyle>
+        <LineStyle id="khLineStyle674">
+          <width>0.4000000059604645</width>
+        </LineStyle>
+        <PolyStyle id="khPolyStyle675">
+        </PolyStyle>
+        <BalloonStyle>
+          <textColor>ffffffff</textColor>
+          <color>FFAF835A</color>
+          <bgColor>FFAF835A</bgColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+        </BalloonStyle>
+      </Style>
+      <Style id="hist2_p">
+        <IconStyle id="khIconStyle641">
+          <color>ff0000ff</color>
+          <Icon>
+            <href>root://icons/palette-4.png</href>
+            <y>128</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <BalloonStyle>
+          <textColor>ffffffff</textColor>
+          <color>FFAF835A</color>
+          <bgColor>FFAF835A</bgColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+        </BalloonStyle>
+      </Style>
+      <Style id="current">
+        <IconStyle id="khIconStyle639">
+          <color>ff0000ff</color>
+          <Icon>
+            <href>root://icons/palette-3.png</href>
+            <x>128</x>
+            <y>32</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+        <LabelStyle id="khLabelStyle641">
+        </LabelStyle>
+        <BalloonStyle id="khBalloonStyle644">
+        </BalloonStyle>
+        <LineStyle id="khLineStyle642">
+        </LineStyle>
+        <PolyStyle id="khPolyStyle643">
+        </PolyStyle>
+        <BalloonStyle>
+          <textColor>ffffffff</textColor>
+          <color>FFAF835A</color>
+          <bgColor>FFAF835A</bgColor>
+          <text>
+            <![CDATA[<b><font size=+2>Charlie & Marty's Voyage on Pegasus</font></b><br>
+   			$[description]<br/></br>powered by www.sailblogs.com
+   			</body>]]>
+          </text>
+        </BalloonStyle>
+      </Style>
+      <Style id="khStyle650">
+        <IconStyle id="khIconStyle651">
+          <Icon>
+            <href>root://icons/palette-3.png</href>
+            <y>96</y>
+            <w>32</w>
+            <h>32</h>
+          </Icon>
+        </IconStyle>
+      </Style>
+      <Placemark>
+        <styleUrl>#current</styleUrl>
+        <Point>
+          <coordinates>-77.0533,26.5467,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark id="jb">
+        <styleUrl>#hist2_b</styleUrl>
+        <Point>
+          <coordinates>-77.0533,26.5467,0</coordinates>
+        </Point>
+      </Placemark>
+    </Document>
+  </Document>
+</kml>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A Point Placemark created in Google Earth -->
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name/>
+  <open>1</open>
+  <Schema name="s_name" id="s_id1">
+    <SimpleField type="string" name="sfield1">
+      <displayName>simple field display name 1</displayName>
+    </SimpleField>
+    <SimpleField type="int" name="sfield2">
+      <!-- deliberately no <displayName> -->
+    </SimpleField>
+  </Schema>
+  <Placemark>
+    <name>default schemadatadata</name>
+    <Point>
+      <coordinates>-122.000,36.995</coordinates>
+    </Point>
+    <ExtendedData>
+      <SchemaData schemaUrl="#s_id1">
+        <SimpleData name="sfield1">one</SimpleData>
+        <SimpleData name="sfield2">2</SimpleData>
+      </SchemaData>
+    </ExtendedData>
+  </Placemark>
+</Document>
+</kml>
+
