@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<PhotoOverlay>
+	<name>Untitled Photo Overlay</name>
+	<Camera>
+		<longitude>7.717927110000019</longitude>
+		<latitude>45.96822669299998</latitude>
+		<altitude>496.9799999971336</altitude>
+		<heading>16.99000000000003</heading>
+		<tilt>83.16000000000005</tilt>
+		<roll>2.131082134218592e-06</roll>
+	</Camera>
+	<Style>
+		<IconStyle>
+			<Icon>
+				<href>files/camera_mode.png</href>
+			</Icon>
+		</IconStyle>
+	</Style>
+	<Icon>
+		<href>files/zermatt.jpg</href>
+	</Icon>
+	<ViewVolume>
+		<leftFov>-25</leftFov>
+		<rightFov>25</rightFov>
+		<bottomFov>-17.225</bottomFov>
+		<topFov>17.225</topFov>
+		<near>107.223</near>
+	</ViewVolume>
+	<Point>
+		<altitudeMode>relativeToGround</altitudeMode>
+		<coordinates>7.717927110000019,45.96822669299999,496.9799999971336</coordinates>
+	</Point>
+</PhotoOverlay>
+</kml>
