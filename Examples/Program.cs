@@ -12,6 +12,7 @@ namespace Examples
             Tuple.Create("BalloonFeatures.cs", typeof(BalloonFeatures)),
             Tuple.Create("Change.cs", typeof(Change)),
             Tuple.Create("Clone.cs", typeof(Clone)),
+            Tuple.Create("CreateIconStyle.cs", typeof(CreateIconStyle)),
             Tuple.Create("CreateKml.cs", typeof(CreateKml)),
             Tuple.Create("CreateKmz.cs", typeof(CreateKmz)),
             Tuple.Create("InlineStyles.cs", typeof(InlineStyles)),

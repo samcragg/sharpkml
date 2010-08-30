@@ -54,6 +54,7 @@
     <Compile Include="Dom\AtomTest.cs" />
     <Compile Include="Dom\CoordinateCollectionTest.cs" />
     <Compile Include="Dom\ElementTest.cs" />
+    <Compile Include="Dom\IconStyleTest.cs" />
     <Compile Include="Dom\IHtmlContentTest.cs" />
     <Compile Include="Dom\ItemIconTest.cs" />
     <Compile Include="Dom\LatLonAltBoxTest.cs" />

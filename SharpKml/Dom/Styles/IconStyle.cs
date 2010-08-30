@@ -83,7 +83,7 @@ namespace SharpKml.Dom
         {
             /// <summary>Initializes a new instance of the IconLink class.</summary>
             /// <param name="href">The value for <see cref="BasicLink.Href"/></param>
-            internal IconLink(Uri href)
+            public IconLink(Uri href)
             {
                 this.Href = href;
             }
