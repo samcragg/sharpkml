@@ -42,6 +42,7 @@
     <Compile Include="Change.cs" />
     <Compile Include="Clone.cs" />
     <Compile Include="CreateKmz.cs" />
+    <Compile Include="CreateIconStyle.cs" />
     <Compile Include="InlineStyles.cs" />
     <Compile Include="ShowStyles.cs" />
     <Compile Include="SortPlacemarks.cs" />
