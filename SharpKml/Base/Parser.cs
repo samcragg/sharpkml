@@ -286,8 +286,11 @@ namespace SharpKml.Base
                 // Check for namespaces first
                 if (string.Equals("xmlns", _reader.Name, StringComparison.Ordinal))
                 {
-                    // Set default namespace
-                    element.Namespaces.AddNamespace(string.Empty, _reader.Value);
+                    // Set default namespace only on unknown elements
+                    if (element is UnknownElement)
+                    {
+                        element.Namespaces.AddNamespace(string.Empty, _reader.Value);
+                    }
                 }
                 else if (string.Equals("xmlns", _reader.Prefix, StringComparison.Ordinal))
                 {

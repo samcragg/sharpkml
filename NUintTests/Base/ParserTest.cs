@@ -207,7 +207,7 @@ namespace NUintTests.Base
         {
             var parser = new Parser();
             parser.ParseString("<kml><a>b<c></c></a></kml>", false);
-            
+
             var kml = parser.Root as Kml;
             Assert.IsNotNull(kml);
             Assert.AreEqual(1, kml.Orphans.Count());
@@ -220,14 +220,14 @@ namespace NUintTests.Base
         [Test]
         public void TestValidKml()
         {
-            const string Xml = 
-                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">"+
-                "<Placemark>"+
-                "<name>a good Placemark</name>"+
-                "<Point>"+
-                "<coordinates>1,2,3</coordinates>"+
-                "</Point>"+
-                "</Placemark>"+
+            const string Xml =
+                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">" +
+                "<Placemark>" +
+                "<name>a good Placemark</name>" +
+                "<Point>" +
+                "<coordinates>1,2,3</coordinates>" +
+                "</Point>" +
+                "</Placemark>" +
                 "</kml>";
 
             var parser = new Parser();
@@ -239,6 +239,31 @@ namespace NUintTests.Base
             parser.ParseString("<kml />", false);
             Assert.IsNotNull(parser.Root);
             Assert.IsInstanceOf<Kml>(parser.Root);
+        }
+
+        [Test]
+        public void TestLegacyKml()
+        {
+            const string Xml =
+                "<kml xmlns=\"http://earth.google.com/kml/2.2\">" +
+                  "<Placemark>" +
+                    "<name>My Placemark</name>" +
+                  "</Placemark>" +
+                "</kml>";
+
+            var parser = new Parser();
+            parser.ParseString(Xml, false);
+
+            Kml root = parser.Root as Kml;
+            Assert.IsNotNull(root);
+
+            // Make sure it didn't add the old namespace
+            Assert.IsFalse(root.Namespaces.GetNamespacesInScope(XmlNamespaceScope.ExcludeXml).ContainsKey(string.Empty));
+
+            // Make sure it serializes
+            Serializer serializer = new Serializer();
+            Assert.DoesNotThrow(() => serializer.Serialize(root));
+            Assert.IsNotNullOrEmpty(serializer.Xml);
         }
     }
 }
