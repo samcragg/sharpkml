@@ -36,10 +36,10 @@ namespace SharpKml.Dom.GX
         public Dom.AltitudeMode? AltitudeMode { get; set; }
 
         /// <summary>
-        /// Gets a collection of <see cref="Vector"/> containing the heading,
+        /// Gets a collection of <see cref="Angle"/> containing the heading,
         /// tilt and roll for the icons and models.
         /// </summary>
-        public IEnumerable<Vector> Angles
+        public IEnumerable<Angle> Angles
         {
             get
             {
@@ -102,7 +102,7 @@ namespace SharpKml.Dom.GX
         /// Adds the specified value to <see cref="Angles"/>.</summary>
         /// <param name="value">The value to add.</param>
         /// <exception cref="ArgumentNullException">value is null.</exception>
-        public void AddAngle(Vector value)
+        public void AddAngle(Angle value)
         {
             if (value == null)
             {
@@ -167,15 +167,12 @@ namespace SharpKml.Dom.GX
             base.AddOrphan(orphan);
         }
 
-        /// <summary>Used to correctly serialize a Vector.</summary>
+        /// <summary>Used to correctly serialize a 3D vector.</summary>
         private abstract class VectorElement : Element, ICustomElement
         {
-            /// <summary>Initializes a new instance of the VectorElement class.</summary>
-            /// <param name="value">The value to serialize.</param>
-            public VectorElement(Vector value)
-            {
-                this.Value = value;
-            }
+            private readonly double _x;
+            private readonly double _y;
+            private readonly double _z;
 
             /// <summary>Initializes a new instance of the VectorElement class.</summary>
             /// <param name="value">The value to serialize.</param>
@@ -184,14 +181,21 @@ namespace SharpKml.Dom.GX
                 // The vector is stored with ' ' as the separator.
                 string[] values = value.Split(new char[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
 
-                this.Value = new Vector();
-                this.Value.Longitude = GetValue(values, 0) ?? 0.0;
-                this.Value.Latitude = GetValue(values, 1) ?? 0.0;
-                this.Value.Altitude = GetValue(values, 2);
+                _x = GetValue(values, 0);
+                _y = GetValue(values, 1);
+                _z = GetValue(values, 2);
             }
 
-            /// <summary>Gets the Vector value of this instance.</summary>
-            public Vector Value { get; private set; }
+            /// <summary>Initializes a new instance of the VectorElement class.</summary>
+            /// <param name="x">The first value.</param>
+            /// <param name="y">The second value.</param>
+            /// <param name="z">The third value.</param>
+            protected VectorElement(double x, double y, double z)
+            {
+                _x = x;
+                _y = y;
+                _z = z;
+            }
 
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
@@ -204,21 +208,33 @@ namespace SharpKml.Dom.GX
             /// <summary>Gets the name of the XML element.</summary>
             protected abstract string Name { get; }
 
+            /// <summary>Gets the first value of the vector.</summary>
+            protected double X
+            {
+                get { return _x; }
+            }
+
+            /// <summary>Gets the second value of the vector.</summary>
+            protected double Y
+            {
+                get { return _y; }
+            }
+
+            /// <summary>Gets the third value of the vector.</summary>
+            protected double Z
+            {
+                get { return _z; }
+            }
+
             /// <summary>Writes the start of an XML element.</summary>
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                string value = string.Format(
-                    KmlFormatter.Instance,
-                    "{0} {1} {2}",
-                    this.Value.Longitude,
-                    this.Value.Latitude,
-                    this.Value.Altitude);
-
+                string value = string.Format(KmlFormatter.Instance, "{0} {1} {2}", _x, _y, _z);
                 writer.WriteElementString(KmlNamespaces.GX22Prefix, this.Name, KmlNamespaces.GX22Namespace, value);
             }
 
-            private static double? GetValue(string[] array, int index)
+            private static double GetValue(string[] array, int index)
             {
                 if (index < array.Length)
                 {
@@ -228,17 +244,17 @@ namespace SharpKml.Dom.GX
                         return value;
                     }
                 }
-                return null;
+                return default(double);
             }
         }
 
-        /// <summary>Used to correctly serialize a Vector in Angles.</summary>
+        /// <summary>Used to correctly serialize an Angle in Angles.</summary>
         private class AnglesElement : VectorElement
         {
             /// <summary>Initializes a new instance of the AnglesElement class.</summary>
-            /// <param name="value">The value to serialize.</param>
-            public AnglesElement(Vector value)
-                : base(value)
+            /// <param name="value">The value to serialize, must not be null.</param>
+            public AnglesElement(Angle value)
+                : base(value.Heading, value.Pitch, value.Roll) // Must be stored in this order.
             {
             }
 
@@ -247,6 +263,14 @@ namespace SharpKml.Dom.GX
             public AnglesElement(string value)
                 : base(value)
             {
+            }
+
+            /// <summary>
+            /// Gets an Angle that represents the value of this instance.
+            /// </summary>
+            public Angle Value
+            {
+                get { return new Angle(this.Y, this.X, this.Z); }
             }
 
             /// <summary>Gets the name of the XML element.</summary>
@@ -260,9 +284,9 @@ namespace SharpKml.Dom.GX
         private class CoordElement : VectorElement
         {
             /// <summary>Initializes a new instance of the CoordElement class.</summary>
-            /// <param name="value">The value to serialize.</param>
+            /// <param name="value">The value to serialize, must not be null.</param>
             public CoordElement(Vector value)
-                : base(value)
+                : base(value.Longitude, value.Latitude, value.Altitude.GetValueOrDefault()) // Must be stored in this order.
             {
             }
 
@@ -271,6 +295,14 @@ namespace SharpKml.Dom.GX
             public CoordElement(string value)
                 : base(value)
             {
+            }
+
+            /// <summary>
+            /// Gets a Vector that represents the value of this instance.
+            /// </summary>
+            public Vector Value
+            {
+                get { return new Vector(this.Y, this.X, this.Z); }
             }
 
             /// <summary>Gets the name of the XML element.</summary>

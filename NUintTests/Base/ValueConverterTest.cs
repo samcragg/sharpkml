@@ -41,7 +41,8 @@ namespace NUintTests.Base
                 "1997-07",
                 "1997-07-16",
                 "1997-07-16T07:30:15Z",
-                "1997-07-16T10:30:15+03:00"
+                "1997-07-16T10:30:15+03:00",
+                "1997-07-16T14:30:15Z" // Check 24hour value
             };
 
             foreach (var date in ValidDateTimes)
