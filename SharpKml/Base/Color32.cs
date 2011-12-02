@@ -121,10 +121,6 @@ namespace SharpKml.Base
         /// </returns>
         public static bool operator <(Color32 colorA, Color32 colorB)
         {
-            if (colorA == null)
-            {
-                return false;
-            }
             return colorA.CompareTo(colorB) < 0;
         }
 
@@ -139,10 +135,6 @@ namespace SharpKml.Base
         /// </returns>
         public static bool operator >(Color32 colorA, Color32 colorB)
         {
-            if (colorA == null)
-            {
-                return false;
-            }
             return colorA.CompareTo(colorB) > 0;
         }
 
@@ -209,10 +201,6 @@ namespace SharpKml.Base
         /// </returns>
         public int CompareTo(Color32 other)
         {
-            if (other == null)
-            {
-                return 1;
-            }
             return _abgr.CompareTo(other._abgr);
         }
 
@@ -227,10 +215,6 @@ namespace SharpKml.Base
         /// </returns>
         public bool Equals(Color32 other)
         {
-            if (other == null)
-            {
-                return false;
-            }
             return _abgr == other._abgr;
         }
 
