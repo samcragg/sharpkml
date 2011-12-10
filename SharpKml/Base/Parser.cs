@@ -186,6 +186,11 @@ namespace SharpKml.Base
                 return null;
             }
 
+            // Need to check this here before we move to the attributes,
+            // as reader.NodeType will never be EndElement for empty elements
+            // and when we move to an attribute, IsEmptyElement doesn't work
+            bool isEmpty = _reader.IsEmptyElement;
+
             Element parent = KmlFactory.CreateElement(this.GetXmlComponent());
             if (parent == null)
             {
@@ -196,14 +201,15 @@ namespace SharpKml.Base
                 this.ProcessAttributes(parent);
 
                 // No need to process all the children
-                ((IHtmlContent)parent).Text = XmlExtractor.FlattenXml(_reader);
+                string text = string.Empty;
+                if (!isEmpty) // Is there something to parse?
+                {
+                    text = XmlExtractor.FlattenXml(_reader);
+                }
+
+                ((IHtmlContent)parent).Text = text;
                 return parent;
             }
-
-            // Need to check this here before we move to the attributes,
-            // as reader.NodeType will never be EndElement for empty elements
-            // and when we move to an attribute, IsEmptyElement doesn't work
-            bool isEmpty = _reader.IsEmptyElement;
 
             this.ProcessAttributes(parent); // Empties can have attributes though
 
