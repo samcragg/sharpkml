@@ -265,5 +265,34 @@ namespace NUintTests.Base
             Assert.DoesNotThrow(() => serializer.Serialize(root));
             Assert.IsNotNullOrEmpty(serializer.Xml);
         }
+
+        [Test]
+        public void TestEmptyElement()
+        {
+            const string xml = @"<?xml version='1.0' encoding='UTF-8'?>
+<kml xmlns='http://www.opengis.net/kml/2.2'>
+  <Document>
+    <Snippet/>
+    <name>My Document</name>
+    <Placemark>
+        <name>My Placemark</name>
+    </Placemark>
+  </Document>
+</kml>";
+
+            var parser = new Parser();
+            parser.ParseString(xml, true);
+
+            Kml kml = parser.Root as Kml;
+            Assert.IsTrue(kml != null);
+
+            Document document = kml.Feature as Document;
+            Assert.IsTrue(document != null);
+            Assert.AreEqual("My Document", document.Name);
+
+            Placemark placemark = document.Features.FirstOrDefault() as Placemark;
+            Assert.IsTrue(placemark != null);
+            Assert.AreEqual("My Placemark", placemark.Name);
+        }
     }
 }

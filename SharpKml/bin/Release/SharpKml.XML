@@ -4574,6 +4574,60 @@
             vector to the top side of the view volume.
             </summary>
         </member>
+        <member name="T:SharpKml.Base.Angle">
+            <summary>
+            Represents the heading, tilt, and roll angles to the icon or model in
+            a gx:Track.
+            </summary>
+        </member>
+        <member name="M:SharpKml.Base.Angle.#ctor">
+            <summary>Initializes a new instance of the Angle class.</summary>
+        </member>
+        <member name="M:SharpKml.Base.Angle.#ctor(System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the Angle class with the specified values.
+            </summary>
+            <param name="pitch">The latitude for this instance.</param>
+            <param name="heading">The longitude for this instance.</param>
+            <param name="roll">The altitude for this instance.</param>
+        </member>
+        <member name="M:SharpKml.Base.Angle.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and the specified object have the
+            same value.
+            </summary>
+            <param name="obj">
+            An object, which must be an Angle, to compare to this instance.
+            </param>
+            <returns>
+            true if the object is an Angle and the value of the object is the
+            same as this instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:SharpKml.Base.Angle.Equals(SharpKml.Base.Angle)">
+            <summary>
+            Determines whether this instance and the specified Angle have the
+            same value.
+            </summary>
+            <param name="other">The Angle to compare to this instance.</param>
+            <returns>
+            true if the angles of the value parameter are the same as this
+            instance; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:SharpKml.Base.Angle.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="P:SharpKml.Base.Angle.Heading">
+            <summary>Gets or sets the heading.</summary>
+        </member>
+        <member name="P:SharpKml.Base.Angle.Pitch">
+            <summary>Gets or sets the pitch.</summary>
+        </member>
+        <member name="P:SharpKml.Base.Angle.Roll">
+            <summary>Gets or sets the roll.</summary>
+        </member>
         <member name="T:SharpKml.Base.MathHelpers">
             <summary>
             Contains mathematical functions useful when working with KML or, more
@@ -5985,60 +6039,6 @@
             <param name="root">The <c>Element</c> to navigate.</param>
             <exception cref="T:System.ArgumentNullException">root is null.</exception>
             <returns>An IEnumerable collection of the Elements.</returns>
-        </member>
-        <member name="T:SharpKml.Base.Angle">
-            <summary>
-            Represents the heading, tilt, and roll angles to the icon or model in
-            a gx:Track.
-            </summary>
-        </member>
-        <member name="M:SharpKml.Base.Angle.#ctor">
-            <summary>Initializes a new instance of the Angle class.</summary>
-        </member>
-        <member name="M:SharpKml.Base.Angle.#ctor(System.Double,System.Double,System.Double)">
-            <summary>
-            Initializes a new instance of the Angle class with the specified values.
-            </summary>
-            <param name="pitch">The latitude for this instance.</param>
-            <param name="heading">The longitude for this instance.</param>
-            <param name="roll">The altitude for this instance.</param>
-        </member>
-        <member name="M:SharpKml.Base.Angle.Equals(System.Object)">
-            <summary>
-            Determines whether this instance and the specified object have the
-            same value.
-            </summary>
-            <param name="obj">
-            An object, which must be an Angle, to compare to this instance.
-            </param>
-            <returns>
-            true if the object is an Angle and the value of the object is the
-            same as this instance; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:SharpKml.Base.Angle.Equals(SharpKml.Base.Angle)">
-            <summary>
-            Determines whether this instance and the specified Angle have the
-            same value.
-            </summary>
-            <param name="other">The Angle to compare to this instance.</param>
-            <returns>
-            true if the angles of the value parameter are the same as this
-            instance; otherwise, false.
-            </returns>
-        </member>
-        <member name="M:SharpKml.Base.Angle.GetHashCode">
-            <summary>Returns the hash code for this instance.</summary>
-            <returns>A 32-bit signed integer hash code.</returns>
-        </member>
-        <member name="P:SharpKml.Base.Angle.Heading">
-            <summary>Gets or sets the heading.</summary>
-        </member>
-        <member name="P:SharpKml.Base.Angle.Pitch">
-            <summary>Gets or sets the pitch.</summary>
-        </member>
-        <member name="P:SharpKml.Base.Angle.Roll">
-            <summary>Gets or sets the roll.</summary>
         </member>
     </members>
 </doc>
