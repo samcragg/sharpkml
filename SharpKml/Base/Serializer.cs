@@ -60,6 +60,11 @@ namespace SharpKml.Base
             this.Serialize(root, settings);
         }
 
+        private static bool IsCData(string input)
+        {
+            return input.StartsWith("<![CDATA[") && input.EndsWith("]]>");
+        }
+
         private static string GetString(object value)
         {
             Type type = value.GetType();
@@ -178,15 +183,18 @@ namespace SharpKml.Base
             // then WriteEndElement will always write a full end element.
             if (!string.IsNullOrWhiteSpace(data))
             {
-                if (!data.Contains("<![CDATA[") &&
-                    (data.IndexOfAny(new char[] { '&', '\'', '<', '>', '\"' }) != -1))
+                if (IsCData(data))
+                {
+                    _writer.WriteRaw(data); // Data is already escaped.
+                }
+                else if (data.IndexOfAny(new char[] { '&', '\'', '<', '>', '\"' }) != -1)
                 {
                     // Illegal character found and the string isn't CDATA
                     _writer.WriteCData(data);
                 }
                 else
                 {
-                    // Just write normal - XmlWriter takes care of illegal characters
+                    // Just write normal.
                     _writer.WriteString(data);
                 }
             }

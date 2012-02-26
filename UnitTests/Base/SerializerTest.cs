@@ -112,6 +112,23 @@ namespace UnitTests.Base
             Assert.False(FindNode(Xml, "invalid", null));
         }
 
+        [Test]
+        public void TestCData()
+        {
+            var balloon = new BalloonStyle();
+            balloon.Text = "<![CDATA[$[description]]]>";
+
+            var serializer = new Serializer();
+            serializer.SerializeRaw(balloon);
+
+            string expected =
+                "<BalloonStyle xmlns=\"http://www.opengis.net/kml/2.2\">" +
+                "<text>" + balloon.Text + "</text>" +
+                "</BalloonStyle>";
+
+            Assert.That(serializer.Xml, Is.EqualTo(expected));
+        }
+
         private static bool FindNode(string xml, string name, Action<XmlReader> callback)
         {
             using (var stringReader = new StringReader(xml))
