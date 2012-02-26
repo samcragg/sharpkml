@@ -117,6 +117,7 @@ namespace SharpKml.Engine
             return file;
         }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Loads a KmlFile using the specified KML data at the specified path.
         /// </summary>
@@ -142,7 +143,9 @@ namespace SharpKml.Engine
                 return Load(stream);
             }
         }
+#endif
 
+#if !SILVERLIGHT // No Kmz support in Silveright
         /// <summary>
         /// Loads a KmlFile using the specified KMZ data.
         /// </summary>
@@ -183,6 +186,7 @@ namespace SharpKml.Engine
             }
             return null;
         }
+#endif
 
         /// <summary>
         /// Searches for a <see cref="KmlObject"/> with the specified

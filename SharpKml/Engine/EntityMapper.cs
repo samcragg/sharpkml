@@ -65,7 +65,7 @@ namespace SharpKml.Engine
         {
             this.ParseEntityFields(feature); // Will throw is feature is null
 
-            Style style = StyleResolver.CreateResolvedStyle(feature, _file, StyleState.Normal, false);
+            Style style = StyleResolver.CreateResolvedStyle(feature, _file, StyleState.Normal);
             if ((style.Balloon != null) && (style.Balloon.Text != null))
             {
                 return this.ExpandEntities(style.Balloon.Text);

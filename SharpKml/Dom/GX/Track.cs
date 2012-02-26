@@ -179,7 +179,7 @@ namespace SharpKml.Dom.GX
             public VectorElement(string value)
             {
                 // The vector is stored with ' ' as the separator.
-                string[] values = value.Split(new char[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
+                string[] values = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 _x = GetValue(values, 0);
                 _y = GetValue(values, 1);

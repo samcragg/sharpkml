@@ -172,7 +172,7 @@ namespace SharpKml.Dom
         /// <summary>Parses the inner text of the XML element.</summary>
         /// <param name="text">The text content of the XML element.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Adding to the buffer would exceed <see cref="StringBuilder.MaxCapacity"/>.
+        /// Adding to the buffer would exceed StringBuilder.MaxCapacity.
         /// </exception>
         protected internal override void AddInnerText(string text)
         {
@@ -196,7 +196,7 @@ namespace SharpKml.Dom
             const string Altitude = "(?:" + Seperator + "(?<alt>" + Token + "))?"; // Optional
             const string Expression = Longitude + Latitude + Altitude + "\\b";
 
-            return new Regex(Expression, RegexOptions.Compiled | RegexOptions.CultureInvariant);
+            return new Regex(Expression, RegexOptions.CultureInvariant);
         }
 
         private void Parse(string input)

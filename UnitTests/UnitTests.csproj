@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B8E1EC2A-64F4-4DCB-85EF-B1D65B42C4AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UnitTests</RootNamespace>
+    <AssemblyName>UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\Color32Test.cs" />
+    <Compile Include="Base\ElementWalkerTest.cs" />
+    <Compile Include="Base\KmlFactoryTest.cs" />
+    <Compile Include="Base\MathHelpersTest.cs" />
+    <Compile Include="Base\ParserTest.cs" />
+    <Compile Include="Base\SerializerTest.cs" />
+    <Compile Include="Base\TypeBrowserTest.cs" />
+    <Compile Include="Base\ValueConverterTest.cs" />
+    <Compile Include="Base\VectorTest.cs" />
+    <Compile Include="Base\XmlComponentTest.cs" />
+    <Compile Include="Base\XmlExtractorTest.cs" />
+    <Compile Include="Dom\AtomTest.cs" />
+    <Compile Include="Dom\CoordinateCollectionTest.cs" />
+    <Compile Include="Dom\ElementTest.cs" />
+    <Compile Include="Dom\IconStyleTest.cs" />
+    <Compile Include="Dom\IHtmlContentTest.cs" />
+    <Compile Include="Dom\ItemIconTest.cs" />
+    <Compile Include="Dom\LatLonAltBoxTest.cs" />
+    <Compile Include="Engine\BoundingBoxTest.cs" />
+    <Compile Include="Engine\ElementExtensionsTest.cs" />
+    <Compile Include="Engine\EntityMapperTest.cs" />
+    <Compile Include="Engine\FeatureExtensionsTest.cs" />
+    <Compile Include="Engine\KmlFileTest.cs" />
+    <Compile Include="Engine\KmzFileTest.cs" />
+    <Compile Include="Engine\LinkResolverTest.cs" />
+    <Compile Include="Engine\StyleResolverTest.cs" />
+    <Compile Include="Engine\UpdateExtensionsTest.cs" />
+    <Compile Include="Engine\UriExtensionsTest.cs" />
+    <Compile Include="NUnitLite\Constraints\AttributeConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\BasicConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\BinaryOperations.cs" />
+    <Compile Include="NUnitLite\Constraints\CollectionConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\ComparisonAdapter.cs" />
+    <Compile Include="NUnitLite\Constraints\ComparisonConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\Constraint.cs" />
+    <Compile Include="NUnitLite\Constraints\ConstraintBuilder.cs" />
+    <Compile Include="NUnitLite\Constraints\ConstraintExpression.cs" />
+    <Compile Include="NUnitLite\Constraints\ConstraintExpressionBase.cs" />
+    <Compile Include="NUnitLite\Constraints\ConstraintFactory.cs" />
+    <Compile Include="NUnitLite\Constraints\ConstraintOperators.cs" />
+    <Compile Include="NUnitLite\Constraints\ContainsConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\EmptyConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\EqualConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\EqualityAdapter.cs" />
+    <Compile Include="NUnitLite\Constraints\FloatingPointNumerics.cs" />
+    <Compile Include="NUnitLite\Constraints\IResolveConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\MessageWriter.cs" />
+    <Compile Include="NUnitLite\Constraints\MsgUtils.cs" />
+    <Compile Include="NUnitLite\Constraints\Numerics.cs" />
+    <Compile Include="NUnitLite\Constraints\NUnitComparer.cs" />
+    <Compile Include="NUnitLite\Constraints\NUnitEqualityComparer.cs" />
+    <Compile Include="NUnitLite\Constraints\PathConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\PredicateConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\PrefixConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\PropertyConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\RangeConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\ResolvableConstraintExpression.cs" />
+    <Compile Include="NUnitLite\Constraints\SameAsConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\StringConstraints.cs" />
+    <Compile Include="NUnitLite\Constraints\ThrowsConstraint.cs" />
+    <Compile Include="NUnitLite\Constraints\Tolerance.cs" />
+    <Compile Include="NUnitLite\Constraints\TypeConstraints.cs" />
+    <Compile Include="NUnitLite\Env.cs" />
+    <Compile Include="NUnitLite\Framework\Assert.cs" />
+    <Compile Include="NUnitLite\Framework\AssertionException.cs" />
+    <Compile Include="NUnitLite\Framework\AssertionHelper.cs" />
+    <Compile Include="NUnitLite\Framework\Contains.cs" />
+    <Compile Include="NUnitLite\Framework\DescriptionAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\ExpectedExceptionAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\GlobalSettings.cs" />
+    <Compile Include="NUnitLite\Framework\Has.cs" />
+    <Compile Include="NUnitLite\Framework\IExpectException.cs" />
+    <Compile Include="NUnitLite\Framework\IgnoreAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\IgnoreException.cs" />
+    <Compile Include="NUnitLite\Framework\InconclusiveException.cs" />
+    <Compile Include="NUnitLite\Framework\Is.cs" />
+    <Compile Include="NUnitLite\Framework\Iz.cs" />
+    <Compile Include="NUnitLite\Framework\NUnitLiteException.cs" />
+    <Compile Include="NUnitLite\Framework\PropertyAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\RequiredAddinAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\SetUpAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\StackFilter.cs" />
+    <Compile Include="NUnitLite\Framework\SuccessException.cs" />
+    <Compile Include="NUnitLite\Framework\TearDownAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\TestAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\TestFixtureAttribute.cs" />
+    <Compile Include="NUnitLite\Framework\TextMessageWriter.cs" />
+    <Compile Include="NUnitLite\Framework\Throws.cs" />
+    <Compile Include="NUnitLite\ITest.cs" />
+    <Compile Include="NUnitLite\NullListener.cs" />
+    <Compile Include="NUnitLite\Reflect.cs" />
+    <Compile Include="NUnitLite\TestCase.cs" />
+    <Compile Include="NUnitLite\TestListener.cs" />
+    <Compile Include="NUnitLite\TestResult.cs" />
+    <Compile Include="NUnitLite\TestSuite.cs" />
+    <Compile Include="SampleData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpKml\SharpKml.csproj">
+      <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
+      <Name>SharpKml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Entities.kml" />
+    <EmbeddedResource Include="Engine\Data\Entity Data.kml" />
+    <EmbeddedResource Include="Engine\Data\Schema Data.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Style Data.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Style Output.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Bounds.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Update.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Links.kml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\Doc.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\NoKml.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Data\MultiKml.kmz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

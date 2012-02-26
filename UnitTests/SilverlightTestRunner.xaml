@@ -1,0 +1,19 @@
+﻿<navigation:Page x:Class="UnitTests.SilverlightTestRunner" x:Name="this"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           Title="SharpKml (Silverlight) - Unit Test Runner">
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Tests Passed:"/>
+            <TextBlock Text="{Binding ElementName=this, Path=PassedTests}" Margin="0,0,10,0"/>
+            <TextBlock Text="Tests Failed:"/>
+            <TextBlock Text="{Binding ElementName=this, Path=FailedTests}"/>
+        </StackPanel>
+        <RichTextBox Grid.Row="1" x:Name="output" FontFamily="Courier New" FontSize="12"/>
+    </Grid>
+</navigation:Page>

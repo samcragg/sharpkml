@@ -19,7 +19,7 @@ namespace SharpKml.Base
         {
             // Register all the sub-classes of Element that are
             // in the same assembly as Element.
-            RegisterAssembly(Assembly.GetAssembly(typeof(Element)));
+            RegisterAssembly(typeof(Element).Assembly);
         }
 
         /// <summary>

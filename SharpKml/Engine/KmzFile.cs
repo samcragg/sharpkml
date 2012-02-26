@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Kmz support is not currently enabled for silverlight, as there is a bug in
+// DotNetZip under silverlight with regards to encoding.
+// (See http://dotnetzip.codeplex.com/workitem/14049)
+#if !SILVERLIGHT
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +24,7 @@ namespace SharpKml.Engine
         // however, the default file for reading from an archive is the first
         // file in the table of contents that ends with ".kml".
         private const string DefaultKmlFilename = "doc.kml";
+        private static Encoding defaultEncoding = Encoding.UTF8;
         private ZipFile _zip;
 
         // The whole ZipFile will be saved to our stream so that we can check
@@ -32,6 +37,16 @@ namespace SharpKml.Engine
         private KmzFile(MemoryStream stream)
         {
             _zipStream = stream;
+        }
+
+        /// <summary>
+        /// Gets or sets the default string encoding to use when extracting
+        /// the Kml from a Kmz archive. Defaults to UTF8.
+        /// </summary>
+        public static Encoding DefaultEncoding
+        {
+            get { return defaultEncoding; }
+            set { defaultEncoding = value; }
         }
 
         /// <summary>
@@ -81,6 +96,7 @@ namespace SharpKml.Engine
             return instance;
         }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Creates a new KmzFile using the data specified in the Kml file.
         /// </summary>
@@ -147,12 +163,13 @@ namespace SharpKml.Engine
 
             return instance;
         }
+#endif
 
         /// <summary>Opens a KmzFile from the specified stream.</summary>
         /// <param name="stream">The stream to read the data from.</param>
         /// <returns>A KmzFile representing the specified stream.</returns>
         /// <exception cref="ArgumentNullException">stream is null.</exception>
-        /// <exception cref="InvalidDataException">
+        /// <exception cref="IOException">
         /// The Kmz archive is not in the expected format.
         /// </exception>
         /// <exception cref="IOException">An I/O error occurred.</exception>
@@ -185,7 +202,11 @@ namespace SharpKml.Engine
             if (!ZipFile.IsZipFile(memory, true))
             {
                 memory.Dispose();
+#if SILVERLIGHT
+                throw new IOException("The Kmz archive is not in the expected format.");
+#else
                 throw new InvalidDataException("The Kmz archive is not in the expected format.");
+#endif
             }
 
             // Everything's ok
@@ -194,6 +215,7 @@ namespace SharpKml.Engine
             return instance;
         }
 
+#if !SILVERLIGHT
         /// <summary>Creates a KmzFile from the specified file path.</summary>
         /// <param name="path">
         /// The URI for the file containing the KMZ data.
@@ -216,6 +238,7 @@ namespace SharpKml.Engine
                 return Open(stream);
             }
         }
+#endif
 
         /// <summary>
         /// Adds the specified data to the Kmz archive, using the specified
@@ -332,7 +355,8 @@ namespace SharpKml.Engine
 
             if (kml != null)
             {
-                return ASCIIEncoding.Default.GetString(this.ExtractResource(kml));
+                byte[] resource = this.ExtractResource(kml);
+                return defaultEncoding.GetString(resource, 0, resource.Length);
             }
             return null;
         }
@@ -505,3 +529,4 @@ namespace SharpKml.Engine
         }
     }
 }
+#endif

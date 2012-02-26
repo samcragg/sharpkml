@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Globalization;
 
 namespace SharpKml.Base
 {
     /// <summary>Represents a color, stored in the KML AABBGGRR format.</summary>
-    [ImmutableObject(true)]
     public struct Color32 : IComparable<Color32>, IEquatable<Color32>
     {
         private readonly uint _abgr; // Stored in the standard aabbggrr KML format.
@@ -43,7 +41,6 @@ namespace SharpKml.Base
         public byte Alpha
         {
             get { return (byte)(_abgr >> 24); }
-            ////set { _abgr = (_abgr & 0x00FFFFFF) | ((uint)value << 24); }
         }
 
         /// <summary>Gets the Color32 as an integer in ARGB format.</summary>
@@ -62,21 +59,18 @@ namespace SharpKml.Base
         public byte Blue
         {
             get { return (byte)(_abgr >> 16); }
-            ////set { _abgr = (_abgr & 0xFF00FFFF) | ((uint)value << 16); }
         }
 
         /// <summary>Gets the green component value.</summary>
         public byte Green
         {
             get { return (byte)(_abgr >> 8); }
-            ////set { _abgr = (_abgr & 0xFFFF00FF) | ((uint)value << 8); }
         }
 
         /// <summary>Gets the red component value.</summary>
         public byte Red
         {
             get { return (byte)_abgr; }
-            ////set { _abgr = (_abgr & 0xFFFFFF00) | (uint)value; }
         }
 
         /// <summary>

@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpKml</RootNamespace>
+    <AssemblyName>SharpKml-SL</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Bin\Debug\SharpKml-SL.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Bin\Release\SharpKml-SL.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\Angle.cs" />
+    <Compile Include="Base\Color32.cs" />
+    <Compile Include="Base\ElementEventArgs.cs" />
+    <Compile Include="Base\ElementWalker.cs" />
+    <Compile Include="Base\KmlAttributeAttribute.cs" />
+    <Compile Include="Base\KmlElementAttribute.cs" />
+    <Compile Include="Base\KmlFactory.cs" />
+    <Compile Include="Base\KmlFormatter.cs" />
+    <Compile Include="Base\KmlNamespaces.cs" />
+    <Compile Include="Base\MathHelpers.cs" />
+    <Compile Include="Base\Parser.cs" />
+    <Compile Include="Base\Serializer.cs" />
+    <Compile Include="Base\TypeBrowser.cs" />
+    <Compile Include="Base\ValueConverter.cs" />
+    <Compile Include="Base\Vector.cs" />
+    <Compile Include="Base\XmlComponent.cs" />
+    <Compile Include="Base\XmlExtractor.cs" />
+    <Compile Include="Dom\Atom\Author.cs" />
+    <Compile Include="Dom\Atom\Category.cs" />
+    <Compile Include="Dom\Atom\Content.cs" />
+    <Compile Include="Dom\Atom\Entry.cs" />
+    <Compile Include="Dom\Atom\Feed.cs" />
+    <Compile Include="Dom\Atom\Link.cs" />
+    <Compile Include="Dom\Element.cs" />
+    <Compile Include="Dom\Features\AbstractLatLonBox.cs" />
+    <Compile Include="Dom\Features\Container.cs" />
+    <Compile Include="Dom\Features\Data.cs" />
+    <Compile Include="Dom\Features\Description.cs" />
+    <Compile Include="Dom\Features\Document.cs" />
+    <Compile Include="Dom\Features\ExtendedData.cs" />
+    <Compile Include="Dom\Features\Feature.cs" />
+    <Compile Include="Dom\Features\Folder.cs" />
+    <Compile Include="Dom\Features\LatLonAltBox.cs" />
+    <Compile Include="Dom\Features\Lod.cs" />
+    <Compile Include="Dom\Features\NetworkLink.cs" />
+    <Compile Include="Dom\Features\Placemark.cs" />
+    <Compile Include="Dom\Features\Region.cs" />
+    <Compile Include="Dom\Features\Schema.cs" />
+    <Compile Include="Dom\Features\SchemaData.cs" />
+    <Compile Include="Dom\Features\SimpleData.cs" />
+    <Compile Include="Dom\Features\SimpleField.cs" />
+    <Compile Include="Dom\Features\Snippet.cs" />
+    <Compile Include="Dom\Fields\AltitudeMode.cs" />
+    <Compile Include="Dom\Fields\ColorMode.cs" />
+    <Compile Include="Dom\Fields\CoordinateCollection.cs" />
+    <Compile Include="Dom\Fields\DisplayMode.cs" />
+    <Compile Include="Dom\Fields\GridOrigin.cs" />
+    <Compile Include="Dom\Fields\ItemIconStates.cs" />
+    <Compile Include="Dom\Fields\ListItemType.cs" />
+    <Compile Include="Dom\Fields\RefreshMode.cs" />
+    <Compile Include="Dom\Fields\Shape.cs" />
+    <Compile Include="Dom\Fields\StyleState.cs" />
+    <Compile Include="Dom\Fields\Unit.cs" />
+    <Compile Include="Dom\Fields\VectorType.cs" />
+    <Compile Include="Dom\Fields\ViewRefreshMode.cs" />
+    <Compile Include="Dom\Geometries\Alias.cs" />
+    <Compile Include="Dom\Geometries\Geometry.cs" />
+    <Compile Include="Dom\Geometries\InnerBoundary.cs" />
+    <Compile Include="Dom\Geometries\LinearRing.cs" />
+    <Compile Include="Dom\Geometries\LineString.cs" />
+    <Compile Include="Dom\Geometries\Location.cs" />
+    <Compile Include="Dom\Geometries\Model.cs" />
+    <Compile Include="Dom\Geometries\MultipleGeometry.cs" />
+    <Compile Include="Dom\Geometries\Orientation.cs" />
+    <Compile Include="Dom\Geometries\OuterBoundary.cs" />
+    <Compile Include="Dom\Geometries\Point.cs" />
+    <Compile Include="Dom\Geometries\Polygon.cs" />
+    <Compile Include="Dom\Geometries\ResourceMap.cs" />
+    <Compile Include="Dom\Geometries\Scale.cs" />
+    <Compile Include="Dom\GX\AnimatedUpdate.cs" />
+    <Compile Include="Dom\GX\Enums.cs" />
+    <Compile Include="Dom\GX\FlyTo.cs" />
+    <Compile Include="Dom\GX\LatLonQuad.cs" />
+    <Compile Include="Dom\GX\MultipleTrack.cs" />
+    <Compile Include="Dom\GX\Playlist.cs" />
+    <Compile Include="Dom\GX\SimpleArrayData.cs" />
+    <Compile Include="Dom\GX\SimpleArrayField.cs" />
+    <Compile Include="Dom\GX\SoundCue.cs" />
+    <Compile Include="Dom\GX\TimeSpan.cs" />
+    <Compile Include="Dom\GX\Timestamp.cs" />
+    <Compile Include="Dom\GX\Tour.cs" />
+    <Compile Include="Dom\GX\TourControl.cs" />
+    <Compile Include="Dom\GX\TourPrimitive.cs" />
+    <Compile Include="Dom\GX\Track.cs" />
+    <Compile Include="Dom\GX\Wait.cs" />
+    <Compile Include="Dom\IBoundsInformation.cs" />
+    <Compile Include="Dom\ICustomElement.cs" />
+    <Compile Include="Dom\IHtmlContent.cs" />
+    <Compile Include="Dom\Kml.cs" />
+    <Compile Include="Dom\KmlObject.cs" />
+    <Compile Include="Dom\Links\ChangeCollection.cs" />
+    <Compile Include="Dom\Links\CreateCollection.cs" />
+    <Compile Include="Dom\Links\DeleteCollection.cs" />
+    <Compile Include="Dom\Links\Icon.cs" />
+    <Compile Include="Dom\Links\Link.cs" />
+    <Compile Include="Dom\Links\LinkSnippet.cs" />
+    <Compile Include="Dom\Links\LinkType.cs" />
+    <Compile Include="Dom\Links\NetworkLinkControl.cs" />
+    <Compile Include="Dom\Links\Update.cs" />
+    <Compile Include="Dom\Overlays\GroundOverlay.cs" />
+    <Compile Include="Dom\Overlays\ImagePyramid.cs" />
+    <Compile Include="Dom\Overlays\LatLonBox.cs" />
+    <Compile Include="Dom\Overlays\Overlay.cs" />
+    <Compile Include="Dom\Overlays\OverlayVector.cs" />
+    <Compile Include="Dom\Overlays\PhotoOverlay.cs" />
+    <Compile Include="Dom\Overlays\RotationVector.cs" />
+    <Compile Include="Dom\Overlays\ScreenOverlay.cs" />
+    <Compile Include="Dom\Overlays\ScreenVector.cs" />
+    <Compile Include="Dom\Overlays\SizeVector.cs" />
+    <Compile Include="Dom\Overlays\ViewVolume.cs" />
+    <Compile Include="Dom\Styles\BalloonStyle.cs" />
+    <Compile Include="Dom\Styles\BasicLink.cs" />
+    <Compile Include="Dom\Styles\ColorStyle.cs" />
+    <Compile Include="Dom\Styles\Hotspot.cs" />
+    <Compile Include="Dom\Styles\IconStyle.cs" />
+    <Compile Include="Dom\Styles\ItemIcon.cs" />
+    <Compile Include="Dom\Styles\LabelStyle.cs" />
+    <Compile Include="Dom\Styles\LineStyle.cs" />
+    <Compile Include="Dom\Styles\ListStyle.cs" />
+    <Compile Include="Dom\Styles\Pair.cs" />
+    <Compile Include="Dom\Styles\PolygonStyle.cs" />
+    <Compile Include="Dom\Styles\Style.cs" />
+    <Compile Include="Dom\Styles\StyleMapCollection.cs" />
+    <Compile Include="Dom\Styles\StyleSelector.cs" />
+    <Compile Include="Dom\Styles\SubStyle.cs" />
+    <Compile Include="Dom\Time\TimePrimitive.cs" />
+    <Compile Include="Dom\Time\TimeSpan.cs" />
+    <Compile Include="Dom\Time\Timestamp.cs" />
+    <Compile Include="Dom\UnknownElement.cs" />
+    <Compile Include="Dom\Url.cs" />
+    <Compile Include="Dom\Views\AbstractView.cs" />
+    <Compile Include="Dom\Views\Camera.cs" />
+    <Compile Include="Dom\Views\LookAt.cs" />
+    <Compile Include="Dom\Xal\AddressDetails.cs" />
+    <Compile Include="Dom\Xal\AdministrativeArea.cs" />
+    <Compile Include="Dom\Xal\Country.cs" />
+    <Compile Include="Dom\Xal\Locality.cs" />
+    <Compile Include="Dom\Xal\PostalCode.cs" />
+    <Compile Include="Dom\Xal\SubAdministrativeArea.cs" />
+    <Compile Include="Dom\Xal\Thoroughfare.cs" />
+    <Compile Include="Engine\BoundingBox.cs" />
+    <Compile Include="Engine\ElementExtensions.cs" />
+    <Compile Include="Engine\EntityMapper.cs" />
+    <Compile Include="Engine\FeatureExtensions.cs" />
+    <Compile Include="Engine\FileHandler.cs" />
+    <Compile Include="Engine\GeometryExtensions.cs" />
+    <Compile Include="Engine\KmlFile.cs" />
+    <Compile Include="Engine\KmzFile.cs" />
+    <Compile Include="Engine\LinkResolver.cs" />
+    <Compile Include="Engine\StyleResolver.cs" />
+    <Compile Include="Engine\UpdateExtensions.cs" />
+    <Compile Include="Engine\UriExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

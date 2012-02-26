@@ -9,6 +9,8 @@ namespace SharpKml.Engine
     /// </summary>
     internal static class FileHandler
     {
+
+#if !SILVERLIGHT
         /// <summary>
         /// Reads a file from either http, ftp or local and returns a stream to
         /// its contents.
@@ -60,6 +62,7 @@ namespace SharpKml.Engine
             }
         }
 
+
         /// <summary>
         /// Reads a Kml file or the default Kml file from a Kmz archive.
         /// </summary>
@@ -93,5 +96,6 @@ namespace SharpKml.Engine
             }
             return null;
         }
+#endif
     }
 }

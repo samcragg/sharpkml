@@ -130,7 +130,7 @@ namespace SharpKml.Dom
         /// <summary>Stores the inner text of the XML element.</summary>
         /// <param name="text">The text content of the XML element.</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Adding to the buffer would exceed <see cref="StringBuilder.MaxCapacity"/>.
+        /// Adding to the buffer would exceed StringBuilder.MaxCapacity.
         /// </exception>
         protected internal virtual void AddInnerText(string text)
         {
