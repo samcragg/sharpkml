@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using NUnit.Framework;
 using SharpKml.Base;
@@ -47,10 +49,17 @@ namespace UnitTests.Base
             }
         }
 
+        public class DoubleElement : Element
+        {
+            [KmlElement("Double", null)]
+            public double Double { get; set; }
+        }
+
         static ParserTest()
         {
             KmlFactory.Register<ChildElement>(new XmlComponent(null, "ChildElement", string.Empty));
             KmlFactory.Register<TestElement>(new XmlComponent(null, "TestElement", string.Empty));
+            KmlFactory.Register<DoubleElement>(new XmlComponent(null, "DoubleElement", string.Empty));
         }
 
         [Test]
@@ -295,6 +304,33 @@ namespace UnitTests.Base
             Placemark placemark = document.Features.FirstOrDefault() as Placemark;
             Assert.That(placemark, Is.Not.Null);
             Assert.That(placemark.Name, Is.EqualTo("My Placemark"));
+        }
+
+        [Test]
+        public void TestCulturalSettings()
+        {
+            const string xml = "<DoubleElement><Double>12.34</Double></DoubleElement>";
+
+            var parser = new Parser();
+            var oldCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                parser.ParseString(xml, true);
+                Assert.That(((DoubleElement)parser.Root).Double, Is.EqualTo(12.34));
+
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("de");
+                parser.ParseString(xml, true);
+                Assert.That(((DoubleElement)parser.Root).Double, Is.EqualTo(12.34));
+            }
+            catch (ArgumentException) // Culture doesn't exist
+            {
+                throw new InconclusiveException("German culture not available.");
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = oldCulture;
+            }
         }
     }
 }

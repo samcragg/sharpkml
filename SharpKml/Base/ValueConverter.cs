@@ -29,42 +29,40 @@ namespace SharpKml.Base
         /// </returns>
         public static bool TryGetValue(Type type, string text, out object value)
         {
-            // TODO: Move this to GetPrimitive
             if (type.IsEnum)
             {
                 value = GetEnum(type, text);
             }
-            else if (type == typeof(bool)) // bool.TryParse doesn't work in our situation
-            {
-                value = GetBool(text);
-            }
-            else if (type.IsPrimitive)
-            {
-                value = GetPrimitive(type, text);
-            }
-            else if (type == typeof(string))
-            {
-                value = text;
-            }
-            else if (type == typeof(Color32))
-            {
-                value = Color32.Parse(text);
-            }
-            else if (type == typeof(DateTime))
-            {
-                value = GetDateTime(text);
-            }
-            else if (type == typeof(Uri))
-            {
-                Uri uri;
-                Uri.TryCreate(text, UriKind.RelativeOrAbsolute, out uri);
-                value = uri; // Will be null if TryCreate failed
-            }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Unknown type:" + type);
-                value = null;
-                return false;
+                TypeCode typeCode = Type.GetTypeCode(type);
+                if (typeCode == TypeCode.String)
+                {
+                    value = text;
+                }
+                else if (typeCode == TypeCode.Object)
+                {
+                    if (type == typeof(Color32))
+                    {
+                        value = Color32.Parse(text);
+                    }
+                    else if (type == typeof(Uri))
+                    {
+                        Uri uri;
+                        Uri.TryCreate(text, UriKind.RelativeOrAbsolute, out uri);
+                        value = uri; // Will be null if TryCreate failed
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Unknown type:" + type);
+                        value = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    value = GetPrimitive(typeCode, text);
+                }
             }
             return true;
         }
@@ -122,23 +120,54 @@ namespace SharpKml.Base
         }
 
         // Only called on Primitive types, as these all have a TryParse method
-        private static object GetPrimitive(Type type, string value)
+        private static object GetPrimitive(TypeCode typeCode, string value)
         {
-            switch (Type.GetTypeCode(type))
+            NumberStyles numberStyle = NumberStyles.Any;
+            IFormatProvider provider = CultureInfo.InvariantCulture; 
+            switch (typeCode)
             {
                 case TypeCode.Boolean:
                     return GetBool(value);
+                case TypeCode.Byte:
+                    byte b;
+                    return byte.TryParse(value, numberStyle, provider, out b) ? (object)b : null;
+                case TypeCode.Char:
+                    char c;
+                    return char.TryParse(value, out c) ? (object)c : null;
+                case TypeCode.DateTime:
+                    return GetDateTime(value);
+                case TypeCode.Decimal:
+                    decimal de;
+                    return decimal.TryParse(value, numberStyle, provider, out de) ? (object)de : null;
+                case TypeCode.Double:
+                    double d;
+                    return double.TryParse(value, numberStyle, provider, out d) ? (object)d : null;
+                case TypeCode.Int16:
+                    short s;
+                    return short.TryParse(value, numberStyle, provider, out s) ? (object)s : null;
+                case TypeCode.Int32:
+                    int i;
+                    return int.TryParse(value, numberStyle, provider, out i) ? (object)i : null;
+                case TypeCode.Int64:
+                    long l;
+                    return long.TryParse(value, numberStyle, provider, out l) ? (object)l : null;
+                case TypeCode.SByte:
+                    sbyte sb;
+                    return sbyte.TryParse(value, numberStyle, provider, out sb) ? (object)sb : null;
+                case TypeCode.Single:
+                    float f;
+                    return float.TryParse(value, numberStyle, provider, out f) ? (object)f : null;
+                case TypeCode.UInt16:
+                    ushort us;
+                    return ushort.TryParse(value, numberStyle, provider, out us) ? (object)us : null;
+                case TypeCode.UInt32:
+                    uint ui;
+                    return uint.TryParse(value, numberStyle, provider, out ui) ? (object)ui : null;
+                case TypeCode.UInt64:
+                    ulong ul;
+                    return ulong.TryParse(value, numberStyle, provider, out ul) ? (object)ul : null;
             }
-
-            // Get the TryParse method
-            MethodInfo tryParse = type.GetMethod("TryParse", new Type[] { typeof(string), type.MakeByRefType() });
-            System.Diagnostics.Debug.Assert(tryParse != null, "TryParse method not found.");
-
-            object[] parameters = { value, null }; // null will be filled by TryParse
-            if ((bool)tryParse.Invoke(null, parameters))
-            {
-                return parameters[1];
-            }
+            System.Diagnostics.Debug.WriteLine("Unknown TypeCode:" + typeCode);
             return null; // Failed to convert
         }
     }
