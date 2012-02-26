@@ -97,9 +97,11 @@ namespace SharpKml.Base
                 else
                 {
                     _defaultNamespace = KmlNamespaces.Kml22Namespace;
-                    var textReader = new XmlTextReader(stream);
-                    textReader.Namespaces = false;
-                    this.Parse(textReader);
+                    this.Parse(
+                        XmlReader.Create(
+                        stream,
+                        new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment },
+                        new XmlParserContext(null, new IgnoreNamespaceManager(), null, XmlSpace.Default)));
                 }
             }
         }
@@ -243,7 +245,7 @@ namespace SharpKml.Base
             {
                 return new XmlComponent(_reader);
             }
-            return new XmlComponent(null, _reader.LocalName, _defaultNamespace);
+            return new XmlComponent(null, _reader.Name, _defaultNamespace);
         }
 
         private void OnElementAdded(Element element)
@@ -315,6 +317,35 @@ namespace SharpKml.Base
                         element.AddAttribute(new XmlComponent(_reader));
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Allows unkown namespaces to be resolved without raising an
+        /// XmlException.
+        /// </summary>
+        private class IgnoreNamespaceManager : XmlNamespaceManager
+        {
+            /// <summary>
+            /// Initializes a new instance of the EmptyNamespaceManager class.
+            /// </summary>
+            public IgnoreNamespaceManager()
+                : base(new NameTable())
+            {
+            }
+
+            /// <summary>Gets the namespace URI for the specified prefix.</summary>
+            /// <param name="prefix">
+            /// The prefix whose namespace URI you want to resolve. To match the
+            /// default namespace, pass String.Empty.
+            /// </param>
+            /// <returns>
+            /// Returns the namespace URI for prefix or String.Empty if there
+            /// is no mapped namespace.
+            /// </returns>
+            public override string LookupNamespace(string prefix)
+            {
+                return base.LookupNamespace(prefix) ?? string.Empty;
             }
         }
     }

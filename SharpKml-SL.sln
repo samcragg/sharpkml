@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Web Developer Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpKml-SL", "SharpKml\SharpKml-SL.csproj", "{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests-SL", "UnitTests\UnitTests-SL.csproj", "{041997FB-F035-4300-B1CF-B4B08A9859DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6166E7-36A4-4170-8DA4-03DFF22B3B2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041997FB-F035-4300-B1CF-B4B08A9859DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041997FB-F035-4300-B1CF-B4B08A9859DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041997FB-F035-4300-B1CF-B4B08A9859DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041997FB-F035-4300-B1CF-B4B08A9859DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

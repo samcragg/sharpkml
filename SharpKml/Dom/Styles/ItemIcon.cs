@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Xml;
 using SharpKml.Base;
+using System.Reflection;
 
 namespace SharpKml.Dom
 {
@@ -67,8 +68,7 @@ namespace SharpKml.Dom
         /// <summary>Used to correctly serialize multiple ItemIconStates.</summary>
         private class StateElement : Element, ICustomElement
         {
-            private static readonly ItemIconStates[] States =
-                Enum.GetValues(typeof(ItemIconStates)).Cast<ItemIconStates>().ToArray();
+            private static readonly ItemIconStates[] States = GetStates();
 
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
@@ -116,6 +116,18 @@ namespace SharpKml.Dom
                         }
                     }
                 }
+            }
+
+            private static ItemIconStates[] GetStates()
+            {
+#if SILVERLIGHT
+                var values = from field in typeof(ItemIconStates).GetFields(BindingFlags.Public | BindingFlags.Static)
+                             where field.IsLiteral
+                             select (ItemIconStates)field.GetValue(null);
+#else
+                var values = Enum.GetValues(typeof(ItemIconStates)).Cast<ItemIconStates>();
+#endif
+                return values.ToArray();
             }
         }
     }

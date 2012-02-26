@@ -21,20 +21,47 @@ namespace SharpKml.Engine
 
         private int _nestedDepth;
         private int _styleId;
+#if !SILVERLIGHT
         private bool _resolveExternal;
+#endif
 
         private StyleResolver(IDictionary<string, StyleSelector> map)
         {
             _styleMap = map;
         }
 
+#if SILVERLIGHT
+        /// <summary>Resolves all the styles in the specified Feature.</summary>
+        /// <param name="feature">The Feature to search for Styles.</param>
+        /// <param name="file">The KmlFile the feature belongs to.</param>
+        /// <param name="state">The StyleState of the styles to look for.</param>
+        /// <returns>A new Style that has been resolved.</returns>
+        /// <exception cref="ArgumentNullException">feature/file is null.</exception>
+        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state)
+        {
+            if (feature == null)
+            {
+                throw new ArgumentNullException("feature");
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+
+            var instance = new StyleResolver(file.StyleMap);
+            instance._state = state;
+            instance.Merge(feature.StyleUrl, feature.StyleSelector);
+            return instance._style;
+        }
+#else
         /// <summary>Resolves all the styles in the specified Feature.</summary>
         /// <param name="feature">The Feature to search for Styles.</param>
         /// <param name="file">The KmlFile the feature belongs to.</param>
         /// <param name="state">The StyleState of the styles to look for.</param>
         /// <param name="resolve">
-        /// Specifies whether to resolve external styles by opening the linked
-        /// file and loading the style from it.
+        /// Optional parameter that specifies whether to resolve external styles
+        /// by opening the linked file and loading the style from it. If the
+        /// parameter is not specified it defaults to false.
         /// </param>
         /// <returns>A new Style that has been resolved.</returns>
         /// <exception cref="ArgumentNullException">feature/file is null.</exception>
@@ -42,7 +69,7 @@ namespace SharpKml.Engine
         /// If resolve is set to true, the method will block while loading the
         /// linked file, however, any errors opening the file are ignored.
         /// </remarks>
-        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state, bool resolve)
+        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state, bool resolve = false)
         {
             if (feature == null)
             {
@@ -59,6 +86,7 @@ namespace SharpKml.Engine
             instance.Merge(feature.StyleUrl, feature.StyleSelector);
             return instance._style;
         }
+#endif
 
         /// <summary>
         /// Inlines the shared Style of the features in the specified element.
@@ -249,6 +277,7 @@ namespace SharpKml.Engine
                         this.Merge(style);
                     }
                 }
+#if !SILVERLIGHT
                 else if (_resolveExternal)
                 {
                     KmlFile file = FileHandler.ReadFile(path);
@@ -261,6 +290,7 @@ namespace SharpKml.Engine
                         }
                     }
                 }
+#endif
             }
         }
 

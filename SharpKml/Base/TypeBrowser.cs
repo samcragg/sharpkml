@@ -112,7 +112,7 @@ namespace SharpKml.Base
             }
 
             Type type = value.GetType();
-            string name = type.GetEnumName(value);
+            string name = Enum.GetName(type, value);
             if (name != null)
             {
                 return GetAttribute<KmlElementAttribute>(type.GetField(name));

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SharpKml.Base;
+using System;
 
 namespace SharpKml.Dom
 {
@@ -83,6 +84,19 @@ namespace SharpKml.Dom
             }
         }
 
+#if SILVERLIGHT
+        /// <summary>
+        /// Do not use this property - it is for internal use only. It is public
+        /// to allow access via reflection in Silverlight.
+        /// </summary>
+        [KmlElement(null, 3)]
+        [System.ComponentModel.Browsable(false)]
+        public CoordinateCollection Coordinates
+        {
+            get { return _coords; }
+            set { this.UpdatePropertyChild(value, ref _coords); }
+        }
+#else
         // Use a private property to enable automatic parsing/serialization
         [KmlElement(null, 3)]
         private CoordinateCollection Coordinates
@@ -90,5 +104,6 @@ namespace SharpKml.Dom
             get { return _coords; }
             set { this.UpdatePropertyChild(value, ref _coords); }
         }
+#endif
     }
 }

@@ -29,6 +29,7 @@ namespace SharpKml.Base
         /// </returns>
         public static bool TryGetValue(Type type, string text, out object value)
         {
+            // TODO: Move this to GetPrimitive
             if (type.IsEnum)
             {
                 value = GetEnum(type, text);
@@ -123,6 +124,12 @@ namespace SharpKml.Base
         // Only called on Primitive types, as these all have a TryParse method
         private static object GetPrimitive(Type type, string value)
         {
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Boolean:
+                    return GetBool(value);
+            }
+
             // Get the TryParse method
             MethodInfo tryParse = type.GetMethod("TryParse", new Type[] { typeof(string), type.MakeByRefType() });
             System.Diagnostics.Debug.Assert(tryParse != null, "TryParse method not found.");
