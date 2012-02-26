@@ -41,7 +41,7 @@
             <summary>Stores the inner text of the XML element.</summary>
             <param name="text">The text content of the XML element.</param>
             <exception cref="T:System.ArgumentOutOfRangeException">
-            Adding to the buffer would exceed <see cref="P:System.Text.StringBuilder.MaxCapacity"/>.
+            Adding to the buffer would exceed StringBuilder.MaxCapacity.
             </exception>
         </member>
         <member name="M:SharpKml.Dom.Element.AddOrphan(SharpKml.Dom.Element)">
@@ -1876,7 +1876,7 @@
             <summary>Parses the inner text of the XML element.</summary>
             <param name="text">The text content of the XML element.</param>
             <exception cref="T:System.ArgumentOutOfRangeException">
-            Adding to the buffer would exceed <see cref="P:System.Text.StringBuilder.MaxCapacity"/>.
+            Adding to the buffer would exceed StringBuilder.MaxCapacity.
             </exception>
         </member>
         <member name="P:SharpKml.Dom.CoordinateCollection.Count">
@@ -5080,6 +5080,12 @@
             <exception cref="T:System.ObjectDisposedException">
             <see cref="M:SharpKml.Engine.KmzFile.Dispose"/> has been called on this instance.
             </exception>
+        </member>
+        <member name="P:SharpKml.Engine.KmzFile.DefaultEncoding">
+            <summary>
+            Gets or sets the default string encoding to use when extracting
+            the Kml from a Kmz archive. Defaults to UTF8.
+            </summary>
         </member>
         <member name="P:SharpKml.Engine.KmzFile.Files">
             <summary>
