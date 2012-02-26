@@ -93,10 +93,17 @@ namespace UnitTests
                 }
                 catch (TargetInvocationException ex)
                 {
-                    this.Dispatcher.BeginInvoke(() => this.FailedTests += 1);
-                    ModifyLastLine("FAILED", Colors.Red);
-                    AppendLine("        " + ex.InnerException.GetType());
-                    AppendLine("        " + ex.InnerException.Message);
+                    if (ex.InnerException.GetType() == typeof(InconclusiveException))
+                    {
+                        ModifyLastLine("SKIPPED", Colors.Orange);
+                    }
+                    else
+                    {
+                        this.Dispatcher.BeginInvoke(() => this.FailedTests += 1);
+                        ModifyLastLine("FAILED", Colors.Red);
+                        AppendLine("        " + ex.InnerException.GetType());
+                        AppendLine("        " + ex.InnerException.Message);
+                    }
                 }
             }
         }
