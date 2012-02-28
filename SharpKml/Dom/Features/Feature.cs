@@ -46,7 +46,7 @@ namespace SharpKml.Dom
 
         /// <summary>Gets or sets the author of the Feature.</summary>
         /// <remarks>This value is inheritable - see section 9.6.2</remarks>
-        [KmlElement("author", KmlNamespaces.AtomNamespace, 4)]
+        [KmlElement(null, 4)]
         public Atom.Author AtomAuthor { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SharpKml.Dom
         /// <see cref="Atom.Link.Relation"/> property shall be present and its
         /// value shall be "related".
         /// </remarks>
-        [KmlElement("link", KmlNamespaces.AtomNamespace, 5)]
+        [KmlElement(null, 5)]
         public Atom.Link AtomLink { get; set; }
 
         /// <summary>Gets or sets a description of the Feature.</summary>

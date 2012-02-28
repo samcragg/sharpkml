@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 using SharpKml.Dom;
@@ -11,8 +12,7 @@ namespace SharpKml.Base
     /// </summary>
     public class Serializer
     {
-        private StringBuilder _data = new StringBuilder();
-        private XmlWriter _writer;
+        private string _xml;
 
         /// <summary>
         /// Gets the XML content after the most recent call to
@@ -20,7 +20,7 @@ namespace SharpKml.Base
         /// </summary>
         public string Xml
         {
-            get { return _data.ToString(); }
+            get { return _xml; }
         }
 
         /// <summary>
@@ -79,40 +79,14 @@ namespace SharpKml.Base
             return string.Format(KmlFormatter.Instance, "{0}", value);
         }
 
-        private void Serialize(Element root, XmlWriterSettings settings)
-        {
-            // We check here so the two public functions don't need to
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
-
-            XmlWriter writer = null;
-            try
-            {
-                _data.Clear();
-                writer = XmlWriter.Create(_data, settings);
-                _writer = writer;
-                this.SerializeElement(root);
-            }
-            finally
-            {
-                _writer = null;
-                if (writer != null)
-                {
-                    ((IDisposable)writer).Dispose();
-                }
-            }
-        }
-
-        private void SerializeElement(Element element)
+        private static void SerializeElement(XmlWriter writer, Element element)
         {
             // Write start tag
             XmlComponent component = KmlFactory.FindType(element.GetType());
             ICustomElement customElement = element as ICustomElement;
             if (customElement != null) // Takes priority over component
             {
-                customElement.CreateStartElement(_writer);
+                customElement.CreateStartElement(writer);
                 if (!customElement.ProcessChildren)
                 {
                     return; // Don't need to to any more work.
@@ -120,7 +94,7 @@ namespace SharpKml.Base
             }
             else if (component != null)
             {
-                _writer.WriteStartElement(component.Name, component.NamespaceUri);
+                writer.WriteStartElement(component.Name, component.NamespaceUri);
             }
             else // We can't handle it so ignore it
             {
@@ -131,37 +105,37 @@ namespace SharpKml.Base
             // Write the attributes - unknown, serialized then namespaces.
             foreach (var att in element.Attributes)
             {
-                _writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
+                writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
             }
 
-            this.WriteAttributes(element);
+            WriteAttributes(writer, element);
 
             foreach (var ns in element.Namespaces.GetNamespacesInScope(XmlNamespaceScope.ExcludeXml))
             {
-                _writer.WriteAttributeString("xmlns", ns.Key, string.Empty, ns.Value);
+                writer.WriteAttributeString("xmlns", ns.Key, string.Empty, ns.Value);
             }
 
             // Now the text part
-            this.WriteData(element.InnerText);
+            WriteData(writer, element.InnerText);
 
             // Now write the elements - serialized, children then unknown children.
-            this.WriteElements(element);
-            this.SerializeElements(element.OrderedChildren);
-            this.SerializeElements(element.Orphans);
+            WriteElements(writer, element);
+            SerializeElements(writer, element.OrderedChildren);
+            SerializeElements(writer, element.Orphans);
 
             // Finished...
-            _writer.WriteEndElement();
+            writer.WriteEndElement();
         }
 
-        private void SerializeElements(IEnumerable<Element> elements)
+        private static void SerializeElements(XmlWriter writer, IEnumerable<Element> elements)
         {
             foreach (var element in elements)
             {
-                this.SerializeElement(element);
+                SerializeElement(writer, element);
             }
         }
 
-        private void WriteAttributes(Element element)
+        private static void WriteAttributes(XmlWriter writer, Element element)
         {
             TypeBrowser browser = TypeBrowser.Create(element.GetType());
             foreach (var property in browser.Attributes)
@@ -169,12 +143,12 @@ namespace SharpKml.Base
                 object value = property.Item1.GetValue(element, null);
                 if (value != null) // Make sure it needs saving
                 {
-                    _writer.WriteAttributeString(property.Item2.AttributeName, GetString(value));
+                    writer.WriteAttributeString(property.Item2.AttributeName, GetString(value));
                 }
             }
         }
 
-        private void WriteData(string data)
+        private static void WriteData(XmlWriter writer, string data)
         {
             // The XmlWriter will escape any illegal XML characters, but the original
             // C++ code would CDATA it instead, making sure it's not already a CDATA.
@@ -185,22 +159,22 @@ namespace SharpKml.Base
             {
                 if (IsCData(data))
                 {
-                    _writer.WriteRaw(data); // Data is already escaped.
+                    writer.WriteRaw(data); // Data is already escaped.
                 }
                 else if (data.IndexOfAny(new char[] { '&', '\'', '<', '>', '\"' }) != -1)
                 {
                     // Illegal character found and the string isn't CDATA
-                    _writer.WriteCData(data);
+                    writer.WriteCData(data);
                 }
                 else
                 {
                     // Just write normal.
-                    _writer.WriteString(data);
+                    writer.WriteString(data);
                 }
             }
         }
 
-        private void WriteElements(Element element)
+        private static void WriteElements(XmlWriter writer, Element element)
         {
             TypeBrowser browser = TypeBrowser.Create(element.GetType());
 
@@ -211,15 +185,37 @@ namespace SharpKml.Base
                 {
                     if (property.Item2.ElementName == null) // This is an element
                     {
-                        this.SerializeElement((Element)value);
+                        SerializeElement(writer, (Element)value);
                     }
                     else
                     {
-                        _writer.WriteStartElement(property.Item2.ElementName, property.Item2.Namespace);
-                        this.WriteData(GetString(value));
-                        _writer.WriteEndElement();
+                        writer.WriteStartElement(property.Item2.ElementName, property.Item2.Namespace);
+                        WriteData(writer, GetString(value));
+                        writer.WriteEndElement();
                     }
                 }
+            }
+        }
+
+        private void Serialize(Element root, XmlWriterSettings settings)
+        {
+            // We check here so the two public functions don't need to
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+
+            _xml = null;
+            settings.Encoding = new UTF8Encoding(false); // Omit the BOM
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = XmlWriter.Create(stream, settings))
+                {
+                    SerializeElement(writer, root);
+                }
+
+                _xml = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
             }
         }
     }
