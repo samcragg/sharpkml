@@ -4290,6 +4290,21 @@
             This should be the root element of a KML document instance.
             </summary>
         </member>
+        <member name="M:SharpKml.Dom.Kml.AddNamespacePrefix(System.String,System.String)">
+            <summary>
+            Registers the specified prefix with the specified namespace.
+            </summary>
+            <param name="prefix">
+            The prefix to associate with the namespace being added.
+            </param>
+            <param name="uri">The namespace to add.</param>
+            <exception cref="T:System.ArgumentException">
+            The value for prefix is an empty string, "xml" or "xmlns".
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            prefix/uri is null.
+            </exception>
+        </member>
         <member name="P:SharpKml.Dom.Kml.Feature">
             <summary>
             Gets or sets the associated <see cref="P:SharpKml.Dom.Kml.Feature"/> of this instance.
@@ -5608,7 +5623,9 @@
             </summary>
         </member>
         <member name="T:SharpKml.Base.KmlNamespaces">
-            <summary>Represents XML namespace information.</summary>
+            <summary>
+            Represents some common XML namespaces and their respective prefix.
+            </summary>
             <remarks>
             These need to be constants for the use in Attributes, hence the
             XXXNamespace and XXXPrefix fields.

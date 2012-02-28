@@ -4,12 +4,14 @@ using System.Reflection;
 
 namespace SharpKml.Base
 {
-    /// <summary>Represents XML namespace information.</summary>
+    /// <summary>
+    /// Represents some common XML namespaces and their respective prefix.
+    /// </summary>
     /// <remarks>
     /// These need to be constants for the use in Attributes, hence the
     /// XXXNamespace and XXXPrefix fields.
     /// </remarks>
-    internal static class KmlNamespaces
+    public static class KmlNamespaces
     {
         /// <summary>Represents the Atom Publishing Protocol namespace.</summary>
         public const string AppNamespace = "http://www.w3.org/2007/app";

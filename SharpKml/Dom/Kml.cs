@@ -1,4 +1,5 @@
-﻿using SharpKml.Base;
+﻿using System;
+using SharpKml.Base;
 
 namespace SharpKml.Dom
 {
@@ -36,6 +37,40 @@ namespace SharpKml.Dom
         {
             get { return _link; }
             set { this.UpdatePropertyChild(value, ref _link); }
+        }
+
+        /// <summary>
+        /// Registers the specified prefix with the specified namespace.
+        /// </summary>
+        /// <param name="prefix">
+        /// The prefix to associate with the namespace being added.
+        /// </param>
+        /// <param name="uri">The namespace to add.</param>
+        /// <exception cref="ArgumentException">
+        /// The value for prefix is an empty string, "xml" or "xmlns".
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        /// prefix/uri is null.
+        /// </exception>
+        public void AddNamespacePrefix(string prefix, string uri)
+        {
+            if (prefix == null)
+            {
+                throw new ArgumentNullException("prefix");
+            }
+            if (uri == null)
+            {
+                throw new ArgumentNullException("uri");
+            }
+
+            if ((prefix == string.Empty) ||
+                (prefix == "xml") ||
+                (prefix == "xmlns"))
+            {
+                throw new ArgumentException("Invalid prefix.", "prefix");
+            }
+
+            this.Namespaces.AddNamespace(prefix, uri);
         }
     }
 }
