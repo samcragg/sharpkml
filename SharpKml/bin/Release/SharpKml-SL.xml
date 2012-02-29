@@ -5249,7 +5249,7 @@
             default namespace, pass String.Empty.
             </param>
             <returns>
-            Returns the namespace URI for prefix or String.Empty if there
+            Returns the namespace URI for prefix or "uri:ignore" if there
             is no mapped namespace.
             </returns>
         </member>
