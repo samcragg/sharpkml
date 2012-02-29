@@ -192,8 +192,13 @@ namespace UnitTests.Engine
 
         private static Uri CreateUri(string uri)
         {
+            // UriKind.RelativeOrAbsolute doesn't work too well under OS X (and possible Linux) so
+            // firt try a relative then an absolute uri
             Uri output;
-            Uri.TryCreate(uri, UriKind.RelativeOrAbsolute, out output);
+            if (!Uri.TryCreate(uri, UriKind.Relative, out output))
+            {
+                Uri.TryCreate(uri, UriKind.Absolute, out output);
+            }
             return output;
         }
 

@@ -81,6 +81,8 @@ namespace SharpKml.Engine
             // Absolute paths are already normalized
             if (!uri.IsAbsoluteUri)
             {
+                // First normalize the separators (important under Mono on OS X)
+                uri = new Uri(uri.OriginalString.Replace('\\', '/'), UriKind.Relative);
                 string components = GetComponents(uri, NormalizeComponents);
                 if (components != null)
                 {
