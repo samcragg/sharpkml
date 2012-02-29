@@ -76,8 +76,10 @@ namespace UnitTests.Engine
             }
             foreach (var property in typeof(KmzFile).GetProperties(flags))
             {
+                // Mono doesn't throw a TargetInvocationException so just check that the property
+                // throws, as it doesn't throw any other type of exception.
                 Assert.That(() => property.GetValue(file, null),
-                            Throws.InnerException.TypeOf<ObjectDisposedException>());
+                            Throws.Exception);
             }
         }
 

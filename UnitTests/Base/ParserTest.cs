@@ -323,6 +323,10 @@ namespace UnitTests.Base
                 parser.ParseString(xml, true);
                 Assert.That(((DoubleElement)parser.Root).Double, Is.EqualTo(12.34));
             }
+            catch (NotSupportedException) // Mono under OS X doesn't like using "de"
+            {
+                throw new InconclusiveException("German culture not available.");
+            }
             catch (ArgumentException) // Culture doesn't exist
             {
                 throw new InconclusiveException("German culture not available.");

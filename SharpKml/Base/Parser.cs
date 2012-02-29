@@ -340,12 +340,12 @@ namespace SharpKml.Base
             /// default namespace, pass String.Empty.
             /// </param>
             /// <returns>
-            /// Returns the namespace URI for prefix or String.Empty if there
+            /// Returns the namespace URI for prefix or "uri:ignore" if there
             /// is no mapped namespace.
             /// </returns>
             public override string LookupNamespace(string prefix)
             {
-                return base.LookupNamespace(prefix) ?? string.Empty;
+                return base.LookupNamespace(prefix) ?? "uri:ignore";
             }
         }
     }
