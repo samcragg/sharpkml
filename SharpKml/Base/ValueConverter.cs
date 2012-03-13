@@ -15,8 +15,9 @@ namespace SharpKml.Base
             "yyyy", // xsd:gYear
             "yyyy-MM", // xsd:gYearMonth
             "yyyy-MM-dd", // xsd:date
-            "yyyy-MM-ddTHH:mm:ssZ", // xsd:dateTime
-            "yyyy-MM-ddTHH:mm:sszzzzzz" // xsd:dateTime
+            "yyyy-MM-ddTHH:mm:ss.FFFFFFF", // xsd:dateTime
+            "yyyy-MM-ddTHH:mm:ss.FFFFFFFZ", // xsd:dateTime
+            "yyyy-MM-ddTHH:mm:ss.FFFFFFFzzzzzz" // xsd:dateTime
         };
 
         /// <summary>Tries to convert the specified string to an object.</summary>
