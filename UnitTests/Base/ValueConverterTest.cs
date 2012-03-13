@@ -35,24 +35,25 @@ namespace UnitTests.Base
         [Test]
         public void TestDateTime()
         {
-            string[] ValidDateTimes =
+            Tuple<string, DateTime>[] ValidDateTimes =
             {
-                "1997",
-                "1997-07",
-                "1997-07-16",
-                "1997-07-16T07:30:15Z",
-                "1997-07-16T10:30:15+03:00",
-                "1997-07-16T14:30:15Z" // Check 24hour value
+                Tuple.Create("1997", new DateTime(1997, 1, 1)),
+                Tuple.Create("1997-07",  new DateTime(1997, 7, 1)),
+                Tuple.Create("1997-07-16", new DateTime(1997, 7, 16)),
+                Tuple.Create("1997-07-16T07:30:15Z", new DateTime(1997, 7, 16, 7, 30, 15)),
+                Tuple.Create("1997-07-16T10:30:15+03:00", new DateTime(1997, 7, 16, 7, 30, 15)),
+                Tuple.Create("1997-07-16T14:30:15Z",  new DateTime(1997, 7, 16, 14, 30, 15)), // Check 24hour value
+                Tuple.Create("1997-07-16T07:30:01",  new DateTime(1997, 7, 16, 7, 30, 1)),   // Time without timezone
+                Tuple.Create("1997-07-16T07:30:01.01", new DateTime(1997, 7, 16, 7, 30, 1, 10))
             };
 
             foreach (var date in ValidDateTimes)
             {
                 object value;
-                ValueConverter.TryGetValue(typeof(DateTime), date, out value);
-
+                ValueConverter.TryGetValue(typeof(DateTime), date.Item1, out value);
+                Console.WriteLine(date.Item1);
                 DateTime dateTime = (DateTime)value;
-                Assert.That(dateTime.Year, Is.EqualTo(1997));
-                Assert.That(dateTime.Kind, Is.EqualTo(DateTimeKind.Utc));
+                Assert.That(dateTime, Is.EqualTo(date.Item2));
             }
         }
 
