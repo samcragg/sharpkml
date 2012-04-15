@@ -52,6 +52,10 @@ namespace SharpKml.Base
                 DateTime? date = arg as DateTime?;
                 if (date != null)
                 {
+                    if (date.Value.Kind == DateTimeKind.Utc)
+                    {
+                        return date.Value.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+                    }
                     return date.Value.ToString("yyyy-MM-ddTHH:mm:sszzzzzz", CultureInfo.InvariantCulture);
                 }
 

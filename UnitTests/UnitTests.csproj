@@ -42,6 +42,7 @@
     <Compile Include="Base\Color32Test.cs" />
     <Compile Include="Base\ElementWalkerTest.cs" />
     <Compile Include="Base\KmlFactoryTest.cs" />
+    <Compile Include="Base\KmlFormatterTest.cs" />
     <Compile Include="Base\MathHelpersTest.cs" />
     <Compile Include="Base\ParserTest.cs" />
     <Compile Include="Base\SerializerTest.cs" />
