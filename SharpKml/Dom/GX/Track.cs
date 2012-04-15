@@ -94,7 +94,7 @@ namespace SharpKml.Dom.GX
             get
             {
                 return from e in this.Children.OfType<WhenElement>()
-                       select e.InnerText;
+                       select e.Value;
             }
         }
 
@@ -332,6 +332,12 @@ namespace SharpKml.Dom.GX
             public bool ProcessChildren
             {
                 get { return false; }
+            }
+
+            /// <summary>Gets the value passed into the constructor.</summary>
+            public string Value
+            {
+                get { return _value; }
             }
 
             /// <summary>Writes the start of an XML element.</summary>
