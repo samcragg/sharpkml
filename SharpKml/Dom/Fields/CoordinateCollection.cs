@@ -14,8 +14,40 @@ namespace SharpKml.Dom
     public sealed class CoordinateCollection : Element, ICollection<Vector>, ICustomElement
     {
         private static readonly Regex Expression = CreateRegex();
+        private static string _delimiter = "\n";
+        private readonly List<Vector> _points;
 
-        private List<Vector> _points = new List<Vector>();
+        /// <summary>
+        /// Initializes a new instance of the CoordinateCollection class.
+        /// </summary>
+        public CoordinateCollection()
+        {
+            _points = new List<Vector>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CoordinateCollection class.
+        /// </summary>
+        /// <param name="points">The points to populate the instance with.</param>
+        /// <exception cref="ArgumentNullException">points is null.</exception>
+        public CoordinateCollection(IEnumerable<Vector> points)
+        {
+            if (points == null)
+            {
+                throw new ArgumentNullException("points");
+            }
+
+            _points = new List<Vector>(points);
+        }
+
+        /// <summary>
+        /// Gets or sets the delimiter to use between each point.
+        /// </summary>
+        public static string Delimiter
+        {
+            get { return _delimiter; }
+            set { _delimiter = value; }
+        }
 
         /// <summary>
         /// Gets the number of points contained in this instance.
@@ -134,13 +166,24 @@ namespace SharpKml.Dom
         {
             // This element is being serialized so we need to update the InnerText
             StringBuilder sb = new StringBuilder();
+            bool first = true;
+
             foreach (var point in _points)
             {
+                if (!first)
+                {
+                    sb.Append(_delimiter);
+                }
+                else
+                {
+                    first = false;
+                }
+
                 if (point.Altitude != null)
                 {
                     sb.AppendFormat(
                         KmlFormatter.Instance,
-                        "{0},{1},{2}\n",
+                        "{0},{1},{2}",
                         point.Longitude,
                         point.Latitude,
                         point.Altitude.Value);
@@ -149,11 +192,12 @@ namespace SharpKml.Dom
                 {
                     sb.AppendFormat(
                         KmlFormatter.Instance,
-                        "{0},{1}\n",
+                        "{0},{1}",
                         point.Longitude,
                         point.Latitude);
                 }
             }
+
             this.ClearInnerText();
             base.AddInnerText(sb.ToString()); // Don't use our overloaded version
 

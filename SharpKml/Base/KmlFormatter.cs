@@ -8,7 +8,6 @@ namespace SharpKml.Base
     internal class KmlFormatter : ICustomFormatter, IFormatProvider
     {
         private static KmlFormatter _instance = new KmlFormatter();
-        private StringBuilder _formatter = new StringBuilder();
 
         private KmlFormatter()
         {
@@ -39,34 +38,34 @@ namespace SharpKml.Base
         /// </returns>
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
-            _formatter.Length = 0; // Clear the StringBuilder
             if (format == null)
             {
-                if ((arg is double) || (arg is float) || (arg is decimal))
+                var convertible = arg as IConvertible;
+                if (convertible != null)
                 {
-                    // Return a maximum 15 meaningful digits
-                    _formatter.AppendFormat(CultureInfo.InvariantCulture, "{0:#0.##############}", arg);
-                    return _formatter.ToString();
-                }
-
-                DateTime? date = arg as DateTime?;
-                if (date != null)
-                {
-                    if (date.Value.Kind == DateTimeKind.Utc)
+                    switch (convertible.GetTypeCode())
                     {
-                        return date.Value.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
-                    }
-                    return date.Value.ToString("yyyy-MM-ddTHH:mm:sszzzzzz", CultureInfo.InvariantCulture);
-                }
+                        case TypeCode.Boolean:
+                            return GetBool((bool)arg);
 
-                bool? boolean = arg as bool?;
-                if (boolean != null)
-                {
-                    return boolean.Value ? "true" : "false"; // bool.ToString returns True or False, we need all lower case
+                        case TypeCode.DateTime:
+                            return GetDateTime((DateTime)arg);
+
+                        case TypeCode.Decimal:
+                            return GetDecimal((decimal)arg);
+
+                        case TypeCode.Double:
+                            return GetFloatingPoint((double)arg);
+
+                        case TypeCode.Single:
+                            return GetFloatingPoint((float)arg);
+                    }
                 }
             }
-            _formatter.AppendFormat(CultureInfo.InvariantCulture, "{0:" + format + "}", arg);
-            return _formatter.ToString();
+
+            var formatter = new StringBuilder();
+            formatter.AppendFormat(CultureInfo.InvariantCulture, "{0:" + format + "}", arg);
+            return formatter.ToString();
         }
 
         /// <summary>
@@ -85,7 +84,37 @@ namespace SharpKml.Base
             {
                 return this;
             }
+
             return null;
+        }
+
+        private static string GetBool(bool value)
+        {
+            return value ? "true" : "false"; // bool.ToString returns True or False, we need all lower case
+        }
+
+        private static string GetDateTime(DateTime date)
+        {
+            if (date.Kind == DateTimeKind.Utc)
+            {
+                return date.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                return date.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static string GetFloatingPoint(double value)
+        {
+            // Return a maximum 15 meaningful digits
+            return value.ToString("#0.##############", CultureInfo.InvariantCulture);
+        }
+
+        private static string GetDecimal(decimal value)
+        {
+            // Return a maximum 15 meaningful digits
+            return value.ToString("#0.##############", CultureInfo.InvariantCulture);
         }
     }
 }
