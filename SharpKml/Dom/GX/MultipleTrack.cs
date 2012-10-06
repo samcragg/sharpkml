@@ -18,11 +18,23 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>
+        /// Gets or sets how the altitude value should be interpreted.
+        /// </summary>
+        [KmlElement("altitudeMode")]
+        public Dom.AltitudeMode? AltitudeMode { get; set; }
+
+        /// <summary>
         /// Gets or sets whether to interpolate missing values between the end
         /// of the first track and the beginning of the next one.
         /// </summary>
         [KmlElement("interpolate", KmlNamespaces.GX22Namespace)]
         public bool? Interpolate { get; set; }
+
+        /// <summary>
+        /// Gets or sets extended altitude mode information.
+        /// </summary>
+        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace)]
+        public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets the <see cref="Track"/>s contained by this instance.
