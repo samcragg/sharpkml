@@ -10,6 +10,8 @@ namespace UnitTests.Dom
     [TestFixture]
     public class CoordinateCollectionTest
     {
+        private const string XmlFormat = "<coordinates xmlns=\"http://www.opengis.net/kml/2.2\">{0}</coordinates>";
+
         [Test]
         public void TestCollection()
         {
@@ -113,32 +115,50 @@ namespace UnitTests.Dom
         [Test]
         public void TestSerialize()
         {
-            const string XmlFormat = "<coordinates xmlns=\"http://www.opengis.net/kml/2.2\">{0}</coordinates>";
-            Serializer serializer = new Serializer();
-            CoordinateCollection coords = new CoordinateCollection();
+            var serializer = new Serializer();
+            var coords = new CoordinateCollection();
 
-            // First test empty
+            // First test empty.
             serializer.SerializeRaw(coords);
             Assert.That(serializer.Xml, Is.EqualTo("<coordinates xmlns=\"http://www.opengis.net/kml/2.2\" />"));
 
+            // Now with a value.
             coords.Add(new Vector(1, 2, 3));
             serializer.SerializeRaw(coords);
-            string output = serializer.Xml.Replace("\r", "");
-            Assert.That(output, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1,3\n")));
 
-            // Make sure altitude is only saved if it's specified
-            coords.Clear();
-            coords.Add(new Vector(1, 2));
-            serializer.SerializeRaw(coords);
-            output = serializer.Xml.Replace("\r", "");
-            Assert.That(output, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1\n")));
+            string expected = string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1,3");
+            Assert.That(serializer.Xml, Is.EqualTo(expected));
+        }
 
-            coords.Clear();
-            coords.Add(new Vector(1, 2, 3));
-            coords.Add(new Vector(2, 1, 3));
+        [Test]
+        public void SerializeShouldNotOutputAltitudeIfItIsNotSpecified()
+        {
+            var coords = new CoordinateCollection(new[] { new Vector(1, 2) });
+
+            var serializer = new Serializer();
             serializer.SerializeRaw(coords);
-            output = serializer.Xml.Replace("\r", "");
-            Assert.That(output, Is.EqualTo(string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1,3\n1,2,3\n")));
+
+            var expected = string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1");
+            Assert.That(serializer.Xml, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void SerializeShouldUseTheDelimiterToSeparatePoints()
+        {
+            var coords = new CoordinateCollection(new []
+                {
+                    new Vector(1, 2, 3),
+                    new Vector(2, 1, 3)
+                });
+
+            var serializer = new Serializer();
+
+            CoordinateCollection.Delimiter = " ";
+            serializer.SerializeRaw(coords);
+            CoordinateCollection.Delimiter = "\n"; // Reset to prove it worked during the call to serialize
+
+            var expected = string.Format(CultureInfo.InvariantCulture, XmlFormat, "2,1,3 1,2,3");
+            Assert.That(serializer.Xml, Is.EqualTo(expected));
         }
 
         private static void AssertVector(Vector vector, double lat, double lon)

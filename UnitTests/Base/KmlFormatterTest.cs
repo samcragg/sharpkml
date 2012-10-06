@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using SharpKml.Base;
 
@@ -8,12 +10,48 @@ namespace UnitTests.Base
     public class KmlFormatterTest
     {
         [Test]
-        public void TestDateTimeKind()
+        public void TestLocalDateTime()
         {
-            DateTime baseDate = new DateTime(2012, 11, 10, 9, 8, 7);
-            TestDateTime(DateTime.SpecifyKind(baseDate, DateTimeKind.Local));
-            TestDateTime(DateTime.SpecifyKind(baseDate, DateTimeKind.Unspecified));
-            TestDateTime(DateTime.SpecifyKind(baseDate, DateTimeKind.Utc));
+            var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
+            TestDateTime(date);
+        }
+
+        [Test]
+        public void TestUnspecifiedDateTime()
+        {
+            var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Unspecified);
+            TestDateTime(date);
+        }
+
+        [Test]
+        public void TestUtcDateTime()
+        {
+            var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Utc);
+            TestDateTime(date);
+        }
+
+        [Test]
+        public void TestLocalDateTimeInOtherCulture()
+        {
+            var oldCulture = Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("he-IL");
+                var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
+                TestDateTime(date);
+            }
+            catch (ArgumentException)
+            {
+                throw new InconclusiveException("Culture not available.");
+            }
+            catch (NotSupportedException)
+            {
+                throw new InconclusiveException("Culture not available.");
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = oldCulture;
+            }
         }
 
         private void TestDateTime(DateTime date)

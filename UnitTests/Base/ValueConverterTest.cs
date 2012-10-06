@@ -76,7 +76,5 @@ namespace UnitTests.Base
             // throw an exception for unknown types.
             Assert.False(ValueConverter.TryGetValue(this.GetType(), string.Empty, out value));
         }
-
-        // TODO: ValueConverter fails when the culture changes.
     }
 }
