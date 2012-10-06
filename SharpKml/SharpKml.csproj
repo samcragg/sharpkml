@@ -48,6 +48,9 @@
     <Compile Include="Base\Angle.cs" />
     <Compile Include="Base\ElementEventArgs.cs" />
     <Compile Include="Base\ElementWalker.cs" />
+    <Compile Include="Dom\GX\Option.cs" />
+    <Compile Include="Dom\GX\PlayMode.cs" />
+    <Compile Include="Dom\GX\FlyToMode.cs" />
     <Compile Include="Engine\FileHandler.cs" />
     <Compile Include="Base\ValueConverter.cs" />
     <Compile Include="Dom\Features\Placemark.cs" />
@@ -126,7 +129,7 @@
     <Compile Include="Dom\Geometries\Orientation.cs" />
     <Compile Include="Dom\Geometries\ResourceMap.cs" />
     <Compile Include="Dom\Geometries\Scale.cs" />
-    <Compile Include="Dom\GX\Enums.cs" />
+    <Compile Include="Dom\GX\AltitudeMode.cs" />
     <Compile Include="Base\XmlExtractor.cs" />
     <Compile Include="Dom\Features\Container.cs" />
     <Compile Include="Dom\IHtmlContent.cs" />

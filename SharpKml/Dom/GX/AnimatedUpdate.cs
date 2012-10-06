@@ -9,7 +9,9 @@ namespace SharpKml.Dom.GX
     {
         private Update _update;
 
-        /// <summary>Gets or sets the amount of time, in seconds.</summary>
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds.
+        /// </summary>
         [KmlElement("duration", KmlNamespaces.GX22Namespace)]
         public double? Duration { get; set; }
 
@@ -22,5 +24,11 @@ namespace SharpKml.Dom.GX
             get { return _update; }
             set { this.UpdatePropertyChild(value, ref _update); }
         }
+
+        /// <summary>
+        /// Gets or sets the number of seconds to wait before starting the update.
+        /// </summary>
+        [KmlElement("delayedStart", KmlNamespaces.GX22Namespace)]
+        public double? DelayedStart { get; set; }
     }
 }

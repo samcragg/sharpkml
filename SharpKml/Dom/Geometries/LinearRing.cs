@@ -68,6 +68,13 @@ namespace SharpKml.Dom
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
+        /// Gets or sets an offset (in meters) to apply to all the points
+        /// without modifying them. [Google Extension]
+        /// </summary>
+        [KmlElement("altitudeOffset", KmlNamespaces.GX22Namespace, 6)]
+        public double? GXAltitudeOffset { get; set; }
+
+        /// <summary>
         /// Gets the coordinates of the bounds of this instance.
         /// </summary>
         IEnumerable<Vector> IBoundsInformation.Coordinates
