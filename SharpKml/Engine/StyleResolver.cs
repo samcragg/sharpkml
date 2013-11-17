@@ -83,7 +83,13 @@ namespace SharpKml.Engine
             var instance = new StyleResolver(file.StyleMap);
             instance._resolveExternal = resolve;
             instance._state = state;
-            instance.Merge(feature.StyleUrl, feature.StyleSelector);
+            instance.Merge(feature.StyleUrl);
+
+            foreach (StyleSelector selector in feature.Styles)
+            {
+                instance.Merge(selector);
+            }
+
             return instance._style;
         }
 #endif
@@ -128,7 +134,8 @@ namespace SharpKml.Engine
             var sharedStyles = new List<Tuple<Document, StyleSelector>>();
 
             T clone = element.Clone();
-            foreach (var e in clone.Flatten())
+            var children = clone.Flatten().ToList(); // Adding a style will add to the children.
+            foreach (Element e in children)
             {
                 var tuple = instance.Split(e);
                 if (tuple != null)
@@ -217,21 +224,12 @@ namespace SharpKml.Engine
                         string id = feature.StyleUrl.GetFragment();
                         if (_styleMap.ContainsKey(id))
                         {
-                            feature.StyleSelector = this.CreateStyleMap(feature.StyleUrl);
+                            feature.AddStyle(this.CreateStyleMap(feature.StyleUrl));
                             feature.StyleUrl = null;
                         }
                     }
                 }
             }
-        }
-
-        private void Merge(Uri url, StyleSelector selector)
-        {
-            // If there's a url to a shared style merge that in first.
-            this.Merge(url);
-
-            // If there's an inline style that takes priority so merge that over.
-            this.Merge(selector);
         }
 
         private void Merge(StyleSelector selector)
@@ -246,11 +244,12 @@ namespace SharpKml.Engine
                 var styleMap = selector as StyleMapCollection;
                 if (styleMap != null)
                 {
-                    foreach (var pair in styleMap)
+                    foreach (Pair pair in styleMap)
                     {
                         if (pair.State == _state)
                         {
-                            this.Merge(pair.StyleUrl, pair.Selector);
+                            this.Merge(pair.StyleUrl);
+                            this.Merge(pair.Selector);
                         }
                     }
                 }
@@ -334,7 +333,7 @@ namespace SharpKml.Engine
                         // remove the old style.
                         _styleMap.Add(shared.Id, shared);
                         feature.StyleUrl = new Uri("#" + shared.Id, UriKind.Relative);
-                        feature.StyleSelector = null;
+                        feature.ClearStyles();
 
                         // This will be added to the Document later when we've
                         // finished iterating through the Children

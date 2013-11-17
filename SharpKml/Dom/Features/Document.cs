@@ -14,7 +14,6 @@ namespace SharpKml.Dom
         /// <summary>Initializes a new instance of the Document class.</summary>
         public Document()
         {
-            this.RegisterValidChild<StyleSelector>();
             this.RegisterValidChild<Schema>();
             this.RegisterValidChild<Feature>();
         }
@@ -28,14 +27,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="StyleSelector"/> contained by this instance.
-        /// </summary>
-        public IEnumerable<StyleSelector> Styles
-        {
-            get { return this.Children.OfType<StyleSelector>(); }
-        }
-
-        /// <summary>
         /// Adds the specified <see cref="Schema"/> to this instance.
         /// </summary>
         /// <param name="schema">The <c>Schema</c> to add to this instance.</param>
@@ -46,20 +37,6 @@ namespace SharpKml.Dom
         public void AddSchema(Schema schema)
         {
             this.AddChild(schema);
-        }
-
-        /// <summary>
-        /// Adds the specified <see cref="StyleSelector"/> to this instance.
-        /// </summary>
-        /// <param name="style">The <c>StyleSelector</c> to add to this instance.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">style is null.</exception>
-        /// <exception cref="System.InvalidOperationException">
-        /// style belongs to another <see cref="Element"/>.
-        /// </exception>
-        public void AddStyle(StyleSelector style)
-        {
-            this.AddChild(style);
         }
     }
 }
