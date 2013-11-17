@@ -297,9 +297,8 @@ namespace SharpKml.Engine
         }
 
         /// <summary>
-        /// Loads a KmlFile using the specified KMZ data.
+        /// Loads a default <see cref="KmlFile"/> inside this archive.
         /// </summary>
-        /// <param name="kmz">The KmzFile containing the KML data.</param>
         /// <returns>
         /// A KmlFile representing the default KML file in the specified KMZ archive
         /// or null if no KML data was found.
@@ -307,8 +306,8 @@ namespace SharpKml.Engine
         /// <remarks>
         /// This method checks for duplicate Id's in the file and throws an
         /// exception if duplicate Id's are found. To enable duplicate Id's
-        /// use the <see cref="Parser"/> class and pass the root element
-        /// to <see cref="Create"/>.
+        /// use the <see cref="SharpKml.Base.Parser"/> class and pass the root
+        /// element to <see cref="KmlFile.Create"/>.
         /// </remarks>
         /// <exception cref="ObjectDisposedException">
         /// <see cref="Dispose"/> has been called on this instance.
