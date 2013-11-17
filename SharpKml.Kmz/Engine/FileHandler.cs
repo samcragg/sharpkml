@@ -9,8 +9,6 @@ namespace SharpKml.Engine
     /// </summary>
     internal static class FileHandler
     {
-
-#if !SILVERLIGHT
         /// <summary>
         /// Reads a file from either http, ftp or local and returns a stream to
         /// its contents.
@@ -47,55 +45,17 @@ namespace SharpKml.Engine
                 }
             }
 
-            var client = new WebClient();
-            try
+            using (var client = new WebClient())
             {
-                return client.DownloadData(uri);
-            }
-            catch (WebException ex)
-            {
-                throw new IOException("Unable to load file.", ex);
-            }
-            finally
-            {
-                client.Dispose();
-            }
-        }
-
-
-        /// <summary>
-        /// Reads a Kml file or the default Kml file from a Kmz archive.
-        /// </summary>
-        /// <param name="path">The path of the file.</param>
-        /// <returns>A KmlFile on success, or null on an error.</returns>
-        public static KmlFile ReadFile(string path)
-        {
-            try
-            {
-                byte[] data = ReadBytes(new Uri(path, UriKind.RelativeOrAbsolute));
-                using (var stream = new MemoryStream(data, false))
+                try
                 {
-                    string extension = Path.GetExtension(path);
-                    if (string.Equals(extension, ".kml", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return KmlFile.Load(stream);
-                    }
-
-                    if (string.Equals(extension, ".kmz", StringComparison.OrdinalIgnoreCase))
-                    {
-                        using (var kmz = KmzFile.Open(stream))
-                        {
-                            return KmlFile.LoadFromKmz(kmz);
-                        }
-                    }
+                    return client.DownloadData(uri);
+                }
+                catch (WebException ex)
+                {
+                    throw new IOException("Unable to load file.", ex);
                 }
             }
-            catch (IOException)
-            {
-                // Silently fail
-            }
-            return null;
         }
-#endif
     }
 }

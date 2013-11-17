@@ -10,9 +10,6 @@ using SharpKml.Engine;
 
 namespace UnitTests.Engine
 {
-    // Test currently disabled for silverlight as there is no Kmz support available
-    // due to a bug in DotNetZip under silverlight.
-#if !SILVERLIGHT
     [TestFixture]
     public class KmzFileTest
     {
@@ -39,11 +36,7 @@ namespace UnitTests.Engine
             // Now try an invalid archive (i.e. something that isn't a zip)
             using (var stream = SampleData.CreateStream("Engine.Data.Bounds.kml"))
             {
-#if SILVERLIGHT
-                var exception = typeof(IOException);
-#else
                 var exception = typeof(InvalidDataException);
-#endif
                 Assert.That((TestDelegate)(() => KmzFile.Open(stream)),
                             Throws.TypeOf(exception));
             }
@@ -149,35 +142,6 @@ namespace UnitTests.Engine
             }
         }
 
-#if SILVERLIGHT
-        [Test]
-        public void TestSave()
-        {
-            // Create the Kml data
-            const string Xml = "<Placemark xmlns='http://www.opengis.net/kml/2.2'><name>tmp kml</name></Placemark>";
-            var parser = new Parser();
-            parser.ParseString(Xml, true);
-            var kml = KmlFile.Create(parser.Root, false);
-
-            using (var stream = new MemoryStream())
-            {
-                // Create and save the archive
-                using (var file = KmzFile.Create(kml))
-                {
-                    file.Save(stream);
-                }
-
-                // Try to open the saved archive, rewinding the stream
-                stream.Position = 0;
-                using (var file = KmzFile.Open(stream))
-                {
-                    // Make sure it's the same as what we saved
-                    parser.ParseString(file.ReadKml(), true);
-                    SampleData.CompareElements(kml.Root, parser.Root);
-                }
-            }
-        }
-#else
         [Test]
         public void TestSave()
         {
@@ -210,7 +174,6 @@ namespace UnitTests.Engine
                 File.Delete(tempFile);
             }
         }
-#endif
 
         [Test]
         public void TestAddFile()
@@ -309,5 +272,4 @@ namespace UnitTests.Engine
             return file;
         }
     }
-#endif
 }

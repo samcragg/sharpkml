@@ -1,8 +1,4 @@
-﻿// Kmz support is not currently enabled for silverlight, as there is a bug in
-// DotNetZip under silverlight with regards to encoding.
-// (See http://dotnetzip.codeplex.com/workitem/14049)
-#if !SILVERLIGHT
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,7 +92,6 @@ namespace SharpKml.Engine
             return instance;
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Creates a new KmzFile using the data specified in the Kml file.
         /// </summary>
@@ -163,7 +158,6 @@ namespace SharpKml.Engine
 
             return instance;
         }
-#endif
 
         /// <summary>Opens a KmzFile from the specified stream.</summary>
         /// <param name="stream">The stream to read the data from.</param>
@@ -202,11 +196,7 @@ namespace SharpKml.Engine
             if (!ZipFile.IsZipFile(memory, true))
             {
                 memory.Dispose();
-#if SILVERLIGHT
-                throw new IOException("The Kmz archive is not in the expected format.");
-#else
                 throw new InvalidDataException("The Kmz archive is not in the expected format.");
-#endif
             }
 
             // Everything's ok
@@ -215,7 +205,6 @@ namespace SharpKml.Engine
             return instance;
         }
 
-#if !SILVERLIGHT
         /// <summary>Creates a KmzFile from the specified file path.</summary>
         /// <param name="path">
         /// The URI for the file containing the KMZ data.
@@ -238,7 +227,6 @@ namespace SharpKml.Engine
                 return Open(stream);
             }
         }
-#endif
 
         /// <summary>
         /// Adds the specified data to the Kmz archive, using the specified
@@ -290,7 +278,9 @@ namespace SharpKml.Engine
             }
         }
 
-        /// <summary>Releases all resources used by this instance.</summary>
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             if (_zip != null)
@@ -304,6 +294,40 @@ namespace SharpKml.Engine
                 _zipStream.Dispose();
                 _zipStream = null;
             }
+        }
+
+        /// <summary>
+        /// Loads a KmlFile using the specified KMZ data.
+        /// </summary>
+        /// <param name="kmz">The KmzFile containing the KML data.</param>
+        /// <returns>
+        /// A KmlFile representing the default KML file in the specified KMZ archive
+        /// or null if no KML data was found.
+        /// </returns>
+        /// <remarks>
+        /// This method checks for duplicate Id's in the file and throws an
+        /// exception if duplicate Id's are found. To enable duplicate Id's
+        /// use the <see cref="Parser"/> class and pass the root element
+        /// to <see cref="Create"/>.
+        /// </remarks>
+        /// <exception cref="ObjectDisposedException">
+        /// <see cref="Dispose"/> has been called on this instance.
+        /// </exception>
+        /// <exception cref="System.Xml.XmlException">
+        /// An error occurred while parsing the KML.
+        /// </exception>
+        public KmlFile GetDefaultKmlFile()
+        {
+            string kml = this.ReadKml();
+            if (kml != null)
+            {
+                using (var reader = new StringReader(kml))
+                {
+                    return KmlFile.Load(reader);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>Extracts the specified file from the Kmz archive.</summary>
@@ -529,4 +553,3 @@ namespace SharpKml.Engine
         }
     }
 }
-#endif

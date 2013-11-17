@@ -109,84 +109,41 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("input");
             }
 
-            KmlFile file = new KmlFile();
             using (var reader = new StreamReader(input))
             {
-                file.Parse(reader);
+                return Load(reader);
             }
+        }
+
+        /// <summary>
+        /// Loads a KmlFile using the specified KML data.
+        /// </summary>
+        /// <param name="reader">The text reader containing the KML data.</param>
+        /// <returns>A KmlFile representing the specified information.</returns>
+        /// <remarks>
+        /// This method checks for duplicate Id's in the file and throws an
+        /// exception if duplicate Id's are found. To enable duplicate Id's
+        /// use the <see cref="Parser"/> class and pass the root element
+        /// to <see cref="Create"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">reader is null.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// Duplicate Id's were found or the XML is nested too deeply.
+        /// </exception>
+        /// <exception cref="System.Xml.XmlException">
+        /// An error occurred while parsing the KML.
+        /// </exception>
+        public static KmlFile Load(TextReader reader)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException("reader");
+            }
+
+            KmlFile file = new KmlFile();
+            file.Parse(reader);
             return file;
         }
-
-#if !SILVERLIGHT
-        /// <summary>
-        /// Loads a KmlFile using the specified KML data at the specified path.
-        /// </summary>
-        /// <param name="path">
-        /// The URI for the file containing the XML data.
-        /// </param>
-        /// <returns>A KmlFile representing the specified file.</returns>
-        /// <remarks>
-        /// This method checks for duplicate Id's in the file and throws an
-        /// exception if duplicate Id's are found. To enable duplicate Id's
-        /// use the <see cref="Parser"/> class and pass the root element
-        /// to <see cref="Create"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
-        /// <exception cref="IOException">An I/O error occurred.</exception>
-        /// <exception cref="System.Xml.XmlException">
-        /// An error occurred while parsing the KML.
-        /// </exception>
-        public static KmlFile Load(string path)
-        {
-            using (var stream = FileHandler.OpenRead(new Uri(path, UriKind.RelativeOrAbsolute)))
-            {
-                return Load(stream);
-            }
-        }
-#endif
-
-#if !SILVERLIGHT // No Kmz support in Silveright
-        /// <summary>
-        /// Loads a KmlFile using the specified KMZ data.
-        /// </summary>
-        /// <param name="kmz">The KmzFile containing the KML data.</param>
-        /// <returns>
-        /// A KmlFile representing the default KML file in the specified KMZ archive
-        /// or null if no KML data was found.
-        /// </returns>
-        /// <remarks>
-        /// This method checks for duplicate Id's in the file and throws an
-        /// exception if duplicate Id's are found. To enable duplicate Id's
-        /// use the <see cref="Parser"/> class and pass the root element
-        /// to <see cref="Create"/>.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">kmz is null.</exception>
-        /// <exception cref="ObjectDisposedException">
-        /// <see cref="KmzFile.Dispose"/> has been called on kmz.
-        /// </exception>
-        /// <exception cref="System.Xml.XmlException">
-        /// An error occurred while parsing the KML.
-        /// </exception>
-        public static KmlFile LoadFromKmz(KmzFile kmz)
-        {
-            if (kmz == null)
-            {
-                throw new ArgumentNullException("kmz");
-            }
-
-            string kml = kmz.ReadKml();
-            if (kml != null)
-            {
-                KmlFile instance = new KmlFile();
-                using (var stream = new StringReader(kml))
-                {
-                    instance.Parse(stream);
-                }
-                return instance;
-            }
-            return null;
-        }
-#endif
 
         /// <summary>
         /// Searches for a <see cref="KmlObject"/> with the specified
@@ -255,44 +212,6 @@ namespace SharpKml.Engine
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write(serializer.Xml);
-            }
-        }
-
-        /// <summary>Saves this instance to the specified path.</summary>
-        /// <param name="path">The complete file path to write to.</param>
-        /// <remarks>
-        /// If the specified file exists in the specified path then it will be
-        /// overwritten; otherwise, a new file will be created.
-        /// </remarks>
-        /// <exception cref="ArgumentException">
-        /// path is a zero-length string, contains only white space, or contains
-        /// one or more invalid characters as defined by
-        /// <see cref="Path.GetInvalidPathChars"/>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">
-        /// The specified path is invalid.
-        /// </exception>
-        /// <exception cref="IOException">
-        /// An I/O error occurred or path includes an incorrect or invalid syntax
-        /// for file name, directory name or volume label.
-        /// </exception>
-        /// <exception cref="NotSupportedException">
-        /// path is in an invalid format.
-        /// </exception>
-        /// <exception cref="PathTooLongException">
-        /// The specified path, file name, or both exceed the system-defined
-        /// maximum length.
-        /// </exception>
-        /// <exception cref="UnauthorizedAccessException">
-        /// The caller does not have the required permission or path specified a
-        /// file that is read-only.
-        /// </exception>
-        public void Save(string path)
-        {
-            using (var file = File.Create(path))
-            {
-                this.Save(file);
             }
         }
 

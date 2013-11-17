@@ -91,7 +91,10 @@ namespace Examples
             KmlFile file;
             try
             {
-                file = KmlFile.Load(filename);
+                using (FileStream stream = File.Open(filename, FileMode.Open))
+                {
+                    file = KmlFile.Load(stream);
+                }
             }
             catch (Exception ex)
             {

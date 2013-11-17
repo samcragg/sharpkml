@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SharpKml.Dom;
 
@@ -19,41 +20,15 @@ namespace SharpKml.Engine
         private Style _style = new Style();
         private StyleState _state;
 
+        private IFileResolver _fileResolver;
         private int _nestedDepth;
         private int _styleId;
-#if !SILVERLIGHT
-        private bool _resolveExternal;
-#endif
 
         private StyleResolver(IDictionary<string, StyleSelector> map)
         {
             _styleMap = map;
         }
 
-#if SILVERLIGHT
-        /// <summary>Resolves all the styles in the specified Feature.</summary>
-        /// <param name="feature">The Feature to search for Styles.</param>
-        /// <param name="file">The KmlFile the feature belongs to.</param>
-        /// <param name="state">The StyleState of the styles to look for.</param>
-        /// <returns>A new Style that has been resolved.</returns>
-        /// <exception cref="ArgumentNullException">feature/file is null.</exception>
-        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state)
-        {
-            if (feature == null)
-            {
-                throw new ArgumentNullException("feature");
-            }
-            if (file == null)
-            {
-                throw new ArgumentNullException("file");
-            }
-
-            var instance = new StyleResolver(file.StyleMap);
-            instance._state = state;
-            instance.Merge(feature.StyleUrl, feature.StyleSelector);
-            return instance._style;
-        }
-#else
         /// <summary>Resolves all the styles in the specified Feature.</summary>
         /// <param name="feature">The Feature to search for Styles.</param>
         /// <param name="file">The KmlFile the feature belongs to.</param>
@@ -69,7 +44,31 @@ namespace SharpKml.Engine
         /// If resolve is set to true, the method will block while loading the
         /// linked file, however, any errors opening the file are ignored.
         /// </remarks>
-        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state, bool resolve = false)
+        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state)
+        {
+            return CreateResolvedStyle(feature, file, state, null);
+        }
+
+        /// <summary>
+        /// Resolves all the styles in the specified <see cref="Feature"/>.
+        /// </summary>
+        /// <param name="feature">
+        /// The <c>Feature</c> to search for styles.
+        /// </param>
+        /// <param name="file">
+        /// The <see cref="KmlFile"/> the feature belongs to.
+        /// </param>
+        /// <param name="state">
+        /// The <see cref="StyleState"/> of the styles to look for.
+        /// </param>
+        /// <param name="resolver">
+        /// Used to resolve external files referenced by the styles.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Style"/> that has been resolved.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">feature/file is null.</exception>
+        public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state, IFileResolver resolver)
         {
             if (feature == null)
             {
@@ -81,7 +80,7 @@ namespace SharpKml.Engine
             }
 
             var instance = new StyleResolver(file.StyleMap);
-            instance._resolveExternal = resolve;
+            instance._fileResolver = resolver;
             instance._state = state;
             instance.Merge(feature.StyleUrl);
 
@@ -92,7 +91,6 @@ namespace SharpKml.Engine
 
             return instance._style;
         }
-#endif
 
         /// <summary>
         /// Inlines the shared Style of the features in the specified element.
@@ -232,6 +230,34 @@ namespace SharpKml.Engine
             }
         }
 
+        private KmlFile LoadFile(string path)
+        {
+            try
+            {
+                byte[] data = _fileResolver.ReadFile(path);
+                using (var stream = new MemoryStream(data, false))
+                {
+                    if (path.EndsWith(".kml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return KmlFile.Load(stream);
+                    }
+
+                    if (path.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (_fileResolver.SupportsKmz)
+                        {
+                            return _fileResolver.ExtractDefaultKmlFileFromKmzArchive(stream);
+                        }
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                // Silently fail
+            }
+            return null;
+        }
+
         private void Merge(StyleSelector selector)
         {
             var style = selector as Style;
@@ -276,10 +302,9 @@ namespace SharpKml.Engine
                         this.Merge(style);
                     }
                 }
-#if !SILVERLIGHT
-                else if (_resolveExternal)
+                else if (_fileResolver != null)
                 {
-                    KmlFile file = FileHandler.ReadFile(path);
+                    KmlFile file = this.LoadFile(path);
                     if (file != null)
                     {
                         StyleSelector style;
@@ -289,7 +314,6 @@ namespace SharpKml.Engine
                         }
                     }
                 }
-#endif
             }
         }
 

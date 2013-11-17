@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SharpKml")]
+[assembly: AssemblyTitle("SharpKml.Kmz")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SharpKml")]
+[assembly: AssemblyProduct("SharpKml Kmz")]
 [assembly: AssemblyCopyright("Copyright © 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0.0")]
-[assembly: CLSCompliant(true)]
 
-[assembly: InternalsVisibleTo("SharpKml.Kmz")]
-[assembly: InternalsVisibleTo("UnitTests")]
+[assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]

@@ -20,7 +20,7 @@ namespace SharpKml.Dom
         /// <summary>Initializes a new instance of the Element class.</summary>
         protected Element()
         {
-            this.Children = _children.AsReadOnly();
+            this.Children = new ReadOnlyCollection<Element>(_children);
             this.Namespaces = new XmlNamespaceManager(new NameTable());
         }
 
