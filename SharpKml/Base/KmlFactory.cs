@@ -35,12 +35,6 @@ namespace SharpKml.Base
         /// Cannot create an instance of an abstract class, or this member was
         /// invoked with a late-binding mechanism.
         /// </exception>
-        /// <exception cref="System.MethodAccessException">
-        /// The caller does not have permission to call this constructor.
-        /// </exception>
-        /// <exception cref="System.MissingMethodException">
-        /// No matching public constructor was found.
-        /// </exception>
         /// <exception cref="System.Reflection.TargetInvocationException">
         /// The constructor being called throws an exception.
         /// </exception>

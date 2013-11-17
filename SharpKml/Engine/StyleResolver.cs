@@ -29,21 +29,22 @@ namespace SharpKml.Engine
             _styleMap = map;
         }
 
-        /// <summary>Resolves all the styles in the specified Feature.</summary>
-        /// <param name="feature">The Feature to search for Styles.</param>
-        /// <param name="file">The KmlFile the feature belongs to.</param>
-        /// <param name="state">The StyleState of the styles to look for.</param>
-        /// <param name="resolve">
-        /// Optional parameter that specifies whether to resolve external styles
-        /// by opening the linked file and loading the style from it. If the
-        /// parameter is not specified it defaults to false.
+        /// <summary>
+        /// Resolves all the styles in the specified <see cref="Feature"/>.
+        /// </summary>
+        /// <param name="feature">
+        /// The <c>Feature</c> to search for styles.
         /// </param>
-        /// <returns>A new Style that has been resolved.</returns>
+        /// <param name="file">
+        /// The <see cref="KmlFile"/> the feature belongs to.
+        /// </param>
+        /// <param name="state">
+        /// The <see cref="StyleState"/> of the styles to look for.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="Style"/> that has been resolved.
+        /// </returns>
         /// <exception cref="ArgumentNullException">feature/file is null.</exception>
-        /// <remarks>
-        /// If resolve is set to true, the method will block while loading the
-        /// linked file, however, any errors opening the file are ignored.
-        /// </remarks>
         public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state)
         {
             return CreateResolvedStyle(feature, file, state, null);
