@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SharpKml.Base;
 
 namespace SharpKml.Dom
@@ -14,10 +16,17 @@ namespace SharpKml.Dom
         private Description _description;
         private ExtendedData _extended;
         private Region _region;
-        private StyleSelector _selector;
         private Snippet _snippet;
         private TimePrimitive _time;
         private AbstractView _view;
+
+        /// <summary>
+        /// Initializes a new instance of the Feature class.
+        /// </summary>
+        protected Feature()
+        {
+            this.RegisterValidChild<StyleSelector>();
+        }
 
         /// <summary>
         /// Gets or sets an unstructured address for the Feature, such as street,
@@ -118,12 +127,12 @@ namespace SharpKml.Dom
             set { this.UpdatePropertyChild(value, ref _snippet); }
         }
 
-        /// <summary>Gets or sets a style used to style the Feature.</summary>
-        [KmlElement(null, 14)]
-        public StyleSelector StyleSelector
+        /// <summary>
+        /// Gets the <see cref="StyleSelector"/>s contained by this instance.
+        /// </summary>
+        public IEnumerable<StyleSelector> Styles
         {
-            get { return _selector; }
-            set { this.UpdatePropertyChild(value, ref _selector); }
+            get { return this.Children.OfType<StyleSelector>(); }
         }
 
         /// <summary>
@@ -174,5 +183,51 @@ namespace SharpKml.Dom
         /// </summary>
         [KmlElement("balloonVisibility", KmlNamespaces.GX22Namespace, 17)]
         public bool? GXBalloonVisibility { get; set; }
+
+        /// <summary>
+        /// Adds the specified <see cref="StyleSelector"/> to this instance.
+        /// </summary>
+        /// <param name="selector">
+        /// The <c>StyleSelector</c> to add to this instance.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// <c>selector</c> is null.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// <c>selector></c> belongs to another <see cref="Element"/>.
+        /// </exception>
+        public void AddStyle(StyleSelector selector)
+        {
+            this.AddChild(selector);
+        }
+
+        /// <summary>
+        /// Removes all the <see cref="StyleSelector"/>s from this instance.
+        /// </summary>
+        public void ClearStyles()
+        {
+            var selectors = this.Styles.ToList();
+            foreach (StyleSelector selector in selectors)
+            {
+                this.RemoveChild(selector);
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified <see cref="StyleSelector"/> from this instance.
+        /// </summary>
+        /// <param name="selector">
+        /// The <c>StyleSelector</c> to add to this instance.
+        /// </param>
+        /// <returns>
+        /// true if <c>selector</c> is successfully removed; otherwise, false.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <c>selector</c> is null.
+        /// </exception>
+        public bool RemoveStyle(StyleSelector selector)
+        {
+            return this.RemoveChild(selector);
+        }
     }
 }
