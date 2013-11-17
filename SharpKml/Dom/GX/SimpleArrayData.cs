@@ -92,7 +92,7 @@ namespace SharpKml.Dom.GX
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                writer.WriteElementString(KmlNamespaces.GX22Prefix, "value", KmlNamespaces.Kml22Namespace, _value);
+                writer.WriteElementString(KmlNamespaces.GX22Prefix, "value", KmlNamespaces.GX22Namespace, _value);
             }
         }
     }
