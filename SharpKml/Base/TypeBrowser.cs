@@ -63,34 +63,34 @@ namespace SharpKml.Base
 
         /// <summary>
         /// Gets a KmlAttribute attribute associated with the specified
-        /// ICustomAttributeProvider.
+        /// MemberInfo.
         /// </summary>
-        /// <param name="provider">
-        /// The ICustomAttributeProvider to retrieve the attribute from.
+        /// <param name="member">
+        /// The MemberInfo to retrieve the attribute from.
         /// </param>
         /// <returns>
         /// A KmlAttributeAttribute associated with the specified value parameter
         /// if one was found; otherwise, null.
         /// </returns>
-        public static KmlAttributeAttribute GetAttribute(ICustomAttributeProvider provider)
+        public static KmlAttributeAttribute GetAttribute(MemberInfo member)
         {
-            return GetAttribute<KmlAttributeAttribute>(provider);
+            return GetAttribute<KmlAttributeAttribute>(member);
         }
 
         /// <summary>
         /// Gets a KmlElement attribute associated with the specified
-        /// ICustomAttributeProvider.
+        /// MemberInfo.
         /// </summary>
-        /// <param name="provider">
-        /// The ICustomAttributeProvider to retrieve the attribute from.
+        /// <param name="member">
+        /// The MemberInfo to retrieve the attribute from.
         /// </param>
         /// <returns>
         /// A KmlElementAttribute associated with the specified value parameter
         /// if one was found; otherwise, null.
         /// </returns>
-        public static KmlElementAttribute GetElement(ICustomAttributeProvider provider)
+        public static KmlElementAttribute GetElement(MemberInfo member)
         {
-            return GetAttribute<KmlElementAttribute>(provider);
+            return GetAttribute<KmlElementAttribute>(member);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace SharpKml.Base
             return query.FirstOrDefault();
         }
 
-        private static T GetAttribute<T>(ICustomAttributeProvider provider) where T : class
+        private static T GetAttribute<T>(MemberInfo provider) where T : class
         {
             if (provider == null)
             {

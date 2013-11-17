@@ -120,14 +120,9 @@ namespace SharpKml.Dom
 
             private static ItemIconStates[] GetStates()
             {
-#if SILVERLIGHT
-                var values = from field in typeof(ItemIconStates).GetFields(BindingFlags.Public | BindingFlags.Static)
-                             where field.IsLiteral
-                             select (ItemIconStates)field.GetValue(null);
-#else
-                var values = Enum.GetValues(typeof(ItemIconStates)).Cast<ItemIconStates>();
-#endif
-                return values.ToArray();
+                return Enum.GetValues(typeof(ItemIconStates))
+                           .Cast<ItemIconStates>()
+                           .ToArray();
             }
         }
     }

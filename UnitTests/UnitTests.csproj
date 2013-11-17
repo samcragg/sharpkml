@@ -12,7 +12,8 @@
     <AssemblyName>UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -138,12 +139,6 @@
     <Compile Include="SampleData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpKml\SharpKml.csproj">
-      <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
-      <Name>SharpKml</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Engine\Data\Entities.kml" />
     <EmbeddedResource Include="Engine\Data\Entity Data.kml" />
     <EmbeddedResource Include="Engine\Data\Schema Data.kml" />
@@ -174,6 +169,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpKml.Kmz\SharpKml.Kmz.csproj">
+      <Project>{029079b8-013e-4422-ab56-6ca90ca9f20e}</Project>
+      <Name>SharpKml.Kmz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpKml\SharpKml.Core.csproj">
+      <Project>{ba1c2e65-51f6-4960-bd72-26e3b95d38d6}</Project>
+      <Name>SharpKml.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

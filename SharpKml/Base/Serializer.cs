@@ -215,7 +215,7 @@ namespace SharpKml.Base
                     SerializeElement(writer, root);
                 }
 
-                _xml = Encoding.UTF8.GetString(stream.GetBuffer(), 0, (int)stream.Length);
+                _xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
             }
         }
     }
