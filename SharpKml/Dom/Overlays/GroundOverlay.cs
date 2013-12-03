@@ -10,6 +10,7 @@ namespace SharpKml.Dom
     public sealed class GroundOverlay : Overlay
     {
         private LatLonBox _box;
+        private GX.LatLonQuad _quad;
 
         /// <summary>
         /// Gets or sets the distance above the terrain in meters.
@@ -42,5 +43,16 @@ namespace SharpKml.Dom
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 4)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
+
+        /// <summary>
+        /// Used for nonrectangular quadrilateral ground overlays.
+        /// [Google Extension]
+        /// </summary>
+        [KmlElement(null, KmlNamespaces.GX22Namespace, 5)]
+        public GX.LatLonQuad GXLatLonQuad
+        {
+            get { return _quad; }
+            set { this.UpdatePropertyChild(value, ref _quad); }
+        }
     }
 }
