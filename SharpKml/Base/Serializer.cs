@@ -209,11 +209,10 @@ namespace SharpKml.Base
             settings.Encoding = new UTF8Encoding(false); // Omit the BOM
 
             using (var stream = new MemoryStream())
+            using (var writer = XmlWriter.Create(stream, settings))
             {
-                using (var writer = XmlWriter.Create(stream, settings))
-                {
-                    SerializeElement(writer, root);
-                }
+                SerializeElement(writer, root);
+                writer.Flush();
 
                 _xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
             }
