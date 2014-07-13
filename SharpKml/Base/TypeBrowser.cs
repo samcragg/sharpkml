@@ -11,11 +11,12 @@ namespace SharpKml.Base
     /// </summary>
     internal class TypeBrowser
     {
-        // Used for a cache. This is very important for performance as it ruduces
+        // Used for a cache. This is very important for performance as it reduces
         // the amount of work done in reflection, as the attributes associated
         // with a Type won't change during the lifetime of the program (ignoring
         // funky Emit etc. vodoo which this library doesn't use)
-        private static Dictionary<Type, TypeBrowser> _types = new Dictionary<Type, TypeBrowser>();
+        private static readonly Dictionary<Type, TypeBrowser> _types = new Dictionary<Type, TypeBrowser>();
+        private static readonly object _typesLock = new object();
 
         private Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>> _attributes =
             new Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>>();
@@ -47,18 +48,25 @@ namespace SharpKml.Base
             }
         }
 
-        /// <summary>Creates TypeBrowser representing the specified type.</summary>
+        /// <summary>
+        /// Creates TypeBrowser representing the specified type.
+        /// </summary>
         /// <param name="type">The type to extract properties from.</param>
         /// <returns>
-        /// A TypeBroswer containing information about the specified type.
+        /// A TypeBrowser containing information about the specified type.
         /// </returns>
         public static TypeBrowser Create(Type type)
         {
-            if (!_types.ContainsKey(type))
+            TypeBrowser browser;
+            lock (_typesLock)
             {
-                _types.Add(type, new TypeBrowser(type));
+                if (!_types.TryGetValue(type, out browser))
+                {
+                    browser = new TypeBrowser(type);
+                    _types.Add(type, browser);
+                }
             }
-            return _types[type];
+            return browser;
         }
 
         /// <summary>
