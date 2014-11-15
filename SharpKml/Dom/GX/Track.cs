@@ -168,7 +168,7 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>Used to correctly serialize a 3D vector.</summary>
-        private abstract class VectorElement : Element, ICustomElement
+        internal abstract class VectorElement : Element, ICustomElement
         {
             private readonly double _x;
             private readonly double _y;
@@ -249,7 +249,7 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>Used to correctly serialize an Angle in Angles.</summary>
-        private class AnglesElement : VectorElement
+        internal class AnglesElement : VectorElement
         {
             /// <summary>Initializes a new instance of the AnglesElement class.</summary>
             /// <param name="value">The value to serialize, must not be null.</param>
@@ -281,7 +281,7 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>Used to correctly serialize a Vector in Coordinates.</summary>
-        private class CoordElement : VectorElement
+        internal class CoordElement : VectorElement
         {
             /// <summary>Initializes a new instance of the CoordElement class.</summary>
             /// <param name="value">The value to serialize, must not be null.</param>
@@ -313,7 +313,7 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>Used to correctly serialize the strings in When.</summary>
-        private class WhenElement : Element, ICustomElement
+        internal class WhenElement : Element, ICustomElement
         {
             private readonly string _value;
 

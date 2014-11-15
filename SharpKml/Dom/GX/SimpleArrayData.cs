@@ -65,7 +65,7 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>Used to correctly serialize the strings in Values.</summary>
-        private class ValueElement : Element, ICustomElement
+        internal class ValueElement : Element, ICustomElement
         {
             private readonly string _value;
 

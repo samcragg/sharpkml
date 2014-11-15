@@ -65,6 +65,7 @@
     <Compile Include="Dom\IHtmlContentTest.cs" />
     <Compile Include="Dom\ItemIconTest.cs" />
     <Compile Include="Dom\LatLonAltBoxTest.cs" />
+    <Compile Include="Dom\PointTest.cs" />
     <Compile Include="Engine\BoundingBoxTest.cs" />
     <Compile Include="Engine\ElementExtensionsTest.cs" />
     <Compile Include="Engine\EntityMapperTest.cs" />
@@ -142,6 +143,8 @@
     <Compile Include="NUnitLite\TestListener.cs" />
     <Compile Include="NUnitLite\TestResult.cs" />
     <Compile Include="NUnitLite\TestSuite.cs" />
+    <Compile Include="PartialTrustTest.cs" />
+    <Compile Include="PartialTrustTestHelper.cs" />
     <Compile Include="SampleData.cs" />
   </ItemGroup>
   <ItemGroup>
