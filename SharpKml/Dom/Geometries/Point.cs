@@ -84,9 +84,10 @@ namespace SharpKml.Dom
             }
         }
 
-        // Use a private property to enable automatic parsing/serialization
+        // Use a non-public (cannot be private as that can't be accessed under
+        // partial trust) property to enable automatic parsing/serialization
         [KmlElement(null, 3)]
-        private CoordinateCollection Coordinates
+        internal CoordinateCollection Coordinates
         {
             get { return _coords; }
             set { this.UpdatePropertyChild(value, ref _coords); }

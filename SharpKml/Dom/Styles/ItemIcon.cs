@@ -66,7 +66,7 @@ namespace SharpKml.Dom
         }
 
         /// <summary>Used to correctly serialize multiple ItemIconStates.</summary>
-        private class StateElement : Element, ICustomElement
+        internal class StateElement : Element, ICustomElement
         {
             private static readonly ItemIconStates[] States = GetStates();
 
