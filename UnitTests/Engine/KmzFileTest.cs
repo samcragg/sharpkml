@@ -258,6 +258,20 @@ namespace UnitTests.Engine
             }
         }
 
+        [Test]
+        public void TestReadKmlDoesNotReturnTheBOM()
+        {
+            const string ExampleString = "Example string with no Byte Order Mark.";
+            KmzFile kmz = KmzFile.Create(KmlFile.Create(new Kml(), duplicates: false));
+
+            byte[] data = Encoding.UTF8.GetBytes(ExampleString);
+            byte[] bom = Encoding.UTF8.GetPreamble();
+            kmz.UpdateFile("doc.kml", bom.Concat(data).ToArray());
+
+            string result = kmz.ReadKml();
+            Assert.That(result, Is.EqualTo(ExampleString));
+        }
+
         private static KmzFile CreateArchive()
         {
             // Create an empty KmlFile

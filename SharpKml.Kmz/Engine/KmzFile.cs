@@ -378,9 +378,17 @@ namespace SharpKml.Engine
 
             if (kml != null)
             {
-                byte[] resource = this.ExtractResource(kml);
-                return defaultEncoding.GetString(resource, 0, resource.Length);
+                using (var stream = new MemoryStream())
+                {
+                    this.ExtractResourceToStream(kml, stream);
+                    stream.Position = 0;
+                    using (var reader = new StreamReader(stream, defaultEncoding))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
             }
+
             return null;
         }
 
@@ -511,6 +519,15 @@ namespace SharpKml.Engine
 
         private byte[] ExtractResource(ZipEntry entry)
         {
+            using (var stream = new MemoryStream())
+            {
+                this.ExtractResourceToStream(entry, stream);
+                return stream.ToArray();
+            }
+        }
+
+        private void ExtractResourceToStream(ZipEntry entry, Stream stream)
+        {
             // ZipEntry.Extract will throw an exception if the ZipFile has been
             // modified. Check the VersionNeeded - if it's zero then the entry
             // needs to be saved before we can extract it.
@@ -520,11 +537,7 @@ namespace SharpKml.Engine
                 entry = _zip[entry.FileName];
             }
 
-            using (var stream = new MemoryStream())
-            {
-                entry.Extract(stream);
-                return stream.ToArray();
-            }
+            entry.Extract(stream);
         }
 
         private void ResetZip(bool save)
