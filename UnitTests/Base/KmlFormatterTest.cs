@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
 using NUnit.Framework;
 using SharpKml.Base;
 
@@ -31,27 +29,19 @@ namespace UnitTests.Base
         }
 
         [Test]
+        [SetCulture("he-IL")]
         public void TestLocalDateTimeInOtherCulture()
         {
-            var oldCulture = Thread.CurrentThread.CurrentCulture;
-            try
-            {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("he-IL");
-                var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
-                TestDateTime(date);
-            }
-            catch (ArgumentException)
-            {
-                throw new InconclusiveException("Culture not available.");
-            }
-            catch (NotSupportedException)
-            {
-                throw new InconclusiveException("Culture not available.");
-            }
-            finally
-            {
-                Thread.CurrentThread.CurrentCulture = oldCulture;
-            }
+            var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
+            TestDateTime(date);
+        }
+
+        [TestCase(double.NegativeInfinity, Result = "-INF")]
+        [TestCase(double.NaN, Result = "NaN")]
+        [TestCase(double.PositiveInfinity, Result = "INF")]
+        public string ShouldOutputSpecialDoublesCorrectly(double value)
+        {
+            return string.Format(KmlFormatter.Instance, "{0}", value);
         }
 
         private void TestDateTime(DateTime date)
