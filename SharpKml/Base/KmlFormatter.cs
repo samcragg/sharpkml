@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Text;
 
 namespace SharpKml.Base
 {
@@ -51,9 +50,6 @@ namespace SharpKml.Base
                         case TypeCode.DateTime:
                             return GetDateTime((DateTime)arg);
 
-                        case TypeCode.Decimal:
-                            return GetDecimal((decimal)arg);
-
                         case TypeCode.Double:
                             return GetFloatingPoint((double)arg);
 
@@ -63,9 +59,7 @@ namespace SharpKml.Base
                 }
             }
 
-            var formatter = new StringBuilder();
-            formatter.AppendFormat(CultureInfo.InvariantCulture, "{0:" + format + "}", arg);
-            return formatter.ToString();
+            return GetDefaultFormat(format, arg, formatProvider);
         }
 
         /// <summary>
@@ -105,16 +99,55 @@ namespace SharpKml.Base
             }
         }
 
-        private static string GetFloatingPoint(double value)
+        private static string GetDefaultFormat(string format, object arg, IFormatProvider formatProvider)
         {
-            // Return a maximum 15 meaningful digits
-            return value.ToString("#0.##############", CultureInfo.InvariantCulture);
+            // This is basically what StringBuilder does, but don't use
+            // StringBuilder as it can go wrong in weird multi-threaded ways:
+            // https://sharpkml.codeplex.com/workitem/2415
+            string result = null;
+            if ((formatProvider != null) && !(formatProvider is KmlFormatter))
+            {
+                var custom = (ICustomFormatter)formatProvider.GetFormat(typeof(ICustomFormatter));
+                if (custom != null)
+                {
+                    result = custom.Format(format, arg, formatProvider);
+                }
+            }
+
+            if (result == null)
+            {
+                var formattableArg = arg as IFormattable;
+                if (formattableArg != null)
+                {
+                    result = formattableArg.ToString(format, formatProvider);
+                }
+                else if (arg != null)
+                {
+                    result = arg.ToString();
+                }
+            }
+
+            // Protect against ToString etc returning null (also if arg is null)
+            return result ?? string.Empty;
         }
 
-        private static string GetDecimal(decimal value)
+        private static string GetFloatingPoint(double value)
         {
-            // Return a maximum 15 meaningful digits
-            return value.ToString("#0.##############", CultureInfo.InvariantCulture);
+            // http://www.w3.org/TR/xmlschema-2/#double
+            if (double.IsPositiveInfinity(value))
+            {
+                return "INF";
+            }
+            else if (double.IsNegativeInfinity(value))
+            {
+                return "-INF";
+            }
+            else
+            {
+                // MSDN says use G17 not R (round-trip)!?
+                // https://msdn.microsoft.com/en-us/library/kfsatb94(v=vs.110).aspx
+                return value.ToString("G17", CultureInfo.InvariantCulture);
+            }
         }
     }
 }

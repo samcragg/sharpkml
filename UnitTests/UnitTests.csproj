@@ -42,6 +42,10 @@
     <AssemblyOriginatorKeyFile>../SharpKml.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -76,73 +80,6 @@
     <Compile Include="Engine\StyleResolverTest.cs" />
     <Compile Include="Engine\UpdateExtensionsTest.cs" />
     <Compile Include="Engine\UriExtensionsTest.cs" />
-    <Compile Include="NUnitLite\Constraints\AttributeConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\BasicConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\BinaryOperations.cs" />
-    <Compile Include="NUnitLite\Constraints\CollectionConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\ComparisonAdapter.cs" />
-    <Compile Include="NUnitLite\Constraints\ComparisonConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\Constraint.cs" />
-    <Compile Include="NUnitLite\Constraints\ConstraintBuilder.cs" />
-    <Compile Include="NUnitLite\Constraints\ConstraintExpression.cs" />
-    <Compile Include="NUnitLite\Constraints\ConstraintExpressionBase.cs" />
-    <Compile Include="NUnitLite\Constraints\ConstraintFactory.cs" />
-    <Compile Include="NUnitLite\Constraints\ConstraintOperators.cs" />
-    <Compile Include="NUnitLite\Constraints\ContainsConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\EmptyConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\EqualConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\EqualityAdapter.cs" />
-    <Compile Include="NUnitLite\Constraints\FloatingPointNumerics.cs" />
-    <Compile Include="NUnitLite\Constraints\IResolveConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\MessageWriter.cs" />
-    <Compile Include="NUnitLite\Constraints\MsgUtils.cs" />
-    <Compile Include="NUnitLite\Constraints\Numerics.cs" />
-    <Compile Include="NUnitLite\Constraints\NUnitComparer.cs" />
-    <Compile Include="NUnitLite\Constraints\NUnitEqualityComparer.cs" />
-    <Compile Include="NUnitLite\Constraints\PathConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\PredicateConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\PrefixConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\PropertyConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\RangeConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\ResolvableConstraintExpression.cs" />
-    <Compile Include="NUnitLite\Constraints\SameAsConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\StringConstraints.cs" />
-    <Compile Include="NUnitLite\Constraints\ThrowsConstraint.cs" />
-    <Compile Include="NUnitLite\Constraints\Tolerance.cs" />
-    <Compile Include="NUnitLite\Constraints\TypeConstraints.cs" />
-    <Compile Include="NUnitLite\Env.cs" />
-    <Compile Include="NUnitLite\Framework\Assert.cs" />
-    <Compile Include="NUnitLite\Framework\AssertionException.cs" />
-    <Compile Include="NUnitLite\Framework\AssertionHelper.cs" />
-    <Compile Include="NUnitLite\Framework\Contains.cs" />
-    <Compile Include="NUnitLite\Framework\DescriptionAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\ExpectedExceptionAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\GlobalSettings.cs" />
-    <Compile Include="NUnitLite\Framework\Has.cs" />
-    <Compile Include="NUnitLite\Framework\IExpectException.cs" />
-    <Compile Include="NUnitLite\Framework\IgnoreAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\IgnoreException.cs" />
-    <Compile Include="NUnitLite\Framework\InconclusiveException.cs" />
-    <Compile Include="NUnitLite\Framework\Is.cs" />
-    <Compile Include="NUnitLite\Framework\Iz.cs" />
-    <Compile Include="NUnitLite\Framework\NUnitLiteException.cs" />
-    <Compile Include="NUnitLite\Framework\PropertyAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\RequiredAddinAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\SetUpAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\StackFilter.cs" />
-    <Compile Include="NUnitLite\Framework\SuccessException.cs" />
-    <Compile Include="NUnitLite\Framework\TearDownAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\TestAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\TestFixtureAttribute.cs" />
-    <Compile Include="NUnitLite\Framework\TextMessageWriter.cs" />
-    <Compile Include="NUnitLite\Framework\Throws.cs" />
-    <Compile Include="NUnitLite\ITest.cs" />
-    <Compile Include="NUnitLite\NullListener.cs" />
-    <Compile Include="NUnitLite\Reflect.cs" />
-    <Compile Include="NUnitLite\TestCase.cs" />
-    <Compile Include="NUnitLite\TestListener.cs" />
-    <Compile Include="NUnitLite\TestResult.cs" />
-    <Compile Include="NUnitLite\TestSuite.cs" />
     <Compile Include="PartialTrustTest.cs" />
     <Compile Include="PartialTrustTestHelper.cs" />
     <Compile Include="SampleData.cs" />
@@ -191,6 +128,9 @@
       <Project>{ba1c2e65-51f6-4960-bd72-26e3b95d38d6}</Project>
       <Name>SharpKml.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
