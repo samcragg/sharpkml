@@ -89,7 +89,7 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets a collection of time values that corresponds to a position.
         /// </summary>
-        public IEnumerable<string> When
+        public IEnumerable<DateTime> When
         {
             get
             {
@@ -127,13 +127,8 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Adds the specified value to <see cref="When"/>.</summary>
         /// <param name="value">The value to add.</param>
-        /// <exception cref="ArgumentNullException">value is null.</exception>
-        public void AddWhen(string value)
+        public void AddWhen(DateTime value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
             this.AddChild(new WhenElement(value));
         }
 
@@ -147,24 +142,38 @@ namespace SharpKml.Dom.GX
             UnknownElement unknown = orphan as UnknownElement;
             if (unknown != null)
             {
-                XmlComponent data = unknown.UnknownData;
-                if (AnglesComponent.Equals(data))
+                Element child = ConvertUnknown(unknown);
+                if (child != null)
                 {
-                    this.AddChild(new AnglesElement(unknown.InnerText));
-                    return;
-                }
-                if (CoordComponent.Equals(data))
-                {
-                    this.AddChild(new CoordElement(unknown.InnerText));
-                    return;
-                }
-                if (WhenComponent.Equals(data))
-                {
-                    this.AddChild(new WhenElement(unknown.InnerText));
+                    this.AddChild(child);
                     return;
                 }
             }
+
             base.AddOrphan(orphan);
+        }
+
+        private static Element ConvertUnknown(UnknownElement unknown)
+        {
+            XmlComponent data = unknown.UnknownData;
+            if (AnglesComponent.Equals(data))
+            {
+                return new AnglesElement(unknown.InnerText);
+            }
+            else if (CoordComponent.Equals(data))
+            {
+                return new CoordElement(unknown.InnerText);
+            }
+            else if (WhenComponent.Equals(data))
+            {
+                DateTime value;
+                if (DateTime.TryParse(unknown.InnerText, CultureInfo.InvariantCulture, DateTimeStyles.None, out value))
+                {
+                    return new WhenElement(value);
+                }
+            }
+
+            return null;
         }
 
         /// <summary>Used to correctly serialize a 3D vector.</summary>
@@ -315,13 +324,13 @@ namespace SharpKml.Dom.GX
         /// <summary>Used to correctly serialize the strings in When.</summary>
         internal class WhenElement : Element, ICustomElement
         {
-            private readonly string _value;
+            private readonly DateTime _value;
 
             /// <summary>Initializes a new instance of the WhenElement class.</summary>
             /// <param name="value">
             /// The value to set the <see cref="Element.InnerText"/> to.
             /// </param>
-            public WhenElement(string value)
+            public WhenElement(DateTime value)
             {
                 _value = value;
             }
@@ -335,7 +344,7 @@ namespace SharpKml.Dom.GX
             }
 
             /// <summary>Gets the value passed into the constructor.</summary>
-            public string Value
+            public DateTime Value
             {
                 get { return _value; }
             }
@@ -344,7 +353,8 @@ namespace SharpKml.Dom.GX
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                writer.WriteElementString("when", KmlNamespaces.Kml22Namespace, _value);
+                string elementValue = KmlFormatter.Instance.Format(null, _value, null);
+                writer.WriteElementString("when", KmlNamespaces.Kml22Namespace, elementValue);
             }
         }
     }

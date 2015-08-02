@@ -51,7 +51,6 @@ namespace UnitTests.Base
             {
                 object value;
                 ValueConverter.TryGetValue(typeof(DateTime), date.Item1, out value);
-                Console.WriteLine(date.Item1);
                 DateTime dateTime = (DateTime)value;
                 Assert.That(dateTime, Is.EqualTo(date.Item2));
             }
