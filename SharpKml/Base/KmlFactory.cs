@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using SharpKml.Dom;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Creates a derived class of <see cref="Element"/> from an XML element.
     /// </summary>
     public static class KmlFactory
     {
         // We need two so we can do reverse lookups
-        private static Dictionary<XmlComponent, Type> _types = new Dictionary<XmlComponent, Type>();
-        private static Dictionary<Type, XmlComponent> _names = new Dictionary<Type, XmlComponent>();
+        private static readonly Dictionary<XmlComponent, Type> Types = new Dictionary<XmlComponent, Type>();
+        private static readonly Dictionary<Type, XmlComponent> Names = new Dictionary<Type, XmlComponent>();
 
-        /// <summary>Initializes static members of the KmlFactory class.</summary>
+        /// <summary>
+        /// Initializes static members of the <see cref="KmlFactory"/> class.
+        /// </summary>
         static KmlFactory()
         {
             // Register all the sub-classes of Element that are
@@ -41,10 +43,11 @@ namespace SharpKml.Base
         public static Element CreateElement(XmlComponent xml)
         {
             Type type;
-            if (_types.TryGetValue(xml, out type))
+            if (Types.TryGetValue(xml, out type))
             {
                 return (Element)Activator.CreateInstance(type);
             }
+
             return null;
         }
 
@@ -60,10 +63,13 @@ namespace SharpKml.Base
         public static XmlComponent FindType(Type type)
         {
             XmlComponent value;
-            if (_names.TryGetValue(type, out value)) // Will throw is type is null.
+
+            // Will throw is type is null.
+            if (Names.TryGetValue(type, out value))
             {
                 return value;
             }
+
             return null;
         }
 
@@ -81,7 +87,8 @@ namespace SharpKml.Base
         /// The type has already been registered or another type with the
         /// same XML name and namespace URI has been already registered.
         /// </exception>
-        public static void Register<T>(XmlComponent xml) where T : Element
+        public static void Register<T>(XmlComponent xml)
+            where T : Element
         {
             if (xml == null)
             {
@@ -91,21 +98,21 @@ namespace SharpKml.Base
             RegisterType(xml.Clone(), typeof(T)); // Don't store what the user passed us
         }
 
-        // Private helper function to ensure both dicionaries are updated.
+        // Private helper function to ensure both dictionaries are updated.
         private static void RegisterType(XmlComponent xml, Type type)
         {
-            if (_names.ContainsKey(type))
+            if (Names.ContainsKey(type))
             {
                 throw new ArgumentException("Class type has already been registered.");
             }
 
-            if (_types.ContainsKey(xml))
+            if (Types.ContainsKey(xml))
             {
                 throw new ArgumentException("Another type has been registered with the specified XML qualified name.");
             }
 
-            _names.Add(type, xml);
-            _types.Add(xml, type);
+            Names.Add(type, xml);
+            Types.Add(xml, type);
         }
 
         private static void RegisterAssembly(Assembly assembly)

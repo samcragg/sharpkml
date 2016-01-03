@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Provides extension methods for <see cref="Update"/> objects.
     /// </summary>
@@ -69,8 +69,9 @@ namespace SharpKml.Engine
             {
                 if (source.TargetId != null)
                 {
+                    // Make sure it was found and that the target was a Container
                     Container target = file.FindObject(source.TargetId) as Container;
-                    if (target != null) // Make sure it was found and that the target was a Container
+                    if (target != null)
                     {
                         foreach (var feature in source.Features)
                         {

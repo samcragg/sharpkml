@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies how the description balloon for a <see cref="Feature"/> is drawn.
     /// </summary>
@@ -9,10 +9,14 @@ namespace SharpKml.Dom
     [KmlElement("BalloonStyle")]
     public sealed class BalloonStyle : SubStyle
     {
-        /// <summary>The default value that should be used for <see cref="BackgroundColor"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="BackgroundColor"/>.
+        /// </summary>
         public static readonly Color32 DefaultBackground = new Color32(255, 255, 255, 255);
 
-        /// <summary>The default value that should be used for <see cref="TextColor"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="TextColor"/>.
+        /// </summary>
         public static readonly Color32 DefaultText = new Color32(255, 0, 0, 0);
 
         /// <summary>
@@ -27,7 +31,9 @@ namespace SharpKml.Dom
         [KmlElement("displayMode", 4)]
         public DisplayMode? DisplayMode { get; set; }
 
-        /// <summary>Gets or sets the text displayed in the balloon.</summary>
+        /// <summary>
+        /// Gets or sets the text displayed in the balloon.
+        /// </summary>
         /// <remarks>
         /// The text may include HTML content. Text shall support entity
         /// substitution, as defined in Section 6.5 Entity Replacement.
@@ -35,7 +41,9 @@ namespace SharpKml.Dom
         [KmlElement("text", 3)]
         public string Text { get; set; }
 
-        /// <summary>Gets or sets the foreground color of the text.</summary>
+        /// <summary>
+        /// Gets or sets the foreground color of the text.
+        /// </summary>
         [KmlElement("textColor", 2)]
         public Color32? TextColor { get; set; }
     }

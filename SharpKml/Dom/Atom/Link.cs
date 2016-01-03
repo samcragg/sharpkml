@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Defines a reference from an entry or feed to a Web resource.
     /// </summary>
@@ -12,7 +12,9 @@ namespace SharpKml.Dom.Atom
     [KmlElement("link", KmlNamespaces.AtomNamespace)]
     public sealed class Link : Element
     {
-        /// <summary>Gets or sets the Link's URI.</summary>
+        /// <summary>
+        /// Gets or sets the Link's URI.
+        /// </summary>
         [KmlAttribute("href")]
         public Uri Href { get; set; }
 
@@ -38,17 +40,22 @@ namespace SharpKml.Dom.Atom
         [KmlAttribute("length")]
         public int? Length { get; set; }
 
-        /// <summary>Gets or sets an advisory media type.</summary>
+        /// <summary>
+        /// Gets or sets an advisory media type.
+        /// </summary>
         /// <remarks>
-        /// The value must conform to the syntax of a MIME media type [RFC 4288].
-        /// This is a hint about the type of the representation that is expected to
-        /// be returned when the value of Href is dereferenced. Note that MediaType
-        /// does not override the actual media type returned with the representation.
+        /// The value must conform to the syntax of a MIME media type [RFC
+        /// 4288]. This is a hint about the type of the representation that is
+        /// expected to be returned when the value of Href is dereferenced. Note
+        /// that MediaType does not override the actual media type returned with
+        /// the representation.
         /// </remarks>
         [KmlAttribute("type")]
         public string MediaType { get; set; }
 
-        /// <summary>Gets or sets the Link's relation type.</summary>
+        /// <summary>
+        /// Gets or sets the Link's relation type.
+        /// </summary>
         /// <remarks>
         /// If the value is not present, the Link must be interpreted as if
         /// Relation is "alternate". There are five initial values for the
@@ -97,7 +104,9 @@ namespace SharpKml.Dom.Atom
         [KmlAttribute("rel")]
         public string Relation { get; set; }
 
-        /// <summary>Gets or sets human-readable information about the Link.</summary>
+        /// <summary>
+        /// Gets or sets human-readable information about the Link.
+        /// </summary>
         /// <remarks>The content is Language-Sensitive.</remarks>
         [KmlAttribute("title")]
         public string Title { get; set; }

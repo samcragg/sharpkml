@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Defines a key/value pair that maps a mode
     /// (<see cref="Dom.StyleState"/>) to the predefined
@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     [KmlElement("Pair")]
     public sealed class Pair : KmlObject
     {
-        private StyleSelector _selector;
+        private StyleSelector selector;
 
         /// <summary>
         /// Gets or sets the associated <see cref="StyleSelector"/> of this instance.
@@ -24,8 +24,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public StyleSelector Selector
         {
-            get { return _selector; }
-            set { this.UpdatePropertyChild(value, ref _selector); }
+            get { return this.selector; }
+            set { this.UpdatePropertyChild(value, ref this.selector); }
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the exterior boundary of a <see cref="Polygon"/>.
     /// </summary>
@@ -9,7 +9,7 @@ namespace SharpKml.Dom
     [KmlElement("outerBoundaryIs")]
     public sealed class OuterBoundary : Element
     {
-        private LinearRing _ring;
+        private LinearRing ring;
 
         /// <summary>
         /// Gets or sets the <see cref="LinearRing"/> acting as the boundary.
@@ -17,8 +17,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public LinearRing LinearRing
         {
-            get { return _ring; }
-            set { this.UpdatePropertyChild(value, ref _ring); }
+            get { return this.ring; }
+            set { this.UpdatePropertyChild(value, ref this.ring); }
         }
     }
 }

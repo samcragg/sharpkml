@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+
     /// <summary>
     /// Specifies a class member is serialized as an XML attribute.
     /// </summary>
@@ -9,7 +9,7 @@ namespace SharpKml.Base
     public sealed class KmlAttributeAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the KmlAttributeAttribute class.
+        /// Initializes a new instance of the <see cref="KmlAttributeAttribute"/> class.
         /// </summary>
         /// <param name="attributeName">The name of the XML attribute.</param>
         public KmlAttributeAttribute(string attributeName)
@@ -17,7 +17,9 @@ namespace SharpKml.Base
             this.AttributeName = attributeName;
         }
 
-        /// <summary>Gets the name of the XML attribute.</summary>
+        /// <summary>
+        /// Gets the name of the XML attribute.
+        /// </summary>
         public string AttributeName { get; private set; }
     }
 }

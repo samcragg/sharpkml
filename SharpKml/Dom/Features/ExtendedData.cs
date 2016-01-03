@@ -1,32 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a KML AbstractFeatureGroup</summary>
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a KML AbstractFeatureGroup
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 9.2</para>
-    /// <para>The scope of ExtendedData is restricted to its <see cref="Element.Parent"/>
-    /// only. Child elements support entity substitution - see section 6.5 for details.</para>
+    /// <para>
+    /// The scope of ExtendedData is restricted to its <see
+    /// cref="Element.Parent"/> only. Child elements support entity substitution
+    /// - see section 6.5 for details.
+    /// </para>
     /// </remarks>
     [KmlElement("ExtendedData")]
     public sealed class ExtendedData : Element
     {
-        /// <summary>Initializes a new instance of the ExtendedData class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtendedData"/> class.
+        /// </summary>
         public ExtendedData()
         {
             this.RegisterValidChild<Data>();
             this.RegisterValidChild<SchemaData>();
         }
 
-        /// <summary>Gets a collection of untyped name/value pairs.</summary>
+        /// <summary>
+        /// Gets a collection of untyped name/value pairs.
+        /// </summary>
         public IEnumerable<Data> Data
         {
             get { return this.Children.OfType<Data>(); }
         }
 
-        /// <summary>Gets a collection of <see cref="SchemaData"/> objects.</summary>
+        /// <summary>
+        /// Gets a collection of <see cref="SchemaData"/> objects.
+        /// </summary>
         public IEnumerable<SchemaData> SchemaData
         {
             get { return this.Children.OfType<SchemaData>(); }

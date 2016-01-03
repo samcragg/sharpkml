@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a point in space to which the browser will fly during a tour.
     /// </summary>
@@ -9,13 +9,17 @@ namespace SharpKml.Dom.GX
     [KmlElement("FlyTo", KmlNamespaces.GX22Namespace)]
     public sealed class FlyTo : TourPrimitive
     {
-        private AbstractView _view;
+        private AbstractView view;
 
-        /// <summary>Gets or sets the amount of time, in seconds.</summary>
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds.
+        /// </summary>
         [KmlElement("duration", KmlNamespaces.GX22Namespace)]
         public double? Duration { get; set; }
 
-        /// <summary>Gets or sets the method of flight.</summary>
+        /// <summary>
+        /// Gets or sets the method of flight.
+        /// </summary>
         [KmlElement("flyToMode", KmlNamespaces.GX22Namespace)]
         public FlyToMode? Mode { get; set; }
 
@@ -25,8 +29,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public AbstractView View
         {
-            get { return _view; }
-            set { this.UpdatePropertyChild(value, ref _view); }
+            get { return this.view; }
+            set { this.UpdatePropertyChild(value, ref this.view); }
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the position and orientation of a virtual camera.
     /// </summary>
@@ -20,7 +20,9 @@ namespace SharpKml.Dom
         [KmlElement("altitude", 3)]
         public double? Altitude { get; set; }
 
-        /// <summary>Gets or sets how the altitude value should be interpreted.</summary>
+        /// <summary>
+        /// Gets or sets how the altitude value should be interpreted.
+        /// </summary>
         [KmlElement("altitudeMode", 7)]
         public AltitudeMode? AltitudeMode { get; set; }
 

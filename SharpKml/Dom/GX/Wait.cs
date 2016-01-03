@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// The camera remains still for the specified <see cref="Duration"/> before
     /// playing the next <see cref="TourPrimitive"/>.
@@ -10,7 +10,9 @@ namespace SharpKml.Dom.GX
     [KmlElement("Wait", KmlNamespaces.GX22Namespace)]
     public sealed class Wait : TourPrimitive
     {
-        /// <summary>Gets or sets the amount of time, in seconds.</summary>
+        /// <summary>
+        /// Gets or sets the amount of time, in seconds.
+        /// </summary>
         [KmlElement("duration", KmlNamespaces.GX22Namespace)]
         public double? Duration { get; set; }
     }

@@ -1,25 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
-    /// <summary>Represents an array of values.</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Xml;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents an array of values.
+    /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("SimpleArrayData", KmlNamespaces.GX22Namespace)]
     public sealed class SimpleArrayData : Element
     {
         private static readonly XmlComponent ValueComponent = new XmlComponent(null, "value", KmlNamespaces.GX22Namespace);
 
-        /// <summary>Initializes a new instance of the SimpleArrayData class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SimpleArrayData"/> class.
+        /// </summary>
         public SimpleArrayData()
         {
             this.RegisterValidChild<ValueElement>();
         }
 
-        /// <summary>Gets or sets the name of the array.</summary>
+        /// <summary>
+        /// Gets or sets the name of the array.
+        /// </summary>
         [KmlAttribute("name")]
         public string Name { get; set; }
 
@@ -45,10 +51,13 @@ namespace SharpKml.Dom.GX
             {
                 throw new ArgumentNullException("value");
             }
+
             this.AddChild(new ValueElement(value));
         }
 
-        /// <summary>Adds the gx:value to <see cref="Values"/>.</summary>
+        /// <summary>
+        /// Adds the gx:value to <see cref="Values"/>.
+        /// </summary>
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
@@ -61,23 +70,26 @@ namespace SharpKml.Dom.GX
                     return;
                 }
             }
+
             base.AddOrphan(orphan);
         }
 
-        /// <summary>Used to correctly serialize the strings in Values.</summary>
+        /// <summary>
+        /// Used to correctly serialize the strings in Values.
+        /// </summary>
         internal class ValueElement : Element, ICustomElement
         {
-            private readonly string _value;
+            private readonly string value;
 
             /// <summary>
-            /// Initializes a new instance of the ValueElement class.
+            /// Initializes a new instance of the <see cref="ValueElement"/> class.
             /// </summary>
             /// <param name="value">
             /// The value to set the <see cref="Element.InnerText"/> to.
             /// </param>
             public ValueElement(string value)
             {
-                _value = value;
+                this.value = value;
             }
 
             /// <summary>
@@ -92,7 +104,7 @@ namespace SharpKml.Dom.GX
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                writer.WriteElementString(KmlNamespaces.GX22Prefix, "value", KmlNamespaces.GX22Namespace, _value);
+                writer.WriteElementString(KmlNamespaces.GX22Prefix, "value", KmlNamespaces.GX22Namespace, this.value);
             }
         }
     }

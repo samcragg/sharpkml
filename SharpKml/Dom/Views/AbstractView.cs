@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents an AbstractViewGroup.
     /// </summary>
@@ -12,10 +12,10 @@ namespace SharpKml.Dom
     /// </remarks>
     public abstract class AbstractView : KmlObject
     {
-        private TimePrimitive _primitive;
+        private TimePrimitive primitive;
 
         /// <summary>
-        /// Initializes a new instance of the AbstractView class.
+        /// Initializes a new instance of the <see cref="AbstractView"/> class.
         /// </summary>
         protected AbstractView()
         {
@@ -32,8 +32,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public TimePrimitive GXTimePrimitive
         {
-            get { return _primitive; }
-            set { this.UpdatePropertyChild(value, ref _primitive); }
+            get { return this.primitive; }
+            set { this.UpdatePropertyChild(value, ref this.primitive); }
         }
 
         /// <summary>

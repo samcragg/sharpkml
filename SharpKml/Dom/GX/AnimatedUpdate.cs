@@ -1,13 +1,15 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
-    /// <summary>Controls changes during a tour to KML features.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Controls changes during a tour to KML features.
+    /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("AnimatedUpdate", KmlNamespaces.GX22Namespace)]
     public sealed class AnimatedUpdate : TourPrimitive
     {
-        private Update _update;
+        private Update update;
 
         /// <summary>
         /// Gets or sets the amount of time, in seconds.
@@ -21,8 +23,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public Update Update
         {
-            get { return _update; }
-            set { this.UpdatePropertyChild(value, ref _update); }
+            get { return this.update; }
+            set { this.UpdatePropertyChild(value, ref this.update); }
         }
 
         /// <summary>

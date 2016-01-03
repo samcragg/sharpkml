@@ -1,21 +1,25 @@
-﻿using System;
-using System.Globalization;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
-    /// <summary>Formats the value of an object to KML specification.</summary>
+    using System;
+    using System.Globalization;
+
+    /// <summary>
+    /// Formats the value of an object to KML specification.
+    /// </summary>
     internal class KmlFormatter : ICustomFormatter, IFormatProvider
     {
-        private static KmlFormatter _instance = new KmlFormatter();
+        private static readonly KmlFormatter SingleInstance = new KmlFormatter();
 
         private KmlFormatter()
         {
         }
 
-        /// <summary>Gets the default instance of the KmlFormatter class.</summary>
+        /// <summary>
+        /// Gets the default instance of the KmlFormatter class.
+        /// </summary>
         public static KmlFormatter Instance
         {
-            get { return _instance; }
+            get { return SingleInstance; }
         }
 
         /// <summary>

@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents information about a category associated with an entry or feed.
     /// </summary>

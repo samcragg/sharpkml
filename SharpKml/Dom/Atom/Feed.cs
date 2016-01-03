@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Acts as a container for metadata and data associated with an Atom feed.
     /// </summary>
@@ -14,7 +14,9 @@ namespace SharpKml.Dom.Atom
     [KmlElement("feed", KmlNamespaces.AtomNamespace)]
     public sealed class Feed : Element
     {
-        /// <summary>Initializes a new instance of the Feed class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Feed"/> class.
+        /// </summary>
         public Feed()
         {
             this.RegisterValidChild<Category>();
@@ -22,13 +24,17 @@ namespace SharpKml.Dom.Atom
             this.RegisterValidChild<Link>();
         }
 
-        /// <summary>Gets the categories associated with this instance.</summary>
+        /// <summary>
+        /// Gets the categories associated with this instance.
+        /// </summary>
         public IEnumerable<Category> Categories
         {
             get { return this.Children.OfType<Category>(); }
         }
 
-        /// <summary>Gets the entries associated with this instance.</summary>
+        /// <summary>
+        /// Gets the entries associated with this instance.
+        /// </summary>
         public IEnumerable<Entry> Entries
         {
             get { return this.Children.OfType<Entry>(); }
@@ -40,13 +46,17 @@ namespace SharpKml.Dom.Atom
         [KmlElement("id", KmlNamespaces.AtomNamespace)]
         public string Id { get; set; }
 
-        /// <summary>Gets the links associated with this instance.</summary>
+        /// <summary>
+        /// Gets the links associated with this instance.
+        /// </summary>
         public IEnumerable<Link> Links
         {
             get { return this.Children.OfType<Link>(); }
         }
 
-        /// <summary>Gets or sets a human-readable title for this instance.</summary>
+        /// <summary>
+        /// Gets or sets a human-readable title for this instance.
+        /// </summary>
         [KmlElement("title", KmlNamespaces.AtomNamespace)]
         public string Title { get; set; }
 

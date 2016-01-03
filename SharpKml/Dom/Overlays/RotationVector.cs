@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies a point about which a rotation occurs.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies a point about which a rotation occurs.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 11.7.3.3</remarks>
     [KmlElement("rotationXY")]
     public sealed class RotationVector : VectorType

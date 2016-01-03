@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a polygon with inner and outer boundaries.</summary>
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a polygon with inner and outer boundaries.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.8</remarks>
     [KmlElement("Polygon")]
     public sealed class Polygon : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
-        private OuterBoundary _outer;
+        private OuterBoundary outer;
 
-        /// <summary>Initializes a new instance of the Polygon class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Polygon"/> class.
+        /// </summary>
         public Polygon()
         {
             this.RegisterValidChild<InnerBoundary>();
@@ -47,12 +51,14 @@ namespace SharpKml.Dom
             get { return this.Children.OfType<InnerBoundary>(); }
         }
 
-        /// <summary>Gets or sets the exterior boundary.</summary>
+        /// <summary>
+        /// Gets or sets the exterior boundary.
+        /// </summary>
         [KmlElement(null, 4)]
         public OuterBoundary OuterBoundary
         {
-            get { return _outer; }
-            set { this.UpdatePropertyChild(value, ref _outer); }
+            get { return this.outer; }
+            set { this.UpdatePropertyChild(value, ref this.outer); }
         }
 
         /// <summary>
@@ -83,6 +89,7 @@ namespace SharpKml.Dom
                 {
                     return ((IBoundsInformation)this.OuterBoundary.LinearRing).Coordinates;
                 }
+
                 return EmptyCoordinates;
             }
         }

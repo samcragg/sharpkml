@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a user-defined field for use in <see cref="SimpleArrayData"/>.
     /// </summary>
@@ -9,11 +9,15 @@ namespace SharpKml.Dom.GX
     [KmlElement("SimpleArrayField", KmlNamespaces.GX22Namespace)]
     public sealed class SimpleArrayField : Element
     {
-        /// <summary>Gets or sets an alternate display name.</summary>
+        /// <summary>
+        /// Gets or sets an alternate display name.
+        /// </summary>
         [KmlElement("displayName")]
         public string DisplayName { get; set; }
 
-        /// <summary>Gets or sets the type of the field.</summary>
+        /// <summary>
+        /// Gets or sets the type of the field.
+        /// </summary>
         /// <remarks>
         /// The type content shall be formatted according to one of the following
         /// XML Schema types:
@@ -51,7 +55,9 @@ namespace SharpKml.Dom.GX
         [KmlAttribute("type")]
         public string FieldType { get; set; }
 
-        /// <summary>Gets or sets a value acting as an identifier.</summary>
+        /// <summary>
+        /// Gets or sets a value acting as an identifier.
+        /// </summary>
         [KmlAttribute("name")]
         public string Name { get; set; }
     }

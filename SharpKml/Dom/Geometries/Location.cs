@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies the coordinates of a location.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies the coordinates of a location.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.10</remarks>
     [KmlElement("Location")]
     public sealed class Location : KmlObject

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Merges and resolves <see cref="Style"/> links.
     /// </summary>
@@ -16,17 +16,17 @@ namespace SharpKml.Engine
         // primarily to inhibit infinite loops on styleUrls that are self referencing.
         private const int MaximumNestingDepth = 5;
 
-        private IDictionary<string, StyleSelector> _styleMap;
-        private Style _style = new Style();
-        private StyleState _state;
+        private IDictionary<string, StyleSelector> styleMap;
+        private Style style = new Style();
+        private StyleState state;
 
-        private IFileResolver _fileResolver;
-        private int _nestedDepth;
-        private int _styleId;
+        private IFileResolver fileResolver;
+        private int nestedDepth;
+        private int styleId;
 
         private StyleResolver(IDictionary<string, StyleSelector> map)
         {
-            _styleMap = map;
+            this.styleMap = map;
         }
 
         /// <summary>
@@ -75,14 +75,15 @@ namespace SharpKml.Engine
             {
                 throw new ArgumentNullException("feature");
             }
+
             if (file == null)
             {
                 throw new ArgumentNullException("file");
             }
 
             var instance = new StyleResolver(file.StyleMap);
-            instance._fileResolver = resolver;
-            instance._state = state;
+            instance.fileResolver = resolver;
+            instance.state = state;
             instance.Merge(feature.StyleUrl);
 
             foreach (StyleSelector selector in feature.Styles)
@@ -90,7 +91,7 @@ namespace SharpKml.Engine
                 instance.Merge(selector);
             }
 
-            return instance._style;
+            return instance.style;
         }
 
         /// <summary>
@@ -101,7 +102,8 @@ namespace SharpKml.Engine
         /// </typeparam>
         /// <param name="element">The element instance.</param>
         /// <returns>A new element with the shared styles inlined.</returns>
-        public static T InlineStyles<T>(T element) where T : Element
+        public static T InlineStyles<T>(T element)
+            where T : Element
         {
             var instance = new StyleResolver(new Dictionary<string, StyleSelector>());
 
@@ -111,6 +113,7 @@ namespace SharpKml.Engine
             {
                 instance.InlineElement(e);
             }
+
             return clone;
         }
 
@@ -124,7 +127,8 @@ namespace SharpKml.Engine
         /// <returns>
         /// A new element with the inlined styles changed to shared styles.
         /// </returns>
-        public static T SplitStyles<T>(T element) where T : Element
+        public static T SplitStyles<T>(T element)
+            where T : Element
         {
             var instance = new StyleResolver(new Dictionary<string, StyleSelector>());
 
@@ -149,6 +153,7 @@ namespace SharpKml.Engine
             {
                 style.Item1.AddStyle(style.Item2);
             }
+
             return clone;
         }
 
@@ -156,12 +161,12 @@ namespace SharpKml.Engine
         {
             this.Reset();
 
-            _state = state;
+            this.state = state;
             this.Merge(url);
 
             var pair = new Pair();
             pair.State = state;
-            pair.Selector = _style;
+            pair.Selector = this.style;
             return pair;
         }
 
@@ -176,10 +181,11 @@ namespace SharpKml.Engine
 
         private string CreateUniqueId()
         {
-            while (true) // Keep trying until we find a unique identifier
+            // Keep trying until we find a unique identifier
+            while (true)
             {
-                string id = "_" + _styleId++;
-                if (!_styleMap.ContainsKey(id))
+                string id = "_" + this.styleId++;
+                if (!this.styleMap.ContainsKey(id))
                 {
                     return id;
                 }
@@ -208,7 +214,7 @@ namespace SharpKml.Engine
                     {
                         if (style.Id != null)
                         {
-                            _styleMap[style.Id] = style;
+                            this.styleMap[style.Id] = style;
                             style.Id = null; // The C++ version clears the id, so we will too...
                             document.RemoveChild(style);
                         }
@@ -221,7 +227,7 @@ namespace SharpKml.Engine
                     if ((feature.StyleUrl != null) && !feature.StyleUrl.IsAbsoluteUri)
                     {
                         string id = feature.StyleUrl.GetFragment();
-                        if (_styleMap.ContainsKey(id))
+                        if (this.styleMap.ContainsKey(id))
                         {
                             feature.AddStyle(this.CreateStyleMap(feature.StyleUrl));
                             feature.StyleUrl = null;
@@ -235,7 +241,7 @@ namespace SharpKml.Engine
         {
             try
             {
-                byte[] data = _fileResolver.ReadFile(path);
+                byte[] data = this.fileResolver.ReadFile(path);
                 using (var stream = new MemoryStream(data, false))
                 {
                     if (path.EndsWith(".kml", StringComparison.OrdinalIgnoreCase))
@@ -245,9 +251,9 @@ namespace SharpKml.Engine
 
                     if (path.EndsWith(".kmz", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (_fileResolver.SupportsKmz)
+                        if (this.fileResolver.SupportsKmz)
                         {
-                            return _fileResolver.ExtractDefaultKmlFileFromKmzArchive(stream);
+                            return this.fileResolver.ExtractDefaultKmlFileFromKmzArchive(stream);
                         }
                     }
                 }
@@ -256,6 +262,7 @@ namespace SharpKml.Engine
             {
                 // Silently fail
             }
+
             return null;
         }
 
@@ -264,7 +271,7 @@ namespace SharpKml.Engine
             var style = selector as Style;
             if (style != null)
             {
-                _style.Merge(style);
+                this.style.Merge(style);
             }
             else
             {
@@ -273,7 +280,7 @@ namespace SharpKml.Engine
                 {
                     foreach (Pair pair in styleMap)
                     {
-                        if (pair.State == _state)
+                        if (pair.State == this.state)
                         {
                             this.Merge(pair.StyleUrl);
                             this.Merge(pair.Selector);
@@ -285,7 +292,7 @@ namespace SharpKml.Engine
 
         private void Merge(Uri url)
         {
-            if ((_nestedDepth++ >= MaximumNestingDepth) || (url == null))
+            if ((this.nestedDepth++ >= MaximumNestingDepth) || (url == null))
             {
                 return; // Silently fail
             }
@@ -298,12 +305,12 @@ namespace SharpKml.Engine
                 if (string.IsNullOrEmpty(path))
                 {
                     StyleSelector style;
-                    if (_styleMap.TryGetValue(id, out style))
+                    if (this.styleMap.TryGetValue(id, out style))
                     {
                         this.Merge(style);
                     }
                 }
-                else if (_fileResolver != null)
+                else if (this.fileResolver != null)
                 {
                     KmlFile file = this.LoadFile(path);
                     if (file != null)
@@ -320,8 +327,8 @@ namespace SharpKml.Engine
 
         private void Reset()
         {
-            _nestedDepth = 0;
-            _style = new Style();
+            this.nestedDepth = 0;
+            this.style = new Style();
         }
 
         private Tuple<Document, StyleSelector> Split(Element element)
@@ -337,7 +344,7 @@ namespace SharpKml.Engine
                 // Add the style to the map so we generate an unique id
                 if (style.Id != null)
                 {
-                    _styleMap[style.Id] = style;
+                    this.styleMap[style.Id] = style;
                 }
 
                 // Find the Document to put the Style in, making sure it doesn't
@@ -356,7 +363,7 @@ namespace SharpKml.Engine
 
                         // Tell the feature to use the new shared style and
                         // remove the old style.
-                        _styleMap.Add(shared.Id, shared);
+                        this.styleMap.Add(shared.Id, shared);
                         feature.StyleUrl = new Uri("#" + shared.Id, UriKind.Relative);
                         feature.ClearStyles();
 
@@ -366,6 +373,7 @@ namespace SharpKml.Engine
                     }
                 }
             }
+
             return null; // Nothing to add
         }
     }

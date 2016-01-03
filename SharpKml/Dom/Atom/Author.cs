@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents a Person construct that indicates the author of the entry or feed.
     /// </summary>
@@ -21,12 +21,16 @@ namespace SharpKml.Dom.Atom
         [KmlElement("email", KmlNamespaces.AtomNamespace)]
         public string Email { get; set; }
 
-        /// <summary>Gets or sets the human-readable name for the person.</summary>
+        /// <summary>
+        /// Gets or sets the human-readable name for the person.
+        /// </summary>
         /// <remarks>The content of is Language-Sensitive.</remarks>
         [KmlElement("name", KmlNamespaces.AtomNamespace)]
         public string Name { get; set; }
 
-        /// <summary>Gets or sets the URI associated with the person.</summary>
+        /// <summary>
+        /// Gets or sets the URI associated with the person.
+        /// </summary>
         [KmlElement("uri", KmlNamespaces.AtomNamespace)]
         public Uri Uri { get; set; }
     }

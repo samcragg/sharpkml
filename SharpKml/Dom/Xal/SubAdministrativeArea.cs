@@ -1,17 +1,19 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.Xal
+﻿namespace SharpKml.Dom.Xal
 {
-    /// <summary>Represents information about a sub-administrative area.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents information about a sub-administrative area.
+    /// </summary>
     /// <remarks>
-    /// An example of a sub-administrative areas is a county. There are two places
-    /// where the name of an administrative area can be specified and in this case,
-    /// one becomes sub-administrative area.
+    /// An example of a sub-administrative areas is a county. There are two
+    /// places where the name of an administrative area can be specified and in
+    /// this case, one becomes sub-administrative area.
     /// </remarks>
     [KmlElement("SubAdministrativeArea", KmlNamespaces.XalNamespace)]
     public sealed class SubAdministrativeArea : Element
     {
-        private Locality _locality;
+        private Locality locality;
 
         /// <summary>
         /// Gets or sets the <see cref="Locality"/> associated with this instance.
@@ -19,8 +21,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Locality Locality
         {
-            get { return _locality; }
-            set { this.UpdatePropertyChild(value, ref _locality); }
+            get { return this.locality; }
+            set { this.UpdatePropertyChild(value, ref this.locality); }
         }
 
         /// <summary>

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Xml;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Xml;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies how icons for <see cref="Placemark"/> and <see cref="PhotoOverlay"/>
     /// with a Point geometry are drawn in an earth browser's list and geographic views.
@@ -16,11 +16,13 @@ namespace SharpKml.Dom
     [KmlElement("IconStyle")]
     public sealed class IconStyle : ColorStyle
     {
-        /// <summary>The default value that should be used for <see cref="Scale"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="Scale"/>.
+        /// </summary>
         public const double DefaultScale = 1.0;
 
-        private Hotspot _hotspot;
-        private IconLink _icon;
+        private Hotspot hotspot;
+        private IconLink icon;
 
         /// <summary>
         /// Gets or sets the direction (North, South, East, West), in decimal degrees.
@@ -41,16 +43,16 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public Hotspot Hotspot
         {
-            get { return _hotspot; }
-            set { this.UpdatePropertyChild(value, ref _hotspot); }
+            get { return this.hotspot; }
+            set { this.UpdatePropertyChild(value, ref this.hotspot); }
         }
 
         /// <summary>Gets or sets the icon resource location.</summary>
         [KmlElement(null, 3)]
         public IconLink Icon
         {
-            get { return _icon; }
-            set { this.UpdatePropertyChild(value, ref _icon); }
+            get { return this.icon; }
+            set { this.UpdatePropertyChild(value, ref this.icon); }
         }
 
         /// <summary>
@@ -78,10 +80,14 @@ namespace SharpKml.Dom
 
         // This is declared like this in the XSD as a nested type in IconStyle
 
-        /// <summary>Specifies an icon resource location.</summary>
+        /// <summary>
+        /// Specifies an icon resource location.
+        /// </summary>
         public sealed class IconLink : BasicLink, ICustomElement
         {
-            /// <summary>Initializes a new instance of the IconLink class.</summary>
+            /// <summary>
+            /// Initializes a new instance of the <see cref="IconLink"/> class.
+            /// </summary>
             /// <param name="href">The value for <see cref="BasicLink.Href"/></param>
             public IconLink(Uri href)
             {
@@ -124,7 +130,9 @@ namespace SharpKml.Dom
                 get { return true; }
             }
 
-            /// <summary>Writes the start of an XML element.</summary>
+            /// <summary>
+            /// Writes the start of an XML element.
+            /// </summary>
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             void ICustomElement.CreateStartElement(XmlWriter writer)
             {

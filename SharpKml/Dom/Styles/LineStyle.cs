@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the drawing style for a line geometry.
     /// </summary>
@@ -41,7 +41,7 @@ namespace SharpKml.Dom
         /// [Google Extension]
         /// </summary>
         [KmlElement("physicalWidth", KmlNamespaces.GX22Namespace, 4)]
-        public double? PhysicalWidth{ get; set; }
+        public double? PhysicalWidth { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not to display a text label on a LineString.

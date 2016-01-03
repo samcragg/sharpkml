@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a container of zero or more <see cref="ColorStyle"/> objects
     /// that can referenced from a <see cref="StyleMapCollection"/> or
@@ -15,12 +15,12 @@ namespace SharpKml.Dom
     [KmlElement("Style")]
     public sealed class Style : StyleSelector
     {
-        private BalloonStyle _balloon;
-        private IconStyle _icon;
-        private LabelStyle _label;
-        private LineStyle _line;
-        private ListStyle _list;
-        private PolygonStyle _polygon;
+        private BalloonStyle balloon;
+        private IconStyle icon;
+        private LabelStyle label;
+        private LineStyle line;
+        private ListStyle list;
+        private PolygonStyle polygon;
 
         /// <summary>
         /// Gets or sets the associated <see cref="BalloonStyle"/> of this instance.
@@ -28,8 +28,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 5)]
         public BalloonStyle Balloon
         {
-            get { return _balloon; }
-            set { this.UpdatePropertyChild(value, ref _balloon); }
+            get { return this.balloon; }
+            set { this.UpdatePropertyChild(value, ref this.balloon); }
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public IconStyle Icon
         {
-            get { return _icon; }
-            set { this.UpdatePropertyChild(value, ref _icon); }
+            get { return this.icon; }
+            set { this.UpdatePropertyChild(value, ref this.icon); }
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public LabelStyle Label
         {
-            get { return _label; }
-            set { this.UpdatePropertyChild(value, ref _label); }
+            get { return this.label; }
+            set { this.UpdatePropertyChild(value, ref this.label); }
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public LineStyle Line
         {
-            get { return _line; }
-            set { this.UpdatePropertyChild(value, ref _line); }
+            get { return this.line; }
+            set { this.UpdatePropertyChild(value, ref this.line); }
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 6)]
         public ListStyle List
         {
-            get { return _list; }
-            set { this.UpdatePropertyChild(value, ref _list); }
+            get { return this.list; }
+            set { this.UpdatePropertyChild(value, ref this.list); }
         }
 
         /// <summary>
@@ -78,8 +78,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public PolygonStyle Polygon
         {
-            get { return _polygon; }
-            set { this.UpdatePropertyChild(value, ref _polygon); }
+            get { return this.polygon; }
+            set { this.UpdatePropertyChild(value, ref this.polygon); }
         }
     }
 }

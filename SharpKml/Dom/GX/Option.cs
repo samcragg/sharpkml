@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Enables special viewing modes in Google Earth 6.0 and later.
     /// </summary>
@@ -18,7 +18,7 @@ namespace SharpKml.Dom.GX
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the viewing mode is on or off.
+        /// Gets or sets a value indicating whether the viewing mode is on or off.
         /// </summary>
         [KmlAttribute("enabled")]
         public bool Enabled { get; set; }

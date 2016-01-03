@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a user-defined schema that is used to add user-defined data
     /// encoded within a child <see cref="ExtendedData"/> element of a <see cref="Feature"/>.
@@ -12,7 +12,9 @@ namespace SharpKml.Dom
     [KmlElement("Schema")]
     public sealed class Schema : KmlObject // TODO: This should inherit from Element, but the C++ version inherits from Object??
     {
-        /// <summary>Initializes a new instance of the Schema class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Schema"/> class.
+        /// </summary>
         public Schema()
         {
             this.RegisterValidChild<SimpleField>();
@@ -27,7 +29,9 @@ namespace SharpKml.Dom
             get { return this.Children.OfType<SimpleField>(); }
         }
 
-        /// <summary>Gets or sets a value acting as an identifier.</summary>
+        /// <summary>
+        /// Gets or sets a value acting as an identifier.
+        /// </summary>
         [KmlAttribute("name")]
         public string Name { get; set; }
 

@@ -1,16 +1,16 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// This should be the root element of a KML document instance.
     /// </summary>
     [KmlElement("kml")]
     public sealed class Kml : Element
     {
-        private Feature _feature;
-        private NetworkLinkControl _link;
+        private Feature feature;
+        private NetworkLinkControl link;
 
         /// <summary>
         /// Gets or sets the associated <see cref="Feature"/> of this instance.
@@ -18,8 +18,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public Feature Feature
         {
-            get { return _feature; }
-            set { this.UpdatePropertyChild(value, ref _feature); }
+            get { return this.feature; }
+            set { this.UpdatePropertyChild(value, ref this.feature); }
         }
 
         /// <summary>
@@ -35,8 +35,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public NetworkLinkControl NetworkLinkControl
         {
-            get { return _link; }
-            set { this.UpdatePropertyChild(value, ref _link); }
+            get { return this.link; }
+            set { this.UpdatePropertyChild(value, ref this.link); }
         }
 
         /// <summary>
@@ -58,6 +58,7 @@ namespace SharpKml.Dom
             {
                 throw new ArgumentNullException("prefix");
             }
+
             if (uri == null)
             {
                 throw new ArgumentNullException("uri");

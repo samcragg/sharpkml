@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Encodes an instance of a user-defined field defined by a referenced
     /// <see cref="SimpleField"/>.
@@ -10,7 +10,9 @@ namespace SharpKml.Dom
     [KmlElement("SimpleData")]
     public sealed class SimpleData : Element, IHtmlContent
     {
-        /// <summary>Gets or sets a value acting as an identifier.</summary>
+        /// <summary>
+        /// Gets or sets a value acting as an identifier.
+        /// </summary>
         /// <remarks>
         /// This shall be used to identify the <see cref="SimpleField"/> by name.
         /// The identified <c>SimpleField</c> shall be declared within the
@@ -20,7 +22,9 @@ namespace SharpKml.Dom
         [KmlAttribute("name")]
         public string Name { get; set; }
 
-        /// <summary>Gets or sets the content of this instance.</summary>
+        /// <summary>
+        /// Gets or sets the content of this instance.
+        /// </summary>
         /// <remarks>The value may contain well formed HTML.</remarks>
         public string Text
         {

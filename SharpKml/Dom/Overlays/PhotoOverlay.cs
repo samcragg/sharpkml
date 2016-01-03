@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using SharpKml.Base;
+
     /// <summary>
     /// Used to position a photograph relative to the camera viewpoint and also
     /// to define field-of-view parameters.
@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <remarks>
     /// <para>OGC KML 2.2 Section 11.4</para>
     /// <para>The PhotoOverlay may be rendered on one of three shapes
-    /// (as determined by <see cref="Shape"/> hape):
+    /// (as determined by <see cref="Shape"/>):
     /// <list type="bullet">
     /// <item><description>A 2D planar rectangle.</description></item>
     /// <item><description>A cylinder (for a panoramic photo).</description></item>
@@ -30,9 +30,9 @@ namespace SharpKml.Dom
     [KmlElement("PhotoOverlay")]
     public sealed class PhotoOverlay : Overlay, IBoundsInformation
     {
-        private Point _location;
-        private ImagePyramid _pyramid;
-        private ViewVolume _view;
+        private Point location;
+        private ImagePyramid pyramid;
+        private ViewVolume view;
 
         /// <summary>
         /// Gets or sets the associated <see cref="ImagePyramid"/> of this instance.
@@ -40,19 +40,21 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public ImagePyramid Image
         {
-            get { return _pyramid; }
-            set { this.UpdatePropertyChild(value, ref _pyramid); }
+            get { return this.pyramid; }
+            set { this.UpdatePropertyChild(value, ref this.pyramid); }
         }
 
-        /// <summary>Gets or sets the location of an associated icon.</summary>
+        /// <summary>
+        /// Gets or sets the location of an associated icon.
+        /// </summary>
         /// <remarks>
         /// The <see cref="Point"/> is styled using associated or default styles.
         /// </remarks>
         [KmlElement(null, 4)]
         public Point Location
         {
-            get { return _location; }
-            set { this.UpdatePropertyChild(value, ref _location); }
+            get { return this.location; }
+            set { this.UpdatePropertyChild(value, ref this.location); }
         }
 
         /// <summary>
@@ -79,8 +81,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public ViewVolume View
         {
-            get { return _view; }
-            set { this.UpdatePropertyChild(value, ref _view); }
+            get { return this.view; }
+            set { this.UpdatePropertyChild(value, ref this.view); }
         }
 
         /// <summary>

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Xml;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Xml;
+
     /// <summary>
     /// Represents general information about XML attributes and elements.
     /// </summary>
     public class XmlComponent : IEquatable<XmlComponent>
     {
-        /// <summary>Initializes a new instance of the XmlComponent class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlComponent"/> class.
+        /// </summary>
         /// <param name="reader">
         /// A <see cref="XmlReader"/> object to extract information from. The
         /// reader will be left in the same state and will not be modified.
@@ -21,7 +23,9 @@ namespace SharpKml.Base
             this.Value = reader.Value;
         }
 
-        /// <summary>Initializes a new instance of the XmlComponent class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlComponent"/> class.
+        /// </summary>
         /// <param name="prefix">The XML prefix.</param>
         /// <param name="local">The XML local name.</param>
         /// <param name="uri">The XML namespace.</param>
@@ -116,7 +120,9 @@ namespace SharpKml.Base
             }
 
             string[] names = (local ?? string.Empty).Split(':');
-            if (names.Length == 1) // No colon found
+
+            // No colon found?
+            if (names.Length == 1)
             {
                 this.Name = names[0];
                 this.NamespaceUri = uri;

@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
-    /// <summary>Handles replaceable entities in <see cref="Feature"/>s.</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using SharpKml.Dom;
+
+    /// <summary>
+    /// Handles replaceable entities in <see cref="Feature"/> s.
+    /// </summary>
     public sealed class EntityMapper
     {
         private const string DisplayNamePostfix = "/displayName";
 
-        private Dictionary<string, string> _map = new Dictionary<string, string>();
-        private Dictionary<string, string> _fieldMap = new Dictionary<string, string>();
-        private List<Tuple<string, string>> _markup = new List<Tuple<string, string>>();
-        private KmlFile _file;
+        private readonly Dictionary<string, string> map = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> fieldMap = new Dictionary<string, string>();
+        private readonly List<Tuple<string, string>> markup = new List<Tuple<string, string>>();
+        private KmlFile file;
 
         /// <summary>
-        /// Initializes a new instance of the EntityMapper class.
+        /// Initializes a new instance of the <see cref="EntityMapper"/> class.
         /// </summary>
         /// <param name="file">The kml information to parse.</param>
         /// <exception cref="ArgumentNullException">file is null.</exception>
@@ -27,7 +29,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("file");
             }
 
-            _file = file;
+            this.file = file;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace SharpKml.Engine
         /// <remarks>This property is for unit testing only.</remarks>
         internal IDictionary<string, string> Entities
         {
-            get { return _map; }
+            get { return this.map; }
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace SharpKml.Engine
         /// <remarks>This property is for unit testing only.</remarks>
         internal IList<Tuple<string, string>> Markup
         {
-            get { return _markup; }
+            get { return this.markup; }
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace SharpKml.Engine
         {
             this.ParseEntityFields(feature); // Will throw is feature is null
 
-            Style style = StyleResolver.CreateResolvedStyle(feature, _file, StyleState.Normal);
+            Style style = StyleResolver.CreateResolvedStyle(feature, this.file, StyleState.Normal);
             if ((style.Balloon != null) && (style.Balloon.Text != null))
             {
                 return this.ExpandEntities(style.Balloon.Text);
@@ -87,10 +89,10 @@ namespace SharpKml.Engine
             }
 
             // Now a table of the extended data
-            if (_markup.Count != 0)
+            if (this.markup.Count != 0)
             {
                 html.AppendLine("\n<table border=\"1\">");
-                foreach (var data in _markup)
+                foreach (var data in this.markup)
                 {
                     html.Append("<tr><td>");
                     html.Append(data.Item1);
@@ -99,6 +101,7 @@ namespace SharpKml.Engine
                     html.AppendLine("</tr>");
                 }
             }
+
             return html.ToString();
         }
 
@@ -116,10 +119,11 @@ namespace SharpKml.Engine
         public string ExpandEntities(string input)
         {
             StringBuilder sb = new StringBuilder(input);
-            foreach (var entity in _map)
+            foreach (var entity in this.map)
             {
                 sb.Replace("$[" + entity.Key + "]", entity.Value);
             }
+
             return sb.ToString();
         }
 
@@ -137,9 +141,9 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("feature");
             }
 
-            _fieldMap.Clear();
-            _map.Clear();
-            _markup.Clear();
+            this.fieldMap.Clear();
+            this.map.Clear();
+            this.markup.Clear();
 
             this.GetFeatureFields(feature);
             this.GetExtendedDataFields(feature);
@@ -180,32 +184,32 @@ namespace SharpKml.Engine
         private void GetFeatureFields(Feature feature)
         {
             // KmlObject's fields
-            AddtoDictionary(_map, "id", feature.Id);
-            AddtoDictionary(_map, "targetId", feature.TargetId);
+            AddtoDictionary(this.map, "id", feature.Id);
+            AddtoDictionary(this.map, "targetId", feature.TargetId);
 
             // Feature's fields
             // TODO: OGC KML 2.2 does not single out specific elements -
             // any simple field or attribute of Feature is an entity candidate,
             // however, these are the select few chosen by the C++ version
-            AddtoDictionary(_map, "name", feature.Name);
-            AddtoDictionary(_map, "address", feature.Address);
-            AddtoDictionary(_map, "Snippet", feature.Snippet);
-            AddtoDictionary(_map, "description", feature.Description);
+            AddtoDictionary(this.map, "name", feature.Name);
+            AddtoDictionary(this.map, "address", feature.Address);
+            AddtoDictionary(this.map, "Snippet", feature.Snippet);
+            AddtoDictionary(this.map, "description", feature.Description);
         }
 
         private void GatherDataFields(Data data)
         {
             if (data.Name != null)
             {
-                _map[data.Name] = data.Value;
+                this.map[data.Name] = data.Value;
                 if (data.DisplayName != null)
                 {
-                    _map[data.Name + DisplayNamePostfix] = data.DisplayName;
-                    _markup.Add(Tuple.Create(data.DisplayName, data.Value));
+                    this.map[data.Name + DisplayNamePostfix] = data.DisplayName;
+                    this.markup.Add(Tuple.Create(data.DisplayName, data.Value));
                 }
                 else
                 {
-                    _markup.Add(Tuple.Create(data.Name, data.Value));
+                    this.markup.Add(Tuple.Create(data.Name, data.Value));
                 }
             }
         }
@@ -216,15 +220,17 @@ namespace SharpKml.Engine
             if (schemaData.SchemaUrl != null)
             {
                 string id = schemaData.SchemaUrl.GetFragment();
-                if (id != null) // Make sure a fragment was found
+                if (id != null)
                 {
-                    Schema schema = _file.FindObject(id) as Schema;
-                    if (schema != null) // Make sure it was found and the object is a Schema
+                    // Make sure it was found and the object is a Schema
+                    Schema schema = this.file.FindObject(id) as Schema;
+                    if (schema != null)
                     {
                         foreach (var field in schema.Fields)
                         {
                             this.GatherSimpleFieldFields(field, schema);
                         }
+
                         this.PopulateSimpleFieldNameMap(schema);
                         prefix = schema.Name + prefix;
                     }
@@ -241,14 +247,15 @@ namespace SharpKml.Engine
         {
             if (data.Name != null)
             {
-                _map[prefix + data.Name] = data.Text;
+                this.map[prefix + data.Name] = data.Text;
 
                 string name;
-                if (!_fieldMap.TryGetValue(data.Name, out name))
+                if (!this.fieldMap.TryGetValue(data.Name, out name))
                 {
                     name = data.Name; // Fallback to it's name
                 }
-                _markup.Add(Tuple.Create(name, data.Text));
+
+                this.markup.Add(Tuple.Create(name, data.Text));
             }
         }
 
@@ -257,7 +264,7 @@ namespace SharpKml.Engine
             if ((field.Name != null) && (field.DisplayName != null))
             {
                 string name = schema.Name + "/" + field.Name + DisplayNamePostfix;
-                _map[name] = field.DisplayName;
+                this.map[name] = field.DisplayName;
             }
         }
 
@@ -269,7 +276,7 @@ namespace SharpKml.Engine
                 {
                     string name = field.DisplayName ?? field.Name; // If no display name then use the regular name.
                     string value = schema.Name + ":" + name;
-                    _fieldMap[field.Name] = value;
+                    this.fieldMap[field.Name] = value;
                 }
             }
         }

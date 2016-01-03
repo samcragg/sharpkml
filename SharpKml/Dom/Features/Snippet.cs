@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a short description for a <see cref="Feature"/>.
     /// </summary>
@@ -13,14 +13,18 @@ namespace SharpKml.Dom
     [KmlElement("Snippet")]
     public sealed class Snippet : Element, IHtmlContent
     {
-        /// <summary>The default value that should be used for <see cref="MaximumLines"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="MaximumLines"/>.
+        /// </summary>
         public const int DefaultMaximumLines = 2;
 
         /// <summary>Gets or sets the maximum number of lines to display.</summary>
         [KmlAttribute("maxLines")]
         public int MaximumLines { get; set; }
 
-        /// <summary>Gets or sets the content of this instance.</summary>
+        /// <summary>
+        /// Gets or sets the content of this instance.
+        /// </summary>
         /// <remarks>The value may contain well formed HTML.</remarks>
         public string Text
         {

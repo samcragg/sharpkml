@@ -6,7 +6,9 @@
     /// </summary>
     internal interface IHtmlContent
     {
-        /// <summary>Gets or sets the content of this instance.</summary>
+        /// <summary>
+        /// Gets or sets the content of this instance.
+        /// </summary>
         /// <remarks>The value may contain well formed HTML.</remarks>
         string Text { get; set; }
     }

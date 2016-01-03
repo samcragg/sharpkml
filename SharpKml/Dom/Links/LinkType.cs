@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.ComponentModel;
+    using SharpKml.Base;
+
     /// <summary>
     /// Provides common properties for <see cref="Icon"/> and <see cref="Link"/>.
     /// </summary>
@@ -15,16 +15,24 @@ namespace SharpKml.Dom
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class LinkType : BasicLink
     {
-        /// <summary>The default value that should be used for <see cref="RefreshInterval"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="RefreshInterval"/>.
+        /// </summary>
         public const double DefaultRefreshInterval = 4.0;
 
-        /// <summary>The default value that should be used for <see cref="ViewBoundScale"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="ViewBoundScale"/>.
+        /// </summary>
         public const double DefaultViewBoundScale = 1.0;
 
-        /// <summary>The default value that should be used for <see cref="ViewRefreshTime"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="ViewRefreshTime"/>.
+        /// </summary>
         public const double DefaultViewRefreshTime = 4.0;
 
-        /// <summary>Initializes a new instance of the LinkType class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LinkType"/> class.
+        /// </summary>
         internal LinkType()
         {
         }
@@ -68,7 +76,9 @@ namespace SharpKml.Dom
         [KmlElement("refreshInterval", 2)]
         public double? RefreshInterval { get; set; }
 
-        /// <summary>Gets or sets a time-based refresh mode.</summary>
+        /// <summary>
+        /// Gets or sets a time-based refresh mode.
+        /// </summary>
         /// <remarks>
         /// If <see cref="RefreshInterval"/> is specified then RefreshMode should
         /// be set to <see cref="Dom.RefreshMode.OnInterval"/>.

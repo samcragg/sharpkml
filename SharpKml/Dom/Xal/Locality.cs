@@ -1,18 +1,22 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.Xal
+﻿namespace SharpKml.Dom.Xal
 {
-    /// <summary>Represents an area one level lower than administrative.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents an area one level lower than administrative.
+    /// </summary>
     /// <remarks>
     /// Typically this includes: cities, reservations and any other built-up areas.
     /// </remarks>
     [KmlElement("Locality", KmlNamespaces.XalNamespace)]
     public sealed class Locality : Element
     {
-        private PostalCode _code;
-        private Thoroughfare _thoroughfare;
+        private PostalCode code;
+        private Thoroughfare thoroughfare;
 
-        /// <summary>Gets or sets the name of the Locality.</summary>
+        /// <summary>
+        /// Gets or sets the name of the Locality.
+        /// </summary>
         [KmlElement("LocalityName", KmlNamespaces.XalNamespace)]
         public string Name { get; set; }
 
@@ -22,8 +26,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public PostalCode PostalCode
         {
-            get { return _code; }
-            set { this.UpdatePropertyChild(value, ref _code); }
+            get { return this.code; }
+            set { this.UpdatePropertyChild(value, ref this.code); }
         }
 
         /// <summary>
@@ -32,8 +36,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Thoroughfare Thoroughfare
         {
-            get { return _thoroughfare; }
-            set { this.UpdatePropertyChild(value, ref _thoroughfare); }
+            get { return this.thoroughfare; }
+            set { this.UpdatePropertyChild(value, ref this.thoroughfare); }
         }
     }
 }

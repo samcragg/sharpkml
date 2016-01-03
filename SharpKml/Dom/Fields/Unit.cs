@@ -1,16 +1,22 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies the unit of a value.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies the unit of a value.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.20</remarks>
     public enum Unit
     {
-        /// <summary>Value is a fraction of the icon.</summary>
+        /// <summary>
+        /// Value is a fraction of the icon.
+        /// </summary>
         [KmlElement("fraction")]
         Fraction = 0,
 
-        /// <summary>Value is a specific pixel size.</summary>
+        /// <summary>
+        /// Value is a specific pixel size.
+        /// </summary>
         [KmlElement("pixels")]
         Pixel,
 

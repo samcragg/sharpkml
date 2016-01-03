@@ -1,7 +1,7 @@
-﻿using System.Xml;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Xml;
+
     /// <summary>
     /// Allows customized serialization of an <see cref="Element"/>.
     /// </summary>
@@ -12,7 +12,9 @@ namespace SharpKml.Dom
         /// </summary>
         bool ProcessChildren { get; }
 
-        /// <summary>Writes the start of an XML element.</summary>
+        /// <summary>
+        /// Writes the start of an XML element.
+        /// </summary>
         /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
         void CreateStartElement(XmlWriter writer);
     }

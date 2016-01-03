@@ -1,15 +1,15 @@
-﻿using System;
-using SharpKml.Dom;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Provides data for the <see cref="Parser.ElementAdded"/> event.
     /// </summary>
     public sealed class ElementEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the ElementEventArgs class.
+        /// Initializes a new instance of the <see cref="ElementEventArgs"/> class.
         /// </summary>
         /// <param name="element">
         /// The value to assign to the Element property.

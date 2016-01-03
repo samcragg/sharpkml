@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Collections.Generic;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies an addition, change, or deletion to a KML resource that has
     /// previously been retrieved via <see cref="NetworkLink"/>.
@@ -20,7 +20,9 @@ namespace SharpKml.Dom
     [KmlElement("Update")]
     public sealed class Update : Element
     {
-        /// <summary>Initializes a new instance of the Update class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Update"/> class.
+        /// </summary>
         public Update()
         {
             this.RegisterValidChild<ChangeCollection>();

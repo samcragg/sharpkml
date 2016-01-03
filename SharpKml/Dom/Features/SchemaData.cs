@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Encodes an instance of a user-defined data type defined by a referenced
     /// <see cref="Schema"/>.
@@ -13,7 +13,9 @@ namespace SharpKml.Dom
     [KmlElement("SchemaData")]
     public sealed class SchemaData : KmlObject
     {
-        /// <summary>Initializes a new instance of the SchemaData class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchemaData"/> class.
+        /// </summary>
         public SchemaData()
         {
             this.RegisterValidChild<SimpleData>();

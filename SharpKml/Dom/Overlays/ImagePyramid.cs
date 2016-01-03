@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a hierarchical set of images, each of which is an increasingly
     /// lower resolution (towards the top of the pyramid).
@@ -22,7 +22,9 @@ namespace SharpKml.Dom
     [KmlElement("ImagePyramid")]
     public sealed class ImagePyramid : KmlObject
     {
-        /// <summary>The default value that should be used for <see cref="TileSize"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="TileSize"/>.
+        /// </summary>
         public const int DefaultTileSize = 256;
 
         /// <summary>
@@ -38,7 +40,9 @@ namespace SharpKml.Dom
         [KmlElement("maxHeight", 3)]
         public int? Height { get; set; }
 
-        /// <summary>Gets or sets the size of the tiles, in pixels.</summary>
+        /// <summary>
+        /// Gets or sets the size of the tiles, in pixels.
+        /// </summary>
         /// <remarks>
         /// Tiles must be square, and TileSize must be a power of 2. A tile size
         /// of 256 (the default) or 512 is recommended. The original image is

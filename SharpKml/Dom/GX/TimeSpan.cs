@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Copy of <see cref="Dom.TimeSpan"/> in the extension namespace.
     /// </summary>
@@ -14,11 +14,15 @@ namespace SharpKml.Dom.GX
     [KmlElement("TimeSpan", KmlNamespaces.GX22Namespace)]
     public sealed class TimeSpan : TimePrimitive
     {
-        /// <summary>Gets or sets the beginning instant of a time period.</summary>
+        /// <summary>
+        /// Gets or sets the beginning instant of a time period.
+        /// </summary>
         [KmlElement("begin", 1)]
         public DateTime? Begin { get; set; }
 
-        /// <summary>Gets or sets the ending instant of a time period.</summary>
+        /// <summary>
+        /// Gets or sets the ending instant of a time period.
+        /// </summary>
         [KmlElement("end", 2)]
         public DateTime? End { get; set; }
     }

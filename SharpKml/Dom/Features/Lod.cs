@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the Level Of Detail to use when displaying a <see cref="Region"/>.
     /// </summary>
@@ -37,7 +37,9 @@ namespace SharpKml.Dom
     [KmlElement("Lod")]
     public sealed class Lod : KmlObject
     {
-        /// <summary>The default value that should be used for <see cref="MaximumPixels"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="MaximumPixels"/>.
+        /// </summary>
         public const double DefaultMaximumPixels = -1.0;
 
         /// <summary>

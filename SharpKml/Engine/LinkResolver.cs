@@ -1,36 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SharpKml.Base;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using SharpKml.Base;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Helper class that looks for all elements with an "href" property.
     /// </summary>
     internal sealed class LinkResolver
     {
-        private bool _duplicates;
-        private List<Uri> _links = new List<Uri>();
+        private bool duplicates;
+        private List<Uri> links = new List<Uri>();
 
         /// <summary>
-        /// Initializes a new instance of the LinkResolver class.
+        /// Initializes a new instance of the <see cref="LinkResolver"/> class.
         /// </summary>
         /// <param name="input">The input to parse.</param>
         /// <param name="duplicates">Allow duplicates or not.</param>
         public LinkResolver(TextReader input, bool duplicates)
         {
-            _duplicates = duplicates;
+            this.duplicates = duplicates;
             Parser parser = new Parser();
             parser.ElementAdded += this.OnElementAdded;
             parser.Parse(input);
         }
 
-        /// <summary>Gets the Uri's of the Links.</summary>
+        /// <summary>
+        /// Gets the Uri's of the Links.
+        /// </summary>
         public IEnumerable<Uri> Links
         {
-            get { return _links; }
+            get { return this.links; }
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace SharpKml.Engine
         {
             get
             {
-                foreach (var uri in _links)
+                foreach (var uri in this.links)
                 {
                     Uri normal = uri.Normalize();
                     if ((normal != null) && !normal.IsAbsoluteUri)
@@ -60,11 +62,12 @@ namespace SharpKml.Engine
         {
             if (uri != null)
             {
-                if (!_duplicates && _links.Contains(uri))
+                if (!this.duplicates && this.links.Contains(uri))
                 {
                     return;
                 }
-                _links.Add(uri);
+
+                this.links.Add(uri);
             }
         }
 

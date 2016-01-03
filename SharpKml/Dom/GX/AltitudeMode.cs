@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Can be used instead of the OGC KML standard <see cref="SharpKml.Dom.AltitudeMode"/>.
     /// </summary>

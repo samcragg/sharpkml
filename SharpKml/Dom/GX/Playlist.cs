@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Contains any number of <see cref="TourPrimitive"/> elements.
     /// </summary>
@@ -11,7 +11,9 @@ namespace SharpKml.Dom.GX
     [KmlElement("Playlist", KmlNamespaces.GX22Namespace)]
     public sealed class Playlist : KmlObject
     {
-        /// <summary>Initializes a new instance of the Playlist class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Playlist"/> class.
+        /// </summary>
         public Playlist()
         {
             this.RegisterValidChild<TourPrimitive>();

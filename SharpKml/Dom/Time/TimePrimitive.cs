@@ -1,6 +1,8 @@
 ﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a KML AbstractTimePrimitiveGroup.</summary>
+    /// <summary>
+    /// Represents a KML AbstractTimePrimitiveGroup.
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 15.1</para>
     /// <para>All DateTime instances in TimePrimitive and its descendants should
