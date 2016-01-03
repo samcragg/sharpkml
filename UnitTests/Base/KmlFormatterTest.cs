@@ -36,9 +36,9 @@ namespace UnitTests.Base
             TestDateTime(date);
         }
 
-        [TestCase(double.NegativeInfinity, Result = "-INF")]
-        [TestCase(double.NaN, Result = "NaN")]
-        [TestCase(double.PositiveInfinity, Result = "INF")]
+        [TestCase(double.NegativeInfinity, ExpectedResult = "-INF")]
+        [TestCase(double.NaN, ExpectedResult = "NaN")]
+        [TestCase(double.PositiveInfinity, ExpectedResult = "INF")]
         public string ShouldOutputSpecialDoublesCorrectly(double value)
         {
             return string.Format(KmlFormatter.Instance, "{0}", value);
