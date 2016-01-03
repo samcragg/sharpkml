@@ -129,6 +129,21 @@ namespace UnitTests.Base
             Assert.That(serializer.Xml, Is.EqualTo(expected));
         }
 
+        [Test]
+        public void SerializeShouldCheckForNullArguments()
+        {
+            var serializer = new Serializer();
+
+            Assert.That(() => serializer.Serialize(null),
+                Throws.InstanceOf<ArgumentNullException>());
+
+            Assert.That(() => serializer.Serialize(null, new MemoryStream()),
+                Throws.InstanceOf<ArgumentNullException>());
+
+            Assert.That(() => serializer.Serialize(new Kml(), null),
+                Throws.InstanceOf<ArgumentNullException>());
+        }
+
         private static bool FindNode(string xml, string name, Action<XmlReader> callback)
         {
             using (var stringReader = new StringReader(xml))

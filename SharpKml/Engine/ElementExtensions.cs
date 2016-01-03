@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Reflection;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -26,41 +27,16 @@
                 throw new ArgumentNullException("element");
             }
 
-            // We're simply going to serialize it then parse it again
-            // This could be rewritten to use reflection but this should
-            // be fast enough.
-            var serializer = new Serializer();
-            var parser = new Parser();
-            Element output;
-
             // Special case as IconStyle has the same Kml name as Icon
-            if (element.GetType() == typeof(IconStyle.IconLink))
+            var iconLink = element as IconStyle.IconLink;
+            if (iconLink != null)
             {
-                if (element.Parent == null)
-                {
-                    var parent = new IconStyle();
-                    parent.Icon = (IconStyle.IconLink)(Element)element; // Have to cast to Element first
-                    serializer.Serialize(parent);
-                    parent.Icon = null; // Sets the Icon's Parent property back to null
-                }
-                else
-                {
-                    serializer.Serialize(element.Parent);
-                }
-
-                parser.ParseString(serializer.Xml, true);
-                IconStyle root = (IconStyle)parser.Root;
-                output = root.Icon;
-                root.Icon = null; // Clear the output's parent
+                return (T)CloneIconLink(iconLink);
             }
             else
             {
-                serializer.Serialize(element);
-                parser.ParseString(serializer.Xml, true);
-                output = parser.Root;
+                return (T)CloneElement(element);
             }
-
-            return (T)output;
         }
 
         /// <summary>
@@ -171,6 +147,48 @@
                 }
 
                 Merge(source, element, source.GetType());
+            }
+        }
+
+        private static Element CloneElement(Element element)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var serializer = new Serializer();
+                serializer.Serialize(element, stream);
+
+                stream.Position = 0;
+                var parser = new Parser();
+                parser.Parse(stream);
+                return parser.Root;
+            }
+        }
+
+        private static Element CloneIconLink(IconStyle.IconLink iconLink)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var serializer = new Serializer();
+                if (iconLink.Parent == null)
+                {
+                    var parent = new IconStyle();
+                    parent.Icon = iconLink;
+                    serializer.Serialize(parent, stream);
+                    parent.Icon = null; // Sets the Icon's Parent property back to null
+                }
+                else
+                {
+                    serializer.Serialize(iconLink.Parent, stream);
+                }
+
+                stream.Position = 0;
+                var parser = new Parser();
+                parser.Parse(stream);
+
+                IconStyle root = (IconStyle)parser.Root;
+                IconStyle.IconLink output = root.Icon;
+                root.Icon = null; // Clear the output's parent
+                return output;
             }
         }
 

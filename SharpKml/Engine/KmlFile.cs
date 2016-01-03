@@ -215,12 +215,7 @@
         public void Save(Stream stream)
         {
             Serializer serializer = new Serializer();
-            serializer.Serialize(this.Root);
-
-            using (var writer = new StreamWriter(stream))
-            {
-                writer.Write(serializer.Xml);
-            }
+            serializer.Serialize(this.Root, stream);
         }
 
         /// <summary>
