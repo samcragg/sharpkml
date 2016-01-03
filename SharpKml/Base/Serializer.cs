@@ -43,6 +43,32 @@
         }
 
         /// <summary>
+        /// Serializes the specified <see cref="Element"/> as XML, writing the
+        /// result to the specified stream.
+        /// </summary>
+        /// <param name="root">
+        /// The <c>Element</c> to serialize, including all its children.
+        /// </param>
+        /// <param name="stream">Where to write the output.</param>
+        /// <remarks>
+        /// The generated XML will be indented and have a full XML
+        /// declaration header.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">root or stream is null.</exception>
+        public void Serialize(Element root, Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            var settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.NamespaceHandling = NamespaceHandling.OmitDuplicates;
+            Serialize(root, stream, settings);
+        }
+
+        /// <summary>
         /// Serializes the specified <see cref="Element"/> to XML without formatting.
         /// </summary>
         /// <param name="root">
@@ -78,6 +104,22 @@
             }
 
             return string.Format(KmlFormatter.Instance, "{0}", value);
+        }
+
+        private static void Serialize(Element root, Stream stream, XmlWriterSettings settings)
+        {
+            // We check here so the public functions don't need to
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+
+            settings.Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            using (var writer = XmlWriter.Create(stream, settings))
+            {
+                SerializeElement(writer, root);
+                writer.Flush();
+            }
         }
 
         private static void SerializeElement(XmlWriter writer, Element element)
@@ -208,21 +250,10 @@
 
         private void Serialize(Element root, XmlWriterSettings settings)
         {
-            // We check here so the two public functions don't need to
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
-
-            this.xml = null;
-            settings.Encoding = new UTF8Encoding(false); // Omit the BOM
-
             using (var stream = new MemoryStream())
-            using (var writer = XmlWriter.Create(stream, settings))
             {
-                SerializeElement(writer, root);
-                writer.Flush();
-
+                this.xml = null;
+                Serialize(root, stream, settings);
                 this.xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
             }
         }
