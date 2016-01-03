@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>References a KML resource on a local or remote network.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// References a KML resource on a local or remote network.
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 9.12</para>
     /// <para>May be used in combination with <see cref="Region"/> elements to
@@ -11,7 +13,7 @@ namespace SharpKml.Dom
     [KmlElement("NetworkLink")]
     public sealed class NetworkLink : Feature
     {
-        private Link _link;
+        private Link link;
 
         /// <summary>
         /// Gets or sets whether to adjust the geographic view upon activation.
@@ -41,8 +43,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public Link Link
         {
-            get { return _link; }
-            set { this.UpdatePropertyChild(value, ref _link); }
+            get { return this.link; }
+            set { this.UpdatePropertyChild(value, ref this.link); }
         }
 
         /// <summary>

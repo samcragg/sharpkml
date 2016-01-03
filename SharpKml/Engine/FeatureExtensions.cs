@@ -1,24 +1,24 @@
-﻿using System;
-using SharpKml.Base;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using SharpKml.Base;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Provides extension methods for <see cref="Feature"/> objects.
     /// </summary>
     public static class FeatureExtensions
     {
-        // The range of the LookAt that emcompasses the feature's extents
-        // depends on the field of view of the virtual camera.
-        private static readonly double FieldOfView = MathHelpers.DegreesToRadians(60.0);
-
         // To avoid zooming in too far to point features or features that are
         // spatially small, we clap the computed range to a minimum value.
         private const double MinimumRange = 1000.0; // Meters
 
         // This is used in CalculateLookAt to give a margin around the feature.
         private const double Margin = 1.1;
+
+        // The range of the LookAt that emcompasses the feature's extents
+        // depends on the field of view of the virtual camera.
+        private static readonly double FieldOfView = MathHelpers.DegreesToRadians(60.0);
 
         /// <summary>
         /// Calculates the coordinates of the bounds of the <see cref="Feature"/>.
@@ -71,6 +71,7 @@ namespace SharpKml.Engine
             {
                 return ComputeLookAt(box);
             }
+
             return null;
         }
 
@@ -108,6 +109,7 @@ namespace SharpKml.Engine
                 {
                     ExpandBox(f, box);
                 }
+
                 return;
             }
 

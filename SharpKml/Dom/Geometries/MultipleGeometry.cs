@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents a container for zero or more <see cref="Geometry"/> elements
     /// associated with the same KML feature.
@@ -12,13 +12,17 @@ namespace SharpKml.Dom
     [KmlElement("MultiGeometry")]
     public sealed class MultipleGeometry : Geometry
     {
-        /// <summary>Initializes a new instance of the MultipleGeometry class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultipleGeometry"/> class.
+        /// </summary>
         public MultipleGeometry()
         {
             this.RegisterValidChild<Geometry>();
         }
 
-        /// <summary>Gets a collection of <see cref="Geometry"/> elements.</summary>
+        /// <summary>
+        /// Gets a collection of <see cref="Geometry"/> elements.
+        /// </summary>
         public IEnumerable<Geometry> Geometry
         {
             get { return this.Children.OfType<Geometry>(); }

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Allows nonrectangular quadrilateral ground overlays.
     /// </summary>
@@ -9,7 +9,7 @@ namespace SharpKml.Dom.GX
     [KmlElement("LatLonQuad", KmlNamespaces.GX22Namespace)]
     public sealed class LatLonQuad : KmlObject
     {
-        private CoordinateCollection _coords;
+        private CoordinateCollection coords;
 
         /// <summary>
         /// Gets or sets the four corner points of a quadrilateral defining the
@@ -25,8 +25,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public CoordinateCollection Coordinates
         {
-            get { return _coords; }
-            set { this.UpdatePropertyChild(value, ref _coords); }
+            get { return this.coords; }
+            set { this.UpdatePropertyChild(value, ref this.coords); }
         }
     }
 }

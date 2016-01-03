@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Affects the visibility of a <see cref="Feature"/>.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Affects the visibility of a <see cref="Feature"/>.
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 9.13</para>
     /// <para>Regions define both culling and level-of-detail control over the
@@ -20,8 +22,8 @@ namespace SharpKml.Dom
     [KmlElement("Region")]
     public sealed class Region : KmlObject
     {
-        private LatLonAltBox _box;
-        private Lod _lod;
+        private LatLonAltBox box;
+        private Lod lod;
 
         /// <summary>
         /// Gets or sets an area of interest defined by geographic coordinates
@@ -30,8 +32,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public LatLonAltBox LatLonAltBox
         {
-            get { return _box; }
-            set { this.UpdatePropertyChild(value, ref _box); }
+            get { return this.box; }
+            set { this.UpdatePropertyChild(value, ref this.box); }
         }
 
         /// <summary>
@@ -40,8 +42,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public Lod LevelOfDetail
         {
-            get { return _lod; }
-            set { this.UpdatePropertyChild(value, ref _lod); }
+            get { return this.lod; }
+            set { this.UpdatePropertyChild(value, ref this.lod); }
         }
     }
 }

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Xml;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Xml;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents data found when parsing which is not recognized.
     /// </summary>
     public sealed class UnknownElement : Element, ICustomElement
     {
-        private XmlComponent _data;
+        private XmlComponent data;
 
         /// <summary>
-        /// Initializes a new instance of the UnknownElement class.
+        /// Initializes a new instance of the <see cref="UnknownElement"/> class.
         /// </summary>
         /// <param name="data">The unrecognized XML data to store.</param>
         /// <exception cref="ArgumentNullException">data is null.</exception>
@@ -22,13 +22,16 @@ namespace SharpKml.Dom
             {
                 throw new ArgumentNullException("data");
             }
-            _data = data.Clone(); // Don't store the data from the user but store a copy instead.
+
+            this.data = data.Clone(); // Don't store the data from the user but store a copy instead.
         }
 
-        /// <summary>Gets the unrecognized data found during parsing.</summary>
+        /// <summary>
+        /// Gets the unrecognized data found during parsing.
+        /// </summary>
         public XmlComponent UnknownData
         {
-            get { return _data.Clone(); } // Don't give them our data to play with
+            get { return this.data.Clone(); } // Don't give them our data to play with
         }
 
         /// <summary>
@@ -39,11 +42,13 @@ namespace SharpKml.Dom
             get { return true; }
         }
 
-        /// <summary>Writes the start of an XML element.</summary>
+        /// <summary>
+        /// Writes the start of an XML element.
+        /// </summary>
         /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
-            writer.WriteStartElement(_data.Prefix, _data.Name, _data.NamespaceUri);
+            writer.WriteStartElement(this.data.Prefix, this.data.Name, this.data.NamespaceUri);
         }
     }
 }

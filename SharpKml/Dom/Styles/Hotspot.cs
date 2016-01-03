@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the position of the reference point on the icon.
     /// </summary>

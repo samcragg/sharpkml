@@ -1,9 +1,11 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
-    /// <summary>Represents a simple geographic bounding box.</summary>
+    using System;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a simple geographic bounding box.
+    /// </summary>
     /// <remarks>
     /// The antemeridian is not considered and the validity of the values are
     /// not checked.
@@ -11,7 +13,7 @@ namespace SharpKml.Engine
     public sealed class BoundingBox
     {
         /// <summary>
-        /// Initializes a new instance of the BoundingBox class.
+        /// Initializes a new instance of the <see cref="BoundingBox"/> class.
         /// </summary>
         public BoundingBox()
         {
@@ -22,8 +24,8 @@ namespace SharpKml.Engine
         }
 
         /// <summary>
-        /// Initializes a new instance of the BoundingBox class with the
-        /// specified values;
+        /// Initializes a new instance of the <see cref="BoundingBox"/> class
+        /// with the specified values.
         /// </summary>
         /// <param name="north">The value for <see cref="North"/>.</param>
         /// <param name="south">The value for <see cref="South"/>.</param>
@@ -37,7 +39,9 @@ namespace SharpKml.Engine
             this.West = west;
         }
 
-        /// <summary>Gets the center of this instance.</summary>
+        /// <summary>
+        /// Gets the center of this instance.
+        /// </summary>
         public Vector Center
         {
             get
@@ -217,6 +221,7 @@ namespace SharpKml.Engine
             {
                 this.North = latitude;
             }
+
             if (latitude < this.South)
             {
                 this.South = latitude;
@@ -235,6 +240,7 @@ namespace SharpKml.Engine
             {
                 this.East = longitude;
             }
+
             if (longitude < this.West)
             {
                 this.West = longitude;

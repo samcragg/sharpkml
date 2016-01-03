@@ -1,18 +1,26 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies an image coordinate system.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies an image coordinate system.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.21</remarks>
     public abstract class VectorType : Element
     {
-        /// <summary>The default value that should be used for <see cref="X"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="X"/>.
+        /// </summary>
         public const double DefaultX = 1.0;
 
-        /// <summary>The default value that should be used for <see cref="Y"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="Y"/>.
+        /// </summary>
         public const double DefaultY = 1.0;
 
-        /// <summary>Gets or sets the x component of a point.</summary>
+        /// <summary>
+        /// Gets or sets the x component of a point.
+        /// </summary>
         [KmlAttribute("x")]
         public double? X { get; set; }
 
@@ -22,7 +30,9 @@ namespace SharpKml.Dom
         [KmlAttribute("xunits")]
         public Unit? XUnits { get; set; }
 
-        /// <summary>Gets or sets the y component of a point.</summary>
+        /// <summary>
+        /// Gets or sets the y component of a point.
+        /// </summary>
         [KmlAttribute("y")]
         public double? Y { get; set; }
 

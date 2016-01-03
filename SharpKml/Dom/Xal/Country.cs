@@ -1,12 +1,14 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.Xal
+﻿namespace SharpKml.Dom.Xal
 {
-    /// <summary>Represents a country.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a country.
+    /// </summary>
     [KmlElement("Country", KmlNamespaces.XalNamespace)]
     public sealed class Country : Element
     {
-        private AdministrativeArea _area;
+        private AdministrativeArea area;
 
         /// <summary>
         /// Gets or sets the <see cref="AdministrativeArea"/> associated with
@@ -15,11 +17,13 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public AdministrativeArea AdministrativeArea
         {
-            get { return _area; }
-            set { this.UpdatePropertyChild(value, ref _area); }
+            get { return this.area; }
+            set { this.UpdatePropertyChild(value, ref this.area); }
         }
 
-        /// <summary>Gets or sets a country code as per ISO 3166-1.</summary>
+        /// <summary>
+        /// Gets or sets a country code as per ISO 3166-1.
+        /// </summary>
         [KmlElement("CountryNameCode", KmlNamespaces.XalNamespace)]
         public string NameCode { get; set; }
     }

@@ -1,12 +1,16 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies the projection mode for a shape.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies the projection mode for a shape.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.17</remarks>
     public enum Shape
     {
-        /// <summary>Represents an ordinary photo.</summary>
+        /// <summary>
+        /// Represents an ordinary photo.
+        /// </summary>
         [KmlElement("rectangle")]
         Rectangle = 0,
 
@@ -16,7 +20,9 @@ namespace SharpKml.Dom
         [KmlElement("cylinder")]
         Cylinder,
 
-        /// <summary>Represents spherical panoramas.</summary>
+        /// <summary>
+        /// Represents spherical panoramas.
+        /// </summary>
         [KmlElement("sphere")]
         Sphere
     }

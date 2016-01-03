@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies the color mode for a graphic element.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies the color mode for a graphic element.
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 16.7</para>
     /// <para>If the value is <see cref="Random"/> then the color components are
@@ -22,11 +24,15 @@ namespace SharpKml.Dom
     /// </remarks>
     public enum ColorMode
     {
-        /// <summary>Use a single color value.</summary>
+        /// <summary>
+        /// Use a single color value.
+        /// </summary>
         [KmlElement("normal")]
         Normal = 0,
 
-        /// <summary>Use a random color value.</summary>
+        /// <summary>
+        /// Use a random color value.
+        /// </summary>
         [KmlElement("random")]
         Random
     }

@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml;
-using SharpKml.Dom;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Xml;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Serializes a derived class of <see cref="Element"/> into XML data.
     /// </summary>
     public class Serializer
     {
-        private string _xml;
+        private string xml;
 
         /// <summary>
         /// Gets the XML content after the most recent call to
@@ -20,7 +20,7 @@ namespace SharpKml.Base
         /// </summary>
         public string Xml
         {
-            get { return _xml; }
+            get { return this.xml; }
         }
 
         /// <summary>
@@ -76,6 +76,7 @@ namespace SharpKml.Base
                     return att.ElementName;
                 }
             }
+
             return string.Format(KmlFormatter.Instance, "{0}", value);
         }
 
@@ -83,8 +84,10 @@ namespace SharpKml.Base
         {
             // Write start tag
             XmlComponent component = KmlFactory.FindType(element.GetType());
+
+            // Custom elements take priority over component
             ICustomElement customElement = element as ICustomElement;
-            if (customElement != null) // Takes priority over component
+            if (customElement != null)
             {
                 customElement.CreateStartElement(writer);
                 if (!customElement.ProcessChildren)
@@ -96,8 +99,9 @@ namespace SharpKml.Base
             {
                 writer.WriteStartElement(component.Name, component.NamespaceUri);
             }
-            else // We can't handle it so ignore it
+            else
             {
+                // We can't handle it so ignore it
                 System.Diagnostics.Debug.WriteLine("Unknown Element type - please register first." + element.GetType());
                 return; // Skip
             }
@@ -141,7 +145,9 @@ namespace SharpKml.Base
             foreach (var property in browser.Attributes)
             {
                 object value = property.Item1.GetValue(element, null);
-                if (value != null) // Make sure it needs saving
+
+                // Make sure it needs saving
+                if (value != null)
                 {
                     writer.WriteAttributeString(property.Item2.AttributeName, GetString(value));
                 }
@@ -181,9 +187,12 @@ namespace SharpKml.Base
             foreach (var property in browser.Elements)
             {
                 object value = property.Item1.GetValue(element, null);
-                if (value != null) // Make sure it needs saving
+
+                // Make sure it needs saving
+                if (value != null)
                 {
-                    if (property.Item2.ElementName == null) // This is an element
+                    // Is this an element?
+                    if (property.Item2.ElementName == null)
                     {
                         SerializeElement(writer, (Element)value);
                     }
@@ -205,7 +214,7 @@ namespace SharpKml.Base
                 throw new ArgumentNullException("root");
             }
 
-            _xml = null;
+            this.xml = null;
             settings.Encoding = new UTF8Encoding(false); // Omit the BOM
 
             using (var stream = new MemoryStream())
@@ -214,7 +223,7 @@ namespace SharpKml.Base
                 SerializeElement(writer, root);
                 writer.Flush();
 
-                _xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
+                this.xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
             }
         }
     }

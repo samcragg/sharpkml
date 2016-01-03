@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies the size of the image.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies the size of the image.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 11.7.3.4</remarks>
     [KmlElement("size")]
     public sealed class SizeVector : VectorType

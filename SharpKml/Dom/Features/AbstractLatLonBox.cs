@@ -1,21 +1,31 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a KML AbstractLatLonAltBox.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a KML AbstractLatLonAltBox.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.14</remarks>
     public abstract class AbstractLatLonBox : KmlObject
     {
-        /// <summary>The default value that should be used for <see cref="East"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="East"/>.
+        /// </summary>
         public const double DefaultEast = 180.0;
 
-        /// <summary>The default value that should be used for <see cref="North"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="North"/>.
+        /// </summary>
         public const double DefaultNorth = 180.0;
 
-        /// <summary>The default value that should be used for <see cref="South"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="South"/>.
+        /// </summary>
         public const double DefaultSouth = -180.0;
 
-        /// <summary>The default value that should be used for <see cref="West"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="West"/>.
+        /// </summary>
         public const double DefaultWest = -180.0;
 
         /// <summary>

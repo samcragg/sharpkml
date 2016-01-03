@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Provides extension methods for <see cref="Geometry"/> objects.
     /// </summary>
@@ -66,6 +66,6 @@ namespace SharpKml.Engine
                     box.Expand(coord.Latitude, coord.Longitude);
                 }
             }
-        }        
+        }
     }
 }

@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a KML AbstractContainerGroup.</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Represents a KML AbstractContainerGroup.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.6</remarks>
     public abstract class Container : Feature
     {
-        /// <summary>Initializes a new instance of the Container class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Container"/> class.
+        /// </summary>
         internal Container()
         {
             // Cannot be inherited outside of this assembly because of the
@@ -74,6 +78,7 @@ namespace SharpKml.Dom
             {
                 return this.RemoveChild(feature);
             }
+
             return false;
         }
     }

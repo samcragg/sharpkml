@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a mapping between two <see cref="Style"/>s using a key/value
     /// pair that maps a mode to the predefined <see cref="Feature.StyleUrl"/>.
@@ -20,7 +20,9 @@ namespace SharpKml.Dom
     [KmlElement("StyleMap")]
     public sealed class StyleMapCollection : StyleSelector, ICollection<Pair>
     {
-        /// <summary>Initializes a new instance of the StyleMapCollection class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StyleMapCollection"/> class.
+        /// </summary>
         public StyleMapCollection()
         {
             this.RegisterValidChild<Pair>();
@@ -34,13 +36,17 @@ namespace SharpKml.Dom
             get { return this.Children.Count; }
         }
 
-        /// <summary>Gets a value indicating whether this instance is read-only.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance is read-only.
+        /// </summary>
         bool ICollection<Pair>.IsReadOnly
         {
             get { return false; }
         }
 
-        /// <summary>Adds a <see cref="Pair"/> to this instance.</summary>
+        /// <summary>
+        /// Adds a <see cref="Pair"/> to this instance.
+        /// </summary>
         /// <param name="item">The <c>Pair</c> to be added.</param>
         /// <exception cref="ArgumentNullException">item is null.</exception>
         /// <exception cref="InvalidOperationException">
@@ -51,7 +57,9 @@ namespace SharpKml.Dom
             this.AddChild(item);
         }
 
-        /// <summary>Removes all <see cref="Pair"/>s from this instance.</summary>
+        /// <summary>
+        /// Removes all <see cref="Pair"/>s from this instance.
+        /// </summary>
         public void Clear()
         {
             for (int i = this.Children.Count; i > 0; --i)
@@ -74,6 +82,7 @@ namespace SharpKml.Dom
             {
                 return false;
             }
+
             return this.Children.Contains(item);
         }
 
@@ -122,6 +131,7 @@ namespace SharpKml.Dom
             {
                 return false;
             }
+
             return this.RemoveChild(item);
         }
 

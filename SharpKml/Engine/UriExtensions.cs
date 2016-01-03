@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+
     /// <summary>
     /// Helper extensions for handling a Uri how the C++ version does.
     /// </summary>
@@ -29,10 +29,13 @@ namespace SharpKml.Engine
             }
 
             Uri absolute = Relative(AbsoluteUri, uri);
-            if ((absolute != null) && absolute.IsAbsoluteUri) // Prevent infinite loop
+
+            // Prevent infinite loop
+            if ((absolute != null) && absolute.IsAbsoluteUri)
             {
                 return GetFragment(absolute); // Try again
             }
+
             return null; // Give up!
         }
 
@@ -57,7 +60,9 @@ namespace SharpKml.Engine
             return GetComponents(uri, UriComponents.Path);
         }
 
-        /// <summary>Returns the Uri of the Kmz file, if one is found.</summary>
+        /// <summary>
+        /// Returns the Uri of the Kmz file, if one is found.
+        /// </summary>
         /// <param name="uri">The Uri instance.</param>
         /// <returns>The Uri of the Kmz file if found; otherwise, null.</returns>
         /// <exception cref="ArgumentNullException">uri is null.</exception>
@@ -67,7 +72,9 @@ namespace SharpKml.Engine
             return (split == null) ? null : split.Item1;
         }
 
-        /// <summary>Normalizes both absolute relative Uri's.</summary>
+        /// <summary>
+        /// Normalizes both absolute relative Uri's.
+        /// </summary>
         /// <param name="uri">The Uri instance.</param>
         /// <returns>A Uri with that is normalized.</returns>
         /// <exception cref="ArgumentNullException">uri is null.</exception>
@@ -95,7 +102,9 @@ namespace SharpKml.Engine
             return Clone(uri);
         }
 
-        /// <summary>Combines the instance and the specified target.</summary>
+        /// <summary>
+        /// Combines the instance and the specified target.
+        /// </summary>
         /// <param name="uri">The Uri instance.</param>
         /// <param name="target">The relative Uri to add to the instance.</param>
         /// <returns>
@@ -120,7 +129,9 @@ namespace SharpKml.Engine
             return output;
         }
 
-        /// <summary>Combines the Href's of a Model.</summary>
+        /// <summary>
+        /// Combines the Href's of a Model.
+        /// </summary>
         /// <param name="uri">The Uri instance.</param>
         /// <param name="geometry">The Href of the geometry.</param>
         /// <param name="target">The Href of the target.</param>
@@ -165,13 +176,16 @@ namespace SharpKml.Engine
                 UriBuilder builder = new UriBuilder(uri);
                 builder.Path = path.Substring(0, index);
 
-                if (index < path.Length - 1) // Allow for '/'
+                // -1 to allow for '/'
+                if (index < path.Length - 1)
                 {
                     Uri file = new Uri(path.Substring(index + 1), UriKind.Relative); // Skip '/'
                     return Tuple.Create(builder.Uri, file);
                 }
+
                 return new Tuple<Uri, Uri>(builder.Uri, null);
             }
+
             return null;
         }
 
@@ -200,6 +214,7 @@ namespace SharpKml.Engine
 
                 return output;
             }
+
             return null;
         }
     }

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies how the name of a <see cref="Feature"/> is drawn in the
     /// geographic view.
@@ -10,7 +10,9 @@ namespace SharpKml.Dom
     [KmlElement("LabelStyle")]
     public sealed class LabelStyle : ColorStyle
     {
-        /// <summary>The default value that should be used for <see cref="Scale"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="Scale"/>.
+        /// </summary>
         public const double DefaultScale = 1.0;
 
         /// <summary>

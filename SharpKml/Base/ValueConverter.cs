@@ -1,16 +1,16 @@
-﻿using System;
-using System.Globalization;
-using System.Reflection;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Globalization;
+    using System.Reflection;
+
     /// <summary>
     /// Converts a string to an object according to the Kml specification.
     /// </summary>
     internal static class ValueConverter
     {
         // These are the only valid DateTime formats
-        private static readonly string[] dateTimeFormats =
+        private static readonly string[] DateTimeFormats =
         {
             "yyyy", // xsd:gYear
             "yyyy-MM", // xsd:gYearMonth
@@ -20,7 +20,9 @@ namespace SharpKml.Base
             "yyyy-MM-ddTHH:mm:ss.FFFFFFFzzzzzz" // xsd:dateTime
         };
 
-        /// <summary>Tries to convert the specified string to an object.</summary>
+        /// <summary>
+        /// Tries to convert the specified string to an object.
+        /// </summary>
         /// <param name="type">The type the value should be converted to.</param>
         /// <param name="text">The string to convert.</param>
         /// <param name="value">The output, if successful; otherwise, null.</param>
@@ -65,6 +67,7 @@ namespace SharpKml.Base
                     value = GetPrimitive(typeCode, text);
                 }
             }
+
             return true;
         }
 
@@ -85,6 +88,7 @@ namespace SharpKml.Base
                     return false;
                 }
             }
+
             return null;
         }
 
@@ -96,10 +100,11 @@ namespace SharpKml.Base
                 DateTimeStyles.AssumeUniversal;
 
             DateTime date;
-            if (DateTime.TryParseExact(value, dateTimeFormats, CultureInfo.InvariantCulture, Style, out date))
+            if (DateTime.TryParseExact(value, DateTimeFormats, CultureInfo.InvariantCulture, Style, out date))
             {
                 return date;
             }
+
             return null;
         }
 
@@ -117,6 +122,7 @@ namespace SharpKml.Base
                     }
                 }
             }
+
             return null;
         }
 
@@ -124,7 +130,7 @@ namespace SharpKml.Base
         private static object GetPrimitive(TypeCode typeCode, string value)
         {
             NumberStyles numberStyle = NumberStyles.Any;
-            IFormatProvider provider = CultureInfo.InvariantCulture; 
+            IFormatProvider provider = CultureInfo.InvariantCulture;
             switch (typeCode)
             {
                 case TypeCode.Boolean:
@@ -168,6 +174,7 @@ namespace SharpKml.Base
                     ulong ul;
                     return ulong.TryParse(value, numberStyle, provider, out ul) ? (object)ul : null;
             }
+
             System.Diagnostics.Debug.WriteLine("Unknown TypeCode:" + typeCode);
             return null; // Failed to convert
         }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Defines a closed line string that should not cross itself.
     /// </summary>
@@ -17,7 +17,7 @@ namespace SharpKml.Dom
     public sealed class LinearRing : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
-        private CoordinateCollection _coords;
+        private CoordinateCollection coords;
 
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
@@ -25,7 +25,9 @@ namespace SharpKml.Dom
         [KmlElement("altitudeMode", 3)]
         public AltitudeMode? AltitudeMode { get; set; }
 
-        /// <summary>Gets or sets a the coordinate tuples.</summary>
+        /// <summary>
+        /// Gets or sets a the coordinate tuples.
+        /// </summary>
         /// <remarks>
         /// Should contain four or more coordinates, where the first and last
         /// coordinates must be the same.
@@ -33,8 +35,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public CoordinateCollection Coordinates
         {
-            get { return _coords; }
-            set { this.UpdatePropertyChild(value, ref _coords); }
+            get { return this.coords; }
+            set { this.UpdatePropertyChild(value, ref this.coords); }
         }
 
         /// <summary>

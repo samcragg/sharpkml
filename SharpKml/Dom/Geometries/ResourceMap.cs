@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a collection of resource aliases.</summary>
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a collection of resource aliases.
+    /// </summary>
     /// <remarks>
     /// <para>OGC KML 2.2 Section 10.13</para>
     /// <para>This element allows texture files to be moved and renamed without
@@ -16,13 +18,17 @@ namespace SharpKml.Dom
     [KmlElement("ResourceMap")]
     public sealed class ResourceMap : KmlObject
     {
-        /// <summary>Initializes a new instance of the ResourceMap class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceMap"/> class.
+        /// </summary>
         public ResourceMap()
         {
             this.RegisterValidChild<Alias>();
         }
 
-        /// <summary>Gets a collection of untyped name/value pairs.</summary>
+        /// <summary>
+        /// Gets a collection of untyped name/value pairs.
+        /// </summary>
         public IEnumerable<Alias> Aliases
         {
             get { return this.Children.OfType<Alias>(); }

@@ -1,19 +1,22 @@
-﻿using System;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+
     /// <summary>
     /// Represents a point in either 2D or, if <see cref="Altitude"/> is set, 3D space.
     /// </summary>
     public sealed class Vector : IEquatable<Vector>
     {
-        /// <summary>Initializes a new instance of the Vector class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector"/> class.
+        /// </summary>
         public Vector()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the Vector class with the specified values.
+        /// Initializes a new instance of the <see cref="Vector"/> class with
+        /// the specified values.
         /// </summary>
         /// <param name="latitude">The latitude for this instance.</param>
         /// <param name="longitude">The longitude for this instance.</param>
@@ -24,7 +27,8 @@ namespace SharpKml.Base
         }
 
         /// <summary>
-        /// Initializes a new instance of the Vector class with the specified values.
+        /// Initializes a new instance of the <see cref="Vector"/> class with
+        /// the specified values.
         /// </summary>
         /// <param name="latitude">The latitude for this instance.</param>
         /// <param name="longitude">The longitude for this instance.</param>
@@ -42,10 +46,14 @@ namespace SharpKml.Base
         /// </summary>
         public double? Altitude { get; set; }
 
-        /// <summary>Gets or sets the Latitude.</summary>
+        /// <summary>
+        /// Gets or sets the Latitude.
+        /// </summary>
         public double Latitude { get; set; }
 
-        /// <summary>Gets or sets the Longitude.</summary>
+        /// <summary>
+        /// Gets or sets the Longitude.
+        /// </summary>
         public double Longitude { get; set; }
 
         /// <summary>
@@ -85,7 +93,9 @@ namespace SharpKml.Base
                    (this.Longitude == other.Longitude);
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
@@ -94,6 +104,7 @@ namespace SharpKml.Base
             {
                 value ^= this.Altitude.GetHashCode();
             }
+
             return value;
         }
     }

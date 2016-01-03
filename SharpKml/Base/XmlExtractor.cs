@@ -1,8 +1,8 @@
-﻿using System.Text;
-using System.Xml;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System.Text;
+    using System.Xml;
+
     /// <summary>
     /// Used to get the inner text of a XML element.
     /// </summary>
@@ -17,12 +17,12 @@ namespace SharpKml.Base
     /// </remarks>
     internal class XmlExtractor
     {
-        private XmlReader _reader;
-        private StringBuilder _xml = new StringBuilder();
+        private XmlReader reader;
+        private StringBuilder xml = new StringBuilder();
 
         private XmlExtractor(XmlReader reader)
         {
-            _reader = reader;
+            this.reader = reader;
         }
 
         /// <summary>
@@ -37,42 +37,45 @@ namespace SharpKml.Base
         {
             XmlExtractor instance = new XmlExtractor(reader);
             instance.ProcessChild();
-            return instance._xml.ToString();
+            return instance.xml.ToString();
         }
 
         private string GetAttributes()
         {
             StringBuilder sb = new StringBuilder();
-            while (_reader.MoveToNextAttribute())
+            while (this.reader.MoveToNextAttribute())
             {
-                sb.AppendFormat(" {0}=\"{1}\"", _reader.Name, _reader.Value);
+                sb.AppendFormat(" {0}=\"{1}\"", this.reader.Name, this.reader.Value);
             }
+
             return sb.ToString();
         }
 
         private void ProcessChild()
         {
-            while (_reader.Read())
+            while (this.reader.Read())
             {
-                switch (_reader.NodeType)
+                switch (this.reader.NodeType)
                 {
                     case XmlNodeType.Element:
-                        if (_reader.IsEmptyElement) // Check here before we access attributes.
+                        // Check here before we access attributes.
+                        if (this.reader.IsEmptyElement)
                         {
-                            _xml.AppendFormat("<{0}{1} />", _reader.Name, this.GetAttributes());
+                            this.xml.AppendFormat("<{0}{1} />", this.reader.Name, this.GetAttributes());
                         }
                         else
                         {
-                            _xml.AppendFormat("<{0}{1}>", _reader.Name, this.GetAttributes());
+                            this.xml.AppendFormat("<{0}{1}>", this.reader.Name, this.GetAttributes());
                             this.ProcessChild();
-                            _xml.AppendFormat("</{0}>", _reader.Name);
+                            this.xml.AppendFormat("</{0}>", this.reader.Name);
                         }
+
                         break;
                     case XmlNodeType.EndElement:
                         return;
                     case XmlNodeType.CDATA: // Fall through
                     case XmlNodeType.Text:
-                        _xml.Append(_reader.Value);
+                        this.xml.Append(this.reader.Value);
                         break;
                 }
             }

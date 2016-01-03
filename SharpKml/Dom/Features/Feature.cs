@@ -1,27 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a KML AbstractFeatureGroup</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a KML AbstractFeatureGroup
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.1</remarks>
     public abstract class Feature : KmlObject
     {
-        /// <summary>The default value that should be used for <see cref="Visibility"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="Visibility"/>.
+        /// </summary>
         public const bool DefaultVisibility = true;
 
-        private Xal.AddressDetails _address;
-        private Description _description;
-        private ExtendedData _extended;
-        private Region _region;
-        private Snippet _snippet;
-        private TimePrimitive _time;
-        private AbstractView _view;
+        private Xal.AddressDetails address;
+        private Description description;
+        private ExtendedData extended;
+        private Region region;
+        private Snippet snippet;
+        private TimePrimitive time;
+        private AbstractView view;
 
         /// <summary>
-        /// Initializes a new instance of the Feature class.
+        /// Initializes a new instance of the <see cref="Feature"/> class.
         /// </summary>
         protected Feature()
         {
@@ -49,11 +53,13 @@ namespace SharpKml.Dom
         [KmlElement(null, 7)]
         public Xal.AddressDetails AddressDetails
         {
-            get { return _address; }
-            set { this.UpdatePropertyChild(value, ref _address); }
+            get { return this.address; }
+            set { this.UpdatePropertyChild(value, ref this.address); }
         }
 
-        /// <summary>Gets or sets the author of the Feature.</summary>
+        /// <summary>
+        /// Gets or sets the author of the Feature.
+        /// </summary>
         /// <remarks>This value is inheritable - see section 9.6.2</remarks>
         [KmlElement(null, 4)]
         public Atom.Author AtomAuthor { get; set; }
@@ -70,7 +76,9 @@ namespace SharpKml.Dom
         [KmlElement(null, 5)]
         public Atom.Link AtomLink { get; set; }
 
-        /// <summary>Gets or sets a description of the Feature.</summary>
+        /// <summary>
+        /// Gets or sets a description of the Feature.
+        /// </summary>
         /// <remarks>
         /// This should be displayed in the description balloon. The text may
         /// include HTML content, which requires special processing for
@@ -79,19 +87,23 @@ namespace SharpKml.Dom
         [KmlElement(null, 10)]
         public Description Description
         {
-            get { return _description; }
-            set { this.UpdatePropertyChild(value, ref _description); }
+            get { return this.description; }
+            set { this.UpdatePropertyChild(value, ref this.description); }
         }
 
-        /// <summary>Gets or sets additional user-defined data.</summary>
+        /// <summary>
+        /// Gets or sets additional user-defined data.
+        /// </summary>
         [KmlElement(null, 16)]
         public ExtendedData ExtendedData
         {
-            get { return _extended; }
-            set { this.UpdatePropertyChild(value, ref _extended); }
+            get { return this.extended; }
+            set { this.UpdatePropertyChild(value, ref this.extended); }
         }
 
-        /// <summary>Gets or sets a label for the Feature.</summary>
+        /// <summary>
+        /// Gets or sets a label for the Feature.
+        /// </summary>
         [KmlElement("name", 1)]
         public string Name { get; set; }
 
@@ -102,7 +114,9 @@ namespace SharpKml.Dom
         [KmlElement("open", 3)]
         public bool? Open { get; set; }
 
-        /// <summary>Gets or sets a value representing a telephone number.</summary>
+        /// <summary>
+        /// Gets or sets a value representing a telephone number.
+        /// </summary>
         /// <remarks>The number should be formatted according to [RFC 3966].</remarks>
         [KmlElement("phoneNumber", 8)]
         public string PhoneNumber { get; set; }
@@ -114,17 +128,21 @@ namespace SharpKml.Dom
         [KmlElement(null, 15)]
         public Region Region
         {
-            get { return _region; }
-            set { this.UpdatePropertyChild(value, ref _region); }
+            get { return this.region; }
+            set { this.UpdatePropertyChild(value, ref this.region); }
         }
 
-        /// <summary>Gets or sets a short description of the of the Feature.</summary>
-        /// <remarks>This is used instead of Description in the list view if it exists.</remarks>
+        /// <summary>
+        /// Gets or sets a short description of the of the Feature.
+        /// </summary>
+        /// <remarks>
+        /// This is used instead of Description in the list view if it exists.
+        /// </remarks>
         [KmlElement(null, 9)]
         public Snippet Snippet
         {
-            get { return _snippet; }
-            set { this.UpdatePropertyChild(value, ref _snippet); }
+            get { return this.snippet; }
+            set { this.UpdatePropertyChild(value, ref this.snippet); }
         }
 
         /// <summary>
@@ -154,16 +172,18 @@ namespace SharpKml.Dom
         [KmlElement(null, 12)]
         public TimePrimitive Time
         {
-            get { return _time; }
-            set { this.UpdatePropertyChild(value, ref _time); }
+            get { return this.time; }
+            set { this.UpdatePropertyChild(value, ref this.time); }
         }
 
-        /// <summary>Gets or sets a viewpoint for the Feature.</summary>
+        /// <summary>
+        /// Gets or sets a viewpoint for the Feature.
+        /// </summary>
         [KmlElement(null, 11)]
         public AbstractView Viewpoint
         {
-            get { return _view; }
-            set { this.UpdatePropertyChild(value, ref _view); }
+            get { return this.view; }
+            set { this.UpdatePropertyChild(value, ref this.view); }
         }
 
         /// <summary>

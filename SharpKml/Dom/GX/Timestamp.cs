@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Copy of <see cref="Dom.Timestamp"/> in the extension namespace.
     /// </summary>
@@ -14,7 +14,9 @@ namespace SharpKml.Dom.GX
     [KmlElement("TimeStamp", KmlNamespaces.GX22Namespace)]
     public sealed class Timestamp : TimePrimitive
     {
-        /// <summary>Gets or sets the moment in time.</summary>
+        /// <summary>
+        /// Gets or sets the moment in time.
+        /// </summary>
         [KmlElement("when", 1)]
         public DateTime? When { get; set; }
     }

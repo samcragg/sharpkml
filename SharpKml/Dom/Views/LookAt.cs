@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the geographic view in terms of a point of interest viewed
     /// from a virtual camera.

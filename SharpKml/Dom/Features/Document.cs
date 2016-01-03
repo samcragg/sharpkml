@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents a container for KML features, shared styles and user-defined schemas.
     /// </summary>
@@ -11,7 +11,9 @@ namespace SharpKml.Dom
     [KmlElement("Document")]
     public sealed class Document : Container
     {
-        /// <summary>Initializes a new instance of the Document class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Document"/> class.
+        /// </summary>
         public Document()
         {
             this.RegisterValidChild<Schema>();

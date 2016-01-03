@@ -1,7 +1,7 @@
-﻿using System.IO;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System.IO;
+
     /// <summary>
     /// Allows the loading of external files when resolving styles.
     /// </summary>

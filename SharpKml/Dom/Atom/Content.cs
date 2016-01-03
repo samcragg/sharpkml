@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents information about or links to the content of an entry.
     /// </summary>

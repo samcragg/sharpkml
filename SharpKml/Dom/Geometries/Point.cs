@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using SharpKml.Base;
-using System;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents a geographic location defined by a single geodetic longitude,
     /// geodetic latitude, and (optional) altitude coordinate tuple.
@@ -12,7 +11,7 @@ namespace SharpKml.Dom
     [KmlElement("Point")]
     public sealed class Point : Geometry, IBoundsInformation
     {
-        private CoordinateCollection _coords;
+        private CoordinateCollection coords;
 
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
@@ -20,7 +19,9 @@ namespace SharpKml.Dom
         [KmlElement("altitudeMode", 2)]
         public AltitudeMode? AltitudeMode { get; set; }
 
-        /// <summary>Gets or sets a single coordinate tuple.</summary>
+        /// <summary>
+        /// Gets or sets a single coordinate tuple.
+        /// </summary>
         public Vector Coordinate
         {
             get
@@ -30,6 +31,7 @@ namespace SharpKml.Dom
                 {
                     return this.Coordinates[0];
                 }
+
                 return null;
             }
             set
@@ -44,6 +46,7 @@ namespace SharpKml.Dom
                     {
                         this.Coordinates = new CoordinateCollection();
                     }
+
                     this.Coordinates.Clear();
                     this.Coordinates.Add(value);
                 }
@@ -84,13 +87,18 @@ namespace SharpKml.Dom
             }
         }
 
-        // Use a non-public (cannot be private as that can't be accessed under
-        // partial trust) property to enable automatic parsing/serialization
+        /// <summary>
+        /// Gets or sets the parsed/serialized coordinates.
+        /// </summary>
+        /// <remarks>
+        /// Use a non-public (cannot be private as that can't be accessed under
+        /// partial trust) property to enable automatic parsing/serialization
+        /// </remarks>
         [KmlElement(null, 3)]
         internal CoordinateCollection Coordinates
         {
-            get { return _coords; }
-            set { this.UpdatePropertyChild(value, ref _coords); }
+            get { return this.coords; }
+            set { this.UpdatePropertyChild(value, ref this.coords); }
         }
     }
 }

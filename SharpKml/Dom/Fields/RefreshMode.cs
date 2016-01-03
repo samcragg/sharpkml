@@ -1,8 +1,10 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies a time-based refresh mode.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies a time-based refresh mode.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.16</remarks>
     public enum RefreshMode
     {

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the orientation of the model coordinate axes relative to a
     /// local earth-fixed reference frame.
@@ -10,7 +10,9 @@ namespace SharpKml.Dom
     [KmlElement("Orientation")]
     public sealed class Orientation : KmlObject
     {
-        /// <summary>Gets or sets the rotation about the z axis.</summary>
+        /// <summary>
+        /// Gets or sets the rotation about the z axis.
+        /// </summary>
         /// <remarks>
         /// A value of 0 equals North. A positive rotation is counter clockwise
         /// around the positive z axis, looking along the z-axis away from the
@@ -19,7 +21,9 @@ namespace SharpKml.Dom
         [KmlElement("heading", 1)]
         public double? Heading { get; set; }
 
-        /// <summary>Gets or sets the rotation about the y axis.</summary>
+        /// <summary>
+        /// Gets or sets the rotation about the y axis.
+        /// </summary>
         /// <remarks>
         /// A positive rotation is counter clockwise around the positive y axis
         /// and specified in decimal degrees from 0 to ±180.
@@ -27,7 +31,9 @@ namespace SharpKml.Dom
         [KmlElement("roll", 3)]
         public double? Roll { get; set; }
 
-        /// <summary>Gets or sets the rotation about the x axis.</summary>
+        /// <summary>
+        /// Gets or sets the rotation about the x axis.
+        /// </summary>
         /// <remarks>
         /// A positive rotation is counter clockwise around the positive x axis
         /// and specified in decimal degrees from 0 to ±180.

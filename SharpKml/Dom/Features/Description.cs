@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a description of a <see cref="Feature"/>, which should be
     /// displayed in the description balloon.
@@ -14,7 +14,9 @@ namespace SharpKml.Dom
     [KmlElement("description")]
     public sealed class Description : Element, IHtmlContent
     {
-        /// <summary>Gets or sets the content of this instance.</summary>
+        /// <summary>
+        /// Gets or sets the content of this instance.
+        /// </summary>
         /// <remarks>The value may contain well formed HTML.</remarks>
         public string Text
         {

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Represents a <see cref="Feature"/> that contains a <see cref="Geometry"/>.
     /// </summary>
@@ -15,7 +15,7 @@ namespace SharpKml.Dom
     [KmlElement("Placemark")]
     public sealed class Placemark : Feature
     {
-        private Geometry _geometry;
+        private Geometry geometry;
 
         /// <summary>
         /// Gets or sets the associated <see cref="Geometry"/> of this instance.
@@ -23,8 +23,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public Geometry Geometry
         {
-            get { return _geometry; }
-            set { this.UpdatePropertyChild(value, ref _geometry); }
+            get { return this.geometry; }
+            set { this.UpdatePropertyChild(value, ref this.geometry); }
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies modifications to zero or more <see cref="Feature"/>s in the
     /// target resource.
@@ -13,7 +13,9 @@ namespace SharpKml.Dom
     [KmlElement("Change")]
     public sealed class ChangeCollection : Element, ICollection<KmlObject>
     {
-        /// <summary>Initializes a new instance of the ChangeCollection class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChangeCollection"/> class.
+        /// </summary>
         public ChangeCollection()
         {
             this.RegisterValidChild<KmlObject>();
@@ -27,13 +29,17 @@ namespace SharpKml.Dom
             get { return this.Children.Count; }
         }
 
-        /// <summary>Gets a value indicating whether this instance is read-only.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance is read-only.
+        /// </summary>
         bool ICollection<KmlObject>.IsReadOnly
         {
             get { return false; }
         }
 
-        /// <summary>Adds a <see cref="KmlObject"/> to this instance.</summary>
+        /// <summary>
+        /// Adds a <see cref="KmlObject"/> to this instance.
+        /// </summary>
         /// <param name="item">The <c>KmlObject</c> to be added.</param>
         /// <exception cref="ArgumentNullException">item is null.</exception>
         /// <exception cref="InvalidOperationException">
@@ -44,7 +50,9 @@ namespace SharpKml.Dom
             this.AddChild(item);
         }
 
-        /// <summary>Removes all <see cref="KmlObject"/>s from this instance.</summary>
+        /// <summary>
+        /// Removes all <see cref="KmlObject"/>s from this instance.
+        /// </summary>
         public void Clear()
         {
             for (int i = this.Children.Count; i > 0; --i)
@@ -67,6 +75,7 @@ namespace SharpKml.Dom
             {
                 return false;
             }
+
             return this.Children.Contains(item);
         }
 
@@ -115,6 +124,7 @@ namespace SharpKml.Dom
             {
                 return false;
             }
+
             return this.RemoveChild(item);
         }
 

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+
     /// <summary>
     /// Contains mathematical functions useful when working with KML or, more
     /// generally, geometry on a Great Circle.
@@ -46,7 +46,9 @@ namespace SharpKml.Base
             return RadiansToDegrees(tan % (2 * Math.PI));
         }
 
-        /// <summary>Converts the specified value in degrees to radians.</summary>
+        /// <summary>
+        /// Converts the specified value in degrees to radians.
+        /// </summary>
         /// <param name="degrees">The angle in degrees.</param>
         /// <returns>The specified angle converted to radians.</returns>
         public static double DegreesToRadians(double degrees)
@@ -68,6 +70,7 @@ namespace SharpKml.Base
             {
                 throw new ArgumentNullException("point1");
             }
+
             if (point2 == null)
             {
                 throw new ArgumentNullException("point2");
@@ -77,6 +80,7 @@ namespace SharpKml.Base
             {
                 return Distance(point1.Latitude, point1.Longitude, point2.Latitude, point2.Longitude);
             }
+
             return Distance(point1.Latitude, point1.Longitude, point1.Altitude.Value, point2.Latitude, point2.Longitude, point2.Altitude.Value);
         }
 
@@ -174,7 +178,9 @@ namespace SharpKml.Base
             return Math.Abs(Math.Sin(DegreesToRadians(elevation)) * range);
         }
 
-        /// <summary>Converts the specified distance in meters to radians.</summary>
+        /// <summary>
+        /// Converts the specified distance in meters to radians.
+        /// </summary>
         /// <param name="meters">The distance in meters.</param>
         /// <returns>The specified distance converted to radians.</returns>
         public static double MetersToRadians(double meters)
@@ -215,7 +221,9 @@ namespace SharpKml.Base
             return new Vector(RadiansToDegrees(radialLat), RadiansToDegrees(radialLon));
         }
 
-        /// <summary>Converts the specified value in radians to degrees.</summary>
+        /// <summary>
+        /// Converts the specified value in radians to degrees.
+        /// </summary>
         /// <param name="radians">The angle in radians.</param>
         /// <returns>The specified angle converted to degrees.</returns>
         public static double RadiansToDegrees(double radians)
@@ -223,7 +231,9 @@ namespace SharpKml.Base
             return radians * 180.0 / Math.PI;
         }
 
-        /// <summary>Converts the specified angle in radians to meters.</summary>
+        /// <summary>
+        /// Converts the specified angle in radians to meters.
+        /// </summary>
         /// <param name="radians">The angle in radians</param>
         /// <returns>The specified angle converted to meters.</returns>
         public static double RadiansToMeters(double radians)

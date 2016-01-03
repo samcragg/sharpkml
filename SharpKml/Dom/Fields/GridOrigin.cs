@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies where to begin numbering the tiles in a layer of an
     /// <see cref="ImagePyramid"/>.

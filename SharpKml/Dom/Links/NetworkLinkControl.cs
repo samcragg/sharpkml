@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Controls the behavior of a <see cref="NetworkLink"/> that references
     /// the KML resource.
@@ -11,11 +11,13 @@ namespace SharpKml.Dom
     [KmlElement("NetworkLinkControl")]
     public sealed class NetworkLinkControl : Element
     {
-        /// <summary>The default value that should be used for <see cref="SessionLength"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="SessionLength"/>.
+        /// </summary>
         public const double DefaultSessionLength = -1.0;
 
-        private Update _update;
-        private AbstractView _view;
+        private Update update;
+        private AbstractView view;
 
         /// <summary>
         /// Gets or sets a string to append to the <see cref="NetworkLink"/>
@@ -102,8 +104,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 9)]
         public Update Update
         {
-            get { return _update; }
-            set { this.UpdatePropertyChild(value, ref _update); }
+            get { return this.update; }
+            set { this.UpdatePropertyChild(value, ref this.update); }
         }
 
         /// <summary>
@@ -112,8 +114,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 10)]
         public AbstractView View
         {
-            get { return _view; }
-            set { this.UpdatePropertyChild(value, ref _view); }
+            get { return this.view; }
+            set { this.UpdatePropertyChild(value, ref this.view); }
         }
     }
 }

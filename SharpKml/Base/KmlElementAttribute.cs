@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+
     /// <summary>
     /// Specifies a class or class member should be serialized as an XML element.
     /// </summary>
@@ -9,7 +9,7 @@ namespace SharpKml.Base
     public sealed class KmlElementAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the KmlElementAttribute class.
+        /// Initializes a new instance of the <see cref="KmlElementAttribute"/> class.
         /// </summary>
         /// <param name="elementName">
         /// The name of the generated XML element.
@@ -23,7 +23,7 @@ namespace SharpKml.Base
         }
 
         /// <summary>
-        /// Initializes a new instance of the KmlElementAttribute class.
+        /// Initializes a new instance of the <see cref="KmlElementAttribute"/> class.
         /// </summary>
         /// <param name="elementName">
         /// The name of the generated XML element.
@@ -41,7 +41,9 @@ namespace SharpKml.Base
             this.Order = order;
         }
 
-        /// <summary>Gets the name of the generated XML element.</summary>
+        /// <summary>
+        /// Gets the name of the generated XML element.
+        /// </summary>
         public string ElementName { get; private set; }
 
         /// <summary>

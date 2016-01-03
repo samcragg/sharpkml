@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies how a <see cref="Feature"/> is displayed in the list view.
     /// </summary>
@@ -11,13 +11,19 @@ namespace SharpKml.Dom
     [KmlElement("ListStyle")]
     public sealed class ListStyle : SubStyle
     {
-        /// <summary>The default value that should be used for <see cref="BackgroundColor"/>.</summary>
-        public static readonly Color32 DefaultBackgroundColor = new Color32(255, 255, 255, 255);
-
-        /// <summary>The default value that should be used for <see cref="MaximumSnippetLines"/>.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="MaximumSnippetLines"/>.
+        /// </summary>
         public const int DefaultMaximumSnippetLines = 2;
 
-        /// <summary>Initializes a new instance of the ListStyle class.</summary>
+        /// <summary>
+        /// The default value that should be used for <see cref="BackgroundColor"/>.
+        /// </summary>
+        public static readonly Color32 DefaultBackgroundColor = new Color32(255, 255, 255, 255);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListStyle"/> class.
+        /// </summary>
         public ListStyle()
         {
             this.RegisterValidChild<ItemIcon>();

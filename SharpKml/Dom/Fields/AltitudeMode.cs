@@ -1,12 +1,16 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies how altitude components are interpreted.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies how altitude components are interpreted.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.1</remarks>
     public enum AltitudeMode
     {
-        /// <summary>Ignore the altitude specification.</summary>
+        /// <summary>
+        /// Ignore the altitude specification.
+        /// </summary>
         [KmlElement("clampToGround")]
         ClampToGround = 0,
 

@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies an image overlay to be displayed fixed to the screen.
     /// </summary>
@@ -16,10 +16,10 @@ namespace SharpKml.Dom
     [KmlElement("ScreenOverlay")]
     public sealed class ScreenOverlay : Overlay
     {
-        private OverlayVector _overlay;
-        private RotationVector _rotation;
-        private ScreenVector _screen;
-        private SizeVector _size;
+        private OverlayVector overlay;
+        private RotationVector rotation;
+        private ScreenVector screen;
+        private SizeVector size;
 
         /// <summary>
         /// Gets or sets a point on (or outside of) the image that is mapped
@@ -31,8 +31,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public OverlayVector Origin
         {
-            get { return _overlay; }
-            set { this.UpdatePropertyChild(value, ref _overlay); }
+            get { return this.overlay; }
+            set { this.UpdatePropertyChild(value, ref this.overlay); }
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public RotationVector RotationOrigin
         {
-            get { return _rotation; }
-            set { this.UpdatePropertyChild(value, ref _rotation); }
+            get { return this.rotation; }
+            set { this.UpdatePropertyChild(value, ref this.rotation); }
         }
 
         /// <summary>
@@ -72,11 +72,13 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public ScreenVector Screen
         {
-            get { return _screen; }
-            set { this.UpdatePropertyChild(value, ref _screen); }
+            get { return this.screen; }
+            set { this.UpdatePropertyChild(value, ref this.screen); }
         }
 
-        /// <summary>Gets or sets the size of the image.</summary>
+        /// <summary>
+        /// Gets or sets the size of the image.
+        /// </summary>
         /// <remarks>
         /// A value of −1 indicates to use the native dimension; a value of 0
         /// indicates to maintain the aspect ratio. Any other value sets the
@@ -85,8 +87,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public SizeVector Size
         {
-            get { return _size; }
-            set { this.UpdatePropertyChild(value, ref _size); }
+            get { return this.size; }
+            set { this.UpdatePropertyChild(value, ref this.size); }
         }
     }
 }

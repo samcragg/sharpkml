@@ -1,8 +1,8 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using System;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies a sound file to play, in MP3, M4A, or AAC format.
     /// </summary>

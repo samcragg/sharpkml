@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SharpKml.Base;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
-    /// <summary>Represents an instance of a KML file.</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using SharpKml.Base;
+    using SharpKml.Dom;
+
+    /// <summary>
+    /// Represents an instance of a KML file.
+    /// </summary>
     /// <remarks>
     /// A KmlFile manages an XML id domain and includes an internal map of all
     /// KmlObject Id's, shared styles, named Schemas and a list of all links.
     /// </remarks>
     public sealed class KmlFile
     {
-        private Dictionary<string, KmlObject> _objects = new Dictionary<string, KmlObject>();
-        private Dictionary<string, StyleSelector> _styles = new Dictionary<string, StyleSelector>();
-        private bool _strict;
+        private readonly Dictionary<string, KmlObject> objects = new Dictionary<string, KmlObject>();
+        private readonly Dictionary<string, StyleSelector> styles = new Dictionary<string, StyleSelector>();
+        private bool strict;
 
         // Use the Create methods
         private KmlFile()
         {
         }
 
-        /// <summary>Gets the root <see cref="Element"/> of the file.</summary>
+        /// <summary>
+        /// Gets the root <see cref="Element"/> of the file.
+        /// </summary>
         public Element Root { get; private set; }
 
         /// <summary>
@@ -30,7 +34,7 @@ namespace SharpKml.Engine
         /// </summary>
         public IEnumerable<StyleSelector> Styles
         {
-            get { return _styles.Values; }
+            get { return this.styles.Values; }
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace SharpKml.Engine
         /// </summary>
         internal IDictionary<string, StyleSelector> StyleMap
         {
-            get { return _styles; }
+            get { return this.styles; }
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace SharpKml.Engine
             }
 
             KmlFile file = new KmlFile();
-            file._strict = !duplicates;
+            file.strict = !duplicates;
 
             foreach (var element in ElementWalker.Walk(root))
             {
@@ -163,10 +167,11 @@ namespace SharpKml.Engine
             }
 
             KmlObject obj;
-            if (_objects.TryGetValue(id, out obj))
+            if (this.objects.TryGetValue(id, out obj))
             {
                 return obj;
             }
+
             return null;
         }
 
@@ -188,14 +193,17 @@ namespace SharpKml.Engine
             }
 
             StyleSelector style;
-            if (_styles.TryGetValue(id, out style))
+            if (this.styles.TryGetValue(id, out style))
             {
                 return style;
             }
+
             return null;
         }
 
-        /// <summary>Saves this instance to the specified stream.</summary>
+        /// <summary>
+        /// Saves this instance to the specified stream.
+        /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <exception cref="ArgumentException">stream is not writable.</exception>
         /// <exception cref="ArgumentNullException">stream is null.</exception>
@@ -215,7 +223,9 @@ namespace SharpKml.Engine
             }
         }
 
-        /// <summary>Adds the feature to the KmlFile.</summary>
+        /// <summary>
+        /// Adds the feature to the KmlFile.
+        /// </summary>
         /// <param name="feature">The feature to add.</param>
         /// <remarks>This is used for Update operations.</remarks>
         /// <exception cref="InvalidOperationException">
@@ -225,27 +235,31 @@ namespace SharpKml.Engine
         {
             if (feature.Id != null)
             {
-                this.AddToDictionary(feature, _objects);
+                this.AddToDictionary(feature, this.objects);
             }
         }
 
-        /// <summary>Removes the feature from the KmlFile.</summary>
+        /// <summary>
+        /// Removes the feature from the KmlFile.
+        /// </summary>
         /// <param name="feature">The feature to remove.</param>
         /// <remarks>This is used for Update operations.</remarks>
         internal void RemoveFeature(Feature feature)
         {
             if (feature.Id != null)
             {
-                _objects.Remove(feature.Id);
+                this.objects.Remove(feature.Id);
             }
         }
 
-        private void AddToDictionary<T>(T element, Dictionary<string, T> dictionary) where T : KmlObject
+        private void AddToDictionary<T>(T element, Dictionary<string, T> dictionary)
+            where T : KmlObject
         {
-            if (_strict && dictionary.ContainsKey(element.Id))
+            if (this.strict && dictionary.ContainsKey(element.Id))
             {
                 throw new InvalidOperationException("Duplicate Object id found.");
             }
+
             dictionary[element.Id] = element; // Add or overwrite existing.
         }
 
@@ -255,7 +269,7 @@ namespace SharpKml.Engine
             KmlObject obj = element as KmlObject;
             if ((obj != null) && (obj.Id != null))
             {
-                this.AddToDictionary(obj, _objects);
+                this.AddToDictionary(obj, this.objects);
 
                 // Also map Styles, as StyleSelector inherits from KmlObject.
                 // A shared style is defined to be a StyleSelector with an
@@ -266,7 +280,7 @@ namespace SharpKml.Engine
                     Document document = element.Parent as Document;
                     if (document != null)
                     {
-                        this.AddToDictionary(style, _styles);
+                        this.AddToDictionary(style, this.styles);
                     }
                 }
             }

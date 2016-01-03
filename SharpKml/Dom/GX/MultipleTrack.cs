@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Used to combine multiple <see cref="Track"/>s into a single conceptual unit.
     /// </summary>
@@ -11,7 +11,9 @@ namespace SharpKml.Dom.GX
     [KmlElement("MultiTrack", KmlNamespaces.GX22Namespace)]
     public sealed class MultipleTrack : Geometry
     {
-        /// <summary>Initializes a new instance of the MultipleTrack class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultipleTrack"/> class.
+        /// </summary>
         public MultipleTrack()
         {
             this.RegisterValidChild<Track>();

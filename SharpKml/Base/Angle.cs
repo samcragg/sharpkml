@@ -1,20 +1,23 @@
-﻿using System;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+
     /// <summary>
     /// Represents the heading, tilt, and roll angles to the icon or model in
     /// a gx:Track.
     /// </summary>
     public sealed class Angle : IEquatable<Angle>
     {
-        /// <summary>Initializes a new instance of the Angle class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Angle"/> class.
+        /// </summary>
         public Angle()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the Angle class with the specified values.
+        /// Initializes a new instance of the <see cref="Angle"/> class with
+        /// the specified values.
         /// </summary>
         /// <param name="pitch">The latitude for this instance.</param>
         /// <param name="heading">The longitude for this instance.</param>

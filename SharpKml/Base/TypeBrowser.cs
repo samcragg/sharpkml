@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
     /// <summary>
     /// Helper class for extracting properties with a KmlAttribute/KmlElement
     /// assigned to them, searching the entire inheritance hierarchy of the type.
@@ -15,14 +15,14 @@ namespace SharpKml.Base
         // the amount of work done in reflection, as the attributes associated
         // with a Type won't change during the lifetime of the program (ignoring
         // funky Emit etc. vodoo which this library doesn't use)
-        private static readonly Dictionary<Type, TypeBrowser> _types = new Dictionary<Type, TypeBrowser>();
-        private static readonly object _typesLock = new object();
+        private static readonly Dictionary<Type, TypeBrowser> Types = new Dictionary<Type, TypeBrowser>();
+        private static readonly object TypesLock = new object();
 
-        private Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>> _attributes =
+        private readonly Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>> attributes =
             new Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>>();
 
         // Needs to be ordered
-        private List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>> _elements =
+        private readonly List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>> elements =
             new List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>>();
 
         private TypeBrowser(Type type)
@@ -35,15 +35,17 @@ namespace SharpKml.Base
         /// </summary>
         public IEnumerable<Tuple<PropertyInfo, KmlAttributeAttribute>> Attributes
         {
-            get { return _attributes.Values; }
+            get { return this.attributes.Values; }
         }
 
-        /// <summary>Gets the properties with a KmlElement attribute.</summary>
+        /// <summary>
+        /// Gets the properties with a KmlElement attribute.
+        /// </summary>
         public IEnumerable<Tuple<PropertyInfo, KmlElementAttribute>> Elements
         {
             get
             {
-                return from element in _elements
+                return from element in this.elements
                        select Tuple.Create(element.Item2, element.Item3);
             }
         }
@@ -58,14 +60,15 @@ namespace SharpKml.Base
         public static TypeBrowser Create(Type type)
         {
             TypeBrowser browser;
-            lock (_typesLock)
+            lock (TypesLock)
             {
-                if (!_types.TryGetValue(type, out browser))
+                if (!Types.TryGetValue(type, out browser))
                 {
                     browser = new TypeBrowser(type);
-                    _types.Add(type, browser);
+                    Types.Add(type, browser);
                 }
             }
+
             return browser;
         }
 
@@ -125,6 +128,7 @@ namespace SharpKml.Base
             {
                 return GetAttribute<KmlElementAttribute>(type.GetField(name));
             }
+
             return null;
         }
 
@@ -139,10 +143,11 @@ namespace SharpKml.Base
         public PropertyInfo FindAttribute(XmlComponent xml)
         {
             Tuple<PropertyInfo, KmlAttributeAttribute> property;
-            if (_attributes.TryGetValue(xml, out property))
+            if (this.attributes.TryGetValue(xml, out property))
             {
                 return property.Item1;
             }
+
             return null;
         }
 
@@ -156,14 +161,15 @@ namespace SharpKml.Base
         /// </returns>
         public PropertyInfo FindElement(XmlComponent xml)
         {
-            var query = from element in _elements
+            var query = from element in this.elements
                         where element.Item1.Equals(xml)
                         select element.Item2;
 
             return query.FirstOrDefault();
         }
 
-        private static T GetAttribute<T>(MemberInfo provider) where T : class
+        private static T GetAttribute<T>(MemberInfo provider)
+            where T : class
         {
             if (provider == null)
             {
@@ -201,9 +207,9 @@ namespace SharpKml.Base
 
                     // Check if a property has already been registered with the info.
                     // Ignore later properties - i.e. don't throw an exception.
-                    if (!_attributes.ContainsKey(component))
+                    if (!this.attributes.ContainsKey(component))
                     {
-                        _attributes.Add(component, Tuple.Create(property, attribute));
+                        this.attributes.Add(component, Tuple.Create(property, attribute));
                     }
                 }
                 else
@@ -218,7 +224,7 @@ namespace SharpKml.Base
             }
 
             // Now add the elements in order
-            _elements.AddRange(elements.OrderBy(e => e.Item3.Order));
+            this.elements.AddRange(elements.OrderBy((Tuple<XmlComponent, PropertyInfo, KmlElementAttribute> e) => e.Item3.Order));
         }
     }
 }

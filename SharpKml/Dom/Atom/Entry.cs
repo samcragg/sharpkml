@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpKml.Base;
-
-namespace SharpKml.Dom.Atom
+﻿namespace SharpKml.Dom.Atom
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using SharpKml.Base;
+
     /// <summary>
     /// Acts as a container for metadata and data associated with an Atom entry.
     /// </summary>
@@ -14,27 +14,33 @@ namespace SharpKml.Dom.Atom
     [KmlElement("entry", KmlNamespaces.AtomNamespace)]
     public sealed class Entry : Element
     {
-        private Content _content;
+        private Content content;
 
-        /// <summary>Initializes a new instance of the Entry class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entry"/> class.
+        /// </summary>
         public Entry()
         {
             this.RegisterValidChild<Category>();
             this.RegisterValidChild<Link>();
         }
 
-        /// <summary>Gets the categories associated with this instance.</summary>
+        /// <summary>
+        /// Gets the categories associated with this instance.
+        /// </summary>
         public IEnumerable<Category> Categories
         {
             get { return this.Children.OfType<Category>(); }
         }
 
-        /// <summary>Gets or sets the content of the Entry.</summary>
+        /// <summary>
+        /// Gets or sets the content of the Entry.
+        /// </summary>
         [KmlElement(null)]
         public Content Content
         {
-            get { return _content; }
-            set { this.UpdatePropertyChild(value, ref _content); }
+            get { return this.content; }
+            set { this.UpdatePropertyChild(value, ref this.content); }
         }
 
         /// <summary>
@@ -43,7 +49,9 @@ namespace SharpKml.Dom.Atom
         [KmlElement("id", KmlNamespaces.AtomNamespace)]
         public string Id { get; set; }
 
-        /// <summary>Gets the links associated with this instance.</summary>
+        /// <summary>
+        /// Gets the links associated with this instance.
+        /// </summary>
         public IEnumerable<Link> Links
         {
             get { return this.Children.OfType<Link>(); }
@@ -60,7 +68,9 @@ namespace SharpKml.Dom.Atom
         [KmlElement("summary", KmlNamespaces.AtomNamespace)]
         public string Summary { get; set; }
 
-        /// <summary>Gets or sets a human-readable title for this instance.</summary>
+        /// <summary>
+        /// Gets or sets a human-readable title for this instance.
+        /// </summary>
         [KmlElement("title", KmlNamespaces.AtomNamespace)]
         public string Title { get; set; }
 

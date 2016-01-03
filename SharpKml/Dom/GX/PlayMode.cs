@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Allows the tour to be paused until a user takes action to continue the tour.
     /// </summary>

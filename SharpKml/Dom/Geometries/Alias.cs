@@ -1,9 +1,11 @@
-﻿using System;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Contains a mapping from SourceHref to TargetHref.</summary>
+    using System;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Contains a mapping from SourceHref to TargetHref.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.14</remarks>
     [KmlElement("Alias")]
     public sealed class Alias : KmlObject

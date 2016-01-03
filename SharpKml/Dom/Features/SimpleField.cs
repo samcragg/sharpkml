@@ -1,17 +1,23 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Specifies a user-defined field.</summary>
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Specifies a user-defined field.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.9</remarks>
     [KmlElement("SimpleField")]
     public sealed class SimpleField : Element
     {
-        /// <summary>Gets or sets an alternate display name.</summary>
+        /// <summary>
+        /// Gets or sets an alternate display name.
+        /// </summary>
         [KmlElement("displayName", 1)]
         public string DisplayName { get; set; }
 
-        /// <summary>Gets or sets the type of the field.</summary>
+        /// <summary>
+        /// Gets or sets the type of the field.
+        /// </summary>
         /// <remarks>
         /// The type content shall be formatted according to one of the following XML Schema types:
         /// <list type="bullet">
@@ -48,7 +54,9 @@ namespace SharpKml.Dom
         [KmlAttribute("type")]
         public string FieldType { get; set; }
 
-        /// <summary>Gets or sets a value acting as an identifier.</summary>
+        /// <summary>
+        /// Gets or sets a value acting as an identifier.
+        /// </summary>
         [KmlAttribute("name")]
         public string Name { get; set; }
     }

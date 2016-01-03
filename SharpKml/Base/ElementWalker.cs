@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using SharpKml.Dom;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
-    /// <summary>Navigates all the children of an element.</summary>
+    using System;
+    using System.Collections.Generic;
+    using SharpKml.Dom;
+
+    /// <summary>
+    /// Navigates all the children of an element.
+    /// </summary>
     internal static class ElementWalker
     {
         /// <summary>

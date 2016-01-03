@@ -1,26 +1,28 @@
-﻿using System;
-using System.Globalization;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
-    /// <summary>Represents a color, stored in the KML AABBGGRR format.</summary>
+    using System;
+    using System.Globalization;
+
+    /// <summary>
+    /// Represents a color, stored in the KML AABBGGRR format.
+    /// </summary>
     public struct Color32 : IComparable<Color32>, IEquatable<Color32>
     {
-        private readonly uint _abgr; // Stored in the standard aabbggrr KML format.
+        private readonly uint abgr; // Stored in the standard aabbggrr KML format.
 
         /// <summary>
-        /// Initializes a new instance of the Color32 struct to the specified
-        /// ABGR value.
+        /// Initializes a new instance of the <see cref="Color32"/> struct to
+        /// the specified ABGR value.
         /// </summary>
         /// <param name="abgr">An integer containing the ABGR color value.</param>
         public Color32(int abgr)
         {
-            _abgr = (uint)abgr;
+            this.abgr = (uint)abgr;
         }
 
         /// <summary>
-        /// Initializes a new instance of the Color32 struct to the specified
-        /// color components.
+        /// Initializes a new instance of the <see cref="Color32"/> struct to
+        /// the specified color components.
         /// </summary>
         /// <param name="alpha">The alpha component value.</param>
         /// <param name="blue">The blue component value.</param>
@@ -28,49 +30,61 @@ namespace SharpKml.Base
         /// <param name="red">The red component value.</param>
         public Color32(byte alpha, byte blue, byte green, byte red)
         {
-            _abgr = (uint)(alpha << 24) | (uint)(blue << 16) | (uint)(green << 8) | (uint)red;
+            this.abgr = (uint)(alpha << 24) | (uint)(blue << 16) | (uint)(green << 8) | (uint)red;
         }
 
-        /// <summary>Gets the Color32 as an integer in ABGR format.</summary>
+        /// <summary>
+        /// Gets the Color32 as an integer in ABGR format.
+        /// </summary>
         public int Abgr
         {
-            get { return (int)_abgr; }
+            get { return (int)this.abgr; }
         }
 
-        /// <summary>Gets the alpha component value.</summary>
+        /// <summary>
+        /// Gets the alpha component value.
+        /// </summary>
         public byte Alpha
         {
-            get { return (byte)(_abgr >> 24); }
+            get { return (byte)(this.abgr >> 24); }
         }
 
-        /// <summary>Gets the Color32 as an integer in ARGB format.</summary>
+        /// <summary>
+        /// Gets the Color32 as an integer in ARGB format.
+        /// </summary>
         public int Argb
         {
             get
             {
-                return (int)((_abgr & 0xFF000000) |
-                       ((_abgr & 0x00FF0000) >> 16) |
-                       (_abgr & 0x0000FF00) |
-                       ((_abgr & 0x000000FF) << 16));
+                return (int)((this.abgr & 0xFF000000) |
+                       ((this.abgr & 0x00FF0000) >> 16) |
+                       (this.abgr & 0x0000FF00) |
+                       ((this.abgr & 0x000000FF) << 16));
             }
         }
 
-        /// <summary>Gets the blue component value.</summary>
+        /// <summary>
+        /// Gets the blue component value.
+        /// </summary>
         public byte Blue
         {
-            get { return (byte)(_abgr >> 16); }
+            get { return (byte)(this.abgr >> 16); }
         }
 
-        /// <summary>Gets the green component value.</summary>
+        /// <summary>
+        /// Gets the green component value.
+        /// </summary>
         public byte Green
         {
-            get { return (byte)(_abgr >> 8); }
+            get { return (byte)(this.abgr >> 8); }
         }
 
-        /// <summary>Gets the red component value.</summary>
+        /// <summary>
+        /// Gets the red component value.
+        /// </summary>
         public byte Red
         {
-            get { return (byte)_abgr; }
+            get { return (byte)this.abgr; }
         }
 
         /// <summary>
@@ -88,6 +102,7 @@ namespace SharpKml.Base
             {
                 return object.ReferenceEquals(colorB, null);
             }
+
             return colorA.Equals(colorB);
         }
 
@@ -145,6 +160,7 @@ namespace SharpKml.Base
             {
                 return new Color32(0);
             }
+
             uint converted = 0;
             int max = Math.Min(value.Length, 8); // We consider only the first eight characters significant.
             for (int i = 0; i < max; ++i)
@@ -158,16 +174,19 @@ namespace SharpKml.Base
                     converted += number;
                 }
             }
+
             return new Color32((int)converted);
         }
 
-        /// <summary>Creates a copy of this instance.</summary>
+        /// <summary>
+        /// Creates a copy of this instance.
+        /// </summary>
         /// <returns>
         /// A new Color32 instance with the same value of this instance.
         /// </returns>
         public Color32 Clone()
         {
-            return new Color32((int)_abgr);
+            return new Color32((int)this.abgr);
         }
 
         /// <summary>
@@ -195,7 +214,7 @@ namespace SharpKml.Base
         /// </returns>
         public int CompareTo(Color32 other)
         {
-            return _abgr.CompareTo(other._abgr);
+            return this.abgr.CompareTo(other.abgr);
         }
 
         /// <summary>
@@ -209,7 +228,7 @@ namespace SharpKml.Base
         /// </returns>
         public bool Equals(Color32 other)
         {
-            return _abgr == other._abgr;
+            return this.abgr == other.abgr;
         }
 
         /// <summary>
@@ -229,11 +248,13 @@ namespace SharpKml.Base
             return color.HasValue && this.Equals(color.Value);
         }
 
-        /// <summary>Returns the hash code for this instance.</summary>
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return _abgr.GetHashCode();
+            return this.abgr.GetHashCode();
         }
 
         /// <summary>
@@ -245,7 +266,7 @@ namespace SharpKml.Base
         /// </returns>
         public override string ToString()
         {
-            return _abgr.ToString("x8", CultureInfo.InvariantCulture);
+            return this.abgr.ToString("x8", CultureInfo.InvariantCulture);
         }
     }
 }

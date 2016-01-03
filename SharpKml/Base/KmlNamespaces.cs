@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace SharpKml.Base
+﻿namespace SharpKml.Base
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     /// <summary>
     /// Represents some common XML namespaces and their respective prefix.
     /// </summary>
@@ -127,7 +127,7 @@ namespace SharpKml.Base
         /// <summary>Represents the default XML Schema prefix.</summary>
         public const string XsiPrefix = "xsi";
 
-        private static Dictionary<string, string> _namespaces = GenerateNamespaces();
+        private static readonly Dictionary<string, string> Namespaces = GenerateNamespaces();
 
         /// <summary>Searches for the associated XML namespace for the specified prefix.</summary>
         /// <param name="prefix">The standard prefix to search for.</param>
@@ -138,10 +138,11 @@ namespace SharpKml.Base
         public static string FindNamespace(string prefix)
         {
             string output;
-            if (_namespaces.TryGetValue(prefix ?? string.Empty, out output))
+            if (Namespaces.TryGetValue(prefix ?? string.Empty, out output))
             {
                 return output;
             }
+
             return null;
         }
 
@@ -161,6 +162,7 @@ namespace SharpKml.Base
                     output.Add((string)prefix.GetValue(null), (string)field.GetValue(null));
                 }
             }
+
             return output;
         }
     }

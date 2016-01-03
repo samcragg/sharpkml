@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Xml;
-using SharpKml.Base;
-using System.Reflection;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using System;
+    using System.Linq;
+    using System.Xml;
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies the location for an icon used in the list view to reflect the
     /// state of the <see cref="Folder"/> or <see cref="NetworkLink"/> to which
@@ -16,17 +15,20 @@ namespace SharpKml.Dom
     public sealed class ItemIcon : KmlObject
     {
         private static readonly XmlComponent StateComponent = new XmlComponent(null, "state", KmlNamespaces.Kml22Namespace);
+        private readonly StateElement state = new StateElement();
 
-        private readonly StateElement _state = new StateElement();
-
-        /// <summary>Initializes a new instance of the ItemIcon class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemIcon"/> class.
+        /// </summary>
         public ItemIcon()
         {
             this.RegisterValidChild<StateElement>();
-            this.AddChild(_state);
+            this.AddChild(this.state);
         }
 
-        /// <summary>Gets or sets the resource location.</summary>
+        /// <summary>
+        /// Gets or sets the resource location.
+        /// </summary>
         /// <remarks>
         /// The URL may contain a fragment component that allows indirect
         /// identification of some portion or subset of a resource.
@@ -45,11 +47,13 @@ namespace SharpKml.Dom
         /// </remarks>
         public ItemIconStates State
         {
-            get { return _state.State; }
-            set { _state.State = value; }
+            get { return this.state.State; }
+            set { this.state.State = value; }
         }
 
-        /// <summary>Parses the &lt;state&gt; element.</summary>
+        /// <summary>
+        /// Parses the &lt;state&gt; element.
+        /// </summary>
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
@@ -58,14 +62,17 @@ namespace SharpKml.Dom
             {
                 if (StateComponent.Equals(unknown.UnknownData))
                 {
-                    _state.Parse(unknown.InnerText);
+                    this.state.Parse(unknown.InnerText);
                     return;
                 }
             }
+
             base.AddOrphan(orphan);
         }
 
-        /// <summary>Used to correctly serialize multiple ItemIconStates.</summary>
+        /// <summary>
+        /// Used to correctly serialize multiple ItemIconStates.
+        /// </summary>
         internal class StateElement : Element, ICustomElement
         {
             private static readonly ItemIconStates[] States = GetStates();
@@ -78,14 +85,19 @@ namespace SharpKml.Dom
                 get { return false; }
             }
 
-            /// <summary>Gets or sets the ItemIconState.</summary>
+            /// <summary>
+            /// Gets or sets the ItemIconState.
+            /// </summary>
             public ItemIconStates State { get; set; }
 
-            /// <summary>Writes the start of an XML element.</summary>
+            /// <summary>
+            /// Writes the start of an XML element.
+            /// </summary>
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                if (this.State != ItemIconStates.None) // Make sure there's something to save
+                // Make sure there's something to save
+                if (this.State != ItemIconStates.None)
                 {
                     var attributes = from v in States
                                      where (v != ItemIconStates.None) && this.State.HasFlag(v)

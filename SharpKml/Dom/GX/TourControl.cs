@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom.GX
+﻿namespace SharpKml.Dom.GX
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Allows the tour to be paused until a user takes action to continue the tour.
     /// </summary>
@@ -9,7 +9,9 @@ namespace SharpKml.Dom.GX
     [KmlElement("TourControl", KmlNamespaces.GX22Namespace)]
     public sealed class TourControl : TourPrimitive
     {
-        /// <summary>Gets or sets whether to pause the tour.</summary>
+        /// <summary>
+        /// Gets or sets whether to pause the tour.
+        /// </summary>
         [KmlElement("playMode", KmlNamespaces.GX22Namespace)]
         public PlayMode? Mode { get; set; }
     }

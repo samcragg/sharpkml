@@ -1,32 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
-    /// <summary>Represents a series of points.</summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using SharpKml.Base;
+
+    /// <summary>
+    /// Represents a series of points.
+    /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.9</remarks>
     [KmlElement("coordinates")]
     public sealed class CoordinateCollection : Element, ICollection<Vector>, ICustomElement
     {
         private static readonly Regex Expression = CreateRegex();
-        private static string _delimiter = "\n";
-        private readonly List<Vector> _points;
+        private static string delimiter = "\n";
+        private readonly List<Vector> points;
 
         /// <summary>
-        /// Initializes a new instance of the CoordinateCollection class.
+        /// Initializes a new instance of the <see cref="CoordinateCollection"/> class.
         /// </summary>
         public CoordinateCollection()
         {
-            _points = new List<Vector>();
+            this.points = new List<Vector>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CoordinateCollection class.
+        /// Initializes a new instance of the <see cref="CoordinateCollection"/> class.
         /// </summary>
         /// <param name="points">The points to populate the instance with.</param>
         /// <exception cref="ArgumentNullException">points is null.</exception>
@@ -37,7 +39,7 @@ namespace SharpKml.Dom
                 throw new ArgumentNullException("points");
             }
 
-            _points = new List<Vector>(points);
+            this.points = new List<Vector>(points);
         }
 
         /// <summary>
@@ -45,8 +47,8 @@ namespace SharpKml.Dom
         /// </summary>
         public static string Delimiter
         {
-            get { return _delimiter; }
-            set { _delimiter = value; }
+            get { return delimiter; }
+            set { delimiter = value; }
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace SharpKml.Dom
         /// </summary>
         public int Count
         {
-            get { return _points.Count; }
+            get { return this.points.Count; }
         }
 
         /// <summary>
@@ -73,19 +75,22 @@ namespace SharpKml.Dom
             get { return true; }
         }
 
-        /// <summary>Gets the value at the specified index.</summary>
+        /// <summary>
+        /// Gets the value at the specified index.
+        /// </summary>
         /// <param name="index">The zero-based index of the value to get.</param>
         /// <returns>The value at the specified index.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// index is less than 0 or index is equal to or greater than
-        /// <see cref="Count"/>.
+        /// index is less than 0 or index is equal to or greater than <see cref="Count"/>.
         /// </exception>
         internal Vector this[int index]
         {
-            get { return _points[index]; }
+            get { return this.points[index]; }
         }
 
-        /// <summary>Adds a point to this instance.</summary>
+        /// <summary>
+        /// Adds a point to this instance.
+        /// </summary>
         /// <param name="item">The point to be added.</param>
         /// <exception cref="ArgumentNullException">item is null.</exception>
         public void Add(Vector item)
@@ -94,13 +99,16 @@ namespace SharpKml.Dom
             {
                 throw new ArgumentNullException("item");
             }
-            _points.Add(item);
+
+            this.points.Add(item);
         }
 
-        /// <summary>Removes all points from this instance.</summary>
+        /// <summary>
+        /// Removes all points from this instance.
+        /// </summary>
         public void Clear()
         {
-            _points.Clear();
+            this.points.Clear();
         }
 
         /// <summary>
@@ -113,7 +121,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Contains(Vector item)
         {
-            return _points.Contains(item);
+            return this.points.Contains(item);
         }
 
         /// <summary>
@@ -134,7 +142,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Vector[] array, int arrayIndex)
         {
-            _points.CopyTo(array, arrayIndex);
+            this.points.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -143,7 +151,7 @@ namespace SharpKml.Dom
         /// <returns>An enumerator for this instance.</returns>
         public IEnumerator<Vector> GetEnumerator()
         {
-            return _points.GetEnumerator();
+            return this.points.GetEnumerator();
         }
 
         /// <summary>
@@ -157,10 +165,12 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Remove(Vector item)
         {
-            return _points.Remove(item);
+            return this.points.Remove(item);
         }
 
-        /// <summary>Writes the start of an XML element.</summary>
+        /// <summary>
+        /// Writes the start of an XML element.
+        /// </summary>
         /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
@@ -168,11 +178,11 @@ namespace SharpKml.Dom
             StringBuilder sb = new StringBuilder();
             bool first = true;
 
-            foreach (var point in _points)
+            foreach (var point in this.points)
             {
                 if (!first)
                 {
-                    sb.Append(_delimiter);
+                    sb.Append(delimiter);
                 }
                 else
                 {
@@ -213,7 +223,9 @@ namespace SharpKml.Dom
             return this.GetEnumerator();
         }
 
-        /// <summary>Parses the inner text of the XML element.</summary>
+        /// <summary>
+        /// Parses the inner text of the XML element.
+        /// </summary>
         /// <param name="text">The text content of the XML element.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Adding to the buffer would exceed StringBuilder.MaxCapacity.
@@ -245,7 +257,7 @@ namespace SharpKml.Dom
 
         private void Parse(string input)
         {
-            _points.Clear();
+            this.points.Clear();
             foreach (Match match in Expression.Matches(input))
             {
                 // Minimum required fields for a valid coordinate are latitude and longitude.
@@ -259,11 +271,12 @@ namespace SharpKml.Dom
                         double altitude;
                         if (double.TryParse(altitudeGroup.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out altitude))
                         {
-                            _points.Add(new Vector(latitude, longitude, altitude));
+                            this.points.Add(new Vector(latitude, longitude, altitude));
                             continue; // Success!
                         }
                     }
-                    _points.Add(new Vector(latitude, longitude));
+
+                    this.points.Add(new Vector(latitude, longitude));
                 }
             }
         }

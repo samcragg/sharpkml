@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using SharpKml.Base;
-using SharpKml.Dom;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using SharpKml.Base;
+    using SharpKml.Dom;
+
     /// <summary>
     /// Provides extension methods for <see cref="Element"/> objects.
     /// </summary>
@@ -18,7 +18,8 @@ namespace SharpKml.Engine
         /// <param name="element">The class instance.</param>
         /// <returns>A new <c>Element</c> representing the same data.</returns>
         /// <exception cref="ArgumentNullException">element is null.</exception>
-        public static T Clone<T>(this T element) where T : Element
+        public static T Clone<T>(this T element)
+            where T : Element
         {
             if (element == null)
             {
@@ -30,9 +31,10 @@ namespace SharpKml.Engine
             // be fast enough.
             var serializer = new Serializer();
             var parser = new Parser();
-
             Element output;
-            if (element.GetType() == typeof(IconStyle.IconLink)) // Special case as IconStyle has the same Kml name as Icon
+
+            // Special case as IconStyle has the same Kml name as Icon
+            if (element.GetType() == typeof(IconStyle.IconLink))
             {
                 if (element.Parent == null)
                 {
@@ -45,6 +47,7 @@ namespace SharpKml.Engine
                 {
                     serializer.Serialize(element.Parent);
                 }
+
                 parser.ParseString(serializer.Xml, true);
                 IconStyle root = (IconStyle)parser.Root;
                 output = root.Icon;
@@ -56,6 +59,7 @@ namespace SharpKml.Engine
                 parser.ParseString(serializer.Xml, true);
                 output = parser.Root;
             }
+
             return (T)output;
         }
 
@@ -87,7 +91,8 @@ namespace SharpKml.Engine
         /// if no elements in the hierarchy are of the specified type.
         /// </returns>
         /// <exception cref="ArgumentNullException">element is null.</exception>
-        public static T GetParent<T>(this Element element) where T : Element
+        public static T GetParent<T>(this Element element)
+            where T : Element
         {
             if (element == null)
             {
@@ -98,12 +103,14 @@ namespace SharpKml.Engine
             while (parent != null)
             {
                 T typed = parent as T;
-                if (typed != null) // parent is not null so the conversion must have worked
+                if (typed != null)
                 {
                     return typed;
                 }
+
                 parent = parent.Parent;
             }
+
             return null;
         }
 
@@ -118,7 +125,8 @@ namespace SharpKml.Engine
         /// otherwise, false.
         /// </returns>
         /// <exception cref="ArgumentNullException">element is null.</exception>
-        public static bool IsChildOf<T>(this Element element) where T : Element
+        public static bool IsChildOf<T>(this Element element)
+            where T : Element
         {
             return GetParent<T>(element) != null;
         }
@@ -135,27 +143,33 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">
         /// element or source is null.
         /// </exception>
-        public static void Merge<T>(this T element, T source) where T : Element
+        public static void Merge<T>(this T element, T source)
+            where T : Element
         {
             if (element == null)
             {
                 throw new ArgumentNullException("element");
             }
+
             if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
-            if (element.GetType() != source.GetType()) // Can happen if one is a more derived class
+
+            // Check that one isn't a more derived class
+            if (element.GetType() != source.GetType())
             {
                 throw new ArgumentException("source type must match that of the target instance.");
             }
 
-            if (!object.ReferenceEquals(element, source)) // Make sure we're not playing with ourselves... so to speak
+            // Make sure we're not playing with ourselves... so to speak
+            if (!object.ReferenceEquals(element, source))
             {
                 foreach (var child in source.Children)
                 {
                     element.AddChild(child.Clone());
                 }
+
                 Merge(source, element, source.GetType());
             }
         }
@@ -174,6 +188,7 @@ namespace SharpKml.Engine
             {
                 return new Uri(((Uri)value).OriginalString, UriKind.RelativeOrAbsolute);
             }
+
             return null;
         }
 
@@ -214,6 +229,7 @@ namespace SharpKml.Engine
                     property.SetValue(target, newValue, null);
                 }
             }
+
             Merge(source, target, type.BaseType);
         }
 

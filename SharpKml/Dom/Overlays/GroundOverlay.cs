@@ -1,7 +1,7 @@
-﻿using SharpKml.Base;
-
-namespace SharpKml.Dom
+﻿namespace SharpKml.Dom
 {
+    using SharpKml.Base;
+
     /// <summary>
     /// Specifies how to display an image draped over the terrain.
     /// </summary>
@@ -9,8 +9,8 @@ namespace SharpKml.Dom
     [KmlElement("GroundOverlay")]
     public sealed class GroundOverlay : Overlay
     {
-        private LatLonBox _box;
-        private GX.LatLonQuad _quad;
+        private LatLonBox box;
+        private GX.LatLonQuad quad;
 
         /// <summary>
         /// Gets or sets the distance above the terrain in meters.
@@ -29,12 +29,14 @@ namespace SharpKml.Dom
         [KmlElement("altitudeMode", 2)]
         public AltitudeMode? AltitudeMode { get; set; }
 
-        /// <summary>Gets or sets a bounding box for the overlay.</summary>
+        /// <summary>
+        /// Gets or sets a bounding box for the overlay.
+        /// </summary>
         [KmlElement(null, 3)]
         public LatLonBox Bounds
         {
-            get { return _box; }
-            set { this.UpdatePropertyChild(value, ref _box); }
+            get { return this.box; }
+            set { this.UpdatePropertyChild(value, ref this.box); }
         }
 
         /// <summary>
@@ -45,14 +47,15 @@ namespace SharpKml.Dom
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
-        /// Used for nonrectangular quadrilateral ground overlays.
+        /// Gets or sets used the value used for nonrectangular quadrilateral
+        /// ground overlays.
         /// [Google Extension]
         /// </summary>
         [KmlElement(null, KmlNamespaces.GX22Namespace, 5)]
         public GX.LatLonQuad GXLatLonQuad
         {
-            get { return _quad; }
-            set { this.UpdatePropertyChild(value, ref _quad); }
+            get { return this.quad; }
+            set { this.UpdatePropertyChild(value, ref this.quad); }
         }
     }
 }
