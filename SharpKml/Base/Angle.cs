@@ -51,7 +51,7 @@
         /// </returns>
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as Vector);
+            return this.Equals(obj as Angle);
         }
 
         /// <summary>

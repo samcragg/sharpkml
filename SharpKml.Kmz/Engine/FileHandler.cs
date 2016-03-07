@@ -49,7 +49,8 @@ namespace SharpKml.Engine
             {
                 try
                 {
-                    return client.DownloadData(uri);
+                    // The docs says it can't return null, but the code scanner says it could!?
+                    return client.DownloadData(uri) ?? new byte[0];
                 }
                 catch (WebException ex)
                 {
