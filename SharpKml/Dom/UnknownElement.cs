@@ -1,6 +1,8 @@
 ﻿namespace SharpKml.Dom
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Xml;
     using SharpKml.Base;
 
@@ -27,11 +29,46 @@
         }
 
         /// <summary>
-        /// Gets the unrecognized data found during parsing.
+        /// Gets the attributes of the element.
+        /// </summary>
+        public new IEnumerable<XmlComponent> Attributes
+        {
+            get { return base.Attributes; }
+        }
+
+        /// <summary>
+        /// Gets the child elements.
+        /// </summary>
+        public IEnumerable<UnknownElement> Elements
+        {
+            get
+            {
+                return this.Children.OfType<UnknownElement>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the unknown element.
+        /// </summary>
+        public string Name
+        {
+            get { return this.data.Name; }
+        }
+
+        /// <summary>
+        /// Gets the information of the unrecognized element found during parsing.
         /// </summary>
         public XmlComponent UnknownData
         {
-            get { return this.data.Clone(); } // Don't give them our data to play with
+            get { return this.data; }
+        }
+
+        /// <summary>
+        /// Gets the value of the element.
+        /// </summary>
+        public string Value
+        {
+            get { return this.data.Value; }
         }
 
         /// <summary>

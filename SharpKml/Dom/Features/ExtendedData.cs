@@ -36,6 +36,14 @@
         }
 
         /// <summary>
+        /// Gets a collection of untyped custom data elements.
+        /// </summary>
+        public IEnumerable<UnknownElement> OtherData
+        {
+            get { return this.Orphans.OfType<UnknownElement>(); }
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="SchemaData"/> objects.
         /// </summary>
         public IEnumerable<SchemaData> SchemaData
