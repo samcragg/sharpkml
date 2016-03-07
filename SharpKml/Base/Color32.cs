@@ -97,12 +97,6 @@
         /// </returns>
         public static bool operator ==(Color32 colorA, Color32 colorB)
         {
-            // Can't use (a == null) because that would call this method again!
-            if (object.ReferenceEquals(colorA, null))
-            {
-                return object.ReferenceEquals(colorB, null);
-            }
-
             return colorA.Equals(colorB);
         }
 

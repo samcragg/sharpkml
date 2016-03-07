@@ -1,6 +1,7 @@
 ﻿namespace SharpKml.Dom
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Xml;
     using SharpKml.Base;
@@ -99,9 +100,10 @@
                 // Make sure there's something to save
                 if (this.State != ItemIconStates.None)
                 {
-                    var attributes = from v in States
-                                     where (v != ItemIconStates.None) && this.State.HasFlag(v)
-                                     select TypeBrowser.GetEnum(v).ElementName;
+                    IEnumerable<string> attributes = States.Where(s => (s != ItemIconStates.None) && this.State.HasFlag(s))
+                                                           .Select(s => TypeBrowser.GetEnum(s))
+                                                           .Where(a => a != null)
+                                                           .Select(a => a.ElementName);
 
                     string value = string.Join(" ", attributes);
                     writer.WriteElementString("state", KmlNamespaces.Kml22Namespace, value);
