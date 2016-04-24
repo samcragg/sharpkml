@@ -156,17 +156,18 @@
             }
 
             uint converted = 0;
-            int max = Math.Min(value.Length, 8); // We consider only the first eight characters significant.
-            for (int i = 0; i < max; ++i)
+            int start = 0;
+            if ((value.Length > 0) && (value[0] == '#'))
+            {
+                start = 1;
+            }
+
+            int max = Math.Min(value.Length - start, start + 8); // We consider only the first eight characters significant.
+            for (int i = start; i < max; ++i)
             {
                 // Always increase the color, even if the char isn't a valid number
                 converted <<= 4; // Move along one hex - 2^4
-                string letter = value[i].ToString();
-                uint number;
-                if (uint.TryParse(letter, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out number))
-                {
-                    converted += number;
-                }
+                converted += ParseHexChar(value, i);
             }
 
             return new Color32((int)converted);
@@ -261,6 +262,27 @@
         public override string ToString()
         {
             return this.abgr.ToString("x8", CultureInfo.InvariantCulture);
+        }
+
+        private static uint ParseHexChar(string value, int index)
+        {
+            char c = value[index];
+            if ((c >= '0') && (c <= '9'))
+            {
+                return (uint)(c - '0');
+            }
+            else if ((c >= 'a') && (c <= 'f'))
+            {
+                return (uint)(c - 'a' + 10);
+            }
+            else if ((c >= 'A') && (c <= 'F'))
+            {
+                return (uint)(c - 'A' + 10);
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

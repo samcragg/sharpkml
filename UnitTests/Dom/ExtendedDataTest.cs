@@ -11,7 +11,7 @@
         [TestCase]
         public void ShouldAllowTheReadingOfCustomData()
         {
-            const string Kml = @"<ExtendedData xmlns:prefix='camp'><camp:site number='14'>Name</camp:site></ExtendedData>";
+            const string Kml = @"<ExtendedData xmlns:camp='http://www.example.com'><camp:site number='14'>Name</camp:site></ExtendedData>";
             var parser = new Parser();
             parser.ParseString(Kml, namespaces: false);
             ExtendedData data = (ExtendedData)parser.Root;
@@ -19,7 +19,7 @@
 
             Assert.That(customData, Has.Length.EqualTo(1));
             Assert.That(customData[0].UnknownData.Name, Is.EqualTo("site"));
-            Assert.That(customData[0].UnknownData.Value, Is.EqualTo("Name"));
+            Assert.That(customData[0].InnerXml, Is.EqualTo("Name"));
             Assert.That(customData[0].Attributes.Single().Name, Is.EqualTo("number"));
             Assert.That(customData[0].Attributes.Single().Value, Is.EqualTo("14"));
         }
