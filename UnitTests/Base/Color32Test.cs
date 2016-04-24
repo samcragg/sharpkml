@@ -108,5 +108,12 @@ namespace UnitTests.Base
             Assert.True(black < green);
             Assert.False(green < black);
         }
+
+        [Test]
+        public void ShouldIgnoreLeadingHashCharacter()
+        {
+            Color32 color = Color32.Parse("#aabbccddee");
+            Assert.That(color.ToString(), Is.EqualTo("aabbccdd"));
+        }
     }
 }

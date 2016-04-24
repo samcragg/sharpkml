@@ -48,6 +48,14 @@
         }
 
         /// <summary>
+        /// Gets all the XML content, including markup, in the current element.
+        /// </summary>
+        public string InnerXml
+        {
+            get { return this.InnerText; }
+        }
+
+        /// <summary>
         /// Gets the name of the unknown element.
         /// </summary>
         public string Name
@@ -61,14 +69,6 @@
         public XmlComponent UnknownData
         {
             get { return this.data; }
-        }
-
-        /// <summary>
-        /// Gets the value of the element.
-        /// </summary>
-        public string Value
-        {
-            get { return this.data.Value; }
         }
 
         /// <summary>
