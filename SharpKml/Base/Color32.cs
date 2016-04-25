@@ -162,7 +162,7 @@
                 start = 1;
             }
 
-            int max = Math.Min(value.Length - start, start + 8); // We consider only the first eight characters significant.
+            int max = Math.Min(value.Length, start + 8); // We consider only the first eight characters significant.
             for (int i = start; i < max; ++i)
             {
                 // Always increase the color, even if the char isn't a valid number
