@@ -126,7 +126,7 @@
             string name = Enum.GetName(type, value);
             if (name != null)
             {
-                return GetAttribute<KmlElementAttribute>(type.GetField(name));
+                return GetAttribute<KmlElementAttribute>(type.GetTypeInfo().GetDeclaredField(name));
             }
 
             return null;
@@ -169,15 +169,14 @@
         }
 
         private static T GetAttribute<T>(MemberInfo provider)
-            where T : class
+            where T : Attribute
         {
             if (provider == null)
             {
                 return null;
             }
 
-            object[] attributes = provider.GetCustomAttributes(typeof(T), false);
-            return (attributes.Length > 0) ? (T)attributes[0] : null;
+            return provider.GetCustomAttribute<T>(inherit: false);
         }
 
         private void ExtractAttributes(Type type)
@@ -190,15 +189,12 @@
             // Look at the base type first as the KML schema specifies <sequence>
             // This will also find private fields in the base classes, which can't
             // be seen through a derived class.
-            this.ExtractAttributes(type.BaseType);
+            TypeInfo typeInfo = type.GetTypeInfo();
+            this.ExtractAttributes(typeInfo.BaseType);
 
             // Store the found elements here so we can add them in order later
             var elements = new List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>>();
-            const BindingFlags PropertyFlags = BindingFlags.DeclaredOnly |
-                                               BindingFlags.Instance |
-                                               BindingFlags.NonPublic |
-                                               BindingFlags.Public;
-            foreach (var property in type.GetProperties(PropertyFlags))
+            foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(p => !p.GetMethod.IsStatic))
             {
                 var attribute = GetAttribute(property);
                 if (attribute != null)

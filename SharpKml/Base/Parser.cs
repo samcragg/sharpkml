@@ -128,7 +128,7 @@
                 {
                     property.SetValue(instance, value, null);
                 }
-                else if (type.IsValueType || (nullableType != null))
+                else if ((nullableType != null) || !type.GetTypeInfo().IsValueType)
                 {
                     property.SetValue(instance, null, null);
                 }
@@ -163,10 +163,10 @@
                 this.OnElementAdded(child); // Will be either added as a Property or Orphan
 
                 // Search for a property that we can assign to
-                Type type = child.GetType();
+                TypeInfo typeInfo = child.GetType().GetTypeInfo();
                 foreach (var property in browser.Elements)
                 {
-                    if (property.Item1.PropertyType.IsAssignableFrom(type))
+                    if (property.Item1.PropertyType.GetTypeInfo().IsAssignableFrom(typeInfo))
                     {
                         property.Item1.SetValue(parent, child, null);
                         return;

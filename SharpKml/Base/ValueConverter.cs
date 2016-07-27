@@ -1,7 +1,9 @@
 ﻿namespace SharpKml.Base
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Reflection;
 
     /// <summary>
@@ -9,6 +11,8 @@
     /// </summary>
     internal static class ValueConverter
     {
+        private static readonly Dictionary<Type, Func<string, object>> Converters = new Dictionary<Type, Func<string, object>>();
+
         // These are the only valid DateTime formats
         private static readonly string[] DateTimeFormats =
         {
@@ -19,6 +23,41 @@
             "yyyy-MM-ddTHH:mm:ss.FFFFFFFZ", // xsd:dateTime
             "yyyy-MM-ddTHH:mm:ss.FFFFFFFzzzzzz" // xsd:dateTime
         };
+
+        static ValueConverter()
+        {
+            Converters.Add(typeof(bool), GetBool);
+            Converters.Add(typeof(DateTime), GetDateTime);
+            Converters.Add(typeof(string), str => str);
+            Converters.Add(typeof(Color32), str => Color32.Parse(str));
+
+            AddConverter<byte>(byte.TryParse);
+            AddConverter<decimal>(decimal.TryParse);
+            AddConverter<double>(double.TryParse);
+            AddConverter<float>(float.TryParse);
+            AddConverter<int>(int.TryParse);
+            AddConverter<long>(long.TryParse);
+            AddConverter<sbyte>(sbyte.TryParse);
+            AddConverter<short>(short.TryParse);
+            AddConverter<uint>(uint.TryParse);
+            AddConverter<ulong>(ulong.TryParse);
+            AddConverter<ushort>(ushort.TryParse);
+
+            Converters.Add(typeof(char), str =>
+            {
+                char value;
+                return char.TryParse(str, out value) ? (object)value : null;
+            });
+
+            Converters.Add(typeof(Uri), str =>
+            {
+                Uri value;
+                Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out value);
+                return value;
+            });
+        }
+
+        private delegate bool TryParse<T>(string s, NumberStyles style, IFormatProvider provider, out T result);
 
         /// <summary>
         /// Tries to convert the specified string to an object.
@@ -32,43 +71,36 @@
         /// </returns>
         public static bool TryGetValue(Type type, string text, out object value)
         {
-            if (type.IsEnum)
+            Func<string, object> converter;
+            if (Converters.TryGetValue(type, out converter))
             {
-                value = GetEnum(type, text);
+                value = converter(text);
             }
             else
             {
-                TypeCode typeCode = Type.GetTypeCode(type);
-                if (typeCode == TypeCode.String)
+                TypeInfo typeInfo = type.GetTypeInfo();
+                if (typeInfo.IsEnum)
                 {
-                    value = text;
-                }
-                else if (typeCode == TypeCode.Object)
-                {
-                    if (type == typeof(Color32))
-                    {
-                        value = Color32.Parse(text);
-                    }
-                    else if (type == typeof(Uri))
-                    {
-                        Uri uri;
-                        Uri.TryCreate(text, UriKind.RelativeOrAbsolute, out uri);
-                        value = uri; // Will be null if TryCreate failed
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine("Unknown type:" + type);
-                        value = null;
-                        return false;
-                    }
+                    value = GetEnum(typeInfo, text);
                 }
                 else
                 {
-                    value = GetPrimitive(typeCode, text);
+                    System.Diagnostics.Debug.WriteLine("Unknown type:" + type);
+                    value = null;
+                    return false;
                 }
             }
 
             return true;
+        }
+
+        private static void AddConverter<T>(TryParse<T> tryParse)
+        {
+            Converters.Add(typeof(T), str =>
+            {
+                T value;
+                return tryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out value) ? (object)value : null;
+            });
         }
 
         // A bool can be either true/1 or false/0
@@ -108,12 +140,12 @@
             return null;
         }
 
-        private static object GetEnum(Type type, string value)
+        private static object GetEnum(TypeInfo typeInfo, string value)
         {
             if (value != null)
             {
                 value = value.Trim();
-                foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+                foreach (FieldInfo field in typeInfo.DeclaredFields.Where(f => f.IsStatic))
                 {
                     KmlElementAttribute element = TypeBrowser.GetElement(field);
                     if (element != null && string.Equals(element.ElementName, value, StringComparison.Ordinal))
@@ -124,59 +156,6 @@
             }
 
             return null;
-        }
-
-        // Only called on Primitive types, as these all have a TryParse method
-        private static object GetPrimitive(TypeCode typeCode, string value)
-        {
-            NumberStyles numberStyle = NumberStyles.Any;
-            IFormatProvider provider = CultureInfo.InvariantCulture;
-            switch (typeCode)
-            {
-                case TypeCode.Boolean:
-                    return GetBool(value);
-                case TypeCode.Byte:
-                    byte b;
-                    return byte.TryParse(value, numberStyle, provider, out b) ? (object)b : null;
-                case TypeCode.Char:
-                    char c;
-                    return char.TryParse(value, out c) ? (object)c : null;
-                case TypeCode.DateTime:
-                    return GetDateTime(value);
-                case TypeCode.Decimal:
-                    decimal de;
-                    return decimal.TryParse(value, numberStyle, provider, out de) ? (object)de : null;
-                case TypeCode.Double:
-                    double d;
-                    return double.TryParse(value, numberStyle, provider, out d) ? (object)d : null;
-                case TypeCode.Int16:
-                    short s;
-                    return short.TryParse(value, numberStyle, provider, out s) ? (object)s : null;
-                case TypeCode.Int32:
-                    int i;
-                    return int.TryParse(value, numberStyle, provider, out i) ? (object)i : null;
-                case TypeCode.Int64:
-                    long l;
-                    return long.TryParse(value, numberStyle, provider, out l) ? (object)l : null;
-                case TypeCode.SByte:
-                    sbyte sb;
-                    return sbyte.TryParse(value, numberStyle, provider, out sb) ? (object)sb : null;
-                case TypeCode.Single:
-                    float f;
-                    return float.TryParse(value, numberStyle, provider, out f) ? (object)f : null;
-                case TypeCode.UInt16:
-                    ushort us;
-                    return ushort.TryParse(value, numberStyle, provider, out us) ? (object)us : null;
-                case TypeCode.UInt32:
-                    uint ui;
-                    return uint.TryParse(value, numberStyle, provider, out ui) ? (object)ui : null;
-                case TypeCode.UInt64:
-                    ulong ul;
-                    return ulong.TryParse(value, numberStyle, provider, out ul) ? (object)ul : null;
-            }
-
-            System.Diagnostics.Debug.WriteLine("Unknown TypeCode:" + typeCode);
-            return null; // Failed to convert
         }
     }
 }

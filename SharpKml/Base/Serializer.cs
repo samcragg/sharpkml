@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using System.Text;
     using System.Xml;
     using SharpKml.Dom;
@@ -93,8 +94,8 @@
 
         private static string GetString(object value)
         {
-            Type type = value.GetType();
-            if (type.IsEnum)
+            TypeInfo typeInfo = value.GetType().GetTypeInfo();
+            if (typeInfo.IsEnum)
             {
                 KmlElementAttribute att = TypeBrowser.GetEnum((Enum)value);
                 if (att != null)
