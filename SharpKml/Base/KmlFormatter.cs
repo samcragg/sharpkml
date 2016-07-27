@@ -43,23 +43,21 @@
         {
             if (format == null)
             {
-                var convertible = arg as IConvertible;
-                if (convertible != null)
+                if (arg is bool)
                 {
-                    switch (convertible.GetTypeCode())
-                    {
-                        case TypeCode.Boolean:
-                            return GetBool((bool)arg);
-
-                        case TypeCode.DateTime:
-                            return GetDateTime((DateTime)arg);
-
-                        case TypeCode.Double:
-                            return GetFloatingPoint((double)arg);
-
-                        case TypeCode.Single:
-                            return GetFloatingPoint((float)arg);
-                    }
+                    return GetBool((bool)arg);
+                }
+                else if (arg is DateTime)
+                {
+                    return GetDateTime((DateTime)arg);
+                }
+                else if (arg is double)
+                {
+                    return GetFloatingPoint((double)arg);
+                }
+                else if (arg is float)
+                {
+                    return GetFloatingPoint((float)arg);
                 }
             }
 

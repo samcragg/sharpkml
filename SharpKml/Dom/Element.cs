@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Xml;
     using SharpKml.Base;
@@ -15,7 +16,7 @@
     {
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
         private readonly List<Element> children = new List<Element>();
-        private readonly Dictionary<Type, int> childTypes = new Dictionary<Type, int>(); // Will store the type and it's order
+        private readonly Dictionary<TypeInfo, int> childTypes = new Dictionary<TypeInfo, int>(); // Will store the type and it's order
         private readonly List<Element> orphans = new List<Element>();
         private readonly StringBuilder text = new StringBuilder();
 
@@ -51,7 +52,7 @@
         {
             get
             {
-                return this.children.OrderBy(e => e.GetType(), new ChildTypeComparer(this));
+                return this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(this));
             }
         }
 
@@ -123,7 +124,7 @@
             // Check if this is a valid child. We use IsAssignableFrom to enable
             // derived classes to be added as well e.g. if Feature is registered
             // as a valid child type and the child is a Placemark then add it.
-            Type childType = child.GetType();
+            TypeInfo childType = child.GetType().GetTypeInfo();
             foreach (var type in this.childTypes)
             {
                 if (type.Key.IsAssignableFrom(childType))
@@ -212,7 +213,7 @@
         protected void RegisterValidChild<T>()
             where T : Element
         {
-            this.childTypes.Add(typeof(T), this.childTypes.Count); // Remember the order they were added.
+            this.childTypes.Add(typeof(T).GetTypeInfo(), this.childTypes.Count); // Remember the order they were added.
         }
 
         /// <summary>
@@ -242,7 +243,7 @@
         /// Private class used to sort the Children by the order the type
         /// was registered.
         /// </summary>
-        private class ChildTypeComparer : IComparer<Type>
+        private class ChildTypeComparer : IComparer<TypeInfo>
         {
             private Element owner;
 
@@ -251,7 +252,7 @@
                 this.owner = owner;
             }
 
-            public int Compare(Type typeA, Type typeB)
+            public int Compare(TypeInfo typeA, TypeInfo typeB)
             {
                 int indexA = this.owner.childTypes[typeA];
                 int indexB = this.owner.childTypes[typeB];

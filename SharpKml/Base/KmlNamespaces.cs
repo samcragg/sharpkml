@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     /// <summary>
@@ -151,16 +152,18 @@
         {
             var output = new Dictionary<string, string>();
 
-            // Iterate over the static fields and add them to the dictionary
-            foreach (var field in typeof(KmlNamespaces).GetFields(BindingFlags.Public | BindingFlags.Static))
-            {
-                if (field.Name.EndsWith("Namespace", StringComparison.Ordinal))
-                {
-                    string name = field.Name.Substring(0, field.Name.Length - 9); // Remove the "Namespace" part
-                    var prefix = typeof(KmlNamespaces).GetField(name + "Prefix");
+            TypeInfo kmlInfo = typeof(KmlNamespaces).GetTypeInfo();
+            IEnumerable<FieldInfo> fields =
+                kmlInfo.DeclaredFields
+                       .Where(f => f.IsPublic)
+                       .Where(f => f.Name.EndsWith("Namespace", StringComparison.Ordinal));
 
-                    output.Add((string)prefix.GetValue(null), (string)field.GetValue(null));
-                }
+            foreach (FieldInfo field in fields)
+            {
+                string name = field.Name.Substring(0, field.Name.Length - 9); // Remove the "Namespace" part
+                var prefix = kmlInfo.GetDeclaredField(name + "Prefix");
+
+                output.Add((string)prefix.GetValue(null), (string)field.GetValue(null));
             }
 
             return output;

@@ -21,7 +21,7 @@
         {
             // Register all the sub-classes of Element that are
             // in the same assembly as Element.
-            RegisterAssembly(typeof(Element).Assembly);
+            RegisterAssembly(typeof(Element).GetTypeInfo().Assembly);
         }
 
         /// <summary>
@@ -117,11 +117,12 @@
 
         private static void RegisterAssembly(Assembly assembly)
         {
-            foreach (var type in assembly.GetExportedTypes())
+            foreach (Type type in assembly.ExportedTypes)
             {
-                if (type.IsSubclassOf(typeof(Element)))
+                TypeInfo typeInfo = type.GetTypeInfo();
+                if (typeInfo.IsSubclassOf(typeof(Element)))
                 {
-                    KmlElementAttribute element = TypeBrowser.GetElement(type);
+                    KmlElementAttribute element = TypeBrowser.GetElement(typeInfo);
                     if (element != null)
                     {
                         var xml = new XmlComponent(null, element.ElementName, element.Namespace);

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -198,7 +199,7 @@
 
             // First check if we can simple return the passed in value as value
             // types and strings are immutable. This also includes the Color32.
-            if (type.IsValueType || type == typeof(string))
+            if (type == typeof(string) || type.GetTypeInfo().IsValueType)
             {
                 return value;
             }
@@ -217,13 +218,10 @@
                 return; // Can't go any higher.
             }
 
-            const BindingFlags PropertyFlags = BindingFlags.DeclaredOnly |
-                                               BindingFlags.Instance |
-                                               BindingFlags.NonPublic |
-                                               BindingFlags.Public;
-            foreach (var property in type.GetProperties(PropertyFlags))
+            TypeInfo typeInfo = type.GetTypeInfo();
+            foreach (PropertyInfo property in typeInfo.DeclaredProperties)
             {
-                if (!property.CanWrite)
+                if (!property.CanWrite || property.GetMethod.IsStatic)
                 {
                     continue;
                 }
@@ -248,7 +246,7 @@
                 }
             }
 
-            Merge(source, target, type.BaseType);
+            Merge(source, target, typeInfo.BaseType);
         }
 
         private static Element MergeElements(Element source, Element target)
