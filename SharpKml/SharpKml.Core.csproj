@@ -194,6 +194,7 @@
     <Compile Include="Engine\GeometryExtensions.cs" />
     <Compile Include="Engine\IFileResolver.cs" />
     <Compile Include="Engine\KmlFile.cs" />
+    <Compile Include="Engine\KmzFile.cs" />
     <Compile Include="Engine\LinkResolver.cs" />
     <Compile Include="Engine\StyleResolver.cs" />
     <Compile Include="Engine\UpdateExtensions.cs" />
