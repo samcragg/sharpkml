@@ -148,30 +148,25 @@ namespace UnitTests.Engine
             // Create the Kml data
             const string Xml = "<Placemark xmlns='http://www.opengis.net/kml/2.2'><name>tmp kml</name></Placemark>";
             var parser = new Parser();
-            parser.ParseString(Xml, true);
-            var kml = KmlFile.Create(parser.Root, false);
+            parser.ParseString(Xml, namespaces: true);
+            var kml = KmlFile.Create(parser.Root, duplicates: false);
 
-            // This will be where we temporary save the archive to
-            string tempFile = Path.GetTempFileName();
-            try
+            using (var stream = new MemoryStream())
             {
                 // Create and save the archive
-                using (var file = KmzFile.Create(kml))
+                using (var kmz = KmzFile.Create(kml))
                 {
-                    file.Save(tempFile);
+                    kmz.Save(stream);
                 }
 
                 // Try to open the saved archive
-                using (var file = KmzFile.Open(tempFile))
+                stream.Position = 0;
+                using (var kmz = KmzFile.Open(stream))
                 {
                     // Make sure it's the same as what we saved
-                    parser.ParseString(file.ReadKml(), true);
+                    parser.ParseString(kmz.ReadKml(), namespaces: true);
                     SampleData.CompareElements(kml.Root, parser.Root);
                 }
-            }
-            finally
-            {
-                File.Delete(tempFile);
             }
         }
 
@@ -184,7 +179,9 @@ namespace UnitTests.Engine
                 byte[] empty = new byte[] { };
                 Assert.That(() => kmz.AddFile(null, empty),
                             Throws.TypeOf<ArgumentNullException>());
-                Assert.That(() => kmz.AddFile(string.Empty, null),
+                Assert.That(() => kmz.AddFile(string.Empty, (byte[])null),
+                            Throws.TypeOf<ArgumentNullException>());
+                Assert.That(() => kmz.AddFile(string.Empty, (Stream)null),
                             Throws.TypeOf<ArgumentNullException>());
 
                 Assert.That(() => kmz.AddFile(string.Empty, empty), // Empty string

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SharpKml.Engine;
@@ -9,7 +10,7 @@ namespace UnitTests.Engine
     public class LinkResolverTest
     {
         [Test]
-        public void TestDuplicates()
+        public void DuplicateLinksShouldBeIgnored()
         {
             const string Kml =
                 "<Folder xmlns='http://www.opengis.net/kml/2.2'>" +
@@ -17,24 +18,17 @@ namespace UnitTests.Engine
                 "<NetworkLink><Link><href>foo.kml</href></Link></NetworkLink>" +
                 "</Folder>";
 
-            // Test that duplicates are ignored
             using (var reader = new StringReader(Kml))
             {
-                var resolver = new LinkResolver(reader, false);
-                Assert.That(resolver.Links.Count(), Is.EqualTo(1));
-                Assert.That(resolver.Links.ElementAt(0).OriginalString, Is.EqualTo("foo.kml"));
-            }
+                var resolver = new LinkResolver(KmlFile.Load(reader));
 
-            // Test that everything is read
-            using (var reader = new StringReader(Kml))
-            {
-                var resolver = new LinkResolver(reader, true);
-                Assert.That(resolver.Links.Count(), Is.EqualTo(2));
+                Assert.That(resolver.Links.Count, Is.EqualTo(1));
+                Assert.That(resolver.Links[0].OriginalString, Is.EqualTo("foo.kml"));
             }
         }
 
         [Test]
-        public void TestAll()
+        public void ShouldFindAllTheLinkTypesInTheKmlFile()
         {
             // Verify that GetLinks finds all kinds of hrefs in a KML file.
             string[] expected =
@@ -53,19 +47,16 @@ namespace UnitTests.Engine
             using (var stream = SampleData.CreateStream("Engine.Data.Links.kml"))
             using (var reader = new StreamReader(stream))
             {
-                var resolver = new LinkResolver(reader, true);
-                Assert.That(resolver.Links.Count(), Is.EqualTo(expected.Length));
+                var resolver = new LinkResolver(KmlFile.Load(reader));
 
-                int index = 0;
-                foreach (var uri in resolver.Links)
-                {
-                    Assert.That(uri.OriginalString, Is.EqualTo(expected[index++]));
-                }
+                IEnumerable<string> links = resolver.Links.Select(u => u.OriginalString);
+
+                Assert.That(links, Is.EquivalentTo(expected));
             }
         }
 
         [Test]
-        public void TestRelative()
+        public void GetRelativePathsShouldReturnTheNormalizedPath()
         {
             string[] expected =
             {
@@ -81,14 +72,11 @@ namespace UnitTests.Engine
             using (var stream = SampleData.CreateStream("Engine.Data.Links.kml"))
             using (var reader = new StreamReader(stream))
             {
-                var resolver = new LinkResolver(reader, true);
-                Assert.That(resolver.RelativePaths.Count(), Is.EqualTo(expected.Length));
+                var resolver = new LinkResolver(KmlFile.Load(reader));
 
-                int index = 0;
-                foreach (var path in resolver.RelativePaths)
-                {
-                    Assert.That(path, Is.EqualTo(expected[index++]));
-                }
+                IEnumerable<string> relatives = resolver.GetRelativePaths();
+
+                Assert.That(relatives, Is.EquivalentTo(expected));
             }
         }
     }

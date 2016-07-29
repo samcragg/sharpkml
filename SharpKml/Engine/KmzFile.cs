@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Ionic.Zip;
-
-namespace SharpKml.Engine
+﻿namespace SharpKml.Engine
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.IO.Compression;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
     /// Represents a Kmz archive, containing Kml data and associated files.
     /// </summary>
@@ -21,18 +21,21 @@ namespace SharpKml.Engine
         // file in the table of contents that ends with ".kml".
         private const string DefaultKmlFilename = "doc.kml";
         private static Encoding defaultEncoding = Encoding.UTF8;
-        private ZipFile _zip;
 
-        // The whole ZipFile will be saved to our stream so that we can check
-        // the zip when it's loaded so we're no creating random exceptions when
-        // accessing the ZipFile.
-        // Also, ZipExntry.Extract will throw an exception if we try to call it
-        // and the ZipFile has been modified (e.g. ZipFile.UpdateEntry)
-        private MemoryStream _zipStream;
+        // The ZipArchive makes changes to the stream when we dispose it but
+        // we need access to the stream to copy it to another stream etc.
+        private readonly MemoryStream zipStream;
+        private ZipArchive zip;
 
-        private KmzFile(MemoryStream stream)
+        private KmzFile(Stream stream = null)
         {
-            _zipStream = stream;
+            this.zipStream = new MemoryStream();
+            if (stream != null)
+            {
+                stream.CopyTo(this.zipStream);
+            }
+
+            this.CreateZipArchive();
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace SharpKml.Engine
             get
             {
                 this.ThrowIfDisposed();
-                return _zip.EntryFileNames;
+                return this.zip.Entries.Select(e => e.FullName);
             }
         }
 
@@ -80,80 +83,11 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("kml");
             }
 
-            var instance = new KmzFile(new MemoryStream());
-            instance._zip = new ZipFile();
-
-            // Add the Kml data
-            using (var stream = new MemoryStream())
+            var instance = new KmzFile();
+            ZipArchiveEntry entry = instance.zip.CreateEntry(DefaultKmlFilename);
+            using (Stream stream = entry.Open())
             {
                 kml.Save(stream);
-                instance.AddFile(DefaultKmlFilename, stream.ToArray());
-            }
-            return instance;
-        }
-
-        /// <summary>
-        /// Creates a new KmzFile using the data specified in the Kml file.
-        /// </summary>
-        /// <param name="path">The path of the Kml file.</param>
-        /// <returns>
-        /// A new KmzFile populated with the data specified in the Kml file.
-        /// </returns>
-        /// <remarks>
-        /// Any local references in the file are written to the Kmz as archived
-        /// resources if the resource URI is relative to and below the location
-        /// of the Kml file. This means all absolute paths, such as
-        /// &lt;href&gt;/etc/passwd&lt;/href&gt;, are ignored, as well as
-        /// relative paths that point to point to an object that is not in
-        /// the same folder or subfolder of the Kml file, e.g.
-        /// &lt;href&gt;../../etc/passwd&lt;/href&gt; will be ignored for the
-        /// file "/home/libkml/kmlfile.kml".
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
-        /// <exception cref="IOException">An I/O error occurred.</exception>
-        /// <exception cref="System.Xml.XmlException">
-        /// An error occurred while parsing the KML.
-        /// </exception>
-        public static KmzFile Create(string path)
-        {
-            // We'll need the base url for relative Url's later
-            string basePath = Path.GetDirectoryName(path);
-            byte[] data = FileHandler.ReadBytes(new Uri(path, UriKind.RelativeOrAbsolute));
-
-            // Find all the links in the Kml
-            LinkResolver links;
-            using (var stream = new MemoryStream(data, false))
-            using (var reader = new StreamReader(stream))
-            {
-                links = new LinkResolver(reader, false);
-            }
-
-            // Now, if nothing threw, create the actual Kmz file
-            var instance = new KmzFile(new MemoryStream());
-            instance._zip = new ZipFile();
-
-            // The first file in the archive with a .kml extension is the default
-            // file, so make sure we add the original Kml file first.
-            instance.AddFile(DefaultKmlFilename, data);
-
-            try
-            {
-                // Next gather the local references and add them.
-                foreach (var link in links.RelativePaths)
-                {
-                    // Make sure it doesn't point to a directory below the base path
-                    if (!link.StartsWith("..", StringComparison.Ordinal))
-                    {
-                        Uri uri = new Uri(Path.Combine(basePath, link), UriKind.RelativeOrAbsolute);
-                        byte[] file = FileHandler.ReadBytes(uri);
-                        instance.AddFile(link, file);
-                    }
-                }
-            }
-            catch // Make sure we don't leak anything
-            {
-                instance.Dispose();
-                throw;
             }
 
             return instance;
@@ -180,52 +114,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("stream");
             }
 
-            var memory = new MemoryStream();
-            try
-            {
-                stream.CopyTo(memory);
-            }
-            catch
-            {
-                memory.Dispose();
-                throw;
-            }
-
-            // Check if it's a valid Zip file
-            memory.Position = 0;
-            if (!ZipFile.IsZipFile(memory, true))
-            {
-                memory.Dispose();
-                throw new InvalidDataException("The Kmz archive is not in the expected format.");
-            }
-
-            // Everything's ok
-            var instance = new KmzFile(memory);
-            instance.ResetZip(false);
-            return instance;
-        }
-
-        /// <summary>Creates a KmzFile from the specified file path.</summary>
-        /// <param name="path">
-        /// The URI for the file containing the KMZ data.
-        /// </param>
-        /// <returns>A KmzFile representing the specified file path.</returns>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
-        /// <exception cref="InvalidDataException">
-        /// The Kmz archive is not in the expected format.
-        /// </exception>
-        /// <exception cref="IOException">An I/O error occurred.</exception>
-        public static KmzFile Open(string path)
-        {
-            if (path == null)
-            {
-                throw new ArgumentNullException("path");
-            }
-
-            using (var stream = FileHandler.OpenRead(new Uri(path, UriKind.RelativeOrAbsolute)))
-            {
-                return Open(stream);
-            }
+            return new KmzFile(stream);
         }
 
         /// <summary>
@@ -247,14 +136,39 @@ namespace SharpKml.Engine
         /// </exception>
         public void AddFile(string path, byte[] data)
         {
+            using (var stream = new MemoryStream(data, writable: false))
+            {
+                this.AddFile(path, stream);
+            }
+        }
+
+        /// <summary>
+        /// Adds the specified data to the Kmz archive, using the specified
+        /// filename and directory path within the archive.
+        /// </summary>
+        /// <param name="path">
+        /// The name, including any path, to use within the archive.
+        /// </param>
+        /// <param name="stream">The data to add to the archive.</param>
+        /// <exception cref="ArgumentException">
+        /// path is a zero-length string, contains only white space, or contains
+        /// one or more invalid characters as defined by
+        /// <see cref="Path.GetInvalidPathChars"/>.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">path/data is null.</exception>
+        /// <exception cref="ObjectDisposedException">
+        /// <see cref="Dispose"/> has been called on this instance.
+        /// </exception>
+        public void AddFile(string path, Stream stream)
+        {
             this.ThrowIfDisposed();
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
-            if (data == null)
+            else if (stream == null)
             {
-                throw new ArgumentNullException("data");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             // GetPathRoot will validate the path for us. If an absolute path
@@ -268,13 +182,10 @@ namespace SharpKml.Engine
                 throw new ArgumentException("path is invalid.", "path");
             }
 
-            try
+            ZipArchiveEntry entry = this.zip.CreateEntry(path);
+            using (Stream entryStream = entry.Open())
             {
-                _zip.AddEntry(path, data);
-            }
-            catch (ZipException)
-            {
-                throw new ArgumentException("path is invalid.", "path");
+                stream.CopyTo(entryStream);
             }
         }
 
@@ -283,16 +194,10 @@ namespace SharpKml.Engine
         /// </summary>
         public void Dispose()
         {
-            if (_zip != null)
+            if (this.zip != null)
             {
-                _zip.Dispose();
-                _zip = null;
-            }
-
-            if (_zipStream != null)
-            {
-                _zipStream.Dispose();
-                _zipStream = null;
+                this.zip.Dispose();
+                this.zip = null;
             }
         }
 
@@ -346,13 +251,13 @@ namespace SharpKml.Engine
 
             if (!string.IsNullOrEmpty(path))
             {
-                // This will return null if the path is not found
-                ZipEntry file = _zip[path];
+                ZipArchiveEntry file = this.zip.GetEntry(path);
                 if (file != null)
                 {
                     return this.ExtractResource(file);
                 }
             }
+
             return null;
         }
 
@@ -373,19 +278,15 @@ namespace SharpKml.Engine
         {
             this.ThrowIfDisposed();
 
-            ZipEntry kml = _zip.FirstOrDefault(
-                e => string.Equals(".kml", Path.GetExtension(e.FileName), StringComparison.OrdinalIgnoreCase));
+            ZipArchiveEntry kml = this.zip.Entries.FirstOrDefault(
+                e => string.Equals(".kml", Path.GetExtension(e.FullName), StringComparison.OrdinalIgnoreCase));
 
             if (kml != null)
             {
-                using (var stream = new MemoryStream())
+                using (var stream = kml.Open())
+                using (var reader = new StreamReader(stream, defaultEncoding))
                 {
-                    this.ExtractResourceToStream(kml, stream);
-                    stream.Position = 0;
-                    using (var reader = new StreamReader(stream, defaultEncoding))
-                    {
-                        return reader.ReadToEnd();
-                    }
+                    return reader.ReadToEnd();
                 }
             }
 
@@ -409,18 +310,20 @@ namespace SharpKml.Engine
 
             if (!string.IsNullOrEmpty(path))
             {
-                // By default RemoveEntry throws an ArgumentException if the file's
-                // not found, so check first to avoid the exception
-                if (_zip.ContainsEntry(path))
+                ZipArchiveEntry entry = this.zip.GetEntry(path);
+                if (entry != null)
                 {
-                    _zip.RemoveEntry(path);
+                    entry.Delete();
                     return true;
                 }
             }
+
             return false;
         }
 
-        /// <summary>Saves this instance to the specified stream.</summary>
+        /// <summary>
+        /// Saves this instance to the specified stream.
+        /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <exception cref="ArgumentException">stream is not writable.</exception>
         /// <exception cref="ArgumentNullException">stream is null.</exception>
@@ -440,49 +343,18 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("stream");
             }
 
-            // ZipFile will hold on to the passed in stream, so we need to save
-            // to our private stream and then copy that to the stream.
-            this.ResetZip(true);
-            _zipStream.Position = 0;
-            _zipStream.CopyTo(stream);
-        }
+            // ZipFile doesn't commit the changes until it's disposed
+            this.zip.Dispose();
 
-        /// <summary>Saves this instance to the specified path.</summary>
-        /// <param name="path">The complete file path to write to.</param>
-        /// <remarks>
-        /// If the specified file exists in the specified path then it will be
-        /// overwritten; otherwise, a new file will be created.
-        /// </remarks>
-        /// <exception cref="ArgumentException">
-        /// path is a zero-length string, contains only white space, or contains
-        /// one or more invalid characters as defined by
-        /// <see cref="Path.GetInvalidPathChars"/>.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">path is null.</exception>
-        /// <exception cref="DirectoryNotFoundException">
-        /// The specified path is invalid.
-        /// </exception>
-        /// <exception cref="IOException">An I/O error occurred.</exception>
-        /// <exception cref="NotSupportedException">
-        /// path is in an invalid format.
-        /// </exception>
-        /// <exception cref="ObjectDisposedException">
-        /// <see cref="Dispose"/> has been called on this instance.
-        /// </exception>
-        /// <exception cref="PathTooLongException">
-        /// The specified path, file name, or both exceed the system-defined
-        /// maximum length.
-        /// </exception>
-        /// <exception cref="UnauthorizedAccessException">
-        /// The caller does not have the required permission or path specified a
-        /// file that is read-only.
-        /// </exception>
-        public void Save(string path)
-        {
-            this.ThrowIfDisposed();
-            using (var file = File.Create(path))
+            try
             {
-                this.Save(file);
+                this.zipStream.Position = 0;
+                this.zipStream.CopyTo(stream);
+            }
+            finally
+            {
+                // Try to set things back to how they were
+                this.CreateZipArchive();
             }
         }
 
@@ -505,60 +377,42 @@ namespace SharpKml.Engine
             {
                 throw new ArgumentNullException("path");
             }
-            if (data == null)
+            else if (data == null)
             {
                 throw new ArgumentNullException("data");
             }
 
-            // ZipFile.UpdateEntry will create the entry if does not exist
-            if (_zip.ContainsEntry(path))
+            ZipArchiveEntry entry = this.zip.GetEntry(path);
+            if (entry != null)
             {
-                _zip.UpdateEntry(path, data);
+                using (Stream stream = entry.Open())
+                {
+                    stream.SetLength(0);
+                    stream.Write(data, 0, data.Length);
+                }
             }
         }
 
-        private byte[] ExtractResource(ZipEntry entry)
+        private void CreateZipArchive()
         {
-            using (var stream = new MemoryStream())
-            {
-                this.ExtractResourceToStream(entry, stream);
-                return stream.ToArray();
-            }
+            this.zipStream.Position = 0;
+            this.zip = new ZipArchive(this.zipStream, ZipArchiveMode.Update, leaveOpen: true);
         }
 
-        private void ExtractResourceToStream(ZipEntry entry, Stream stream)
+        private byte[] ExtractResource(ZipArchiveEntry entry)
         {
-            // ZipEntry.Extract will throw an exception if the ZipFile has been
-            // modified. Check the VersionNeeded - if it's zero then the entry
-            // needs to be saved before we can extract it.
-            if (entry.VersionNeeded == 0)
+            using (var ms = new MemoryStream())
+            using (var stream = entry.Open())
             {
-                this.ResetZip(true);
-                entry = _zip[entry.FileName];
+                stream.CopyTo(ms);
+                return ms.ToArray();
             }
-
-            entry.Extract(stream);
-        }
-
-        private void ResetZip(bool save)
-        {
-            if (save)
-            {
-                var copy = new MemoryStream();
-                _zip.Save(copy);
-                _zip.Dispose();
-
-                _zipStream.Dispose();
-                _zipStream = copy;
-            }
-
-            _zipStream.Position = 0;
-            _zip = ZipFile.Read(_zipStream);
         }
 
         private void ThrowIfDisposed()
         {
-            if (_zipStream == null) // _zipStream is set to null only in Dispose
+            // We set zip to null once it's been disposed
+            if (this.zip == null)
             {
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
