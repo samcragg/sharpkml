@@ -78,10 +78,7 @@
         /// <exception cref="ArgumentNullException">kml is null.</exception>
         public static KmzFile Create(KmlFile kml)
         {
-            if (kml == null)
-            {
-                throw new ArgumentNullException("kml");
-            }
+            Check.IsNotNull(kml, nameof(kml));
 
             var instance = new KmzFile();
             ZipArchiveEntry entry = instance.zip.CreateEntry(DefaultKmlFilename);
@@ -109,10 +106,7 @@
         /// </exception>
         public static KmzFile Open(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
+            Check.IsNotNull(stream, nameof(stream));
 
             return new KmzFile(stream);
         }
@@ -136,6 +130,9 @@
         /// </exception>
         public void AddFile(string path, byte[] data)
         {
+            this.ThrowIfDisposed();
+            Check.IsNotNull(data, nameof(data));
+
             using (var stream = new MemoryStream(data, writable: false))
             {
                 this.AddFile(path, stream);
@@ -162,14 +159,8 @@
         public void AddFile(string path, Stream stream)
         {
             this.ThrowIfDisposed();
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
-            else if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            Check.IsNotNull(path, nameof(path));
+            Check.IsNotNull(stream, nameof(stream));
 
             // GetPathRoot will validate the path for us. If an absolute path
             // is passed in then GetPathRoot will return the root directory
@@ -338,10 +329,7 @@
         public void Save(Stream stream)
         {
             this.ThrowIfDisposed();
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
+            Check.IsNotNull(stream, nameof(stream));
 
             // ZipFile doesn't commit the changes until it's disposed
             this.zip.Dispose();
@@ -373,14 +361,8 @@
         public void UpdateFile(string path, byte[] data)
         {
             this.ThrowIfDisposed();
-            if (path == null)
-            {
-                throw new ArgumentNullException("path");
-            }
-            else if (data == null)
-            {
-                throw new ArgumentNullException("data");
-            }
+            Check.IsNotNull(path, nameof(path));
+            Check.IsNotNull(data, nameof(data));
 
             ZipArchiveEntry entry = this.zip.GetEntry(path);
             if (entry != null)

@@ -61,6 +61,7 @@
     <Compile Include="Base\Vector.cs" />
     <Compile Include="Base\XmlComponent.cs" />
     <Compile Include="Base\XmlExtractor.cs" />
+    <Compile Include="Check.cs" />
     <Compile Include="Dom\Atom\Author.cs" />
     <Compile Include="Dom\Atom\Category.cs" />
     <Compile Include="Dom\Atom\Content.cs" />
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="SharpKml.Core.nuspec" />
     <None Include="SharpKml.Core.ruleset" />
   </ItemGroup>
   <ItemGroup>
