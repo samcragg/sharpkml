@@ -28,14 +28,6 @@ namespace UnitTests.Base
             TestDateTime(date);
         }
 
-        [Test]
-        [SetCulture("he-IL")]
-        public void TestLocalDateTimeInOtherCulture()
-        {
-            var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
-            TestDateTime(date);
-        }
-
         [TestCase(double.NegativeInfinity, ExpectedResult = "-INF")]
         [TestCase(double.NaN, ExpectedResult = "NaN")]
         [TestCase(double.PositiveInfinity, ExpectedResult = "INF")]
