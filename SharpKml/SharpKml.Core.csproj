@@ -12,15 +12,21 @@
     <RepositoryUrl>https://github.com/samcragg/sharpkml</RepositoryUrl>
     <PackageProjectUrl>https://github.com/samcragg/sharpkml</PackageProjectUrl>
     <Product>SharpKml.Core</Product>
-    <PackageLicenseUrl>https://github.com/samcragg/sharpkml/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseUrl>https://github.com/samcragg/sharpkml/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.3\SharpKml.Core.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.3\SharpKml.Core.xml</DocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 </Project>

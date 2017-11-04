@@ -1,4 +1,9 @@
-﻿namespace SharpKml.Dom.GX
+﻿// Copyright (c) Samuel Cragg.
+//
+// Licensed under the MIT license. See LICENSE file in the project root for
+// full license information.
+
+namespace SharpKml.Dom.GX
 {
     /// <summary>
     /// Abstract class providing instructions to KML browsers during tours.

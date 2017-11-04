@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "copyrightText": "Copyright (c) Samuel Cragg.\n\nLicensed under the MIT license. See LICENSE file in the project root for\nfull license information.",
+      "xmlHeader": false
+    }
+  }
+}

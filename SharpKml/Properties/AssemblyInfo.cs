@@ -1,4 +1,9 @@
-﻿using System;
+﻿// Copyright (c) Samuel Cragg.
+//
+// Licensed under the MIT license. See LICENSE file in the project root for
+// full license information.
+
+using System;
 using System.Runtime.CompilerServices;
 
 [assembly: CLSCompliant(true)]
