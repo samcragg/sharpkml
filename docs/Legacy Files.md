@@ -1,4 +1,4 @@
-The OGC KML specification specifies that Kml elements should be inside the {{http://www.opengis.com/kml/2.2}} namespace. However, before the specification was finalized, programs may have used different namespaces (a common example being {{http://earth.google.com/kml/2.2}}) and you may need to work with those files. One way of doing this is use a `Parser` as follows:
+The OGC KML specification specifies that Kml elements should be inside the `http://www.opengis.com/kml/2.2` namespace. However, before the specification was finalized, programs may have used different namespaces (a common example being `http://earth.google.com/kml/2.2`) and you may need to work with those files. One way of doing this is use a `Parser` as follows:
 
     using System;
     using SharpKml.Base;
