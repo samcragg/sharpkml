@@ -7,6 +7,7 @@ namespace SharpKml.Base
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Xml;
     using SharpKml.Dom;
@@ -19,8 +20,9 @@ namespace SharpKml.Base
         // The maximum nesting depth we permit. Depths beyond this are treated as errors.
         private const int MaxNestingDepth = 100;
 
-        private XmlReader reader;
+        private bool currentElementIsEmpty;
         private string defaultNamespace;
+        private XmlReader reader;
 
         /// <summary>
         /// Raised when a new <see cref="Element"/> is parsed and added to the
@@ -52,7 +54,7 @@ namespace SharpKml.Base
         public void Parse(Stream input)
         {
             this.defaultNamespace = null; // This method is strict about namespaces
-            XmlReader reader = XmlReader.Create(input);
+            var reader = XmlReader.Create(input);
             this.Parse(reader);
         }
 
@@ -73,7 +75,7 @@ namespace SharpKml.Base
         public void Parse(TextReader input)
         {
             this.defaultNamespace = null; // This method is strict about namespaces
-            XmlReader reader = XmlReader.Create(input);
+            var reader = XmlReader.Create(input);
             this.Parse(reader);
         }
 
@@ -93,7 +95,7 @@ namespace SharpKml.Base
         /// </exception>
         public void ParseString(string xml, bool namespaces)
         {
-            using (StringReader stream = new StringReader(xml))
+            using (var stream = new StringReader(xml))
             {
                 if (namespaces)
                 {
@@ -126,8 +128,7 @@ namespace SharpKml.Base
                 type = nullableType;
             }
 
-            object value;
-            if (ValueConverter.TryGetValue(type, text, out value))
+            if (ValueConverter.TryGetValue(type, text, out object value))
             {
                 if (value != null)
                 {
@@ -142,47 +143,63 @@ namespace SharpKml.Base
 
         private void AddChild(Element parent)
         {
-            TypeBrowser browser = TypeBrowser.Create(parent.GetType());
-            Element child = this.GetElement();
+            Element child = this.CreateElement();
+            bool isOrphan;
             if (child is UnknownElement)
             {
+                var browser = TypeBrowser.Create(parent.GetType());
                 PropertyInfo property = browser.FindElement(this.GetXmlComponent());
                 if (property != null)
                 {
-                    AssignValue(parent, property, child.InnerText);
-
                     // We're not going to add it to the parent, which has the potential to
                     // lose any attributes/child elements assigned to the unknown, but this
                     // is the behaviour of the C++ version.
+                    this.PopulateElement(child);
+                    AssignValue(parent, property, child.InnerText);
                     return;
                 }
-            }
-            else if (parent.AddChild(child))
-            {
-                this.OnElementAdded(child); // Call it here after it's Parent has been set
-                return; // Not an orphan
+
+                isOrphan = true;
             }
             else
             {
-                // Lets try an Element as a property?
-                this.OnElementAdded(child); // Will be either added as a Property or Orphan
+                isOrphan = !this.AddChildToParent(parent, child);
+            }
 
+            this.PopulateElement(child);
+            this.OnElementAdded(child);
+
+            if (isOrphan)
+            {
+                parent.AddOrphan(child); // Save for later serialization
+            }
+        }
+
+        private bool AddChildToParent(Element parent, Element child)
+        {
+            if (parent.AddChild(child))
+            {
+                return true;
+            }
+            else
+            {
                 // Search for a property that we can assign to
                 TypeInfo typeInfo = child.GetType().GetTypeInfo();
-                foreach (var property in browser.Elements)
+                var browser = TypeBrowser.Create(parent.GetType());
+                foreach (PropertyInfo property in browser.Elements.Select(x => x.Item1))
                 {
-                    if (property.Item1.PropertyType.GetTypeInfo().IsAssignableFrom(typeInfo))
+                    if (property.PropertyType.GetTypeInfo().IsAssignableFrom(typeInfo))
                     {
-                        property.Item1.SetValue(parent, child, null);
-                        return;
+                        property.SetValue(parent, child, null);
+                        return true;
                     }
                 }
             }
 
-            parent.AddOrphan(child); // Save for later serialization
+            return false;
         }
 
-        private Element GetElement()
+        private Element CreateElement()
         {
             if (this.reader.Depth > MaxNestingDepth)
             {
@@ -197,56 +214,10 @@ namespace SharpKml.Base
             // Need to check this here before we move to the attributes,
             // as reader.NodeType will never be EndElement for empty elements
             // and when we move to an attribute, IsEmptyElement doesn't work
-            bool isEmpty = this.reader.IsEmptyElement;
+            this.currentElementIsEmpty = this.reader.IsEmptyElement;
 
-            Element parent = KmlFactory.CreateElement(this.GetXmlComponent());
-            if (parent == null)
-            {
-                parent = new UnknownElement(new XmlComponent(this.reader));
-            }
-            else if (parent is IHtmlContent)
-            {
-                this.ProcessAttributes(parent);
-
-                // No need to process all the children
-                string text = string.Empty;
-
-                // Is there something to parse?
-                if (!isEmpty)
-                {
-                    text = XmlExtractor.FlattenXml(this.reader);
-                }
-
-                ((IHtmlContent)parent).Text = text;
-                return parent;
-            }
-
-            this.ProcessAttributes(parent); // Empties can have attributes though
-
-            // Is there any text/children to process?
-            if (!isEmpty)
-            {
-                while (this.reader.Read())
-                {
-                    if (this.reader.NodeType == XmlNodeType.EndElement)
-                    {
-                        break;
-                    }
-
-                    switch (this.reader.NodeType)
-                    {
-                        case XmlNodeType.Element:
-                            this.AddChild(parent);
-                            break;
-                        case XmlNodeType.CDATA: // Treat like normal text
-                        case XmlNodeType.Text:
-                            parent.AddInnerText(this.reader.Value);
-                            break;
-                    }
-                }
-            }
-
-            return parent;
+            Element element = KmlFactory.CreateElement(this.GetXmlComponent());
+            return element ?? new UnknownElement(new XmlComponent(this.reader));
         }
 
         private XmlComponent GetXmlComponent()
@@ -261,11 +232,7 @@ namespace SharpKml.Base
 
         private void OnElementAdded(Element element)
         {
-            var callback = this.ElementAdded;
-            if (callback != null)
-            {
-                callback(this, new ElementEventArgs(element));
-            }
+            this.ElementAdded?.Invoke(this, new ElementEventArgs(element));
         }
 
         private void Parse(XmlReader reader)
@@ -278,7 +245,8 @@ namespace SharpKml.Base
                 // Try to find the first element
                 if (this.reader.MoveToContent() == XmlNodeType.Element)
                 {
-                    Element element = this.GetElement();
+                    Element element = this.CreateElement();
+                    this.PopulateElement(element);
 
                     // Do not allow unknown root elements
                     if (!(element is UnknownElement))
@@ -302,9 +270,50 @@ namespace SharpKml.Base
             }
         }
 
+        private void PopulateElement(Element element)
+        {
+            if (element == null)
+            {
+                return;
+            }
+
+            this.ProcessAttributes(element);
+            if (element is IHtmlContent htmlContent)
+            {
+                if (this.currentElementIsEmpty)
+                {
+                    htmlContent.Text = string.Empty;
+                }
+                else
+                {
+                    htmlContent.Text = XmlExtractor.FlattenXml(this.reader);
+                }
+            }
+            else if (!this.currentElementIsEmpty)
+            {
+                while (this.reader.Read())
+                {
+                    switch (this.reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            this.AddChild(element);
+                            break;
+
+                        case XmlNodeType.EndElement:
+                            return;
+
+                        case XmlNodeType.CDATA: // Treat like normal text
+                        case XmlNodeType.Text:
+                            element.AddInnerText(this.reader.Value);
+                            break;
+                    }
+                }
+            }
+        }
+
         private void ProcessAttributes(Element element)
         {
-            TypeBrowser browser = TypeBrowser.Create(element.GetType());
+            var browser = TypeBrowser.Create(element.GetType());
             while (this.reader.MoveToNextAttribute())
             {
                 // Check for namespaces first

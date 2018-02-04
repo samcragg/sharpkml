@@ -228,6 +228,15 @@ namespace UnitTests.Base
         }
 
         [Test]
+        public void TestEmptyKml()
+        {
+            var parser = new Parser();
+            parser.ParseString("<kml />", namespaces: false);
+            Assert.That(parser.Root, Is.Not.Null);
+            Assert.That(parser.Root, Is.InstanceOf<Kml>());
+        }
+
+        [Test]
         public void TestValidKml()
         {
             const string Xml =
@@ -241,12 +250,7 @@ namespace UnitTests.Base
                 "</kml>";
 
             var parser = new Parser();
-            parser.ParseString(Xml, true);
-            Assert.That(parser.Root, Is.Not.Null);
-            Assert.That(parser.Root, Is.InstanceOf<Kml>());
-
-            // Test empty but valid Kml
-            parser.ParseString("<kml />", false);
+            parser.ParseString(Xml, namespaces: true);
             Assert.That(parser.Root, Is.Not.Null);
             Assert.That(parser.Root, Is.InstanceOf<Kml>());
         }
