@@ -45,21 +45,13 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets unknown attributes found during parsing.
         /// </summary>
-        internal IEnumerable<XmlComponent> Attributes
-        {
-            get { return this.attributes; }
-        }
+        internal IEnumerable<XmlComponent> Attributes => this.attributes;
 
         /// <summary>
         /// Gets the child elements of this instance, in their serialization order.
         /// </summary>
-        internal IEnumerable<Element> OrderedChildren
-        {
-            get
-            {
-                return this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(this));
-            }
-        }
+        internal IEnumerable<Element> OrderedChildren =>
+            this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(this));
 
         /// <summary>
         /// Gets the XML namespaces associated with this instance.
@@ -69,10 +61,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets invalid child Elements found during parsing.
         /// </summary>
-        internal IEnumerable<Element> Orphans
-        {
-            get { return this.orphans; }
-        }
+        internal IEnumerable<Element> Orphans => this.orphans;
 
         /// <summary>
         /// Gets the child elements of this instance.
@@ -82,10 +71,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the inner text of the XML element.
         /// </summary>
-        protected internal string InnerText
-        {
-            get { return this.text.ToString(); }
-        }
+        protected internal string InnerText => this.text.ToString();
 
         /// <summary>
         /// Stores unknown attributes found during parsing for later serialization.
@@ -113,7 +99,7 @@ namespace SharpKml.Dom
         /// child belongs to another Element (i.e. the value of it's
         /// <see cref="Parent"/> is not null).
         /// </exception>
-        protected internal bool AddChild<T>(T child)
+        protected internal virtual bool AddChild<T>(T child)
             where T : Element // Use generics so we don't get a warning from FxCop telling us to use base class Element when a child calls this method
         {
             if (child == null)
@@ -130,15 +116,15 @@ namespace SharpKml.Dom
             // derived classes to be added as well e.g. if Feature is registered
             // as a valid child type and the child is a Placemark then add it.
             TypeInfo childType = child.GetType().GetTypeInfo();
-            foreach (var type in this.childTypes)
+            foreach (KeyValuePair<TypeInfo, int> type in this.childTypes)
             {
                 if (type.Key.IsAssignableFrom(childType))
                 {
-                    // If this is a derived class, add the type to the childtype
+                    // If this is a derived class, add the type to the child type
                     // collection with the same index.
                     if (type.Key != childType)
                     {
-                        // It's ok to change the collection as we're breaking
+                        // It's OK to change the collection as we're breaking
                         // out of the iteration.
                         this.childTypes[childType] = type.Value;
                     }

@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.2] - 2018-02-04
+### Changed
+- Fix for https://github.com/samcragg/sharpkml/issues/4
+  - For improved compatability with Google Earth, `innerBoundaryIs` with
+    multiple `LinearyRing` elements (which is invalid) is now handled without
+    loss of information.
+  - Made `Element.AddChild` virtual
+  - Modified `InnerBoundary` to check if it already has a `LinearRing` set - if
+    it does then it will try to add a new `InnerBoundary` to its parent
+
+
 ## [3.0.1] - 2017-11-04
 ### Changed
 - Updated package to target .NET Standard 1.2

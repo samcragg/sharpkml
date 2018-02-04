@@ -22,8 +22,24 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public LinearRing LinearRing
         {
-            get { return this.ring; }
-            set { this.UpdatePropertyChild(value, ref this.ring); }
+            get => this.ring;
+            set => this.UpdatePropertyChild(value, ref this.ring);
+        }
+
+        /// <inheritdoc />
+        protected internal override bool AddChild<T>(T child)
+        {
+            if (child is LinearRing linearRing &&
+                (this.ring != null) &&
+                (this.Parent != null))
+            {
+                return this.Parent.AddChild(new InnerBoundary
+                {
+                    LinearRing = linearRing
+                });
+            }
+
+            return base.AddChild(child);
         }
     }
 }
