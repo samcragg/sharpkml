@@ -17,6 +17,11 @@ namespace SharpKml.Base
     /// </summary>
     public sealed class Parser
     {
+        /// <summary>
+        /// Represents the namespace used when ignoring unknown prefixes.
+        /// </summary>
+        internal const string IgnoreNamespace = "uri:ignore";
+
         // The maximum nesting depth we permit. Depths beyond this are treated as errors.
         private const int MaxNestingDepth = 100;
 
@@ -359,7 +364,7 @@ namespace SharpKml.Base
 
             public override string LookupNamespace(string prefix)
             {
-                return base.LookupNamespace(prefix) ?? "uri:ignore";
+                return base.LookupNamespace(prefix) ?? IgnoreNamespace;
             }
         }
     }

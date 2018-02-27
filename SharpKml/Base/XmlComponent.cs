@@ -65,12 +65,13 @@ namespace SharpKml.Base
         /// <returns>A copy of this instance.</returns>
         public XmlComponent Clone()
         {
-            XmlComponent output = new XmlComponent();
-            output.Name = this.Name;
-            output.NamespaceUri = this.NamespaceUri;
-            output.Prefix = this.Prefix;
-            output.Value = this.Value;
-            return output;
+            return new XmlComponent
+            {
+                Name = this.Name,
+                NamespaceUri = this.NamespaceUri,
+                Prefix = this.Prefix,
+                Value = this.Value
+            };
         }
 
         /// <summary>
@@ -86,13 +87,24 @@ namespace SharpKml.Base
         /// </returns>
         public bool Equals(XmlComponent other)
         {
-            if (other == null)
+            if (other != null)
             {
-                return false;
+                if (string.Equals(this.Name, other.Name, StringComparison.Ordinal))
+                {
+                    // Do we need to compare the namespaces?
+                    if (string.Equals(this.NamespaceUri, Parser.IgnoreNamespace, StringComparison.Ordinal) ||
+                        string.Equals(other.NamespaceUri, Parser.IgnoreNamespace, StringComparison.Ordinal))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return string.Equals(this.NamespaceUri, other.NamespaceUri, StringComparison.Ordinal);
+                    }
+                }
             }
 
-            return string.Equals(this.Name, other.Name, StringComparison.Ordinal) &&
-                   string.Equals(this.NamespaceUri, other.NamespaceUri, StringComparison.Ordinal);
+            return false;
         }
 
         /// <summary>

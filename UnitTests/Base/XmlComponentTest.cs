@@ -7,33 +7,59 @@ namespace UnitTests.Base
     public class XmlComponentTest
     {
         [Test]
-        public void TestClone()
+        public void CloneShouldReturnANewInstance()
         {
-            XmlComponent original = new XmlComponent("pre", "local", "uri");
-            XmlComponent clone = original.Clone();
-            Assert.That(clone, Is.EqualTo(original));
+            var original = new XmlComponent("pre", "local", "uri");
 
-            // Make sure changing a property on the clone does not change the original
-            original.Value = "Hello";
-            clone.Value = "World";
-            Assert.That(clone.Value, Is.Not.EqualTo(original.Value));
+            XmlComponent clone = original.Clone();
+
+            Assert.That(clone, Is.Not.SameAs(original));
+            Assert.That(clone, Is.EqualTo(original));
         }
 
         [Test]
-        public void TestEquals()
+        public void EqualsShouldReturnFalseIfTheNamespaceIsDifferent()
         {
-            XmlComponent xml1 = new XmlComponent("pre", "local", "uri");
-            XmlComponent xml2 = new XmlComponent(null, "local", "uri");
-            XmlComponent xml3 = new XmlComponent("pre", "local", null);
-            object boxed = xml2;
+            var xml1 = new XmlComponent("pre", "name", "uri");
+            var xml2 = new XmlComponent("pre", "name", "other");
 
-            Assert.That(xml1, Is.EqualTo(xml2));
-            Assert.That(xml1, Is.EqualTo(boxed));
-            Assert.That(xml1, Is.Not.EqualTo(xml3));
-            Assert.That(xml2, Is.Not.EqualTo(xml3));
-            Assert.That(xml2, Is.Not.EqualTo(new XmlComponent(null, "Local", "uri"))); // Check case sensitivity
+            Assert.That(xml1.Equals(xml2), Is.False);
+        }
 
-            Assert.That(xml1.GetHashCode(), Is.EqualTo(xml2.GetHashCode()));
+        [Test]
+        public void EqualsShouldReturnFalseIfTheNameIsDifferent()
+        {
+            var xml1 = new XmlComponent("pre", "name", "uri");
+            var xml2 = new XmlComponent("pre", "other", "uri");
+
+            Assert.That(xml1.Equals(xml2), Is.False);
+        }
+
+        [Test]
+        public void EqualsShouldReturnFalseIfTheNameDiffersByCase()
+        {
+            var xml1 = new XmlComponent("pre", "name", "uri");
+            var xml2 = new XmlComponent("pre", "Name", "uri");
+
+            Assert.That(xml1.Equals(xml2), Is.False);
+        }
+
+        [Test]
+        public void EqualsShouldReturnTrueIfTheNameAndNamespaceAreEqual()
+        {
+            var xml1 = new XmlComponent("pre", "name", "uri");
+            var xml2 = new XmlComponent(null, "name", "uri");
+
+            Assert.That(xml1.Equals(xml2), Is.True);
+        }
+
+        [Test]
+        public void EqualsShouldReturnTrueIfTheNamespaceIsTheIgnoreNamespace()
+        {
+            var xml1 = new XmlComponent("x", "name", "uri");
+            var xml2 = new XmlComponent("y", "name", Parser.IgnoreNamespace);
+
+            Assert.That(xml1.Equals(xml2), Is.True);
         }
 
         [Test]

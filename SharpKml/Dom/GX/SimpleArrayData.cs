@@ -37,14 +37,8 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets the collection of values stored by this instance.
         /// </summary>
-        public IEnumerable<string> Values
-        {
-            get
-            {
-                return from e in this.Children.OfType<ValueElement>()
-                       select e.InnerText;
-            }
-        }
+        public IEnumerable<string> Values =>
+            this.Children.OfType<ValueElement>().Select(v => v.Value);
 
         /// <summary>
         /// Adds the specified value to <see cref="Values"/>.</summary>
@@ -66,8 +60,7 @@ namespace SharpKml.Dom.GX
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
-            UnknownElement unknown = orphan as UnknownElement;
-            if (unknown != null)
+            if (orphan is UnknownElement unknown)
             {
                 if (ValueComponent.Equals(unknown.UnknownData))
                 {
@@ -84,32 +77,36 @@ namespace SharpKml.Dom.GX
         /// </summary>
         internal class ValueElement : Element, ICustomElement
         {
-            private readonly string value;
-
             /// <summary>
             /// Initializes a new instance of the <see cref="ValueElement"/> class.
             /// </summary>
-            /// <param name="value">
-            /// The value to set the <see cref="Element.InnerText"/> to.
-            /// </param>
+            /// <param name="value">The value of the element.</param>
             public ValueElement(string value)
             {
-                this.value = value;
+                this.Value = value;
             }
 
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
             /// </summary>
-            public bool ProcessChildren
-            {
-                get { return false; }
-            }
+            public bool ProcessChildren => false;
 
-            /// <summary>Writes the start of an XML element.</summary>
+            /// <summary>
+            /// Gets the value of the node.
+            /// </summary>
+            public string Value { get; }
+
+            /// <summary>
+            /// Writes the start of an XML element.
+            /// </summary>
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                writer.WriteElementString(KmlNamespaces.GX22Prefix, "value", KmlNamespaces.GX22Namespace, this.value);
+                writer.WriteElementString(
+                    KmlNamespaces.GX22Prefix,
+                    "value",
+                    KmlNamespaces.GX22Namespace,
+                    this.Value);
             }
         }
     }
