@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.3] - 2018-02-27
+### Changed
+- Fix for https://github.com/samcragg/sharpkml/issues/5
+  - SimpleArrayData was trying to return the inner text of the created elements,
+    however, it hadn't copied it accross from the UnknownElement. This has been
+    fixed so now the nested values can be retrieved.
+  - SimpleArrayData didn't have any values if namespaces were being ignored
+    during parsing - this has now been fixed.
+
 ## [3.0.2] - 2018-02-04
 ### Changed
 - Fix for https://github.com/samcragg/sharpkml/issues/4
