@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.4] - 2018-03-08
+### Added
+- Support for .NET 4.5
+
 ## [3.0.3] - 2018-02-27
-### Changed
+### Fixed
 - Fix for https://github.com/samcragg/sharpkml/issues/5
   - SimpleArrayData was trying to return the inner text of the created elements,
     however, it hadn't copied it accross from the UnknownElement. This has been
@@ -16,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     during parsing - this has now been fixed.
 
 ## [3.0.2] - 2018-02-04
-### Changed
+### Fixed
 - Fix for https://github.com/samcragg/sharpkml/issues/4
   - For improved compatability with Google Earth, `innerBoundaryIs` with
     multiple `LinearyRing` elements (which is invalid) is now handled without
