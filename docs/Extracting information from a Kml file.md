@@ -1,17 +1,17 @@
 The library can be used to load a Kml file in memory and then iterate over its elements. To do this we need to load the file from disk:
 
-{code:c#}
+```csharp
 // This will read a Kml file into memory.
 KmlFile file = KmlFile.Load("YourKmlFile.kml");
 
 // Kmz (compressed Kml files) can also be loaded:
 KmzFile kmz = KmzFile.Open("YourKmzFile.kmz");
 KmlFile file = KmlFile.LoadFromKmz(kmz);
-{code:c#}
+```
 
 Once the file is loaded you can iterate over the elements inside. Here's a quick example that uses Linq:
 
-{code:c#}
+```csharp
 // Make sure these are placed at the top of your file:
 // using System.Linq;
 // using SharpKml.Engine;
@@ -25,4 +25,4 @@ if (kml != null)
         Console.WriteLine(placemark.Name);
     }
 }
-{code:c#}
+```
