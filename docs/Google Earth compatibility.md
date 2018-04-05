@@ -1,8 +1,8 @@
-To use some of the advanced features offered by Google Earth in your Kml files (such as a tour) there exists the several classes in the {{SharpKml.Dom.GX}} namespace to help you.
+To use some of the advanced features offered by Google Earth in your Kml files (such as a tour) there exists the several classes in the `SharpKml.Dom.GX` namespace to help you.
 
-However, for the results to display correctly in Google Earth, the Google extension namespace must be added to the root {{kml}} node. Below is a simple example that creates a tour.
+However, for the results to display correctly in Google Earth, the Google extension namespace must be added to the root `kml` node. Below is a simple example that creates a tour.
 
-{{
+```csharp
 using System;
 using System.Reflection;
 using System.Xml;
@@ -29,4 +29,4 @@ class Program
         Console.WriteLine(serializer.Xml);
     }
 }
-}}
+```

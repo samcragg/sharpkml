@@ -1,5 +1,5 @@
-A common requirement for processing Kml files is to extract a particular element from the file and then do some processing with them. For example, we might want to extract the {{Polygon}}s from the following Kml:
-{code:xml}
+A common requirement for processing Kml files is to extract a particular element from the file and then do some processing with them. For example, we might want to extract the `Polygon`s from the following Kml:
+```xml
 <?xml version='1.0' encoding='UTF-8'?>
 <kml xmlns='http://www.opengis.net/kml/2.2'>
   <Document>
@@ -36,9 +36,10 @@ A common requirement for processing Kml files is to extract a particular element
     </Placemark>
   </Document>
 </kml>
-{code:xml}
-To do that we can use the {{Flatten}} extension method, which enables us to iterate all the elements and can then filter them out using LINQ, like so:
-{code:c#}
+```
+
+To do that we can use the `Flatten` extension method, which enables us to iterate all the elements and can then filter them out using LINQ, like so:
+```csharp
 using System;
 using System.IO;
 using System.Linq;
@@ -73,4 +74,4 @@ class Program
         Console.ReadKey();
     }
 }
-{code:c#}
+```
