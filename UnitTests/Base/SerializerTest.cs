@@ -10,6 +10,10 @@ namespace UnitTests.Base
     [TestFixture]
     public class SerializerTest
     {
+        private const string XmlNamespace = "http://www.example.com";
+        private const string ChildElementName = "ChildElementS";
+        private const string TestElementName = "TestElementS";
+
         public class ChildElement : Element
         {
             [KmlElement("counter")]
@@ -18,7 +22,7 @@ namespace UnitTests.Base
 
         public class TestElement : Element
         {
-            private ChildElement _child;
+            private ChildElement child;
 
             [KmlAttribute("Attribute")]
             public string Attribute { get; set; }
@@ -42,33 +46,34 @@ namespace UnitTests.Base
             [KmlElement(null)]
             public ChildElement Child
             {
-                get { return _child; }
-                set { this.UpdatePropertyChild(value, ref _child); }
+                get => this.child;
+                set => this.UpdatePropertyChild(value, ref this.child);
             }
         }
 
         static SerializerTest()
         {
-            KmlFactory.Register<ChildElement>(new XmlComponent(null, "ChildElementS", string.Empty));
-            KmlFactory.Register<TestElement>(new XmlComponent(null, "TestElementS", string.Empty));
+            KmlFactory.Register<ChildElement>(new XmlComponent(null, ChildElementName, XmlNamespace));
+            KmlFactory.Register<TestElement>(new XmlComponent(null, TestElementName, XmlNamespace));
         }
 
         [Test]
         public void TestAttributes()
         {
             // Try the attributes first
-            TestElement element = new TestElement();
-            element.Attribute = "attribute";
-            element.EnumAtt = ColorMode.Random;
+            var element = new TestElement
+            {
+                Attribute = "attribute",
+                EnumAtt = ColorMode.Random
+            };
 
-            Serializer serializer = new Serializer();
+            var serializer = new Serializer();
             serializer.Serialize(element);
-            Assert.True(FindNode(serializer.Xml, "TestElementS", r =>
+            Assert.True(FindNode(serializer.Xml, TestElementName, r =>
                 {
                     Assert.That(r.GetAttribute("Attribute"), Is.EqualTo("attribute"));
                     Assert.That(r.GetAttribute("EnumAtt"), Is.EqualTo("random"));
                 }));
-
 
             // Try optional elements = make sure they're only serialized if they have a value
             element.Int = 42;
@@ -87,12 +92,17 @@ namespace UnitTests.Base
         [Test]
         public void TestChild()
         {
-            TestElement element = new TestElement();
-            element.Child = new ChildElement();
-            element.Child.Counter = 1;
+            var element = new TestElement
+            {
+                Child = new ChildElement
+                {
+                    Counter = 1
+                }
+            };
 
-            Serializer serializer = new Serializer();
+            var serializer = new Serializer();
             serializer.Serialize(element);
+
             Assert.True(FindNode(serializer.Xml, "counter", r =>
                 Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(1))));
         }
@@ -115,8 +125,10 @@ namespace UnitTests.Base
         [Test]
         public void TestCData()
         {
-            var balloon = new BalloonStyle();
-            balloon.Text = "<![CDATA[$[description]]]>";
+            var balloon = new BalloonStyle
+            {
+                Text = "<![CDATA[$[description]]]>"
+            };
 
             var serializer = new Serializer();
             serializer.SerializeRaw(balloon);
@@ -144,6 +156,19 @@ namespace UnitTests.Base
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
+        [Test]
+        public void SerializeShouldNotPrefixElementsIfTheyAreInTheDefaultNamespace()
+        {
+            var element = new TestElement();
+            element.AddAttribute(new XmlComponent("xmlns", "p", "") { Value = XmlNamespace });
+            element.Child = new ChildElement();
+
+            var serializer = new Serializer();
+            serializer.SerializeRaw(element);
+
+            Assert.That(serializer.Xml, Contains.Substring("<" + ChildElementName + ">"));
+        }
+
         private static bool FindNode(string xml, string name, Action<XmlReader> callback)
         {
             using (var stringReader = new StringReader(xml))
@@ -154,10 +179,7 @@ namespace UnitTests.Base
                     if ((reader.NodeType == XmlNodeType.Element) &&
                         (reader.LocalName == name))
                     {
-                        if (callback != null)
-                        {
-                            callback(reader);
-                        }
+                        callback?.Invoke(reader);
                         return true;
                     }
                 }
