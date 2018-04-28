@@ -62,6 +62,38 @@ namespace SharpKml.Base
         public double Longitude { get; set; }
 
         /// <summary>
+        /// Adds two vectors to each other.
+        /// </summary>
+        /// <param name="left">Left param</param>
+        /// <param name="right">Right param</param>
+        /// <returns>new vector object</returns>
+        public static Vector operator +(Vector left, Vector right)
+        {
+            return new Vector
+            {
+                Altitude = right.Altitude + left.Altitude,
+                Longitude = right.Longitude + left.Longitude,
+                Latitude = right.Latitude + left.Latitude
+            };
+        }
+
+        /// <summary>
+        /// Multiply a vector by a scalar
+        /// </summary>
+        /// <param name="left">Left param</param>
+        /// <param name="multi">scalar to multiply a vector</param>
+        /// <returns>new vector object</returns>
+        public static Vector operator *(Vector left, double multi)
+        {
+            return new Vector
+            {
+                Altitude = left.Altitude * multi,
+                Longitude = left.Longitude * multi,
+                Latitude = left.Latitude * multi
+            };
+        }
+
+        /// <summary>
         /// Determines whether this instance and the specified object have the
         /// same value.
         /// </summary>
@@ -97,7 +129,6 @@ namespace SharpKml.Base
                    (this.Latitude == other.Latitude) &&
                    (this.Longitude == other.Longitude);
         }
-
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
