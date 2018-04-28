@@ -155,6 +155,7 @@ namespace SharpKml.Base
                    (this.Latitude == other.Latitude) &&
                    (this.Longitude == other.Longitude);
         }
+        
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
