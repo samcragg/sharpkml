@@ -76,5 +76,29 @@ namespace UnitTests.Base
             Assert.AreEqual(0, endVector.Latitude);
             Assert.AreEqual(null, endVector.Altitude);
         }
+
+        [Test]
+        public void TestVectorInversion()
+        {
+            Vector vector1 = new Vector(10, 5);
+            vector1 = -vector1;
+
+            Assert.AreEqual(-10, vector1.Latitude);
+            Assert.AreEqual(-5, vector1.Longitude);
+            Assert.AreEqual(null, vector1.Altitude);
+        }
+
+        [Test]
+        public void TestVectorSubtrack()
+        {
+            Vector vector1 = new Vector(10, 5);
+            Vector vector2 = new Vector(20, 10, 5);
+
+            Vector endVector = vector1 - vector2;
+
+            Assert.AreEqual(-10, endVector.Latitude);
+            Assert.AreEqual(-5, endVector.Longitude);
+            Assert.AreEqual(null, endVector.Altitude);
+        }
     }
 }
