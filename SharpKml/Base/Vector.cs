@@ -78,6 +78,32 @@ namespace SharpKml.Base
         }
 
         /// <summary>
+        /// Invert vector
+        /// </summary>
+        /// <param name="right">Right param</param>
+        /// <returns>new vector object</returns>
+        public static Vector operator -(Vector right)
+        {
+            return new Vector
+            {
+                Altitude = -right.Altitude,
+                Longitude = -right.Longitude,
+                Latitude = -right.Latitude
+            };
+        }
+
+        /// <summary>
+        /// Subtrack two vectors.
+        /// </summary>
+        /// <param name="left">Left param</param>
+        /// <param name="right">Right param</param>
+        /// <returns>new vector object</returns>
+        public static Vector operator -(Vector left, Vector right)
+        {
+            return left + (-right);
+        }
+
+        /// <summary>
         /// Multiply a vector by a scalar
         /// </summary>
         /// <param name="left">Left param</param>
