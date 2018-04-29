@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.1.0]
+### Added
+- Arithmatic operators for the Vector class (thanks @MikDal002)
+
 ## [3.0.5] - 2018-04-18
 ### Fixed
 - Fix for https://github.com/samcragg/sharpkml/issues/8
