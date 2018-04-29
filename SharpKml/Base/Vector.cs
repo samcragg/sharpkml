@@ -62,6 +62,66 @@ namespace SharpKml.Base
         public double Longitude { get; set; }
 
         /// <summary>
+        /// Adds two vectors together.
+        /// </summary>
+        /// <param name="left">The first vector to add.</param>
+        /// <param name="right">The second vector to add.</param>
+        /// <returns>The summed vector.</returns>
+        public static Vector operator +(Vector left, Vector right)
+        {
+            return new Vector
+            {
+                Altitude = right.Altitude + left.Altitude,
+                Longitude = right.Longitude + left.Longitude,
+                Latitude = right.Latitude + left.Latitude
+            };
+        }
+
+        /// <summary>
+        /// Negates the specified vector.
+        /// </summary>
+        /// <param name="value">The vector to negate.</param>
+        /// <returns>The negated vector.</returns>
+        public static Vector operator -(Vector value)
+        {
+            return new Vector
+            {
+                Altitude = -value.Altitude,
+                Longitude = -value.Longitude,
+                Latitude = -value.Latitude
+            };
+        }
+
+        /// <summary>
+        /// Subtracts the second vector from the first.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>
+        /// The vector that results from subtracting <c>right</c> from <c>left</c>.
+        /// </returns>
+        public static Vector operator -(Vector left, Vector right)
+        {
+            return left + (-right);
+        }
+
+        /// <summary>
+        /// Multiples a vector by a scalar value.
+        /// </summary>
+        /// <param name="left">The vector.</param>
+        /// <param name="right">The scalar value.</param>
+        /// <returns>The scaled vector.</returns>
+        public static Vector operator *(Vector left, double right)
+        {
+            return new Vector
+            {
+                Altitude = left.Altitude * right,
+                Longitude = left.Longitude * right,
+                Latitude = left.Latitude * right
+            };
+        }
+
+        /// <summary>
         /// Determines whether this instance and the specified object have the
         /// same value.
         /// </summary>
