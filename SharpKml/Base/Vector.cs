@@ -62,11 +62,11 @@ namespace SharpKml.Base
         public double Longitude { get; set; }
 
         /// <summary>
-        /// Adds two vectors to each other.
+        /// Adds two vectors together.
         /// </summary>
-        /// <param name="left">Left param</param>
-        /// <param name="right">Right param</param>
-        /// <returns>new vector object</returns>
+        /// <param name="left">The first vector to add.</param>
+        /// <param name="right">The second vector to add.</param>
+        /// <returns>The summed vector.</returns>
         public static Vector operator +(Vector left, Vector right)
         {
             return new Vector
@@ -78,44 +78,46 @@ namespace SharpKml.Base
         }
 
         /// <summary>
-        /// Invert vector
+        /// Negates the specified vector.
         /// </summary>
-        /// <param name="right">Right param</param>
-        /// <returns>new vector object</returns>
-        public static Vector operator -(Vector right)
+        /// <param name="value">The vector to negate.</param>
+        /// <returns>The negated vector.</returns>
+        public static Vector operator -(Vector value)
         {
             return new Vector
             {
-                Altitude = -right.Altitude,
-                Longitude = -right.Longitude,
-                Latitude = -right.Latitude
+                Altitude = -value.Altitude,
+                Longitude = -value.Longitude,
+                Latitude = -value.Latitude
             };
         }
 
         /// <summary>
-        /// Subtrack two vectors.
+        /// Subtracts the second vector from the first.
         /// </summary>
-        /// <param name="left">Left param</param>
-        /// <param name="right">Right param</param>
-        /// <returns>new vector object</returns>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>
+        /// The vector that results from subtracting <c>right</c> from <c>left</c>.
+        /// </returns>
         public static Vector operator -(Vector left, Vector right)
         {
             return left + (-right);
         }
 
         /// <summary>
-        /// Multiply a vector by a scalar
+        /// Multiples a vector by a scalar value.
         /// </summary>
-        /// <param name="left">Left param</param>
-        /// <param name="multi">scalar to multiply a vector</param>
-        /// <returns>new vector object</returns>
-        public static Vector operator *(Vector left, double multi)
+        /// <param name="left">The vector.</param>
+        /// <param name="right">The scalar value.</param>
+        /// <returns>The scaled vector.</returns>
+        public static Vector operator *(Vector left, double right)
         {
             return new Vector
             {
-                Altitude = left.Altitude * multi,
-                Longitude = left.Longitude * multi,
-                Latitude = left.Latitude * multi
+                Altitude = left.Altitude * right,
+                Longitude = left.Longitude * right,
+                Latitude = left.Latitude * right
             };
         }
 
@@ -155,7 +157,7 @@ namespace SharpKml.Base
                    (this.Latitude == other.Latitude) &&
                    (this.Longitude == other.Longitude);
         }
-        
+
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
