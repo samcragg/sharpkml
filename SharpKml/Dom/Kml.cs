@@ -76,7 +76,7 @@ namespace SharpKml.Dom
                 throw new ArgumentException("Invalid prefix.", "prefix");
             }
 
-            this.Namespaces.AddNamespace(prefix, uri);
+            this.AddNamespace(prefix, uri);
         }
     }
 }

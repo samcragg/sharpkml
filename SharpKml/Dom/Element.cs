@@ -23,6 +23,7 @@ namespace SharpKml.Dom
         private readonly List<Element> children = new List<Element>();
         private readonly Dictionary<TypeInfo, int> childTypes = new Dictionary<TypeInfo, int>(); // Will store the type and it's order
         private readonly List<Element> orphans = new List<Element>();
+        private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
         private string text = string.Empty;
 
         /// <summary>
@@ -31,7 +32,6 @@ namespace SharpKml.Dom
         protected Element()
         {
             this.Children = new ReadOnlyCollection<Element>(this.children);
-            this.Namespaces = new XmlNamespaceManager(new NameTable());
         }
 
         /// <summary>
@@ -52,11 +52,6 @@ namespace SharpKml.Dom
         /// </summary>
         internal IEnumerable<Element> OrderedChildren =>
             this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(this));
-
-        /// <summary>
-        /// Gets the XML namespaces associated with this instance.
-        /// </summary>
-        internal XmlNamespaceManager Namespaces { get; private set; }
 
         /// <summary>
         /// Gets invalid child Elements found during parsing.
@@ -187,6 +182,26 @@ namespace SharpKml.Dom
             }
 
             return false; // Not ours
+        }
+
+        /// <summary>
+        /// Add an xml namespace to the XML element.
+        /// </summary>
+        /// <param name="prefix">namespace prefix</param>
+        /// <param name="uri">namespace uri</param>
+        protected internal void AddNamespace(string prefix, string uri)
+        {
+            this.namespaces[prefix] = uri;
+        }
+
+        /// <summary>
+        /// Returns namespaces declared for the current Element (excluding the default xml namespace).
+        /// </summary>
+        /// <returns>A IDictionary containing the declared namespaces where Key is namespace prefix and Value namespace uri.</returns>
+        protected internal IDictionary<string, string> GetNamespaces()
+        {
+            return this.namespaces.Where(kvp => kvp.Key != "xml")
+                .ToDictionary(k => k.Key, v => v.Value);
         }
 
         /// <summary>

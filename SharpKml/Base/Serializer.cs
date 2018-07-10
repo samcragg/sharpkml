@@ -196,7 +196,7 @@ namespace SharpKml.Base
 
             WriteAttributesForElement(writer, element);
 
-            foreach (KeyValuePair<string, string> ns in element.Namespaces.GetNamespacesInScope(XmlNamespaceScope.ExcludeXml))
+            foreach (KeyValuePair<string, string> ns in element.GetNamespaces())
             {
                 writer.WriteAttributeString("xmlns", ns.Key, string.Empty, ns.Value);
                 manager.AddNamespace(ns.Key, ns.Value);

@@ -327,12 +327,12 @@ namespace SharpKml.Base
                     // Set default namespace only on unknown elements
                     if (element is UnknownElement)
                     {
-                        element.Namespaces.AddNamespace(string.Empty, this.reader.Value);
+                        element.AddNamespace(string.Empty, this.reader.Value);
                     }
                 }
                 else if (string.Equals("xmlns", this.reader.Prefix, StringComparison.Ordinal))
                 {
-                    element.Namespaces.AddNamespace(this.reader.LocalName, this.reader.Value);
+                    element.AddNamespace(this.reader.LocalName, this.reader.Value);
                 }
                 else
                 {
