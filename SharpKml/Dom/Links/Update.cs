@@ -26,13 +26,20 @@ namespace SharpKml.Dom
     public sealed class Update : Element
     {
         /// <summary>
+        /// Initializes static members of the <see cref="Update"/> class.
+        /// </summary>
+        static Update()
+        {
+            RegisterValidChild<Update, ChangeCollection>();
+            RegisterValidChild<Update, CreateCollection>();
+            RegisterValidChild<Update, DeleteCollection>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Update"/> class.
         /// </summary>
         public Update()
         {
-            this.RegisterValidChild<ChangeCollection>();
-            this.RegisterValidChild<CreateCollection>();
-            this.RegisterValidChild<DeleteCollection>();
         }
 
         /// <summary>

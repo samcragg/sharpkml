@@ -18,12 +18,19 @@ namespace SharpKml.Dom
     public sealed class Schema : KmlObject // TODO: This should inherit from Element, but the C++ version inherits from Object??
     {
         /// <summary>
+        /// Initializes static members of the <see cref="Schema"/> class.
+        /// </summary>
+        static Schema()
+        {
+            RegisterValidChild<Schema, SimpleField>();
+            RegisterValidChild<Schema, GX.SimpleArrayField>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Schema"/> class.
         /// </summary>
         public Schema()
         {
-            this.RegisterValidChild<SimpleField>();
-            this.RegisterValidChild<GX.SimpleArrayField>();
         }
 
         /// <summary>

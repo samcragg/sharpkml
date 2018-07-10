@@ -17,11 +17,18 @@ namespace SharpKml.Dom.GX
     public sealed class Playlist : KmlObject
     {
         /// <summary>
+        /// Initializes static members of the <see cref="Playlist"/> class.
+        /// </summary>
+        static Playlist()
+        {
+            RegisterValidChild<Playlist, TourPrimitive>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Playlist"/> class.
         /// </summary>
         public Playlist()
         {
-            this.RegisterValidChild<TourPrimitive>();
         }
 
         /// <summary>

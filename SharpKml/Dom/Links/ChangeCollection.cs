@@ -19,11 +19,18 @@ namespace SharpKml.Dom
     public sealed class ChangeCollection : Element, ICollection<KmlObject>
     {
         /// <summary>
+        /// Initializes static members of the <see cref="ChangeCollection"/> class.
+        /// </summary>
+        static ChangeCollection()
+        {
+            RegisterValidChild<ChangeCollection, KmlObject>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ChangeCollection"/> class.
         /// </summary>
         public ChangeCollection()
         {
-            this.RegisterValidChild<KmlObject>();
         }
 
         /// <summary>

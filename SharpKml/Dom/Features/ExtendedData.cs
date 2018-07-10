@@ -24,12 +24,19 @@ namespace SharpKml.Dom
     public sealed class ExtendedData : Element
     {
         /// <summary>
+        /// Initializes static members of the <see cref="ExtendedData"/> class.
+        /// </summary>
+        static ExtendedData()
+        {
+            RegisterValidChild<ExtendedData, Data>();
+            RegisterValidChild<ExtendedData, SchemaData>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ExtendedData"/> class.
         /// </summary>
         public ExtendedData()
         {
-            this.RegisterValidChild<Data>();
-            this.RegisterValidChild<SchemaData>();
         }
 
         /// <summary>

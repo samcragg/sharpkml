@@ -17,11 +17,18 @@ namespace SharpKml.Dom.GX
     public sealed class MultipleTrack : Geometry
     {
         /// <summary>
+        /// Initializes static members of the <see cref="MultipleTrack"/> class.
+        /// </summary>
+        static MultipleTrack()
+        {
+            RegisterValidChild<MultipleTrack, Track>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MultipleTrack"/> class.
         /// </summary>
         public MultipleTrack()
         {
-            this.RegisterValidChild<Track>();
         }
 
         /// <summary>

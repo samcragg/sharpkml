@@ -18,11 +18,18 @@ namespace SharpKml.Dom
     public sealed class MultipleGeometry : Geometry
     {
         /// <summary>
+        /// Initializes static members of the <see cref="MultipleGeometry"/> class.
+        /// </summary>
+        static MultipleGeometry()
+        {
+            RegisterValidChild<MultipleGeometry, Geometry>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MultipleGeometry"/> class.
         /// </summary>
         public MultipleGeometry()
         {
-            this.RegisterValidChild<Geometry>();
         }
 
         /// <summary>

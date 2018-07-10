@@ -19,14 +19,18 @@ namespace SharpKml.Dom.Atom
     [KmlElement("feed", KmlNamespaces.AtomNamespace)]
     public sealed class Feed : Element
     {
+        static Feed()
+        {
+            RegisterValidChild<Feed, Category>();
+            RegisterValidChild<Feed, Entry>();
+            RegisterValidChild<Feed, Link>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Feed"/> class.
         /// </summary>
         public Feed()
         {
-            this.RegisterValidChild<Category>();
-            this.RegisterValidChild<Entry>();
-            this.RegisterValidChild<Link>();
         }
 
         /// <summary>

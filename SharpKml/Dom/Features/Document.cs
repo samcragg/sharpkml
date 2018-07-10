@@ -17,12 +17,19 @@ namespace SharpKml.Dom
     public sealed class Document : Container
     {
         /// <summary>
+        /// Initializes static members of the <see cref="Document"/> class.
+        /// </summary>
+        static Document()
+        {
+            RegisterValidChild<Document, Schema>();
+            RegisterValidChild<Document, Feature>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Document"/> class.
         /// </summary>
         public Document()
         {
-            this.RegisterValidChild<Schema>();
-            this.RegisterValidChild<Feature>();
         }
 
         /// <summary>
