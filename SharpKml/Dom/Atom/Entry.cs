@@ -22,12 +22,19 @@ namespace SharpKml.Dom.Atom
         private Content content;
 
         /// <summary>
+        /// Initializes static members of the <see cref="Entry"/> class.
+        /// </summary>
+        static Entry()
+        {
+            RegisterValidChild<Entry, Category>();
+            RegisterValidChild<Entry, Link>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Entry"/> class.
         /// </summary>
         public Entry()
         {
-            this.RegisterValidChild<Category>();
-            this.RegisterValidChild<Link>();
         }
 
         /// <summary>

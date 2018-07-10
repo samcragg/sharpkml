@@ -20,11 +20,18 @@ namespace SharpKml.Dom
     public sealed class CreateCollection : Element, ICollection<Container>
     {
         /// <summary>
+        /// Initializes static members of the <see cref="CreateCollection"/> class.
+        /// </summary>
+        static CreateCollection()
+        {
+            RegisterValidChild<CreateCollection, Container>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CreateCollection"/> class.
         /// </summary>
         public CreateCollection()
         {
-            this.RegisterValidChild<Container>();
         }
 
         /// <summary>

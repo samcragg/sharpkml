@@ -19,11 +19,18 @@ namespace SharpKml.Dom
     public sealed class DeleteCollection : Element, ICollection<Feature>
     {
         /// <summary>
+        /// Initializes static members of the <see cref="DeleteCollection"/> class.
+        /// </summary>
+        static DeleteCollection()
+        {
+            RegisterValidChild<DeleteCollection, Feature>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DeleteCollection"/> class.
         /// </summary>
         public DeleteCollection()
         {
-            this.RegisterValidChild<Feature>();
         }
 
         /// <summary>

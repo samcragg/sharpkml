@@ -19,12 +19,19 @@ namespace SharpKml.Dom
     public sealed class SchemaData : KmlObject
     {
         /// <summary>
+        /// Initializes static members of the <see cref="SchemaData"/> class.
+        /// </summary>
+        static SchemaData()
+        {
+            RegisterValidChild<SchemaData, SimpleData>();
+            RegisterValidChild<SchemaData, GX.SimpleArrayData>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SchemaData"/> class.
         /// </summary>
         public SchemaData()
         {
-            this.RegisterValidChild<SimpleData>();
-            this.RegisterValidChild<GX.SimpleArrayData>();
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Samuel Cragg.
+// Copyright (c) Samuel Cragg.
 //
 // Licensed under the MIT license. See LICENSE file in the project root for
 // full license information.
@@ -30,11 +30,18 @@ namespace SharpKml.Dom
         private AbstractView view;
 
         /// <summary>
+        /// Initializes static members of the <see cref="Feature"/> class.
+        /// </summary>
+        static Feature()
+        {
+            RegisterValidChild<Feature, StyleSelector>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Feature"/> class.
         /// </summary>
         protected Feature()
         {
-            this.RegisterValidChild<StyleSelector>();
         }
 
         /// <summary>

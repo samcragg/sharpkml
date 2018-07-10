@@ -15,11 +15,18 @@ namespace SharpKml.Dom
     public sealed class Folder : Container
     {
         /// <summary>
+        /// Initializes static members of the <see cref="Folder"/> class.
+        /// </summary>
+        static Folder()
+        {
+            RegisterValidChild<Folder, Feature>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Folder"/> class.
         /// </summary>
         public Folder()
         {
-            this.RegisterValidChild<Feature>();
         }
     }
 }

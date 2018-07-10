@@ -26,11 +26,18 @@ namespace SharpKml.Dom
     public sealed class StyleMapCollection : StyleSelector, ICollection<Pair>
     {
         /// <summary>
+        /// Initializes static members of the <see cref="StyleMapCollection"/> class.
+        /// </summary>
+        static StyleMapCollection()
+        {
+            RegisterValidChild<StyleMapCollection, Pair>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="StyleMapCollection"/> class.
         /// </summary>
         public StyleMapCollection()
         {
-            this.RegisterValidChild<Pair>();
         }
 
         /// <summary>

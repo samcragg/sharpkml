@@ -24,11 +24,18 @@ namespace SharpKml.Dom
         private readonly StateElement state = new StateElement();
 
         /// <summary>
+        /// Initializes static members of the <see cref="ItemIcon"/> class.
+        /// </summary>
+        static ItemIcon()
+        {
+            RegisterValidChild<ItemIcon, StateElement>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ItemIcon"/> class.
         /// </summary>
         public ItemIcon()
         {
-            this.RegisterValidChild<StateElement>();
             this.AddChild(this.state);
         }
 

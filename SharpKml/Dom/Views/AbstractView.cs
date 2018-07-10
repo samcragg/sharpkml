@@ -19,12 +19,16 @@ namespace SharpKml.Dom
     {
         private TimePrimitive primitive;
 
+        static AbstractView()
+        {
+            RegisterValidChild<AbstractView, GX.Option>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractView"/> class.
         /// </summary>
         protected AbstractView()
         {
-            this.RegisterValidChild<GX.Option>();
         }
 
         /// <summary>

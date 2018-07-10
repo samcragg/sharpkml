@@ -27,13 +27,20 @@ namespace SharpKml.Dom.GX
         private Model model;
 
         /// <summary>
+        /// Initializes static members of the <see cref="Track"/> class.
+        /// </summary>
+        static Track()
+        {
+            RegisterValidChild<Track, WhenElement>();
+            RegisterValidChild<Track, CoordElement>();
+            RegisterValidChild<Track, AnglesElement>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Track"/> class.
         /// </summary>
         public Track()
         {
-            this.RegisterValidChild<WhenElement>();
-            this.RegisterValidChild<CoordElement>();
-            this.RegisterValidChild<AnglesElement>();
         }
 
         /// <summary>

@@ -24,11 +24,18 @@ namespace SharpKml.Dom
     public sealed class ResourceMap : KmlObject
     {
         /// <summary>
+        /// Initializes static members of the <see cref="ResourceMap"/> class.
+        /// </summary>
+        static ResourceMap()
+        {
+            RegisterValidChild<ResourceMap, Alias>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ResourceMap"/> class.
         /// </summary>
         public ResourceMap()
         {
-            this.RegisterValidChild<Alias>();
         }
 
         /// <summary>

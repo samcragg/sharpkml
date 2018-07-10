@@ -21,11 +21,18 @@ namespace SharpKml.Dom.GX
         private static readonly XmlComponent ValueComponent = new XmlComponent(null, "value", KmlNamespaces.GX22Namespace);
 
         /// <summary>
+        /// Initializes static members of the <see cref="SimpleArrayData"/> class.
+        /// </summary>
+        static SimpleArrayData()
+        {
+            RegisterValidChild<SimpleArrayData, ValueElement>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SimpleArrayData"/> class.
         /// </summary>
         public SimpleArrayData()
         {
-            this.RegisterValidChild<ValueElement>();
         }
 
         /// <summary>

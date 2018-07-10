@@ -19,11 +19,13 @@ namespace SharpKml.Dom
     /// </summary>
     public abstract class Element
     {
+        private static readonly Dictionary<TypeInfo, Dictionary<TypeInfo, int>> ChildTypes = new Dictionary<TypeInfo, Dictionary<TypeInfo, int>>(); // Will store the child type and it's order for each Element type.
+
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
         private readonly List<Element> children = new List<Element>();
-        private readonly Dictionary<TypeInfo, int> childTypes = new Dictionary<TypeInfo, int>(); // Will store the type and it's order
         private readonly List<Element> orphans = new List<Element>();
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
+
         private string text = string.Empty;
 
         /// <summary>
@@ -107,26 +109,31 @@ namespace SharpKml.Dom
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
 
-            // Check if this is a valid child. We use IsAssignableFrom to enable
-            // derived classes to be added as well e.g. if Feature is registered
-            // as a valid child type and the child is a Placemark then add it.
-            TypeInfo childType = child.GetType().GetTypeInfo();
-            foreach (KeyValuePair<TypeInfo, int> type in this.childTypes)
-            {
-                if (type.Key.IsAssignableFrom(childType))
-                {
-                    // If this is a derived class, add the type to the child type
-                    // collection with the same index.
-                    if (type.Key != childType)
-                    {
-                        // It's OK to change the collection as we're breaking
-                        // out of the iteration.
-                        this.childTypes[childType] = type.Value;
-                    }
+            Dictionary<TypeInfo, int> childTypes;
 
-                    this.children.Add(child);
-                    child.Parent = this;
-                    return true;
+            if (Element.ChildTypes.TryGetValue(this.GetType().GetTypeInfo(), out childTypes))
+            {
+                // Check if this is a valid child. We use IsAssignableFrom to enable
+                // derived classes to be added as well e.g. if Feature is registered
+                // as a valid child type and the child is a Placemark then add it.
+                TypeInfo childType = child.GetType().GetTypeInfo();
+                foreach (KeyValuePair<TypeInfo, int> type in childTypes)
+                {
+                    if (type.Key.IsAssignableFrom(childType))
+                    {
+                        // If this is a derived class, add the type to the child type
+                        // collection with the same index.
+                        if (type.Key != childType)
+                        {
+                            // It's OK to change the collection as we're breaking
+                            // out of the iteration.
+                            childTypes[childType] = type.Value;
+                        }
+
+                        this.children.Add(child);
+                        child.Parent = this;
+                        return true;
+                    }
                 }
             }
 
@@ -205,21 +212,33 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
+        /// Registers an element type as a valid child of this instance.
+        /// </summary>
+        /// <typeparam name="U">Parent type deriving from Element.</typeparam>
+        /// <typeparam name="T">Child type deriving from Element.</typeparam>
+        protected static void RegisterValidChild<U, T>()
+            where U : Element
+            where T : Element
+        {
+            var parentTypeInfo = typeof(U).GetType().GetTypeInfo();
+
+            Dictionary<TypeInfo, int> childTypes;
+
+            if (!ChildTypes.TryGetValue(parentTypeInfo, out childTypes))
+            {
+                childTypes = new Dictionary<TypeInfo, int>();
+                ChildTypes[parentTypeInfo] = childTypes;
+            }
+
+            childTypes.Add(typeof(T).GetTypeInfo(), childTypes.Count); // Remember the order they were added.
+        }
+
+        /// <summary>
         /// Removes all characters from <see cref="InnerText"/>.
         /// </summary>
         protected void ClearInnerText()
         {
             this.text = string.Empty;
-        }
-
-        /// <summary>
-        /// Registers an element type as a valid child of this instance.
-        /// </summary>
-        /// <typeparam name="T">A type deriving from Element.</typeparam>
-        protected void RegisterValidChild<T>()
-            where T : Element
-        {
-            this.childTypes.Add(typeof(T).GetTypeInfo(), this.childTypes.Count); // Remember the order they were added.
         }
 
         /// <summary>
@@ -260,8 +279,8 @@ namespace SharpKml.Dom
 
             public int Compare(TypeInfo typeA, TypeInfo typeB)
             {
-                int indexA = this.owner.childTypes[typeA];
-                int indexB = this.owner.childTypes[typeB];
+                int indexA = Element.ChildTypes[this.owner.GetType().GetTypeInfo()][typeA];
+                int indexB = Element.ChildTypes[this.owner.GetType().GetTypeInfo()][typeB];
                 return indexA.CompareTo(indexB);
             }
         }

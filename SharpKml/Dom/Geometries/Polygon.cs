@@ -20,11 +20,18 @@ namespace SharpKml.Dom
         private OuterBoundary outer;
 
         /// <summary>
+        /// Initializes static members of the <see cref="Polygon"/> class.
+        /// </summary>
+        static Polygon()
+        {
+            RegisterValidChild<Polygon, InnerBoundary>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Polygon"/> class.
         /// </summary>
         public Polygon()
         {
-            this.RegisterValidChild<InnerBoundary>();
         }
 
         /// <summary>

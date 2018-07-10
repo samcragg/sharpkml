@@ -27,11 +27,18 @@ namespace SharpKml.Dom
         public static readonly Color32 DefaultBackgroundColor = new Color32(255, 255, 255, 255);
 
         /// <summary>
+        /// Initializes static members of the <see cref="ListStyle"/> class.
+        /// </summary>
+        static ListStyle()
+        {
+            RegisterValidChild<ListStyle, ItemIcon>();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ListStyle"/> class.
         /// </summary>
         public ListStyle()
         {
-            this.RegisterValidChild<ItemIcon>();
         }
 
         /// <summary>
