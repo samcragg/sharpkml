@@ -23,7 +23,7 @@ namespace SharpKml.Dom
         private readonly List<Element> children = new List<Element>();
         private readonly Dictionary<TypeInfo, int> childTypes = new Dictionary<TypeInfo, int>(); // Will store the type and it's order
         private readonly List<Element> orphans = new List<Element>();
-        private readonly StringBuilder text = new StringBuilder();
+        private string text = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Element"/> class.
@@ -71,7 +71,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the inner text of the XML element.
         /// </summary>
-        protected internal string InnerText => this.text.ToString();
+        protected internal string InnerText => this.text;
 
         /// <summary>
         /// Stores unknown attributes found during parsing for later serialization.
@@ -147,7 +147,7 @@ namespace SharpKml.Dom
         /// </exception>
         protected internal virtual void AddInnerText(string text)
         {
-            this.text.Append(text);
+            this.text += text;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace SharpKml.Dom
         /// </summary>
         protected void ClearInnerText()
         {
-            this.text.Clear();
+            this.text = string.Empty;
         }
 
         /// <summary>
