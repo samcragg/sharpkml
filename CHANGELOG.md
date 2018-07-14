@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.0]
+### Changed
+- Reduced memory usage for large files with lots of elements (thanks @sylvaneau)
+
 ## [3.1.0]
 ### Added
 - Arithmatic operators for the Vector class (thanks @MikDal002)
