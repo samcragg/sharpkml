@@ -17,10 +17,10 @@ namespace SharpKml.Engine
     {
         private const string DisplayNamePostfix = "/displayName";
 
-        private readonly Dictionary<string, string> map = new Dictionary<string, string>();
         private readonly Dictionary<string, string> fieldMap = new Dictionary<string, string>();
+        private readonly KmlFile file;
+        private readonly Dictionary<string, string> map = new Dictionary<string, string>();
         private readonly List<Tuple<string, string>> markup = new List<Tuple<string, string>>();
-        private KmlFile file;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityMapper"/> class.
@@ -41,19 +41,13 @@ namespace SharpKml.Engine
         /// Gets the entities found during the most recent parse.
         /// </summary>
         /// <remarks>This property is for unit testing only.</remarks>
-        internal IDictionary<string, string> Entities
-        {
-            get { return this.map; }
-        }
+        internal IDictionary<string, string> Entities => this.map;
 
         /// <summary>
         /// Gets the alternative markup found during the most recent parse.
         /// </summary>
         /// <remarks>This property is for unit testing only.</remarks>
-        internal IList<Tuple<string, string>> Markup
-        {
-            get { return this.markup; }
-        }
+        internal IList<Tuple<string, string>> Markup => this.markup;
 
         /// <summary>
         /// Creates a balloon text for the specified feature, calling
@@ -80,7 +74,7 @@ namespace SharpKml.Engine
 
             // If the Balloon doesn't exist or doesn't have any text then we'll
             // make an HTML default table.
-            StringBuilder html = new StringBuilder();
+            var html = new StringBuilder();
             if (feature.Name != null)
             {
                 html.Append("<h3>");
@@ -97,7 +91,7 @@ namespace SharpKml.Engine
             if (this.markup.Count != 0)
             {
                 html.AppendLine("\n<table border=\"1\">");
-                foreach (var data in this.markup)
+                foreach (Tuple<string, string> data in this.markup)
                 {
                     html.Append("<tr><td>");
                     html.Append(data.Item1);
@@ -123,8 +117,8 @@ namespace SharpKml.Engine
         /// </remarks>
         public string ExpandEntities(string input)
         {
-            StringBuilder sb = new StringBuilder(input);
-            foreach (var entity in this.map)
+            var sb = new StringBuilder(input);
+            foreach (KeyValuePair<string, string> entity in this.map)
             {
                 sb.Replace("$[" + entity.Key + "]", entity.Value);
             }
@@ -170,38 +164,6 @@ namespace SharpKml.Engine
             }
         }
 
-        private void GetExtendedDataFields(Feature feature)
-        {
-            if (feature.ExtendedData != null)
-            {
-                foreach (var data in feature.ExtendedData.Data)
-                {
-                    this.GatherDataFields(data);
-                }
-
-                foreach (var schema in feature.ExtendedData.SchemaData)
-                {
-                    this.GatherSchemaDataFields(schema);
-                }
-            }
-        }
-
-        private void GetFeatureFields(Feature feature)
-        {
-            // KmlObject's fields
-            AddtoDictionary(this.map, "id", feature.Id);
-            AddtoDictionary(this.map, "targetId", feature.TargetId);
-
-            // Feature's fields
-            // TODO: OGC KML 2.2 does not single out specific elements -
-            // any simple field or attribute of Feature is an entity candidate,
-            // however, these are the select few chosen by the C++ version
-            AddtoDictionary(this.map, "name", feature.Name);
-            AddtoDictionary(this.map, "address", feature.Address);
-            AddtoDictionary(this.map, "Snippet", feature.Snippet);
-            AddtoDictionary(this.map, "description", feature.Description);
-        }
-
         private void GatherDataFields(Data data)
         {
             if (data.Name != null)
@@ -228,10 +190,9 @@ namespace SharpKml.Engine
                 if (id != null)
                 {
                     // Make sure it was found and the object is a Schema
-                    Schema schema = this.file.FindObject(id) as Schema;
-                    if (schema != null)
+                    if (this.file.FindObject(id) is Schema schema)
                     {
-                        foreach (var field in schema.Fields)
+                        foreach (SimpleField field in schema.Fields)
                         {
                             this.GatherSimpleFieldFields(field, schema);
                         }
@@ -242,7 +203,7 @@ namespace SharpKml.Engine
                 }
             }
 
-            foreach (var data in schemaData.SimpleData)
+            foreach (SimpleData data in schemaData.SimpleData)
             {
                 this.GatherSimpleDataFields(data, prefix);
             }
@@ -254,8 +215,7 @@ namespace SharpKml.Engine
             {
                 this.map[prefix + data.Name] = data.Text;
 
-                string name;
-                if (!this.fieldMap.TryGetValue(data.Name, out name))
+                if (!this.fieldMap.TryGetValue(data.Name, out string name))
                 {
                     name = data.Name; // Fallback to it's name
                 }
@@ -273,9 +233,41 @@ namespace SharpKml.Engine
             }
         }
 
+        private void GetExtendedDataFields(Feature feature)
+        {
+            if (feature.ExtendedData != null)
+            {
+                foreach (Data data in feature.ExtendedData.Data)
+                {
+                    this.GatherDataFields(data);
+                }
+
+                foreach (SchemaData schema in feature.ExtendedData.SchemaData)
+                {
+                    this.GatherSchemaDataFields(schema);
+                }
+            }
+        }
+
+        private void GetFeatureFields(Feature feature)
+        {
+            // KmlObject's fields
+            AddtoDictionary(this.map, "id", feature.Id);
+            AddtoDictionary(this.map, "targetId", feature.TargetId);
+
+            // Feature's fields
+            // TODO: OGC KML 2.2 does not single out specific elements -
+            // any simple field or attribute of Feature is an entity candidate,
+            // however, these are the select few chosen by the C++ version
+            AddtoDictionary(this.map, "name", feature.Name);
+            AddtoDictionary(this.map, "address", feature.Address);
+            AddtoDictionary(this.map, "Snippet", feature.Snippet);
+            AddtoDictionary(this.map, "description", feature.Description);
+        }
+
         private void PopulateSimpleFieldNameMap(Schema schema)
         {
-            foreach (var field in schema.Fields)
+            foreach (SimpleField field in schema.Fields)
             {
                 if (field.Name != null)
                 {

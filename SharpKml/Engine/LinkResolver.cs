@@ -35,10 +35,7 @@ namespace SharpKml.Engine
         /// <summary>
         /// Gets the Uri's of the Links.
         /// </summary>
-        public IReadOnlyList<Uri> Links
-        {
-            get { return this.links; }
-        }
+        public IReadOnlyList<Uri> Links => this.links;
 
         /// <summary>
         /// Gets the normalized path from the Links that are relative.
@@ -76,36 +73,31 @@ namespace SharpKml.Engine
         // (Feature, BasicLink) means they cannot be inherited outside the assembly.
         private static void AddUriFromElement(ISet<Uri> set, Element element)
         {
-            var alias = element as Alias;
-            if (alias != null)
+            if (element is Alias alias)
             {
                 AddUri(set, alias.TargetHref);
                 return;
             }
 
-            var feature = element as Feature;
-            if (feature != null)
+            if (element is Feature feature)
             {
                 AddUri(set, feature.StyleUrl);
                 return;
             }
 
-            var icon = element as ItemIcon;
-            if (icon != null)
+            if (element is ItemIcon icon)
             {
                 AddUri(set, icon.Href);
                 return;
             }
 
-            var link = element as BasicLink;
-            if (link != null)
+            if (element is BasicLink link)
             {
                 AddUri(set, link.Href);
                 return;
             }
 
-            var schema = element as SchemaData;
-            if (schema != null)
+            if (element is SchemaData schema)
             {
                 AddUri(set, schema.SchemaUrl);
                 return;

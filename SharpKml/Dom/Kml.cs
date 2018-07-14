@@ -23,8 +23,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public Feature Feature
         {
-            get { return this.feature; }
-            set { this.UpdatePropertyChild(value, ref this.feature); }
+            get => this.feature;
+            set => this.UpdatePropertyChild(value, ref this.feature);
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public NetworkLinkControl NetworkLinkControl
         {
-            get { return this.link; }
-            set { this.UpdatePropertyChild(value, ref this.link); }
+            get => this.link;
+            set => this.UpdatePropertyChild(value, ref this.link);
         }
 
         /// <summary>

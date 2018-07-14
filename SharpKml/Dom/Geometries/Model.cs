@@ -28,13 +28,20 @@ namespace SharpKml.Dom
         public AltitudeMode? AltitudeMode { get; set; }
 
         /// <summary>
+        /// Gets or sets extended altitude mode information.
+        /// [Google Extension]
+        /// </summary>
+        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 7)]
+        public GX.AltitudeMode? GXAltitudeMode { get; set; }
+
+        /// <summary>
         /// Gets or sets the location of a textured 3D object resource.
         /// </summary>
         [KmlElement(null, 5)]
         public Link Link
         {
-            get { return this.link; }
-            set { this.UpdatePropertyChild(value, ref this.link); }
+            get => this.link;
+            set => this.UpdatePropertyChild(value, ref this.link);
         }
 
         /// <summary>
@@ -43,8 +50,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public Location Location
         {
-            get { return this.location; }
-            set { this.UpdatePropertyChild(value, ref this.location); }
+            get => this.location;
+            set => this.UpdatePropertyChild(value, ref this.location);
         }
 
         /// <summary>
@@ -54,8 +61,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public Orientation Orientation
         {
-            get { return this.orientation; }
-            set { this.UpdatePropertyChild(value, ref this.orientation); }
+            get => this.orientation;
+            set => this.UpdatePropertyChild(value, ref this.orientation);
         }
 
         /// <summary>
@@ -64,8 +71,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 6)]
         public ResourceMap Resources
         {
-            get { return this.resources; }
-            set { this.UpdatePropertyChild(value, ref this.resources); }
+            get => this.resources;
+            set => this.UpdatePropertyChild(value, ref this.resources);
         }
 
         /// <summary>
@@ -75,16 +82,9 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public Scale Scale
         {
-            get { return this.scale; }
-            set { this.UpdatePropertyChild(value, ref this.scale); }
+            get => this.scale;
+            set => this.UpdatePropertyChild(value, ref this.scale);
         }
-
-        /// <summary>
-        /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
-        /// </summary>
-        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 7)]
-        public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets the coordinates of the bounds of this instance.

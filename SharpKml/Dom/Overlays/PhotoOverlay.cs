@@ -45,8 +45,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public ImagePyramid Image
         {
-            get { return this.pyramid; }
-            set { this.UpdatePropertyChild(value, ref this.pyramid); }
+            get => this.pyramid;
+            set => this.UpdatePropertyChild(value, ref this.pyramid);
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public Point Location
         {
-            get { return this.location; }
-            set { this.UpdatePropertyChild(value, ref this.location); }
+            get => this.location;
+            set => this.UpdatePropertyChild(value, ref this.location);
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public ViewVolume View
         {
-            get { return this.view; }
-            set { this.UpdatePropertyChild(value, ref this.view); }
+            get => this.view;
+            set => this.UpdatePropertyChild(value, ref this.view);
         }
 
         /// <summary>

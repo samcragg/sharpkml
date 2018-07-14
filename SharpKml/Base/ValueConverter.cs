@@ -50,14 +50,12 @@ namespace SharpKml.Base
 
             Converters.Add(typeof(char), str =>
             {
-                char value;
-                return char.TryParse(str, out value) ? (object)value : null;
+                return char.TryParse(str, out char value) ? (object)value : null;
             });
 
             Converters.Add(typeof(Uri), str =>
             {
-                Uri value;
-                Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out value);
+                Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out Uri value);
                 return value;
             });
         }
@@ -76,8 +74,7 @@ namespace SharpKml.Base
         /// </returns>
         public static bool TryGetValue(Type type, string text, out object value)
         {
-            Func<string, object> converter;
-            if (Converters.TryGetValue(type, out converter))
+            if (Converters.TryGetValue(type, out Func<string, object> converter))
             {
                 value = converter(text);
             }
@@ -103,8 +100,7 @@ namespace SharpKml.Base
         {
             Converters.Add(typeof(T), str =>
             {
-                T value;
-                return tryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out value) ? (object)value : null;
+                return tryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out T value) ? (object)value : null;
             });
         }
 
@@ -136,8 +132,7 @@ namespace SharpKml.Base
                 DateTimeStyles.AllowWhiteSpaces |
                 DateTimeStyles.AssumeUniversal;
 
-            DateTime date;
-            if (DateTime.TryParseExact(value, DateTimeFormats, CultureInfo.InvariantCulture, Style, out date))
+            if (DateTime.TryParseExact(value, DateTimeFormats, CultureInfo.InvariantCulture, Style, out DateTime date))
             {
                 return date;
             }

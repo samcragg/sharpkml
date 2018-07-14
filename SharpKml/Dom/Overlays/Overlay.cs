@@ -47,8 +47,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public Icon Icon
         {
-            get { return this.icon; }
-            set { this.UpdatePropertyChild(value, ref this.icon); }
+            get => this.icon;
+            set => this.UpdatePropertyChild(value, ref this.icon);
         }
     }
 }

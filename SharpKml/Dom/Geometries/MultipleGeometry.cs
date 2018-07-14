@@ -26,19 +26,9 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultipleGeometry"/> class.
-        /// </summary>
-        public MultipleGeometry()
-        {
-        }
-
-        /// <summary>
         /// Gets a collection of <see cref="Geometry"/> elements.
         /// </summary>
-        public IEnumerable<Geometry> Geometry
-        {
-            get { return this.Children.OfType<Geometry>(); }
-        }
+        public IEnumerable<Geometry> Geometry => this.Children.OfType<Geometry>();
 
         /// <summary>
         /// Adds the specified <see cref="Geometry"/> to this instance.

@@ -38,13 +38,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Feature"/> class.
-        /// </summary>
-        protected Feature()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets an unstructured address for the Feature, such as street,
         /// city, state address, and/or a postal code.
         /// </summary>
@@ -65,8 +58,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 7)]
         public Xal.AddressDetails AddressDetails
         {
-            get { return this.address; }
-            set { this.UpdatePropertyChild(value, ref this.address); }
+            get => this.address;
+            set => this.UpdatePropertyChild(value, ref this.address);
         }
 
         /// <summary>
@@ -99,8 +92,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 10)]
         public Description Description
         {
-            get { return this.description; }
-            set { this.UpdatePropertyChild(value, ref this.description); }
+            get => this.description;
+            set => this.UpdatePropertyChild(value, ref this.description);
         }
 
         /// <summary>
@@ -109,9 +102,16 @@ namespace SharpKml.Dom
         [KmlElement(null, 16)]
         public ExtendedData ExtendedData
         {
-            get { return this.extended; }
-            set { this.UpdatePropertyChild(value, ref this.extended); }
+            get => this.extended;
+            set => this.UpdatePropertyChild(value, ref this.extended);
         }
+
+        /// <summary>
+        /// Gets or sets the visibility of a description balloon.
+        /// [Google Extension]
+        /// </summary>
+        [KmlElement("balloonVisibility", KmlNamespaces.GX22Namespace, 17)]
+        public bool? GXBalloonVisibility { get; set; }
 
         /// <summary>
         /// Gets or sets a label for the Feature.
@@ -140,8 +140,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 15)]
         public Region Region
         {
-            get { return this.region; }
-            set { this.UpdatePropertyChild(value, ref this.region); }
+            get => this.region;
+            set => this.UpdatePropertyChild(value, ref this.region);
         }
 
         /// <summary>
@@ -153,17 +153,14 @@ namespace SharpKml.Dom
         [KmlElement(null, 9)]
         public Snippet Snippet
         {
-            get { return this.snippet; }
-            set { this.UpdatePropertyChild(value, ref this.snippet); }
+            get => this.snippet;
+            set => this.UpdatePropertyChild(value, ref this.snippet);
         }
 
         /// <summary>
         /// Gets the <see cref="StyleSelector"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<StyleSelector> Styles
-        {
-            get { return this.Children.OfType<StyleSelector>(); }
-        }
+        public IEnumerable<StyleSelector> Styles => this.Children.OfType<StyleSelector>();
 
         /// <summary>
         /// Gets or sets a reference to a <see cref="Style"/> or
@@ -184,8 +181,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 12)]
         public TimePrimitive Time
         {
-            get { return this.time; }
-            set { this.UpdatePropertyChild(value, ref this.time); }
+            get => this.time;
+            set => this.UpdatePropertyChild(value, ref this.time);
         }
 
         /// <summary>
@@ -194,8 +191,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 11)]
         public AbstractView Viewpoint
         {
-            get { return this.view; }
-            set { this.UpdatePropertyChild(value, ref this.view); }
+            get => this.view;
+            set => this.UpdatePropertyChild(value, ref this.view);
         }
 
         /// <summary>
@@ -208,13 +205,6 @@ namespace SharpKml.Dom
         /// </remarks>
         [KmlElement("visibility", 2)]
         public bool? Visibility { get; set; }
-
-        /// <summary>
-        /// Gets or sets the visibility of a description balloon.
-        /// [Google Extension]
-        /// </summary>
-        [KmlElement("balloonVisibility", KmlNamespaces.GX22Namespace, 17)]
-        public bool? GXBalloonVisibility { get; set; }
 
         /// <summary>
         /// Adds the specified <see cref="StyleSelector"/> to this instance.

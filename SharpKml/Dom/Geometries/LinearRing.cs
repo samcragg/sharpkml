@@ -40,8 +40,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public CoordinateCollection Coordinates
         {
-            get { return this.coords; }
-            set { this.UpdatePropertyChild(value, ref this.coords); }
+            get => this.coords;
+            set => this.UpdatePropertyChild(value, ref this.coords);
         }
 
         /// <summary>
@@ -58,16 +58,6 @@ namespace SharpKml.Dom
         public bool? Extrude { get; set; }
 
         /// <summary>
-        /// Gets or sets whether to drape a geometry over the terrain.
-        /// </summary>
-        /// <remarks>
-        /// To enable tessellation, the value should be set to true and
-        /// <see cref="AltitudeMode"/> shall be <see cref="Dom.AltitudeMode.ClampToGround"/>.
-        /// </remarks>
-        [KmlElement("tessellate", 2)]
-        public bool? Tessellate { get; set; }
-
-        /// <summary>
         /// Gets or sets extended altitude mode information.
         /// [Google Extension]
         /// </summary>
@@ -82,14 +72,19 @@ namespace SharpKml.Dom
         public double? GXAltitudeOffset { get; set; }
 
         /// <summary>
+        /// Gets or sets whether to drape a geometry over the terrain.
+        /// </summary>
+        /// <remarks>
+        /// To enable tessellation, the value should be set to true and
+        /// <see cref="AltitudeMode"/> shall be <see cref="Dom.AltitudeMode.ClampToGround"/>.
+        /// </remarks>
+        [KmlElement("tessellate", 2)]
+        public bool? Tessellate { get; set; }
+
+        /// <summary>
         /// Gets the coordinates of the bounds of this instance.
         /// </summary>
-        IEnumerable<Vector> IBoundsInformation.Coordinates
-        {
-            get
-            {
-                return this.Coordinates ?? EmptyCoordinates;
-            }
-        }
+        IEnumerable<Vector> IBoundsInformation.Coordinates =>
+            this.Coordinates ?? EmptyCoordinates;
     }
 }

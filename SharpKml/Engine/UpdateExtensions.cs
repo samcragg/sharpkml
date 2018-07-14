@@ -28,24 +28,21 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("file");
             }
 
-            foreach (var child in update.Updates)
+            foreach (Element child in update.Updates)
             {
-                ChangeCollection change = child as ChangeCollection;
-                if (change != null)
+                if (child is ChangeCollection change)
                 {
                     ProcessChange(change, file);
                     continue;
                 }
 
-                CreateCollection create = child as CreateCollection;
-                if (create != null)
+                if (child is CreateCollection create)
                 {
                     ProcessCreate(create, file);
                     continue;
                 }
 
-                DeleteCollection delete = child as DeleteCollection;
-                if (delete != null)
+                if (child is DeleteCollection delete)
                 {
                     ProcessDelete(delete, file);
                 }
@@ -54,7 +51,7 @@ namespace SharpKml.Engine
 
         private static void ProcessChange(ChangeCollection change, KmlFile file)
         {
-            foreach (var source in change)
+            foreach (KmlObject source in change)
             {
                 if (source.TargetId != null)
                 {
@@ -70,17 +67,16 @@ namespace SharpKml.Engine
 
         private static void ProcessCreate(CreateCollection create, KmlFile file)
         {
-            foreach (var source in create)
+            foreach (Container source in create)
             {
                 if (source.TargetId != null)
                 {
                     // Make sure it was found and that the target was a Container
-                    Container target = file.FindObject(source.TargetId) as Container;
-                    if (target != null)
+                    if (file.FindObject(source.TargetId) is Container target)
                     {
-                        foreach (var feature in source.Features)
+                        foreach (Feature feature in source.Features)
                         {
-                            var clone = feature.Clone(); // We never give the original source.
+                            Feature clone = feature.Clone(); // We never give the original source.
                             target.AddFeature(clone);
                             file.AddFeature(clone);
                         }
@@ -91,24 +87,21 @@ namespace SharpKml.Engine
 
         private static void ProcessDelete(DeleteCollection delete, KmlFile file)
         {
-            foreach (var source in delete)
+            foreach (Feature source in delete)
             {
                 if (source.TargetId != null)
                 {
-                    Feature feature = file.FindObject(source.TargetId) as Feature;
-                    if (feature != null)
+                    if (file.FindObject(source.TargetId) is Feature feature)
                     {
                         // Remove the Feature from the parent, which is either
                         // a Container or Kml
-                        Container container = feature.Parent as Container;
-                        if (container != null)
+                        if (feature.Parent is Container container)
                         {
                             container.RemoveFeature(source.TargetId);
                         }
                         else
                         {
-                            Kml kml = feature.Parent as Kml;
-                            if (kml != null)
+                            if (feature.Parent is Kml kml)
                             {
                                 kml.Feature = null;
                             }

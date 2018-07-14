@@ -27,6 +27,6 @@ namespace SharpKml.Base
         /// <summary>
         /// Gets the <see cref="Dom.Element"/> found during parsing.
         /// </summary>
-        public Element Element { get; private set; }
+        public Element Element { get; }
     }
 }

@@ -22,8 +22,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public AdministrativeArea AdministrativeArea
         {
-            get { return this.area; }
-            set { this.UpdatePropertyChild(value, ref this.area); }
+            get => this.area;
+            set => this.UpdatePropertyChild(value, ref this.area);
         }
 
         /// <summary>

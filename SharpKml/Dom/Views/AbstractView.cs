@@ -25,11 +25,11 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractView"/> class.
+        /// Gets or sets the horizontal field of view of the AbstractView
+        /// during a tour. [Google Extension]
         /// </summary>
-        protected AbstractView()
-        {
-        }
+        [KmlElement("horizFov", KmlNamespaces.GX22Namespace, 2)]
+        public double? GXHorizontalFOV { get; set; }
 
         /// <summary>
         /// Gets or sets the associated time primitive.
@@ -41,25 +41,15 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public TimePrimitive GXTimePrimitive
         {
-            get { return this.primitive; }
-            set { this.UpdatePropertyChild(value, ref this.primitive); }
+            get => this.primitive;
+            set => this.UpdatePropertyChild(value, ref this.primitive);
         }
-
-        /// <summary>
-        /// Gets or sets the horizontal field of view of the AbstractView
-        /// during a tour. [Google Extension]
-        /// </summary>
-        [KmlElement("horizFov", KmlNamespaces.GX22Namespace, 2)]
-        public double? GXHorizontalFOV { get; set; }
 
         /// <summary>
         /// Gets the <see cref="GX.Option"/>s stored by this instance.
         /// [Google Extension]
         /// </summary>
-        public IEnumerable<GX.Option> ViewerOptions
-        {
-            get { return this.Children.OfType<GX.Option>(); }
-        }
+        public IEnumerable<GX.Option> ViewerOptions => this.Children.OfType<GX.Option>();
 
         /// <summary>
         /// Adds the specified <see cref="GX.Option"/> to this instance.

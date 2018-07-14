@@ -24,9 +24,9 @@ namespace SharpKml.Engine
         private readonly Dictionary<string, StyleSelector> styles = new Dictionary<string, StyleSelector>();
         private bool strict;
 
-        // Use the Create methods
         private KmlFile()
         {
+            // Use the Create methods
         }
 
         /// <summary>
@@ -37,18 +37,12 @@ namespace SharpKml.Engine
         /// <summary>
         /// Gets the <see cref="StyleSelector"/>s which have their Id set.
         /// </summary>
-        public IEnumerable<StyleSelector> Styles
-        {
-            get { return this.styles.Values; }
-        }
+        public IEnumerable<StyleSelector> Styles => this.styles.Values;
 
         /// <summary>
         /// Gets the internal map of the styles found during the parse.
         /// </summary>
-        internal IDictionary<string, StyleSelector> StyleMap
-        {
-            get { return this.styles; }
-        }
+        internal IDictionary<string, StyleSelector> StyleMap => this.styles;
 
         /// <summary>
         /// Creates a KmlFie from the specified <see cref="Element"/> hierarchy.
@@ -74,10 +68,12 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("root");
             }
 
-            KmlFile file = new KmlFile();
-            file.strict = !duplicates;
+            var file = new KmlFile
+            {
+                strict = !duplicates
+            };
 
-            foreach (var element in ElementWalker.Walk(root))
+            foreach (Element element in ElementWalker.Walk(root))
             {
                 file.OnElementAdded(element);
             }
@@ -149,7 +145,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("reader");
             }
 
-            KmlFile file = new KmlFile();
+            var file = new KmlFile();
             file.Parse(reader);
             return file;
         }
@@ -171,8 +167,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("id");
             }
 
-            KmlObject obj;
-            if (this.objects.TryGetValue(id, out obj))
+            if (this.objects.TryGetValue(id, out KmlObject obj))
             {
                 return obj;
             }
@@ -197,8 +192,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("id");
             }
 
-            StyleSelector style;
-            if (this.styles.TryGetValue(id, out style))
+            if (this.styles.TryGetValue(id, out StyleSelector style))
             {
                 return style;
             }
@@ -219,7 +213,7 @@ namespace SharpKml.Engine
         /// </exception>
         public void Save(Stream stream)
         {
-            Serializer serializer = new Serializer();
+            var serializer = new Serializer();
             serializer.Serialize(this.Root, stream);
         }
 
@@ -266,19 +260,16 @@ namespace SharpKml.Engine
         private void OnElementAdded(Element element)
         {
             // Map KmlObjects and related descendents
-            KmlObject obj = element as KmlObject;
-            if ((obj != null) && (obj.Id != null))
+            if (element is KmlObject obj && (obj.Id != null))
             {
                 this.AddToDictionary(obj, this.objects);
 
                 // Also map Styles, as StyleSelector inherits from KmlObject.
                 // A shared style is defined to be a StyleSelector with an
                 // id that is a child of a Document.
-                StyleSelector style = element as StyleSelector;
-                if (style != null)
+                if (element is StyleSelector style)
                 {
-                    Document document = element.Parent as Document;
-                    if (document != null)
+                    if (element.Parent is Document document)
                     {
                         this.AddToDictionary(style, this.styles);
                     }
@@ -288,7 +279,7 @@ namespace SharpKml.Engine
 
         private void Parse(TextReader input)
         {
-            Parser parser = new Parser();
+            var parser = new Parser();
             parser.ElementAdded += (s, e) => this.OnElementAdded(e.Element);
             parser.Parse(input);
             this.Root = parser.Root;

@@ -48,8 +48,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public Link Link
         {
-            get { return this.link; }
-            set { this.UpdatePropertyChild(value, ref this.link); }
+            get => this.link;
+            set => this.UpdatePropertyChild(value, ref this.link);
         }
 
         /// <summary>
@@ -76,11 +76,9 @@ namespace SharpKml.Dom
         protected internal override void AddOrphan(Element orphan)
         {
 #pragma warning disable 0618 // Url is obsolete, but it's ok because we're updating it
-            Url url = orphan as Url;
-#pragma warning restore 0618
-
-            if (url != null)
+            if (orphan is Url url)
             {
+#pragma warning restore 0618
                 this.Link = (Link)url; // Explicit conversion
             }
             else

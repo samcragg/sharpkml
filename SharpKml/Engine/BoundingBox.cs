@@ -66,16 +66,8 @@ namespace SharpKml.Engine
         /// <summary>
         /// Gets a value indicating whether this instance is empty or not;
         /// </summary>
-        public bool IsEmpty
-        {
-            get
-            {
-                return (this.East == -180) &&
-                       (this.North == -180) &&
-                       (this.South == 180) &&
-                       (this.West == 180);
-            }
-        }
+        public bool IsEmpty =>
+            (this.East == -180) && (this.North == -180) && (this.South == 180) && (this.West == 180);
 
         /// <summary>
         /// Gets or sets the latitude of the north edge of the bounding box,

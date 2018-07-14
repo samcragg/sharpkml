@@ -41,69 +41,36 @@ namespace SharpKml.Base
         /// <summary>
         /// Gets the Color32 as an integer in ABGR format.
         /// </summary>
-        public int Abgr
-        {
-            get { return (int)this.abgr; }
-        }
+        public int Abgr => (int)this.abgr;
 
         /// <summary>
         /// Gets the alpha component value.
         /// </summary>
-        public byte Alpha
-        {
-            get { return (byte)(this.abgr >> 24); }
-        }
+        public byte Alpha => (byte)(this.abgr >> 24);
 
         /// <summary>
         /// Gets the Color32 as an integer in ARGB format.
         /// </summary>
-        public int Argb
-        {
-            get
-            {
-                return (int)((this.abgr & 0xFF000000) |
-                       ((this.abgr & 0x00FF0000) >> 16) |
-                       (this.abgr & 0x0000FF00) |
-                       ((this.abgr & 0x000000FF) << 16));
-            }
-        }
+        public int Argb =>
+            (int)((this.abgr & 0xFF000000) |
+            ((this.abgr & 0x00FF0000) >> 16) |
+            (this.abgr & 0x0000FF00) |
+            ((this.abgr & 0x000000FF) << 16));
 
         /// <summary>
         /// Gets the blue component value.
         /// </summary>
-        public byte Blue
-        {
-            get { return (byte)(this.abgr >> 16); }
-        }
+        public byte Blue => (byte)(this.abgr >> 16);
 
         /// <summary>
         /// Gets the green component value.
         /// </summary>
-        public byte Green
-        {
-            get { return (byte)(this.abgr >> 8); }
-        }
+        public byte Green => (byte)(this.abgr >> 8);
 
         /// <summary>
         /// Gets the red component value.
         /// </summary>
-        public byte Red
-        {
-            get { return (byte)this.abgr; }
-        }
-
-        /// <summary>
-        /// Determines whether two specified Color32s have the same value.
-        /// </summary>
-        /// <param name="colorA">The first Color32 to compare.</param>
-        /// <param name="colorB">The second Color32 to compare.</param>
-        /// <returns>
-        /// true if the value of the two colors is the same; otherwise, false.
-        /// </returns>
-        public static bool operator ==(Color32 colorA, Color32 colorB)
-        {
-            return colorA.Equals(colorB);
-        }
+        public byte Red => (byte)this.abgr;
 
         /// <summary>
         /// Determines whether two specified Color32s have different values.
@@ -130,6 +97,19 @@ namespace SharpKml.Base
         public static bool operator <(Color32 colorA, Color32 colorB)
         {
             return colorA.CompareTo(colorB) < 0;
+        }
+
+        /// <summary>
+        /// Determines whether two specified Color32s have the same value.
+        /// </summary>
+        /// <param name="colorA">The first Color32 to compare.</param>
+        /// <param name="colorB">The second Color32 to compare.</param>
+        /// <returns>
+        /// true if the value of the two colors is the same; otherwise, false.
+        /// </returns>
+        public static bool operator ==(Color32 colorA, Color32 colorB)
+        {
+            return colorA.Equals(colorB);
         }
 
         /// <summary>
@@ -244,7 +224,7 @@ namespace SharpKml.Base
         /// </returns>
         public override bool Equals(object obj)
         {
-            Color32? color = obj as Color32?;
+            var color = obj as Color32?;
             return color.HasValue && this.Equals(color.Value);
         }
 

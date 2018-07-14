@@ -22,8 +22,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public LinearRing LinearRing
         {
-            get { return this.ring; }
-            set { this.UpdatePropertyChild(value, ref this.ring); }
+            get => this.ring;
+            set => this.UpdatePropertyChild(value, ref this.ring);
         }
     }
 }

@@ -38,22 +38,14 @@ namespace SharpKml.Base
         /// <summary>
         /// Gets the properties with a KmlAttribute attribute.
         /// </summary>
-        public IEnumerable<Tuple<PropertyInfo, KmlAttributeAttribute>> Attributes
-        {
-            get { return this.attributes.Values; }
-        }
+        public IEnumerable<Tuple<PropertyInfo, KmlAttributeAttribute>> Attributes =>
+            this.attributes.Values;
 
         /// <summary>
         /// Gets the properties with a KmlElement attribute.
         /// </summary>
-        public IEnumerable<Tuple<PropertyInfo, KmlElementAttribute>> Elements
-        {
-            get
-            {
-                return from element in this.elements
-                       select Tuple.Create(element.Item2, element.Item3);
-            }
-        }
+        public IEnumerable<Tuple<PropertyInfo, KmlElementAttribute>> Elements =>
+            this.elements.Select(e => Tuple.Create(e.Item2, e.Item3));
 
         /// <summary>
         /// Creates TypeBrowser representing the specified type.
@@ -147,8 +139,7 @@ namespace SharpKml.Base
         /// </returns>
         public PropertyInfo FindAttribute(XmlComponent xml)
         {
-            Tuple<PropertyInfo, KmlAttributeAttribute> property;
-            if (this.attributes.TryGetValue(xml, out property))
+            if (this.attributes.TryGetValue(xml, out Tuple<PropertyInfo, KmlAttributeAttribute> property))
             {
                 return property.Item1;
             }
@@ -166,11 +157,10 @@ namespace SharpKml.Base
         /// </returns>
         public PropertyInfo FindElement(XmlComponent xml)
         {
-            var query = from element in this.elements
-                        where element.Item1.Equals(xml)
-                        select element.Item2;
-
-            return query.FirstOrDefault();
+            return this.elements
+                .Where(e => e.Item1.Equals(xml))
+                .Select(e => e.Item2)
+                .FirstOrDefault();
         }
 
         private static T GetAttribute<T>(MemberInfo provider)
@@ -201,10 +191,10 @@ namespace SharpKml.Base
             var elements = new List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>>();
             foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(p => !p.GetMethod.IsStatic))
             {
-                var attribute = GetAttribute(property);
+                KmlAttributeAttribute attribute = GetAttribute(property);
                 if (attribute != null)
                 {
-                    XmlComponent component = new XmlComponent(null, attribute.AttributeName, null);
+                    var component = new XmlComponent(null, attribute.AttributeName, null);
 
                     // Check if a property has already been registered with the info.
                     // Ignore later properties - i.e. don't throw an exception.
@@ -215,10 +205,10 @@ namespace SharpKml.Base
                 }
                 else
                 {
-                    var element = GetElement(property);
+                    KmlElementAttribute element = GetElement(property);
                     if (element != null)
                     {
-                        XmlComponent component = new XmlComponent(null, element.ElementName, element.Namespace);
+                        var component = new XmlComponent(null, element.ElementName, element.Namespace);
                         elements.Add(Tuple.Create(component, property, element));
                     }
                 }

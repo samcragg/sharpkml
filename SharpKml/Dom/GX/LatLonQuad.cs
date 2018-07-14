@@ -30,8 +30,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public CoordinateCollection Coordinates
         {
-            get { return this.coords; }
-            set { this.UpdatePropertyChild(value, ref this.coords); }
+            get => this.coords;
+            set => this.UpdatePropertyChild(value, ref this.coords);
         }
     }
 }

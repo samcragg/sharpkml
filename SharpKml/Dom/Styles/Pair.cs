@@ -29,8 +29,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public StyleSelector Selector
         {
-            get { return this.selector; }
-            set { this.UpdatePropertyChild(value, ref this.selector); }
+            get => this.selector;
+            set => this.UpdatePropertyChild(value, ref this.selector);
         }
 
         /// <summary>

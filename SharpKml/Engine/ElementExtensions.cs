@@ -8,7 +8,6 @@ namespace SharpKml.Engine
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -34,8 +33,7 @@ namespace SharpKml.Engine
             }
 
             // Special case as IconStyle has the same Kml name as Icon
-            var iconLink = element as IconStyle.IconLink;
-            if (iconLink != null)
+            if (element is IconStyle.IconLink iconLink)
             {
                 return (T)CloneIconLink(iconLink);
             }
@@ -81,11 +79,10 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("element");
             }
 
-            var parent = element.Parent;
+            Element parent = element.Parent;
             while (parent != null)
             {
-                T typed = parent as T;
-                if (typed != null)
+                if (parent is T typed)
                 {
                     return typed;
                 }
@@ -147,7 +144,7 @@ namespace SharpKml.Engine
             // Make sure we're not playing with ourselves... so to speak
             if (!object.ReferenceEquals(element, source))
             {
-                foreach (var child in source.Children)
+                foreach (Element child in source.Children)
                 {
                     element.AddChild(child.Clone());
                 }
@@ -177,8 +174,10 @@ namespace SharpKml.Engine
                 var serializer = new Serializer();
                 if (iconLink.Parent == null)
                 {
-                    var parent = new IconStyle();
-                    parent.Icon = iconLink;
+                    var parent = new IconStyle
+                    {
+                        Icon = iconLink
+                    };
                     serializer.Serialize(parent, stream);
                     parent.Icon = null; // Sets the Icon's Parent property back to null
                 }
@@ -191,7 +190,7 @@ namespace SharpKml.Engine
                 var parser = new Parser();
                 parser.Parse(stream);
 
-                IconStyle root = (IconStyle)parser.Root;
+                var root = (IconStyle)parser.Root;
                 IconStyle.IconLink output = root.Icon;
                 root.Icon = null; // Clear the output's parent
                 return output;
@@ -235,8 +234,7 @@ namespace SharpKml.Engine
                 object value = property.GetValue(source, null);
 
                 // First check if it's an element and merge any existing info.
-                Element sourceElement = value as Element;
-                if (sourceElement != null)
+                if (value is Element sourceElement)
                 {
                     newValue = MergeElements(sourceElement, (Element)property.GetValue(target, null));
                 }

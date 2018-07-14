@@ -109,8 +109,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 9)]
         public Update Update
         {
-            get { return this.update; }
-            set { this.UpdatePropertyChild(value, ref this.update); }
+            get => this.update;
+            set => this.UpdatePropertyChild(value, ref this.update);
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 10)]
         public AbstractView View
         {
-            get { return this.view; }
-            set { this.UpdatePropertyChild(value, ref this.view); }
+            get => this.view;
+            set => this.UpdatePropertyChild(value, ref this.view);
         }
     }
 }

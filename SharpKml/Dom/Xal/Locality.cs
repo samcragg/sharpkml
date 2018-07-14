@@ -31,8 +31,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public PostalCode PostalCode
         {
-            get { return this.code; }
-            set { this.UpdatePropertyChild(value, ref this.code); }
+            get => this.code;
+            set => this.UpdatePropertyChild(value, ref this.code);
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Thoroughfare Thoroughfare
         {
-            get { return this.thoroughfare; }
-            set { this.UpdatePropertyChild(value, ref this.thoroughfare); }
+            get => this.thoroughfare;
+            set => this.UpdatePropertyChild(value, ref this.thoroughfare);
         }
     }
 }

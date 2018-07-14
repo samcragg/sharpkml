@@ -24,8 +24,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Country Country
         {
-            get { return this.country; }
-            set { this.UpdatePropertyChild(value, ref this.country); }
+            get => this.country;
+            set => this.UpdatePropertyChild(value, ref this.country);
         }
     }
 }

@@ -13,19 +13,15 @@ namespace SharpKml.Base
     /// </summary>
     internal class KmlFormatter : ICustomFormatter, IFormatProvider
     {
-        private static readonly KmlFormatter SingleInstance = new KmlFormatter();
-
         private KmlFormatter()
         {
+            // Prevent others from creating us
         }
 
         /// <summary>
         /// Gets the default instance of the KmlFormatter class.
         /// </summary>
-        public static KmlFormatter Instance
-        {
-            get { return SingleInstance; }
-        }
+        public static KmlFormatter Instance { get; } = new KmlFormatter();
 
         /// <summary>
         /// Converts the value of a specified object to an equivalent string
@@ -123,8 +119,7 @@ namespace SharpKml.Base
 
             if (result == null)
             {
-                var formattableArg = arg as IFormattable;
-                if (formattableArg != null)
+                if (arg is IFormattable formattableArg)
                 {
                     result = formattableArg.ToString(format, formatProvider);
                 }

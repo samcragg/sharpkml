@@ -19,6 +19,9 @@ namespace SharpKml.Dom.Atom
     [KmlElement("feed", KmlNamespaces.AtomNamespace)]
     public sealed class Feed : Element
     {
+        /// <summary>
+        /// Initializes static members of the <see cref="Feed"/> class.
+        /// </summary>
         static Feed()
         {
             RegisterValidChild<Feed, Category>();
@@ -27,27 +30,14 @@ namespace SharpKml.Dom.Atom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Feed"/> class.
-        /// </summary>
-        public Feed()
-        {
-        }
-
-        /// <summary>
         /// Gets the categories associated with this instance.
         /// </summary>
-        public IEnumerable<Category> Categories
-        {
-            get { return this.Children.OfType<Category>(); }
-        }
+        public IEnumerable<Category> Categories => this.Children.OfType<Category>();
 
         /// <summary>
         /// Gets the entries associated with this instance.
         /// </summary>
-        public IEnumerable<Entry> Entries
-        {
-            get { return this.Children.OfType<Entry>(); }
-        }
+        public IEnumerable<Entry> Entries => this.Children.OfType<Entry>();
 
         /// <summary>
         /// Gets or sets a permanent, universally unique identifier for this instance.
@@ -58,10 +48,7 @@ namespace SharpKml.Dom.Atom
         /// <summary>
         /// Gets the links associated with this instance.
         /// </summary>
-        public IEnumerable<Link> Links
-        {
-            get { return this.Children.OfType<Link>(); }
-        }
+        public IEnumerable<Link> Links => this.Children.OfType<Link>();
 
         /// <summary>
         /// Gets or sets a human-readable title for this instance.

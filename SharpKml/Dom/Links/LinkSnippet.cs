@@ -37,10 +37,7 @@ namespace SharpKml.Dom
         /// <remarks>The value may contain well formed HTML.</remarks>
         public string Text
         {
-            get
-            {
-                return this.InnerText;
-            }
+            get => this.InnerText;
             set
             {
                 this.ClearInnerText();

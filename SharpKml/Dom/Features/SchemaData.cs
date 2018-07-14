@@ -28,11 +28,10 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SchemaData"/> class.
+        /// Gets a collection of value arrays.
+        /// [Google Extension]
         /// </summary>
-        public SchemaData()
-        {
-        }
+        public IEnumerable<GX.SimpleArrayData> GXSimpleArray => this.Children.OfType<GX.SimpleArrayData>();
 
         /// <summary>
         /// Gets or sets a reference to a <see cref="KmlObject.Id"/> belonging
@@ -46,32 +45,7 @@ namespace SharpKml.Dom
         public Uri SchemaUrl { get; set; }
 
         /// <summary>Gets a collection of user-defined fields.</summary>
-        public IEnumerable<SimpleData> SimpleData
-        {
-            get { return this.Children.OfType<SimpleData>(); }
-        }
-
-        /// <summary>
-        /// Gets a collection of value arrays.
-        /// [Google Extension]
-        /// </summary>
-        public IEnumerable<GX.SimpleArrayData> GXSimpleArray
-        {
-            get { return this.Children.OfType<GX.SimpleArrayData>(); }
-        }
-
-        /// <summary>
-        /// Adds the specified <see cref="SimpleData"/> to this instance.
-        /// </summary>
-        /// <param name="data">The <c>SimpleData</c> to add to this instance.</param>
-        /// <exception cref="ArgumentNullException">data is null.</exception>
-        /// <exception cref="InvalidOperationException">
-        /// data belongs to another <see cref="Element"/>.
-        /// </exception>
-        public void AddData(SimpleData data)
-        {
-            this.AddChild(data);
-        }
+        public IEnumerable<SimpleData> SimpleData => this.Children.OfType<SimpleData>();
 
         /// <summary>
         /// Adds the specified <see cref="GX.SimpleArrayData"/> to this instance.
@@ -85,6 +59,19 @@ namespace SharpKml.Dom
         public void AddArray(GX.SimpleArrayData array)
         {
             this.AddChild(array);
+        }
+
+        /// <summary>
+        /// Adds the specified <see cref="SimpleData"/> to this instance.
+        /// </summary>
+        /// <param name="data">The <c>SimpleData</c> to add to this instance.</param>
+        /// <exception cref="ArgumentNullException">data is null.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// data belongs to another <see cref="Element"/>.
+        /// </exception>
+        public void AddData(SimpleData data)
+        {
+            this.AddChild(data);
         }
     }
 }

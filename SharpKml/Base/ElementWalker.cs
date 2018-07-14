@@ -7,6 +7,7 @@ namespace SharpKml.Base
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using SharpKml.Dom;
 
     /// <summary>
@@ -34,23 +35,23 @@ namespace SharpKml.Base
         // iterative approach is not necessary so recursion is used for clarity.
         private static IEnumerable<Element> WalkElement(Element element)
         {
-            ICustomElement customElement = element as ICustomElement;
+            var customElement = element as ICustomElement;
             if ((customElement == null) || customElement.ProcessChildren)
             {
                 yield return element; // Is a valid Element
 
                 // Explore the children
-                foreach (var child in element.Children)
+                foreach (Element child in element.Children)
                 {
-                    foreach (var e in WalkElement(child))
+                    foreach (Element e in WalkElement(child))
                     {
                         yield return e;
                     }
                 }
 
                 // Explore the properties
-                TypeBrowser browser = TypeBrowser.Create(element.GetType());
-                foreach (var property in browser.Elements)
+                var browser = TypeBrowser.Create(element.GetType());
+                foreach (Tuple<PropertyInfo, KmlElementAttribute> property in browser.Elements)
                 {
                     // All properties with their ElementName set to null will be Elements
                     // Check here to avoid the GetValue the property is not an Element.
@@ -59,7 +60,7 @@ namespace SharpKml.Base
                         object value = property.Item1.GetValue(element, null);
                         if (value != null)
                         {
-                            foreach (var e in WalkElement((Element)value))
+                            foreach (Element e in WalkElement((Element)value))
                             {
                                 yield return e;
                             }

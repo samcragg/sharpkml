@@ -15,9 +15,10 @@ namespace SharpKml.Base
     /// </summary>
     public static class KmlFactory
     {
+        private static readonly Dictionary<Type, XmlComponent> Names = new Dictionary<Type, XmlComponent>();
+
         // We need two so we can do reverse lookups
         private static readonly Dictionary<XmlComponent, Type> Types = new Dictionary<XmlComponent, Type>();
-        private static readonly Dictionary<Type, XmlComponent> Names = new Dictionary<Type, XmlComponent>();
 
         /// <summary>
         /// Initializes static members of the <see cref="KmlFactory"/> class.
@@ -47,8 +48,7 @@ namespace SharpKml.Base
         /// </exception>
         public static Element CreateElement(XmlComponent xml)
         {
-            Type type;
-            if (Types.TryGetValue(xml, out type))
+            if (Types.TryGetValue(xml, out Type type))
             {
                 return (Element)Activator.CreateInstance(type);
             }
@@ -67,10 +67,8 @@ namespace SharpKml.Base
         /// <exception cref="ArgumentNullException">type is null.</exception>
         public static XmlComponent FindType(Type type)
         {
-            XmlComponent value;
-
-            // Will throw is type is null.
-            if (Names.TryGetValue(type, out value))
+            // Will throw if type is null.
+            if (Names.TryGetValue(type, out XmlComponent value))
             {
                 return value;
             }
@@ -103,23 +101,6 @@ namespace SharpKml.Base
             RegisterType(xml.Clone(), typeof(T)); // Don't store what the user passed us
         }
 
-        // Private helper function to ensure both dictionaries are updated.
-        private static void RegisterType(XmlComponent xml, Type type)
-        {
-            if (Names.ContainsKey(type))
-            {
-                throw new ArgumentException("Class type has already been registered.");
-            }
-
-            if (Types.ContainsKey(xml))
-            {
-                throw new ArgumentException("Another type has been registered with the specified XML qualified name.");
-            }
-
-            Names.Add(type, xml);
-            Types.Add(xml, type);
-        }
-
         private static void RegisterAssembly(Assembly assembly)
         {
             foreach (Type type in assembly.ExportedTypes)
@@ -135,6 +116,23 @@ namespace SharpKml.Base
                     }
                 }
             }
+        }
+
+        // Private helper function to ensure both dictionaries are updated.
+        private static void RegisterType(XmlComponent xml, Type type)
+        {
+            if (Names.ContainsKey(type))
+            {
+                throw new ArgumentException("Class type has already been registered.");
+            }
+
+            if (Types.ContainsKey(xml))
+            {
+                throw new ArgumentException("Another type has been registered with the specified XML qualified name.");
+            }
+
+            Names.Add(type, xml);
+            Types.Add(xml, type);
         }
     }
 }

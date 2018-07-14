@@ -37,8 +37,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public LatLonAltBox LatLonAltBox
         {
-            get { return this.box; }
-            set { this.UpdatePropertyChild(value, ref this.box); }
+            get => this.box;
+            set => this.UpdatePropertyChild(value, ref this.box);
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public Lod LevelOfDetail
         {
-            get { return this.lod; }
-            set { this.UpdatePropertyChild(value, ref this.lod); }
+            get => this.lod;
+            set => this.UpdatePropertyChild(value, ref this.lod);
         }
     }
 }

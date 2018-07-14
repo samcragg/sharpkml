@@ -26,8 +26,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Locality Locality
         {
-            get { return this.locality; }
-            set { this.UpdatePropertyChild(value, ref this.locality); }
+            get => this.locality;
+            set => this.UpdatePropertyChild(value, ref this.locality);
         }
 
         /// <summary>

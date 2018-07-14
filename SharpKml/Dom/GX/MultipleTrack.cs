@@ -25,17 +25,16 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultipleTrack"/> class.
-        /// </summary>
-        public MultipleTrack()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
         /// </summary>
         [KmlElement("altitudeMode")]
         public Dom.AltitudeMode? AltitudeMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets extended altitude mode information.
+        /// </summary>
+        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace)]
+        public AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets or sets whether to interpolate missing values between the end
@@ -45,18 +44,9 @@ namespace SharpKml.Dom.GX
         public bool? Interpolate { get; set; }
 
         /// <summary>
-        /// Gets or sets extended altitude mode information.
-        /// </summary>
-        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace)]
-        public GX.AltitudeMode? GXAltitudeMode { get; set; }
-
-        /// <summary>
         /// Gets the <see cref="Track"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<Track> Tracks
-        {
-            get { return this.Children.OfType<Track>(); }
-        }
+        public IEnumerable<Track> Tracks => this.Children.OfType<Track>();
 
         /// <summary>
         /// Adds the specified <see cref="Track"/> to this instance.

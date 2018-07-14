@@ -40,8 +40,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public LatLonBox Bounds
         {
-            get { return this.box; }
-            set { this.UpdatePropertyChild(value, ref this.box); }
+            get => this.box;
+            set => this.UpdatePropertyChild(value, ref this.box);
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace SharpKml.Dom
         [KmlElement(null, KmlNamespaces.GX22Namespace, 5)]
         public GX.LatLonQuad GXLatLonQuad
         {
-            get { return this.quad; }
-            set { this.UpdatePropertyChild(value, ref this.quad); }
+            get => this.quad;
+            set => this.UpdatePropertyChild(value, ref this.quad);
         }
     }
 }

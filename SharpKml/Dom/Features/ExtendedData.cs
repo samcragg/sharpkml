@@ -33,35 +33,19 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtendedData"/> class.
-        /// </summary>
-        public ExtendedData()
-        {
-        }
-
-        /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>
-        public IEnumerable<Data> Data
-        {
-            get { return this.Children.OfType<Data>(); }
-        }
+        public IEnumerable<Data> Data => this.Children.OfType<Data>();
 
         /// <summary>
         /// Gets a collection of untyped custom data elements.
         /// </summary>
-        public IEnumerable<UnknownElement> OtherData
-        {
-            get { return this.Orphans.OfType<UnknownElement>(); }
-        }
+        public IEnumerable<UnknownElement> OtherData => this.Orphans.OfType<UnknownElement>();
 
         /// <summary>
         /// Gets a collection of <see cref="SchemaData"/> objects.
         /// </summary>
-        public IEnumerable<SchemaData> SchemaData
-        {
-            get { return this.Children.OfType<SchemaData>(); }
-        }
+        public IEnumerable<SchemaData> SchemaData => this.Children.OfType<SchemaData>();
 
         /// <summary>
         /// Adds the specified <see cref="Data"/> to this instance.

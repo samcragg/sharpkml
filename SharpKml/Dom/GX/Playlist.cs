@@ -25,19 +25,9 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Playlist"/> class.
-        /// </summary>
-        public Playlist()
-        {
-        }
-
-        /// <summary>
         /// Gets the <see cref="TourPrimitive"/>s stored by this instance.
         /// </summary>
-        public IEnumerable<TourPrimitive> Values
-        {
-            get { return this.Children.OfType<TourPrimitive>(); }
-        }
+        public IEnumerable<TourPrimitive> Values => this.Children.OfType<TourPrimitive>();
 
         /// <summary>
         /// Adds the specified <see cref="TourPrimitive"/> to this instance.

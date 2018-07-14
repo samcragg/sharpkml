@@ -16,8 +16,6 @@ namespace SharpKml.Dom
     /// </summary>
     public sealed class UnknownElement : Element, ICustomElement
     {
-        private XmlComponent data;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownElement"/> class.
         /// </summary>
@@ -30,59 +28,38 @@ namespace SharpKml.Dom
                 throw new ArgumentNullException("data");
             }
 
-            this.data = data.Clone(); // Don't store the data from the user but store a copy instead.
+            this.UnknownData = data.Clone(); // Don't store the data from the user but store a copy instead.
         }
 
         /// <summary>
         /// Gets the attributes of the element.
         /// </summary>
-        public new IEnumerable<XmlComponent> Attributes
-        {
-            get { return base.Attributes; }
-        }
+        public new IEnumerable<XmlComponent> Attributes => base.Attributes;
 
         /// <summary>
         /// Gets the child elements.
         /// </summary>
-        public IEnumerable<UnknownElement> Elements
-        {
-            get
-            {
-                return this.Children.OfType<UnknownElement>();
-            }
-        }
+        public IEnumerable<UnknownElement> Elements => this.Children.OfType<UnknownElement>();
 
         /// <summary>
         /// Gets all the XML content, including markup, in the current element.
         /// </summary>
-        public string InnerXml
-        {
-            get { return this.InnerText; }
-        }
+        public string InnerXml => this.InnerText;
 
         /// <summary>
         /// Gets the name of the unknown element.
         /// </summary>
-        public string Name
-        {
-            get { return this.data.Name; }
-        }
+        public string Name => this.UnknownData.Name;
 
         /// <summary>
         /// Gets the information of the unrecognized element found during parsing.
         /// </summary>
-        public XmlComponent UnknownData
-        {
-            get { return this.data; }
-        }
+        public XmlComponent UnknownData { get; }
 
         /// <summary>
         /// Gets a value indicating whether to process the children of the Element.
         /// </summary>
-        bool ICustomElement.ProcessChildren
-        {
-            get { return true; }
-        }
+        bool ICustomElement.ProcessChildren => true;
 
         /// <summary>
         /// Writes the start of an XML element.
@@ -90,7 +67,7 @@ namespace SharpKml.Dom
         /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
-            writer.WriteStartElement(this.data.Prefix, this.data.Name, this.data.NamespaceUri);
+            writer.WriteStartElement(this.UnknownData.Prefix, this.UnknownData.Name, this.UnknownData.NamespaceUri);
         }
     }
 }

@@ -25,7 +25,6 @@ namespace SharpKml.Engine
         // however, the default file for reading from an archive is the first
         // file in the table of contents that ends with ".kml".
         private const string DefaultKmlFilename = "doc.kml";
-        private static Encoding defaultEncoding = Encoding.UTF8;
 
         // The ZipArchive makes changes to the stream when we dispose it but
         // we need access to the stream to copy it to another stream etc.
@@ -47,11 +46,7 @@ namespace SharpKml.Engine
         /// Gets or sets the default string encoding to use when extracting
         /// the Kml from a Kmz archive. Defaults to UTF8.
         /// </summary>
-        public static Encoding DefaultEncoding
-        {
-            get { return defaultEncoding; }
-            set { defaultEncoding = value; }
-        }
+        public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
 
         /// <summary>
         /// Gets the filenames for the entries contained in the archive.
@@ -279,8 +274,8 @@ namespace SharpKml.Engine
 
             if (kml != null)
             {
-                using (var stream = kml.Open())
-                using (var reader = new StreamReader(stream, defaultEncoding))
+                using (Stream stream = kml.Open())
+                using (var reader = new StreamReader(stream, DefaultEncoding))
                 {
                     return reader.ReadToEnd();
                 }
@@ -389,7 +384,7 @@ namespace SharpKml.Engine
         private byte[] ExtractResource(ZipArchiveEntry entry)
         {
             using (var ms = new MemoryStream())
-            using (var stream = entry.Open())
+            using (Stream stream = entry.Open())
             {
                 stream.CopyTo(ms);
                 return ms.ToArray();

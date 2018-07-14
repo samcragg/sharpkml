@@ -36,13 +36,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Update"/> class.
-        /// </summary>
-        public Update()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the URL for the target KML resource that has been
         /// previously retrieved via <see cref="NetworkLink"/>.
         /// </summary>
@@ -53,10 +46,7 @@ namespace SharpKml.Dom
         /// Gets the update elements (<see cref="ChangeCollection"/>, <see cref="CreateCollection"/>
         /// or <see cref="DeleteCollection"/>) associated with this instance.
         /// </summary>
-        public IEnumerable<Element> Updates
-        {
-            get { return this.Children; }
-        }
+        public IEnumerable<Element> Updates => this.Children;
 
         /// <summary>
         /// Adds the specified <see cref="ChangeCollection"/> to <see cref="Updates"/>.

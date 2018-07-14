@@ -29,7 +29,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("geometry");
             }
 
-            BoundingBox box = new BoundingBox();
+            var box = new BoundingBox();
             ExpandBox(geometry, box);
 
             return box.IsEmpty ? null : box;
@@ -42,10 +42,9 @@ namespace SharpKml.Engine
         /// <param name="box">The BoundingBox to expand.</param>
         internal static void ExpandBox(Geometry geometry, BoundingBox box)
         {
-            MultipleGeometry multiple = geometry as MultipleGeometry;
-            if (multiple != null)
+            if (geometry is MultipleGeometry multiple)
             {
-                foreach (var geo in multiple.Geometry)
+                foreach (Geometry geo in multiple.Geometry)
                 {
                     ExpandBox(geo, box);
                 }
@@ -66,7 +65,7 @@ namespace SharpKml.Engine
         {
             if (bounds != null)
             {
-                foreach (var coord in bounds.Coordinates)
+                foreach (Base.Vector coord in bounds.Coordinates)
                 {
                     box.Expand(coord.Latitude, coord.Longitude);
                 }

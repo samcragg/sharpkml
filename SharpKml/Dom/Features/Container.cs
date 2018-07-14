@@ -29,10 +29,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the <see cref="Feature"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<Feature> Features
-        {
-            get { return this.Children.OfType<Feature>(); }
-        }
+        public IEnumerable<Feature> Features => this.Children.OfType<Feature>();
 
         /// <summary>
         /// Adds the specified <see cref="Feature"/> to this instance.

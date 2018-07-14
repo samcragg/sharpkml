@@ -22,7 +22,7 @@ namespace SharpKml.Base
     /// </remarks>
     internal class XmlExtractor
     {
-        private XmlReader reader;
+        private readonly XmlReader reader;
         private StringBuilder xml = new StringBuilder();
 
         private XmlExtractor(XmlReader reader)
@@ -40,14 +40,14 @@ namespace SharpKml.Base
         /// </returns>
         public static string FlattenXml(XmlReader reader)
         {
-            XmlExtractor instance = new XmlExtractor(reader);
+            var instance = new XmlExtractor(reader);
             instance.ProcessChild();
             return instance.xml.ToString();
         }
 
         private string GetAttributes()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             while (this.reader.MoveToNextAttribute())
             {
                 sb.AppendFormat(" {0}=\"{1}\"", this.reader.Name, this.reader.Value);
@@ -76,8 +76,10 @@ namespace SharpKml.Base
                         }
 
                         break;
+
                     case XmlNodeType.EndElement:
                         return;
+
                     case XmlNodeType.CDATA: // Fall through
                     case XmlNodeType.Text:
                         this.xml.Append(this.reader.Value);

@@ -34,8 +34,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public AbstractView View
         {
-            get { return this.view; }
-            set { this.UpdatePropertyChild(value, ref this.view); }
+            get => this.view;
+            set => this.UpdatePropertyChild(value, ref this.view);
         }
     }
 }

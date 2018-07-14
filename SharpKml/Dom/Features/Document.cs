@@ -26,19 +26,9 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Document"/> class.
-        /// </summary>
-        public Document()
-        {
-        }
-
-        /// <summary>
         /// Gets a collection of <see cref="Schema"/> contained by this instance.
         /// </summary>
-        public IEnumerable<Schema> Schemas
-        {
-            get { return this.Children.OfType<Schema>(); }
-        }
+        public IEnumerable<Schema> Schemas => this.Children.OfType<Schema>();
 
         /// <summary>
         /// Adds the specified <see cref="Schema"/> to this instance.

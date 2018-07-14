@@ -32,19 +32,9 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceMap"/> class.
-        /// </summary>
-        public ResourceMap()
-        {
-        }
-
-        /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>
-        public IEnumerable<Alias> Aliases
-        {
-            get { return this.Children.OfType<Alias>(); }
-        }
+        public IEnumerable<Alias> Aliases => this.Children.OfType<Alias>();
 
         /// <summary>
         /// Adds the specified <see cref="Alias"/> to this instance.

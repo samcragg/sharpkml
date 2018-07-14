@@ -25,6 +25,6 @@ namespace SharpKml.Base
         /// <summary>
         /// Gets the name of the XML attribute.
         /// </summary>
-        public string AttributeName { get; private set; }
+        public string AttributeName { get; }
     }
 }

@@ -25,8 +25,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public Locality Locality
         {
-            get { return this.locality; }
-            set { this.UpdatePropertyChild(value, ref this.locality); }
+            get => this.locality;
+            set => this.UpdatePropertyChild(value, ref this.locality);
         }
 
         /// <summary>
@@ -42,8 +42,8 @@ namespace SharpKml.Dom.Xal
         [KmlElement(null)]
         public SubAdministrativeArea SubAdministrativeArea
         {
-            get { return this.subArea; }
-            set { this.UpdatePropertyChild(value, ref this.subArea); }
+            get => this.subArea;
+            set => this.UpdatePropertyChild(value, ref this.subArea);
         }
     }
 }

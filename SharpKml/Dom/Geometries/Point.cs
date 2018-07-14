@@ -102,8 +102,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         internal CoordinateCollection Coordinates
         {
-            get { return this.coords; }
-            set { this.UpdatePropertyChild(value, ref this.coords); }
+            get => this.coords;
+            set => this.UpdatePropertyChild(value, ref this.coords);
         }
     }
 }

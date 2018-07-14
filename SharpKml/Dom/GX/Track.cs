@@ -37,40 +37,15 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Track"/> class.
-        /// </summary>
-        public Track()
-        {
-        }
-
-        /// <summary>
-        /// Gets or sets how the altitude value should be interpreted.
-        /// </summary>
-        [KmlElement("altitudeMode")]
-        public Dom.AltitudeMode? AltitudeMode { get; set; }
-
-        /// <summary>
         /// Gets a collection of <see cref="Angle"/> containing the heading,
         /// tilt and roll for the icons and models.
         /// </summary>
-        public IEnumerable<Angle> Angles
-        {
-            get
-            {
-                return from e in this.Children.OfType<AnglesElement>()
-                       select e.Value;
-            }
-        }
+        public IEnumerable<Angle> Angles =>
+            this.Children.OfType<AnglesElement>().Select(e => e.Value);
 
         /// <summary>Gets a collection of coordinates for the Track.</summary>
-        public IEnumerable<Vector> Coordinates
-        {
-            get
-            {
-                return from e in this.Children.OfType<CoordElement>()
-                       select e.Value;
-            }
-        }
+        public IEnumerable<Vector> Coordinates =>
+            this.Children.OfType<CoordElement>().Select(e => e.Value);
 
         /// <summary>
         /// Gets or sets custom data elements defined in a <see cref="Schema"/>
@@ -79,15 +54,15 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public ExtendedData ExtendedData
         {
-            get { return this.data; }
-            set { this.UpdatePropertyChild(value, ref this.data); }
+            get => this.data;
+            set => this.UpdatePropertyChild(value, ref this.data);
         }
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace)]
-        public GX.AltitudeMode? GXAltitudeMode { get; set; }
+        public AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Model"/> used to indicate the current
@@ -96,21 +71,21 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public Model Model
         {
-            get { return this.model; }
-            set { this.UpdatePropertyChild(value, ref this.model); }
+            get => this.model;
+            set => this.UpdatePropertyChild(value, ref this.model);
         }
 
         /// <summary>
         /// Gets a collection of time values that corresponds to a position.
         /// </summary>
-        public IEnumerable<DateTime> When
-        {
-            get
-            {
-                return from e in this.Children.OfType<WhenElement>()
-                       select e.Value;
-            }
-        }
+        public IEnumerable<DateTime> When =>
+            this.Children.OfType<WhenElement>().Select(e => e.Value);
+
+        /// <summary>
+        /// Gets or sets how the altitude value should be interpreted.
+        /// </summary>
+        [KmlElement("altitudeMode")]
+        public Dom.AltitudeMode? AltitudeMode { get; set; }
 
         /// <summary>
         /// Adds the specified value to <see cref="Angles"/>.</summary>
@@ -155,8 +130,7 @@ namespace SharpKml.Dom.GX
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
-            UnknownElement unknown = orphan as UnknownElement;
-            if (unknown != null)
+            if (orphan is UnknownElement unknown)
             {
                 Element child = ConvertUnknown(unknown);
                 if (child != null)
@@ -182,112 +156,17 @@ namespace SharpKml.Dom.GX
             }
             else if (WhenComponent.Equals(data))
             {
-                DateTime value;
-                if (DateTime.TryParse(unknown.InnerText, CultureInfo.InvariantCulture, DateTimeStyles.None, out value))
+                if (DateTime.TryParse(
+                        unknown.InnerText,
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out DateTime value))
                 {
                     return new WhenElement(value);
                 }
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Used to correctly serialize a 3D vector.
-        /// </summary>
-        internal abstract class VectorElement : Element, ICustomElement
-        {
-            private readonly double x;
-            private readonly double y;
-            private readonly double z;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="VectorElement"/> class.
-            /// </summary>
-            /// <param name="value">The value to serialize.</param>
-            public VectorElement(string value)
-            {
-                // The vector is stored with ' ' as the separator.
-                string[] values = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                this.x = GetValue(values, 0);
-                this.y = GetValue(values, 1);
-                this.z = GetValue(values, 2);
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="VectorElement"/> class.
-            /// </summary>
-            /// <param name="x">The first value.</param>
-            /// <param name="y">The second value.</param>
-            /// <param name="z">The third value.</param>
-            protected VectorElement(double x, double y, double z)
-            {
-                this.x = x;
-                this.y = y;
-                this.z = z;
-            }
-
-            /// <summary>
-            /// Gets a value indicating whether to process the children of the Element.
-            /// </summary>
-            public bool ProcessChildren
-            {
-                get { return false; }
-            }
-
-            /// <summary>
-            /// Gets the name of the XML element.
-            /// </summary>
-            protected abstract string Name { get; }
-
-            /// <summary>
-            /// Gets the first value of the vector.
-            /// </summary>
-            protected double X
-            {
-                get { return this.x; }
-            }
-
-            /// <summary>
-            /// Gets the second value of the vector.
-            /// </summary>
-            protected double Y
-            {
-                get { return this.y; }
-            }
-
-            /// <summary>
-            /// Gets the third value of the vector.
-            /// </summary>
-            protected double Z
-            {
-                get { return this.z; }
-            }
-
-            /// <summary>
-            /// Writes the start of an XML element.
-            /// </summary>
-            /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
-            public void CreateStartElement(XmlWriter writer)
-            {
-                string value = string.Format(KmlFormatter.Instance, "{0} {1} {2}", this.x, this.y, this.z);
-                writer.WriteElementString(KmlNamespaces.GX22Prefix, this.Name, KmlNamespaces.GX22Namespace, value);
-            }
-
-            private static double GetValue(string[] array, int index)
-            {
-                if (index < array.Length)
-                {
-                    double value;
-                    if (double.TryParse(array[index], NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-                    {
-                        return value;
-                    }
-                }
-
-                return default(double);
-            }
         }
 
         /// <summary>
@@ -316,18 +195,12 @@ namespace SharpKml.Dom.GX
             /// <summary>
             /// Gets an Angle that represents the value of this instance.
             /// </summary>
-            public Angle Value
-            {
-                get { return new Angle(this.Y, this.X, this.Z); }
-            }
+            public Angle Value => new Angle(this.Y, this.X, this.Z);
 
             /// <summary>
             /// Gets the name of the XML element.
             /// </summary>
-            protected override string Name
-            {
-                get { return "angles"; }
-            }
+            protected override string Name => "angles";
         }
 
         /// <summary>
@@ -356,17 +229,96 @@ namespace SharpKml.Dom.GX
             /// <summary>
             /// Gets a Vector that represents the value of this instance.
             /// </summary>
-            public Vector Value
-            {
-                get { return new Vector(this.Y, this.X, this.Z); }
-            }
+            public Vector Value => new Vector(this.Y, this.X, this.Z);
 
             /// <summary>
             /// Gets the name of the XML element.
             /// </summary>
-            protected override string Name
+            protected override string Name => "coord";
+        }
+
+        /// <summary>
+        /// Used to correctly serialize a 3D vector.
+        /// </summary>
+        internal abstract class VectorElement : Element, ICustomElement
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="VectorElement"/> class.
+            /// </summary>
+            /// <param name="value">The value to serialize.</param>
+            public VectorElement(string value)
             {
-                get { return "coord"; }
+                // The vector is stored with ' ' as the separator.
+                string[] values = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                this.X = GetValue(values, 0);
+                this.Y = GetValue(values, 1);
+                this.Z = GetValue(values, 2);
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="VectorElement"/> class.
+            /// </summary>
+            /// <param name="x">The first value.</param>
+            /// <param name="y">The second value.</param>
+            /// <param name="z">The third value.</param>
+            protected VectorElement(double x, double y, double z)
+            {
+                this.X = x;
+                this.Y = y;
+                this.Z = z;
+            }
+
+            /// <summary>
+            /// Gets a value indicating whether to process the children of the Element.
+            /// </summary>
+            public bool ProcessChildren => false;
+
+            /// <summary>
+            /// Gets the name of the XML element.
+            /// </summary>
+            protected abstract string Name { get; }
+
+            /// <summary>
+            /// Gets the first value of the vector.
+            /// </summary>
+            protected double X { get; }
+
+            /// <summary>
+            /// Gets the second value of the vector.
+            /// </summary>
+            protected double Y { get; }
+
+            /// <summary>
+            /// Gets the third value of the vector.
+            /// </summary>
+            protected double Z { get; }
+
+            /// <summary>
+            /// Writes the start of an XML element.
+            /// </summary>
+            /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
+            public void CreateStartElement(XmlWriter writer)
+            {
+                string value = string.Format(KmlFormatter.Instance, "{0} {1} {2}", this.X, this.Y, this.Z);
+                writer.WriteElementString(KmlNamespaces.GX22Prefix, this.Name, KmlNamespaces.GX22Namespace, value);
+            }
+
+            private static double GetValue(string[] array, int index)
+            {
+                if (index < array.Length)
+                {
+                    if (double.TryParse(
+                            array[index],
+                            NumberStyles.Float,
+                            CultureInfo.InvariantCulture,
+                            out double value))
+                    {
+                        return value;
+                    }
+                }
+
+                return default;
             }
         }
 
@@ -375,8 +327,6 @@ namespace SharpKml.Dom.GX
         /// </summary>
         internal class WhenElement : Element, ICustomElement
         {
-            private readonly DateTime value;
-
             /// <summary>
             /// Initializes a new instance of the <see cref="WhenElement"/> class.
             /// </summary>
@@ -385,24 +335,18 @@ namespace SharpKml.Dom.GX
             /// </param>
             public WhenElement(DateTime value)
             {
-                this.value = value;
+                this.Value = value;
             }
 
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
             /// </summary>
-            public bool ProcessChildren
-            {
-                get { return false; }
-            }
+            public bool ProcessChildren => false;
 
             /// <summary>
             /// Gets the value passed into the constructor.
             /// </summary>
-            public DateTime Value
-            {
-                get { return this.value; }
-            }
+            public DateTime Value { get; }
 
             /// <summary>
             /// Writes the start of an XML element.
@@ -410,7 +354,7 @@ namespace SharpKml.Dom.GX
             /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
             public void CreateStartElement(XmlWriter writer)
             {
-                string elementValue = KmlFormatter.Instance.Format(null, this.value, null);
+                string elementValue = KmlFormatter.Instance.Format(null, this.Value, null);
                 writer.WriteElementString("when", KmlNamespaces.Kml22Namespace, elementValue);
             }
         }

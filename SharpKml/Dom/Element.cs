@@ -10,8 +10,6 @@ namespace SharpKml.Dom
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
-    using System.Xml;
     using SharpKml.Base;
 
     /// <summary>
@@ -23,10 +21,8 @@ namespace SharpKml.Dom
 
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
         private readonly List<Element> children = new List<Element>();
-        private readonly List<Element> orphans = new List<Element>();
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
-
-        private string text = string.Empty;
+        private readonly List<Element> orphans = new List<Element>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Element"/> class.
@@ -68,7 +64,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the inner text of the XML element.
         /// </summary>
-        protected internal string InnerText => this.text;
+        protected internal string InnerText { get; private set; } = string.Empty;
 
         /// <summary>
         /// Stores unknown attributes found during parsing for later serialization.
@@ -109,9 +105,9 @@ namespace SharpKml.Dom
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
 
-            Dictionary<TypeInfo, int> childTypes;
-
-            if (Element.ChildTypes.TryGetValue(this.GetType().GetTypeInfo(), out childTypes))
+            if (Element.ChildTypes.TryGetValue(
+                    this.GetType().GetTypeInfo(),
+                    out Dictionary<TypeInfo, int> childTypes))
             {
                 // Check if this is a valid child. We use IsAssignableFrom to enable
                 // derived classes to be added as well e.g. if Feature is registered
@@ -149,7 +145,17 @@ namespace SharpKml.Dom
         /// </exception>
         protected internal virtual void AddInnerText(string text)
         {
-            this.text += text;
+            this.InnerText += text;
+        }
+
+        /// <summary>
+        /// Adds an XML namespace to the element.
+        /// </summary>
+        /// <param name="prefix">The namespace prefix</param>
+        /// <param name="uri">The namespace URI</param>
+        protected internal void AddNamespace(string prefix, string uri)
+        {
+            this.namespaces[prefix] = uri;
         }
 
         /// <summary>
@@ -163,6 +169,20 @@ namespace SharpKml.Dom
                 orphan.Parent = this;
                 this.orphans.Add(orphan);
             }
+        }
+
+        /// <summary>
+        /// Returns namespaces declared for the current Element (excluding the
+        /// default XML namespace).
+        /// </summary>
+        /// <returns>
+        /// A IDictionary containing the declared namespaces where Key is
+        /// namespace prefix and Value namespace URI.
+        /// </returns>
+        protected internal IDictionary<string, string> GetNamespaces()
+        {
+            return this.namespaces.Where(kvp => kvp.Key != "xml")
+                .ToDictionary(k => k.Key, v => v.Value);
         }
 
         /// <summary>
@@ -192,26 +212,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Add an xml namespace to the XML element.
-        /// </summary>
-        /// <param name="prefix">namespace prefix</param>
-        /// <param name="uri">namespace uri</param>
-        protected internal void AddNamespace(string prefix, string uri)
-        {
-            this.namespaces[prefix] = uri;
-        }
-
-        /// <summary>
-        /// Returns namespaces declared for the current Element (excluding the default xml namespace).
-        /// </summary>
-        /// <returns>A IDictionary containing the declared namespaces where Key is namespace prefix and Value namespace uri.</returns>
-        protected internal IDictionary<string, string> GetNamespaces()
-        {
-            return this.namespaces.Where(kvp => kvp.Key != "xml")
-                .ToDictionary(k => k.Key, v => v.Value);
-        }
-
-        /// <summary>
         /// Registers an element type as a valid child of this instance.
         /// </summary>
         /// <typeparam name="U">Parent type deriving from Element.</typeparam>
@@ -220,11 +220,8 @@ namespace SharpKml.Dom
             where U : Element
             where T : Element
         {
-            var parentTypeInfo = typeof(U).GetType().GetTypeInfo();
-
-            Dictionary<TypeInfo, int> childTypes;
-
-            if (!ChildTypes.TryGetValue(parentTypeInfo, out childTypes))
+            TypeInfo parentTypeInfo = typeof(U).GetType().GetTypeInfo();
+            if (!ChildTypes.TryGetValue(parentTypeInfo, out Dictionary<TypeInfo, int> childTypes))
             {
                 childTypes = new Dictionary<TypeInfo, int>();
                 ChildTypes[parentTypeInfo] = childTypes;
@@ -238,7 +235,7 @@ namespace SharpKml.Dom
         /// </summary>
         protected void ClearInnerText()
         {
-            this.text = string.Empty;
+            this.InnerText = string.Empty;
         }
 
         /// <summary>
@@ -270,7 +267,7 @@ namespace SharpKml.Dom
         /// </summary>
         private class ChildTypeComparer : IComparer<TypeInfo>
         {
-            private Element owner;
+            private readonly Element owner;
 
             public ChildTypeComparer(Element owner)
             {

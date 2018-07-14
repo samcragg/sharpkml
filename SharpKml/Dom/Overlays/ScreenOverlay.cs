@@ -36,8 +36,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public OverlayVector Origin
         {
-            get { return this.overlay; }
-            set { this.UpdatePropertyChild(value, ref this.overlay); }
+            get => this.overlay;
+            set => this.UpdatePropertyChild(value, ref this.overlay);
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public RotationVector RotationOrigin
         {
-            get { return this.rotation; }
-            set { this.UpdatePropertyChild(value, ref this.rotation); }
+            get => this.rotation;
+            set => this.UpdatePropertyChild(value, ref this.rotation);
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public ScreenVector Screen
         {
-            get { return this.screen; }
-            set { this.UpdatePropertyChild(value, ref this.screen); }
+            get => this.screen;
+            set => this.UpdatePropertyChild(value, ref this.screen);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public SizeVector Size
         {
-            get { return this.size; }
-            set { this.UpdatePropertyChild(value, ref this.size); }
+            get => this.size;
+            set => this.UpdatePropertyChild(value, ref this.size);
         }
     }
 }

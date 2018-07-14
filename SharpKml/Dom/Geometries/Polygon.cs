@@ -28,13 +28,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Polygon"/> class.
-        /// </summary>
-        public Polygon()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
         /// </summary>
         [KmlElement("altitudeMode", 3)]
@@ -55,13 +48,17 @@ namespace SharpKml.Dom
         public bool? Extrude { get; set; }
 
         /// <summary>
+        /// Gets or sets extended altitude mode information.
+        /// [Google Extension]
+        /// </summary>
+        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 5)]
+        public GX.AltitudeMode? GXAltitudeMode { get; set; }
+
+        /// <summary>
         /// Gets a collection of <see cref="InnerBoundary"/> elements.
         /// </summary>
         /// <remarks>It is advised that the rings not cross each other.</remarks>
-        public IEnumerable<InnerBoundary> InnerBoundary
-        {
-            get { return this.Children.OfType<InnerBoundary>(); }
-        }
+        public IEnumerable<InnerBoundary> InnerBoundary => this.Children.OfType<InnerBoundary>();
 
         /// <summary>
         /// Gets or sets the exterior boundary.
@@ -69,8 +66,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public OuterBoundary OuterBoundary
         {
-            get { return this.outer; }
-            set { this.UpdatePropertyChild(value, ref this.outer); }
+            get => this.outer;
+            set => this.UpdatePropertyChild(value, ref this.outer);
         }
 
         /// <summary>
@@ -82,13 +79,6 @@ namespace SharpKml.Dom
         /// </remarks>
         [KmlElement("tessellate", 2)]
         public bool? Tessellate { get; set; }
-
-        /// <summary>
-        /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
-        /// </summary>
-        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 5)]
-        public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets the coordinates of the bounds of this instance.

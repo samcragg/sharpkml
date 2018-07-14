@@ -73,8 +73,8 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static Uri KmzUrl(this Uri uri)
         {
-            var split = SplitKmz(uri);
-            return (split == null) ? null : split.Item1;
+            Tuple<Uri, Uri> split = SplitKmz(uri);
+            return split?.Item1;
         }
 
         /// <summary>
@@ -129,8 +129,7 @@ namespace SharpKml.Engine
                 return Clone(uri);
             }
 
-            Uri output;
-            Uri.TryCreate(uri, target, out output);
+            Uri.TryCreate(uri, target, out Uri output);
             return output;
         }
 
@@ -178,13 +177,15 @@ namespace SharpKml.Engine
             if (index > 0)
             {
                 index += 4; // Add ".kmz"
-                UriBuilder builder = new UriBuilder(uri);
-                builder.Path = path.Substring(0, index);
+                var builder = new UriBuilder(uri)
+                {
+                    Path = path.Substring(0, index)
+                };
 
                 // -1 to allow for '/'
                 if (index < path.Length - 1)
                 {
-                    Uri file = new Uri(path.Substring(index + 1), UriKind.Relative); // Skip '/'
+                    var file = new Uri(path.Substring(index + 1), UriKind.Relative); // Skip '/'
                     return Tuple.Create(builder.Uri, file);
                 }
 

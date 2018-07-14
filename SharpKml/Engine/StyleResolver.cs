@@ -21,12 +21,11 @@ namespace SharpKml.Engine
         // primarily to inhibit infinite loops on styleUrls that are self referencing.
         private const int MaximumNestingDepth = 5;
 
-        private IDictionary<string, StyleSelector> styleMap;
-        private Style style = new Style();
-        private StyleState state;
-
+        private readonly IDictionary<string, StyleSelector> styleMap;
         private IFileResolver fileResolver;
         private int nestedDepth;
+        private StyleState state;
+        private Style style = new Style();
         private int styleId;
 
         private StyleResolver(IDictionary<string, StyleSelector> map)
@@ -86,9 +85,11 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("file");
             }
 
-            var instance = new StyleResolver(file.StyleMap);
-            instance.fileResolver = resolver;
-            instance.state = state;
+            var instance = new StyleResolver(file.StyleMap)
+            {
+                fileResolver = resolver,
+                state = state
+            };
             instance.Merge(feature.StyleUrl);
 
             foreach (StyleSelector selector in feature.Styles)
@@ -114,7 +115,7 @@ namespace SharpKml.Engine
 
             // Don't modify the original but create a copy instead
             T clone = element.Clone();
-            foreach (var e in clone.Flatten())
+            foreach (Element e in clone.Flatten())
             {
                 instance.InlineElement(e);
             }
@@ -145,7 +146,7 @@ namespace SharpKml.Engine
             var children = clone.Flatten().ToList(); // Adding a style will add to the children.
             foreach (Element e in children)
             {
-                var tuple = instance.Split(e);
+                Tuple<Document, StyleSelector> tuple = instance.Split(e);
                 if (tuple != null)
                 {
                     sharedStyles.Add(tuple);
@@ -154,7 +155,7 @@ namespace SharpKml.Engine
 
             // Finished iterating the flattened hierarchy (which incudes
             // Children) so we can now add the shared styles
-            foreach (var style in sharedStyles)
+            foreach (Tuple<Document, StyleSelector> style in sharedStyles)
             {
                 style.Item1.AddStyle(style.Item2);
             }
@@ -169,19 +170,21 @@ namespace SharpKml.Engine
             this.state = state;
             this.Merge(url);
 
-            var pair = new Pair();
-            pair.State = state;
-            pair.Selector = this.style;
-            return pair;
+            return new Pair
+            {
+                State = state,
+                Selector = this.style
+            };
         }
 
         private StyleSelector CreateStyleMap(Uri url)
         {
             // This is the same order as the C++ version - Normal then Highlight
-            var map = new StyleMapCollection();
-            map.Add(this.CreatePair(StyleState.Normal, url));
-            map.Add(this.CreatePair(StyleState.Highlight, url));
-            return map;
+            return new StyleMapCollection
+            {
+                this.CreatePair(StyleState.Normal, url),
+                this.CreatePair(StyleState.Highlight, url)
+            };
         }
 
         private string CreateUniqueId()
@@ -204,18 +207,16 @@ namespace SharpKml.Engine
                 return;
             }
 
-            var feature = element as Feature;
-            if (feature != null)
+            if (element is Feature feature)
             {
                 // Check if it's a Document, which inherits from Feature, as
                 // Documents contain shared styles
-                var document = element as Document;
-                if (document != null)
+                if (element is Document document)
                 {
                     // Create a copy of the styles so we can iterate the copy
                     // and remove them from the Document.
                     var styles = document.Styles.ToList();
-                    foreach (var style in styles)
+                    foreach (StyleSelector style in styles)
                     {
                         if (style.Id != null)
                         {
@@ -273,23 +274,18 @@ namespace SharpKml.Engine
 
         private void Merge(StyleSelector selector)
         {
-            var style = selector as Style;
-            if (style != null)
+            if (selector is Style style)
             {
                 this.style.Merge(style);
             }
-            else
+            else if (selector is StyleMapCollection styleMap)
             {
-                var styleMap = selector as StyleMapCollection;
-                if (styleMap != null)
+                foreach (Pair pair in styleMap)
                 {
-                    foreach (Pair pair in styleMap)
+                    if (pair.State == this.state)
                     {
-                        if (pair.State == this.state)
-                        {
-                            this.Merge(pair.StyleUrl);
-                            this.Merge(pair.Selector);
-                        }
+                        this.Merge(pair.StyleUrl);
+                        this.Merge(pair.Selector);
                     }
                 }
             }
@@ -309,8 +305,7 @@ namespace SharpKml.Engine
                 string path = url.GetPath();
                 if (string.IsNullOrEmpty(path))
                 {
-                    StyleSelector style;
-                    if (this.styleMap.TryGetValue(id, out style))
+                    if (this.styleMap.TryGetValue(id, out StyleSelector style))
                     {
                         this.Merge(style);
                     }
@@ -320,8 +315,7 @@ namespace SharpKml.Engine
                     KmlFile file = this.LoadFile(path);
                     if (file != null)
                     {
-                        StyleSelector style;
-                        if (file.StyleMap.TryGetValue(id, out style))
+                        if (file.StyleMap.TryGetValue(id, out StyleSelector style))
                         {
                             this.Merge(style);
                         }
@@ -343,8 +337,7 @@ namespace SharpKml.Engine
                 return null;
             }
 
-            var style = element as StyleSelector;
-            if (style != null)
+            if (element is StyleSelector style)
             {
                 // Add the style to the map so we generate an unique id
                 if (style.Id != null)
@@ -354,15 +347,14 @@ namespace SharpKml.Engine
 
                 // Find the Document to put the Style in, making sure it doesn't
                 // already have one as a Parent.
-                var document = element.GetParent<Document>();
+                Document document = element.GetParent<Document>();
                 if ((document != null) && (element.Parent != document))
                 {
                     // Is the style in a Feature that doesn't have a StyleUrl?
-                    var feature = element.Parent as Feature;
-                    if ((feature != null) && (feature.StyleUrl == null))
+                    if (element.Parent is Feature feature && (feature.StyleUrl == null))
                     {
                         // Create a copy of the style, using a new id
-                        StyleSelector shared = (StyleSelector)Activator.CreateInstance(style.GetType());
+                        var shared = (StyleSelector)Activator.CreateInstance(style.GetType());
                         shared.Merge(style);
                         shared.Id = this.CreateUniqueId();
 

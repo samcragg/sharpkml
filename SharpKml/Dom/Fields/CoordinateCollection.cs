@@ -21,7 +21,6 @@ namespace SharpKml.Dom
     public sealed class CoordinateCollection : Element, ICollection<Vector>, ICustomElement
     {
         private static readonly Regex Expression = CreateRegex();
-        private static string delimiter = "\n";
         private readonly List<Vector> points;
 
         /// <summary>
@@ -50,35 +49,22 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets or sets the delimiter to use between each point.
         /// </summary>
-        public static string Delimiter
-        {
-            get { return delimiter; }
-            set { delimiter = value; }
-        }
+        public static string Delimiter { get; set; } = "\n";
 
         /// <summary>
         /// Gets the number of points contained in this instance.
         /// </summary>
-        public int Count
-        {
-            get { return this.points.Count; }
-        }
+        public int Count => this.points.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
-        bool ICollection<Vector>.IsReadOnly
-        {
-            get { return false; }
-        }
+        bool ICollection<Vector>.IsReadOnly => false;
 
         /// <summary>
         /// Gets a value indicating whether to process the children of the Element.
         /// </summary>
-        bool ICustomElement.ProcessChildren
-        {
-            get { return true; }
-        }
+        bool ICustomElement.ProcessChildren => true;
 
         /// <summary>
         /// Gets the value at the specified index.
@@ -88,10 +74,7 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentOutOfRangeException">
         /// index is less than 0 or index is equal to or greater than <see cref="Count"/>.
         /// </exception>
-        internal Vector this[int index]
-        {
-            get { return this.points[index]; }
-        }
+        internal Vector this[int index] => this.points[index];
 
         /// <summary>
         /// Adds a point to this instance.
@@ -180,14 +163,14 @@ namespace SharpKml.Dom
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
             // This element is being serialized so we need to update the InnerText
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             bool first = true;
 
-            foreach (var point in this.points)
+            foreach (Vector point in this.points)
             {
                 if (!first)
                 {
-                    sb.Append(delimiter);
+                    sb.Append(Delimiter);
                 }
                 else
                 {
@@ -266,15 +249,13 @@ namespace SharpKml.Dom
             foreach (Match match in Expression.Matches(input))
             {
                 // Minimum required fields for a valid coordinate are latitude and longitude.
-                double latitude, longitude;
-                if (double.TryParse(match.Groups["lat"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latitude) &&
-                    double.TryParse(match.Groups["lon"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
+                if (double.TryParse(match.Groups["lat"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
+                    double.TryParse(match.Groups["lon"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude))
                 {
                     Group altitudeGroup = match.Groups["alt"];
                     if (altitudeGroup.Success)
                     {
-                        double altitude;
-                        if (double.TryParse(altitudeGroup.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out altitude))
+                        if (double.TryParse(altitudeGroup.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double altitude))
                         {
                             this.points.Add(new Vector(latitude, longitude, altitude));
                             continue; // Success!

@@ -40,6 +40,8 @@ namespace SharpKml.Dom
         /// </summary>
         internal LinkType()
         {
+            // Constructor is internal to prevent classes outside this assembly
+            // deriving from the class
         }
 
         /// <summary>

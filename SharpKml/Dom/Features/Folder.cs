@@ -21,12 +21,5 @@ namespace SharpKml.Dom
         {
             RegisterValidChild<Folder, Feature>();
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Folder"/> class.
-        /// </summary>
-        public Folder()
-        {
-        }
     }
 }

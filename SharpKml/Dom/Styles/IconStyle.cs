@@ -48,16 +48,16 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public Hotspot Hotspot
         {
-            get { return this.hotspot; }
-            set { this.UpdatePropertyChild(value, ref this.hotspot); }
+            get => this.hotspot;
+            set => this.UpdatePropertyChild(value, ref this.hotspot);
         }
 
         /// <summary>Gets or sets the icon resource location.</summary>
         [KmlElement(null, 3)]
         public IconLink Icon
         {
-            get { return this.icon; }
-            set { this.UpdatePropertyChild(value, ref this.icon); }
+            get => this.icon;
+            set => this.UpdatePropertyChild(value, ref this.icon);
         }
 
         /// <summary>
@@ -72,8 +72,7 @@ namespace SharpKml.Dom
         /// <param name="orphan">The <c>Element</c> to store for serialization.</param>
         protected internal override void AddOrphan(Element orphan)
         {
-            Icon icon = orphan as Icon;
-            if (icon != null)
+            if (orphan is Icon icon)
             {
                 this.Icon = new IconLink(icon.Href);
             }
@@ -130,10 +129,7 @@ namespace SharpKml.Dom
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
             /// </summary>
-            bool ICustomElement.ProcessChildren
-            {
-                get { return true; }
-            }
+            bool ICustomElement.ProcessChildren => true;
 
             /// <summary>
             /// Writes the start of an XML element.

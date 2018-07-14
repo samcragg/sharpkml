@@ -22,8 +22,8 @@ namespace SharpKml.Dom.GX
         [KmlElement(null)]
         public Playlist Playlist
         {
-            get { return this.playlist; }
-            set { this.UpdatePropertyChild(value, ref this.playlist); }
+            get => this.playlist;
+            set => this.UpdatePropertyChild(value, ref this.playlist);
         }
     }
 }

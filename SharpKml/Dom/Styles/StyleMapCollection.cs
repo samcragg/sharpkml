@@ -34,27 +34,14 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StyleMapCollection"/> class.
-        /// </summary>
-        public StyleMapCollection()
-        {
-        }
-
-        /// <summary>
         /// Gets the number of <see cref="Pair"/>s in this instance.
         /// </summary>
-        public int Count
-        {
-            get { return this.Children.Count; }
-        }
+        public int Count => this.Children.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
-        bool ICollection<Pair>.IsReadOnly
-        {
-            get { return false; }
-        }
+        bool ICollection<Pair>.IsReadOnly => false;
 
         /// <summary>
         /// Adds a <see cref="Pair"/> to this instance.

@@ -33,8 +33,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 5)]
         public BalloonStyle Balloon
         {
-            get { return this.balloon; }
-            set { this.UpdatePropertyChild(value, ref this.balloon); }
+            get => this.balloon;
+            set => this.UpdatePropertyChild(value, ref this.balloon);
         }
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public IconStyle Icon
         {
-            get { return this.icon; }
-            set { this.UpdatePropertyChild(value, ref this.icon); }
+            get => this.icon;
+            set => this.UpdatePropertyChild(value, ref this.icon);
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 2)]
         public LabelStyle Label
         {
-            get { return this.label; }
-            set { this.UpdatePropertyChild(value, ref this.label); }
+            get => this.label;
+            set => this.UpdatePropertyChild(value, ref this.label);
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 3)]
         public LineStyle Line
         {
-            get { return this.line; }
-            set { this.UpdatePropertyChild(value, ref this.line); }
+            get => this.line;
+            set => this.UpdatePropertyChild(value, ref this.line);
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 6)]
         public ListStyle List
         {
-            get { return this.list; }
-            set { this.UpdatePropertyChild(value, ref this.list); }
+            get => this.list;
+            set => this.UpdatePropertyChild(value, ref this.list);
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 4)]
         public PolygonStyle Polygon
         {
-            get { return this.polygon; }
-            set { this.UpdatePropertyChild(value, ref this.polygon); }
+            get => this.polygon;
+            set => this.UpdatePropertyChild(value, ref this.polygon);
         }
     }
 }

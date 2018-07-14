@@ -60,8 +60,8 @@ namespace SharpKml.Dom
         /// </remarks>
         public ItemIconStates State
         {
-            get { return this.state.State; }
-            set { this.state.State = value; }
+            get => this.state.State;
+            set => this.state.State = value;
         }
 
         /// <summary>
@@ -70,8 +70,7 @@ namespace SharpKml.Dom
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
-            UnknownElement unknown = orphan as UnknownElement;
-            if (unknown != null)
+            if (orphan is UnknownElement unknown)
             {
                 if (StateComponent.Equals(unknown.UnknownData))
                 {
@@ -93,10 +92,7 @@ namespace SharpKml.Dom
             /// <summary>
             /// Gets a value indicating whether to process the children of the Element.
             /// </summary>
-            public bool ProcessChildren
-            {
-                get { return false; }
-            }
+            public bool ProcessChildren => false;
 
             /// <summary>
             /// Gets or sets the ItemIconState.
@@ -131,11 +127,10 @@ namespace SharpKml.Dom
             {
                 if (value != null)
                 {
-                    var tokens = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (var token in tokens)
+                    string[] tokens = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string token in tokens)
                     {
-                        object state;
-                        ValueConverter.TryGetValue(typeof(ItemIconStates), token, out state);
+                        ValueConverter.TryGetValue(typeof(ItemIconStates), token, out object state);
                         if (state != null)
                         {
                             this.State |= (ItemIconStates)state;

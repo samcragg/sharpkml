@@ -31,19 +31,9 @@ namespace SharpKml.Dom.Atom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Entry"/> class.
-        /// </summary>
-        public Entry()
-        {
-        }
-
-        /// <summary>
         /// Gets the categories associated with this instance.
         /// </summary>
-        public IEnumerable<Category> Categories
-        {
-            get { return this.Children.OfType<Category>(); }
-        }
+        public IEnumerable<Category> Categories => this.Children.OfType<Category>();
 
         /// <summary>
         /// Gets or sets the content of the Entry.
@@ -51,8 +41,8 @@ namespace SharpKml.Dom.Atom
         [KmlElement(null)]
         public Content Content
         {
-            get { return this.content; }
-            set { this.UpdatePropertyChild(value, ref this.content); }
+            get => this.content;
+            set => this.UpdatePropertyChild(value, ref this.content);
         }
 
         /// <summary>
@@ -64,10 +54,7 @@ namespace SharpKml.Dom.Atom
         /// <summary>
         /// Gets the links associated with this instance.
         /// </summary>
-        public IEnumerable<Link> Links
-        {
-            get { return this.Children.OfType<Link>(); }
-        }
+        public IEnumerable<Link> Links => this.Children.OfType<Link>();
 
         /// <summary>
         /// Gets or sets a short summary, abstract, or excerpt of an entry.

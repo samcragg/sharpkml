@@ -28,8 +28,8 @@ namespace SharpKml.Dom
         [KmlElement(null, 1)]
         public Geometry Geometry
         {
-            get { return this.geometry; }
-            set { this.UpdatePropertyChild(value, ref this.geometry); }
+            get => this.geometry;
+            set => this.UpdatePropertyChild(value, ref this.geometry);
         }
     }
 }

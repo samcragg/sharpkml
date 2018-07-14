@@ -29,13 +29,6 @@ namespace SharpKml.Dom.GX
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SimpleArrayData"/> class.
-        /// </summary>
-        public SimpleArrayData()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the name of the array.
         /// </summary>
         [KmlAttribute("name")]

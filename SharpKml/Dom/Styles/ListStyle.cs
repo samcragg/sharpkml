@@ -35,13 +35,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ListStyle"/> class.
-        /// </summary>
-        public ListStyle()
-        {
-        }
-
-        /// <summary>
         /// Gets or sets the background color of the graphic element.
         /// </summary>
         [KmlElement("bgColor", 2)]
@@ -50,10 +43,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the <see cref="ItemIcon"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<ItemIcon> ItemIcons
-        {
-            get { return this.Children.OfType<ItemIcon>(); }
-        }
+        public IEnumerable<ItemIcon> ItemIcons => this.Children.OfType<ItemIcon>();
 
         /// <summary>
         /// Gets or sets how a <see cref="Folder"/> and its contents shall be

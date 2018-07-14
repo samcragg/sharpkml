@@ -14,12 +14,12 @@ namespace SharpKml.Engine
     /// </summary>
     public static class FeatureExtensions
     {
+        // This is used in CalculateLookAt to give a margin around the feature.
+        private const double Margin = 1.1;
+
         // To avoid zooming in too far to point features or features that are
         // spatially small, we clap the computed range to a minimum value.
         private const double MinimumRange = 1000.0; // Meters
-
-        // This is used in CalculateLookAt to give a margin around the feature.
-        private const double Margin = 1.1;
 
         // The range of the LookAt that emcompasses the feature's extents
         // depends on the field of view of the virtual camera.
@@ -45,7 +45,7 @@ namespace SharpKml.Engine
                 throw new ArgumentNullException("feature");
             }
 
-            BoundingBox box = new BoundingBox();
+            var box = new BoundingBox();
             ExpandBox(feature, box);
 
             return box.IsEmpty ? null : box;
@@ -90,27 +90,26 @@ namespace SharpKml.Engine
             double northWest = Math.Sqrt(Math.Pow(north, 2) + Math.Pow(west, 2));
             double range = northWest * Math.Tan(FieldOfView) * Margin;
 
-            LookAt output = new LookAt();
-            output.AltitudeMode = AltitudeMode.RelativeToGround;
-            output.Latitude = center.Latitude;
-            output.Longitude = center.Longitude;
-            output.Range = Math.Max(range, MinimumRange); // Clamp value
-            return output;
+            return new LookAt
+            {
+                AltitudeMode = AltitudeMode.RelativeToGround,
+                Latitude = center.Latitude,
+                Longitude = center.Longitude,
+                Range = Math.Max(range, MinimumRange) // Clamp value
+            };
         }
 
         private static void ExpandBox(Feature feature, BoundingBox box)
         {
-            Placemark placemark = feature as Placemark;
-            if (placemark != null)
+            if (feature is Placemark placemark)
             {
                 GeometryExtensions.ExpandBox(placemark.Geometry, box); // Can pass in nulls
                 return;
             }
 
-            Container container = feature as Container;
-            if (container != null)
+            if (feature is Container container)
             {
-                foreach (var f in container.Features)
+                foreach (Feature f in container.Features)
                 {
                     ExpandBox(f, box);
                 }
