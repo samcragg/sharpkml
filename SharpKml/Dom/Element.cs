@@ -7,7 +7,6 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
     using SharpKml.Base;
@@ -17,20 +16,14 @@ namespace SharpKml.Dom
     /// </summary>
     public abstract class Element
     {
-        private static readonly Dictionary<TypeInfo, Dictionary<TypeInfo, int>> ChildTypes = new Dictionary<TypeInfo, Dictionary<TypeInfo, int>>(); // Will store the child type and it's order for each Element type.
+        // Will store the child type and it's order for each Element type.
+        private static readonly Dictionary<Type, Dictionary<TypeInfo, int>> ChildTypes =
+            new Dictionary<Type, Dictionary<TypeInfo, int>>();
 
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
         private readonly List<Element> children = new List<Element>();
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
         private readonly List<Element> orphans = new List<Element>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Element"/> class.
-        /// </summary>
-        protected Element()
-        {
-            this.Children = new ReadOnlyCollection<Element>(this.children);
-        }
 
         /// <summary>
         /// Gets the parent Element of this instance.
@@ -49,7 +42,7 @@ namespace SharpKml.Dom
         /// Gets the child elements of this instance, in their serialization order.
         /// </summary>
         internal IEnumerable<Element> OrderedChildren =>
-            this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(this));
+            this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(GetChildTypesFor(this.GetType())));
 
         /// <summary>
         /// Gets invalid child Elements found during parsing.
@@ -59,7 +52,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the child elements of this instance.
         /// </summary>
-        protected internal ReadOnlyCollection<Element> Children { get; private set; }
+        protected internal IReadOnlyList<Element> Children => this.children;
 
         /// <summary>
         /// Gets the inner text of the XML element.
@@ -105,31 +98,28 @@ namespace SharpKml.Dom
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
 
-            if (Element.ChildTypes.TryGetValue(
-                    this.GetType().GetTypeInfo(),
-                    out Dictionary<TypeInfo, int> childTypes))
-            {
-                // Check if this is a valid child. We use IsAssignableFrom to enable
-                // derived classes to be added as well e.g. if Feature is registered
-                // as a valid child type and the child is a Placemark then add it.
-                TypeInfo childType = child.GetType().GetTypeInfo();
-                foreach (KeyValuePair<TypeInfo, int> type in childTypes)
-                {
-                    if (type.Key.IsAssignableFrom(childType))
-                    {
-                        // If this is a derived class, add the type to the child type
-                        // collection with the same index.
-                        if (type.Key != childType)
-                        {
-                            // It's OK to change the collection as we're breaking
-                            // out of the iteration.
-                            childTypes[childType] = type.Value;
-                        }
+            Dictionary<TypeInfo, int> childTypes = GetChildTypesFor(this.GetType());
 
-                        this.children.Add(child);
-                        child.Parent = this;
-                        return true;
+            // Check if this is a valid child. We use IsAssignableFrom to enable
+            // derived classes to be added as well e.g. if Feature is registered
+            // as a valid child type and the child is a Placemark then add it.
+            TypeInfo childType = child.GetType().GetTypeInfo();
+            foreach (KeyValuePair<TypeInfo, int> type in childTypes)
+            {
+                if (type.Key.IsAssignableFrom(childType))
+                {
+                    // If this is a derived class, add the type to the child type
+                    // collection with the same index.
+                    if (type.Key != childType)
+                    {
+                        // It's OK to change the collection as we're breaking
+                        // out of the iteration.
+                        childTypes[childType] = type.Value;
                     }
+
+                    this.children.Add(child);
+                    child.Parent = this;
+                    return true;
                 }
             }
 
@@ -212,25 +202,6 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Registers an element type as a valid child of this instance.
-        /// </summary>
-        /// <typeparam name="U">Parent type deriving from Element.</typeparam>
-        /// <typeparam name="T">Child type deriving from Element.</typeparam>
-        protected static void RegisterValidChild<U, T>()
-            where U : Element
-            where T : Element
-        {
-            TypeInfo parentTypeInfo = typeof(U).GetType().GetTypeInfo();
-            if (!ChildTypes.TryGetValue(parentTypeInfo, out Dictionary<TypeInfo, int> childTypes))
-            {
-                childTypes = new Dictionary<TypeInfo, int>();
-                ChildTypes[parentTypeInfo] = childTypes;
-            }
-
-            childTypes.Add(typeof(T).GetTypeInfo(), childTypes.Count); // Remember the order they were added.
-        }
-
-        /// <summary>
         /// Removes all characters from <see cref="InnerText"/>.
         /// </summary>
         protected void ClearInnerText()
@@ -261,23 +232,62 @@ namespace SharpKml.Dom
             element = value;
         }
 
+        private static void AddChildTypesFromAttributes(TypeInfo type, Dictionary<TypeInfo, int> childTypes)
+        {
+            Type baseType = type.BaseType;
+            if (baseType != null)
+            {
+                AddChildTypesFromAttributes(baseType.GetTypeInfo(), childTypes);
+            }
+
+            // Offset the order by the number of attributes we've added from
+            // base classes (i.e. their children are ordered before ours)
+            int offset = 0;
+            if (childTypes.Count > 0)
+            {
+                offset = childTypes.Values.Max() + 1;
+            }
+
+            foreach (ChildTypeAttribute attribute in type.GetCustomAttributes(typeof(ChildTypeAttribute)))
+            {
+                childTypes.Add(
+                    attribute.ChildType.GetTypeInfo(),
+                    offset + attribute.Order);
+            }
+        }
+
+        private static Dictionary<TypeInfo, int> GetChildTypesFor(Type type)
+        {
+            lock (ChildTypes)
+            {
+                if (!ChildTypes.TryGetValue(type, out Dictionary<TypeInfo, int> childTypes))
+                {
+                    childTypes = new Dictionary<TypeInfo, int>();
+                    AddChildTypesFromAttributes(type.GetTypeInfo(), childTypes);
+                    ChildTypes.Add(type, childTypes);
+                }
+
+                return childTypes;
+            }
+        }
+
         /// <summary>
         /// Private class used to sort the Children by the order the type
         /// was registered.
         /// </summary>
         private class ChildTypeComparer : IComparer<TypeInfo>
         {
-            private readonly Element owner;
+            private readonly Dictionary<TypeInfo, int> childTypes;
 
-            public ChildTypeComparer(Element owner)
+            public ChildTypeComparer(Dictionary<TypeInfo, int> childTypes)
             {
-                this.owner = owner;
+                this.childTypes = childTypes;
             }
 
             public int Compare(TypeInfo typeA, TypeInfo typeB)
             {
-                int indexA = Element.ChildTypes[this.owner.GetType().GetTypeInfo()][typeA];
-                int indexB = Element.ChildTypes[this.owner.GetType().GetTypeInfo()][typeB];
+                int indexA = this.childTypes[typeA];
+                int indexB = this.childTypes[typeB];
                 return indexA.CompareTo(indexB);
             }
         }

@@ -272,8 +272,7 @@ namespace UnitTests.Base
             Assert.That(root, Is.Not.Null);
 
             // Make sure it didn't add the old namespace
-            Assert.That(root.Namespaces.GetNamespacesInScope(XmlNamespaceScope.ExcludeXml),
-                        Is.Not.Contains(string.Empty));
+            Assert.That(root.GetNamespaces(), Has.No.ContainKey(string.Empty));
 
             // Make sure it serializes
             Serializer serializer = new Serializer();

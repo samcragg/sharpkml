@@ -18,18 +18,11 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.14</remarks>
     [KmlElement("ItemIcon")]
+    [ChildType(typeof(StateElement), 1)]
     public sealed class ItemIcon : KmlObject
     {
         private static readonly XmlComponent StateComponent = new XmlComponent(null, "state", KmlNamespaces.Kml22Namespace);
         private readonly StateElement state = new StateElement();
-
-        /// <summary>
-        /// Initializes static members of the <see cref="ItemIcon"/> class.
-        /// </summary>
-        static ItemIcon()
-        {
-            RegisterValidChild<ItemIcon, StateElement>();
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemIcon"/> class.

@@ -17,16 +17,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.4</remarks>
     [KmlElement("Create")]
+    [ChildType(typeof(Container), 1)]
     public sealed class CreateCollection : Element, ICollection<Container>
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="CreateCollection"/> class.
-        /// </summary>
-        static CreateCollection()
-        {
-            RegisterValidChild<CreateCollection, Container>();
-        }
-
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.
         /// </summary>
@@ -97,7 +90,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Container[] array, int arrayIndex)
         {
-            this.Children.CopyTo(array, arrayIndex);
+            ((ICollection<Element>)this.Children).CopyTo(array, arrayIndex);
         }
 
         /// <summary>

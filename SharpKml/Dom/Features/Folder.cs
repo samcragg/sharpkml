@@ -12,14 +12,8 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.10</remarks>
     [KmlElement("Folder")]
+    [ChildType(typeof(Feature), 1)]
     public sealed class Folder : Container
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Folder"/> class.
-        /// </summary>
-        static Folder()
-        {
-            RegisterValidChild<Folder, Feature>();
-        }
     }
 }

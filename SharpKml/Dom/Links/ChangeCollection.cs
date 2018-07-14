@@ -16,16 +16,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.6</remarks>
     [KmlElement("Change")]
+    [ChildType(typeof(KmlObject), 1)]
     public sealed class ChangeCollection : Element, ICollection<KmlObject>
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="ChangeCollection"/> class.
-        /// </summary>
-        static ChangeCollection()
-        {
-            RegisterValidChild<ChangeCollection, KmlObject>();
-        }
-
         /// <summary>
         /// Gets the number of <see cref="KmlObject"/>s in this instance.
         /// </summary>
@@ -96,7 +89,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(KmlObject[] array, int arrayIndex)
         {
-            this.Children.CopyTo(array, arrayIndex);
+            ((ICollection<Element>)this.Children).CopyTo(array, arrayIndex);
         }
 
         /// <summary>

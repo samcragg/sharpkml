@@ -17,6 +17,9 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Track", KmlNamespaces.GX22Namespace)]
+    [ChildType(typeof(WhenElement), 1)]
+    [ChildType(typeof(CoordElement), 2)]
+    [ChildType(typeof(AnglesElement), 3)]
     public sealed class Track : Geometry
     {
         private static readonly XmlComponent AnglesComponent = new XmlComponent(null, "angles", KmlNamespaces.GX22Namespace);
@@ -25,16 +28,6 @@ namespace SharpKml.Dom.GX
 
         private ExtendedData data;
         private Model model;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="Track"/> class.
-        /// </summary>
-        static Track()
-        {
-            RegisterValidChild<Track, WhenElement>();
-            RegisterValidChild<Track, CoordElement>();
-            RegisterValidChild<Track, AnglesElement>();
-        }
 
         /// <summary>
         /// Gets a collection of <see cref="Angle"/> containing the heading,

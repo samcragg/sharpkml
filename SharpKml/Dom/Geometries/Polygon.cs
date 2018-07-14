@@ -14,18 +14,11 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.8</remarks>
     [KmlElement("Polygon")]
+    [ChildType(typeof(InnerBoundary), 1)]
     public sealed class Polygon : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
         private OuterBoundary outer;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="Polygon"/> class.
-        /// </summary>
-        static Polygon()
-        {
-            RegisterValidChild<Polygon, InnerBoundary>();
-        }
 
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.

@@ -15,14 +15,10 @@ namespace SharpKml.Dom
     /// <remarks>
     /// OGC KML 2.2 Section 14.1
     /// </remarks>
+    [ChildType(typeof(GX.Option), 1)]
     public abstract class AbstractView : KmlObject
     {
         private TimePrimitive primitive;
-
-        static AbstractView()
-        {
-            RegisterValidChild<AbstractView, GX.Option>();
-        }
 
         /// <summary>
         /// Gets or sets the horizontal field of view of the AbstractView

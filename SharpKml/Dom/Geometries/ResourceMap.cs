@@ -21,16 +21,9 @@ namespace SharpKml.Dom
     /// resource.</para>
     /// </remarks>
     [KmlElement("ResourceMap")]
+    [ChildType(typeof(Alias), 1)]
     public sealed class ResourceMap : KmlObject
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="ResourceMap"/> class.
-        /// </summary>
-        static ResourceMap()
-        {
-            RegisterValidChild<ResourceMap, Alias>();
-        }
-
         /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>

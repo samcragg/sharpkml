@@ -17,18 +17,11 @@ namespace SharpKml.Dom.Atom
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("entry", KmlNamespaces.AtomNamespace)]
+    [ChildType(typeof(Category), 1)]
+    [ChildType(typeof(Link), 2)]
     public sealed class Entry : Element
     {
         private Content content;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="Entry"/> class.
-        /// </summary>
-        static Entry()
-        {
-            RegisterValidChild<Entry, Category>();
-            RegisterValidChild<Entry, Link>();
-        }
 
         /// <summary>
         /// Gets the categories associated with this instance.

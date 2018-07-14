@@ -14,6 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.13</remarks>
     [KmlElement("ListStyle")]
+    [ChildType(typeof(ItemIcon), 1)]
     public sealed class ListStyle : SubStyle
     {
         /// <summary>
@@ -25,14 +26,6 @@ namespace SharpKml.Dom
         /// The default value that should be used for <see cref="BackgroundColor"/>.
         /// </summary>
         public static readonly Color32 DefaultBackgroundColor = new Color32(255, 255, 255, 255);
-
-        /// <summary>
-        /// Initializes static members of the <see cref="ListStyle"/> class.
-        /// </summary>
-        static ListStyle()
-        {
-            RegisterValidChild<ListStyle, ItemIcon>();
-        }
 
         /// <summary>
         /// Gets or sets the background color of the graphic element.

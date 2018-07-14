@@ -14,16 +14,9 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Playlist", KmlNamespaces.GX22Namespace)]
+    [ChildType(typeof(TourPrimitive), 1)]
     public sealed class Playlist : KmlObject
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Playlist"/> class.
-        /// </summary>
-        static Playlist()
-        {
-            RegisterValidChild<Playlist, TourPrimitive>();
-        }
-
         /// <summary>
         /// Gets the <see cref="TourPrimitive"/>s stored by this instance.
         /// </summary>

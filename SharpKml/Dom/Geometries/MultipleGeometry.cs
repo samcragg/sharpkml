@@ -15,16 +15,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.2</remarks>
     [KmlElement("MultiGeometry")]
+    [ChildType(typeof(Geometry), 1)]
     public sealed class MultipleGeometry : Geometry
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="MultipleGeometry"/> class.
-        /// </summary>
-        static MultipleGeometry()
-        {
-            RegisterValidChild<MultipleGeometry, Geometry>();
-        }
-
         /// <summary>
         /// Gets a collection of <see cref="Geometry"/> elements.
         /// </summary>

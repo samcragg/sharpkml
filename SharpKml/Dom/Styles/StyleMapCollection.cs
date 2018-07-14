@@ -23,16 +23,9 @@ namespace SharpKml.Dom
     /// <see cref="StyleState.Highlight"/>.</para>
     /// </remarks>
     [KmlElement("StyleMap")]
+    [ChildType(typeof(Pair), 1)]
     public sealed class StyleMapCollection : StyleSelector, ICollection<Pair>
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="StyleMapCollection"/> class.
-        /// </summary>
-        static StyleMapCollection()
-        {
-            RegisterValidChild<StyleMapCollection, Pair>();
-        }
-
         /// <summary>
         /// Gets the number of <see cref="Pair"/>s in this instance.
         /// </summary>
@@ -103,7 +96,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Pair[] array, int arrayIndex)
         {
-            this.Children.CopyTo(array, arrayIndex);
+            ((ICollection<Element>)this.Children).CopyTo(array, arrayIndex);
         }
 
         /// <summary>

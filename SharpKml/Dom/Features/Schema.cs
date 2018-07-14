@@ -16,17 +16,10 @@ namespace SharpKml.Dom
     /// <remarks>OGC KML 2.2 Section 9.8</remarks>
     // This should inherit from Element, but the C++ version inherits from Object
     [KmlElement("Schema")]
+    [ChildType(typeof(SimpleField), 1)]
+    [ChildType(typeof(GX.SimpleArrayField), 2)]
     public sealed class Schema : KmlObject
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Schema"/> class.
-        /// </summary>
-        static Schema()
-        {
-            RegisterValidChild<Schema, SimpleField>();
-            RegisterValidChild<Schema, GX.SimpleArrayField>();
-        }
-
         /// <summary>
         /// Gets a collection of <see cref="GX.SimpleArrayField"/> contained by this instance.
         /// [Google extension]

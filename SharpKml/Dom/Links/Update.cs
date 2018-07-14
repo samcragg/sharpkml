@@ -23,18 +23,11 @@ namespace SharpKml.Dom
     /// <see cref="KmlObject.Id"/>.</para>
     /// </remarks>
     [KmlElement("Update")]
+    [ChildType(typeof(ChangeCollection), 1)]
+    [ChildType(typeof(CreateCollection), 2)]
+    [ChildType(typeof(DeleteCollection), 3)]
     public sealed class Update : Element
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Update"/> class.
-        /// </summary>
-        static Update()
-        {
-            RegisterValidChild<Update, ChangeCollection>();
-            RegisterValidChild<Update, CreateCollection>();
-            RegisterValidChild<Update, DeleteCollection>();
-        }
-
         /// <summary>
         /// Gets or sets the URL for the target KML resource that has been
         /// previously retrieved via <see cref="NetworkLink"/>.

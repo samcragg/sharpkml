@@ -14,17 +14,10 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.7</remarks>
     [KmlElement("Document")]
+    [ChildType(typeof(Schema), 1)]
+    [ChildType(typeof(Feature), 2)]
     public sealed class Document : Container
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Document"/> class.
-        /// </summary>
-        static Document()
-        {
-            RegisterValidChild<Document, Schema>();
-            RegisterValidChild<Document, Feature>();
-        }
-
         /// <summary>
         /// Gets a collection of <see cref="Schema"/> contained by this instance.
         /// </summary>

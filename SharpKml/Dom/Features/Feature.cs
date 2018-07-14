@@ -14,6 +14,7 @@ namespace SharpKml.Dom
     /// Represents a KML AbstractFeatureGroup
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.1</remarks>
+    [ChildType(typeof(StyleSelector), 1)]
     public abstract class Feature : KmlObject
     {
         /// <summary>
@@ -28,14 +29,6 @@ namespace SharpKml.Dom
         private Snippet snippet;
         private TimePrimitive time;
         private AbstractView view;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="Feature"/> class.
-        /// </summary>
-        static Feature()
-        {
-            RegisterValidChild<Feature, StyleSelector>();
-        }
 
         /// <summary>
         /// Gets or sets an unstructured address for the Feature, such as street,

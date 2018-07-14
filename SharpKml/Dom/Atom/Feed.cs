@@ -17,18 +17,11 @@ namespace SharpKml.Dom.Atom
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("feed", KmlNamespaces.AtomNamespace)]
+    [ChildType(typeof(Category), 1)]
+    [ChildType(typeof(Entry), 2)]
+    [ChildType(typeof(Link), 3)]
     public sealed class Feed : Element
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="Feed"/> class.
-        /// </summary>
-        static Feed()
-        {
-            RegisterValidChild<Feed, Category>();
-            RegisterValidChild<Feed, Entry>();
-            RegisterValidChild<Feed, Link>();
-        }
-
         /// <summary>
         /// Gets the categories associated with this instance.
         /// </summary>

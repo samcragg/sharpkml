@@ -14,16 +14,9 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("MultiTrack", KmlNamespaces.GX22Namespace)]
+    [ChildType(typeof(Track), 1)]
     public sealed class MultipleTrack : Geometry
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="MultipleTrack"/> class.
-        /// </summary>
-        static MultipleTrack()
-        {
-            RegisterValidChild<MultipleTrack, Track>();
-        }
-
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
         /// </summary>

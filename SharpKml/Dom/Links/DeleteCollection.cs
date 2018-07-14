@@ -16,16 +16,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.5</remarks>
     [KmlElement("Delete")]
+    [ChildType(typeof(Feature), 1)]
     public sealed class DeleteCollection : Element, ICollection<Feature>
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="DeleteCollection"/> class.
-        /// </summary>
-        static DeleteCollection()
-        {
-            RegisterValidChild<DeleteCollection, Feature>();
-        }
-
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.
         /// </summary>
@@ -96,7 +89,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Feature[] array, int arrayIndex)
         {
-            this.Children.CopyTo(array, arrayIndex);
+            ((ICollection<Element>)this.Children).CopyTo(array, arrayIndex);
         }
 
         /// <summary>

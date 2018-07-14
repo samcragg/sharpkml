@@ -16,17 +16,10 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.4</remarks>
     [KmlElement("SchemaData")]
+    [ChildType(typeof(SimpleData), 1)]
+    [ChildType(typeof(GX.SimpleArrayData), 2)]
     public sealed class SchemaData : KmlObject
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="SchemaData"/> class.
-        /// </summary>
-        static SchemaData()
-        {
-            RegisterValidChild<SchemaData, SimpleData>();
-            RegisterValidChild<SchemaData, GX.SimpleArrayData>();
-        }
-
         /// <summary>
         /// Gets a collection of value arrays.
         /// [Google Extension]

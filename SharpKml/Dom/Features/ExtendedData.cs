@@ -21,17 +21,10 @@ namespace SharpKml.Dom
     /// </para>
     /// </remarks>
     [KmlElement("ExtendedData")]
+    [ChildType(typeof(Data), 1)]
+    [ChildType(typeof(SchemaData), 2)]
     public sealed class ExtendedData : Element
     {
-        /// <summary>
-        /// Initializes static members of the <see cref="ExtendedData"/> class.
-        /// </summary>
-        static ExtendedData()
-        {
-            RegisterValidChild<ExtendedData, Data>();
-            RegisterValidChild<ExtendedData, SchemaData>();
-        }
-
         /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>
