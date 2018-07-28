@@ -115,3 +115,7 @@ orleans.codegen.cs
 *.mdf
 *.ldf
 *.ndf
+
+# Cake
+build/tools/*
+!build/tools/packages.config
