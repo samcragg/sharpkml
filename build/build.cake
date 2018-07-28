@@ -2,6 +2,22 @@ var configuration = Argument("configuration", "Release");
 bool isLocalBuild = BuildSystem.IsLocalBuild;
 var target = Argument("target", "Default");
 
+void UploadTestResults(FilePath result)
+{
+    if (isLocalBuild)
+    {
+        return;
+    }
+
+    using (var client = new System.Net.WebClient())
+    {
+        string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
+        client.UploadFile(
+            "https://ci.appveyor.com/api/testresults/nunit3/" + jobId,
+            result.FullPath);
+    }
+}
+
 Task("Build")
     .Does(() =>
 {
@@ -26,40 +42,26 @@ Task("Pack")
 Task("Test")
     .Does(() =>
 {
-    DotNetCoreTest("../UnitTests/UnitTests.csproj", new DotNetCoreTestSettings
+    try
     {
-        Configuration = configuration,
-        Logger = "trx;LogFileName=UnitTests.trx",
-        NoBuild = true,
-        NoRestore = true,
-        ResultsDirectory = "./TestResults/",
-    });
-});
-
-Task("UploadTestResults")
-    .WithCriteria(!isLocalBuild)
-    .IsDependentOn("Test")
-    .Does(() =>
-{
-    using (var client = new System.Net.WebClient())
+        DotNetCoreTest("../UnitTests/UnitTests.csproj", new DotNetCoreTestSettings
+        {
+            Configuration = configuration,
+            Logger = "trx;LogFileName=UnitTests.trx",
+            NoBuild = true,
+            NoRestore = true,
+            ResultsDirectory = "./TestResults/",
+        });
+    }
+    finally
     {
-        string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
-        client.UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit3/" + jobId,
-            "./TestResults/UnitTests.trx");
+        UploadTestResults("./TestResults/UnitTests.trx");
     }
 });
-
-
-// System.Net.WebClient'
-//    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit3/$($env:APPVEYOR_JOB_ID)", (Resolve-Path ./Adaptive.Agrona.Tests/TestResults/AgronaResults.trx))
-
-
 
 Task("Default")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("Pack")
-    .IsDependentOn("UploadTestResults");
+    .IsDependentOn("Pack");
 
 RunTarget(target);
