@@ -1,0 +1,10 @@
+version: 0.1.{build}
+image: Visual Studio 2017
+configuration: Release
+
+build_script:
+  - ps: Set-Location ./build
+  - ps: ./build.ps1
+
+artifacts:
+  - path: 'build/artifacts/*.nupkg'
