@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpKml.Base;
 
@@ -38,12 +39,14 @@ namespace UnitTests.Base
 
         private void TestDateTime(DateTime date)
         {
-            string formatted = null;
-            Assert.That(() => formatted = string.Format(KmlFormatter.Instance, "{0}", date), Throws.Nothing);
+            string formatted = string.Format(KmlFormatter.Instance, "{0}", date);
 
-            object parsed;
-            ValueConverter.TryGetValue(typeof(DateTime), formatted, out parsed);
-            Assert.That(parsed, Is.EqualTo(date));
+            DateTime parsed = DateTime.Parse(
+                formatted,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal);
+
+            Assert.That(parsed, Is.EqualTo(date.ToUniversalTime()));
         }
     }
 }
