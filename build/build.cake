@@ -13,7 +13,7 @@ void UploadTestResults(FilePath result)
     {
         string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
         client.UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit3/" + jobId,
+            "https://ci.appveyor.com/api/testresults/mstest/" + jobId,
             result.FullPath);
     }
 }
