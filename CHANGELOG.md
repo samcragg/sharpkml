@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.2.0]
+## [3.3.0] - 2018-07-29
+### Added
+- Registered types can now be replaced (via `KmlFactory.Replace`)
+### Changed
+- All classes representing KML elements are no longer marked as `sealed`
+
+## [3.2.0] - 2018-07-14
 ### Changed
 - Reduced memory usage for large files with lots of elements (thanks @sylvaneau)
 
-## [3.1.0]
+## [3.1.0] - 2018-04-29
 ### Added
 - Arithmatic operators for the Vector class (thanks @MikDal002)
 
