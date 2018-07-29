@@ -18,6 +18,5 @@ The easiest way to use the library is to install the
 [SharpKml.Core NuGet package](https://www.nuget.org/packages/SharpKml.Core/),
 however, you can also download the binaries/source code from this project page.
 
-For some examples, check out the [Examples](/Examples) folder, which is also a
-short program that you can debug through to try out the more common tasks of
-working with KML.
+Check out the [Getting Started](docs/GettingStarted.md) page for some useful
+documentation.
