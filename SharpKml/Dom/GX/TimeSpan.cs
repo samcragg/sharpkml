@@ -17,7 +17,7 @@ namespace SharpKml.Dom.GX
     /// <see cref="AbstractView"/>.</para>
     /// </remarks>
     [KmlElement("TimeSpan", KmlNamespaces.GX22Namespace)]
-    public sealed class TimeSpan : TimePrimitive
+    public class TimeSpan : TimePrimitive
     {
         /// <summary>
         /// Gets or sets the beginning instant of a time period.

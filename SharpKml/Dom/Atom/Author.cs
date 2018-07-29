@@ -15,7 +15,7 @@ namespace SharpKml.Dom.Atom
     /// RFC 4287 Section 4.2.1 (see http://atompub.org/rfc4287.html)
     /// </remarks>
     [KmlElement("author", KmlNamespaces.AtomNamespace)]
-    public sealed class Author : Element
+    public class Author : Element
     {
         /// <summary>
         /// Gets or sets the e-mail address associated with the person.

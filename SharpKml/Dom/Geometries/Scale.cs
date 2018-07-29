@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.12</remarks>
     [KmlElement("Scale")]
-    public sealed class Scale : KmlObject
+    public class Scale : KmlObject
     {
         /// <summary>
         /// The default value that should be used for <see cref="X"/>.

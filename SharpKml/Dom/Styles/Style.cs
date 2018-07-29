@@ -18,7 +18,7 @@ namespace SharpKml.Dom
     /// geographic view and how a <c>Feature</c> appears in the list view.</para>
     /// </remarks>
     [KmlElement("Style")]
-    public sealed class Style : StyleSelector
+    public class Style : StyleSelector
     {
         private BalloonStyle balloon;
         private IconStyle icon;

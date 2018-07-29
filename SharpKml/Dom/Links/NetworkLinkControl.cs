@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.2</remarks>
     [KmlElement("NetworkLinkControl")]
-    public sealed class NetworkLinkControl : Element
+    public class NetworkLinkControl : Element
     {
         /// <summary>
         /// The default value that should be used for <see cref="SessionLength"/>.

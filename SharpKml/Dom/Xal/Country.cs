@@ -11,7 +11,7 @@ namespace SharpKml.Dom.Xal
     /// Represents a country.
     /// </summary>
     [KmlElement("Country", KmlNamespaces.XalNamespace)]
-    public sealed class Country : Element
+    public class Country : Element
     {
         private AdministrativeArea area;
 

@@ -18,7 +18,7 @@ namespace SharpKml.Dom
     /// icon.</para>
     /// </remarks>
     [KmlElement("Placemark")]
-    public sealed class Placemark : Feature
+    public class Placemark : Feature
     {
         private Geometry geometry;
 

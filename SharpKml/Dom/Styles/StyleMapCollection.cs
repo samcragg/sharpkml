@@ -24,7 +24,7 @@ namespace SharpKml.Dom
     /// </remarks>
     [KmlElement("StyleMap")]
     [ChildType(typeof(Pair), 1)]
-    public sealed class StyleMapCollection : StyleSelector, ICollection<Pair>
+    public class StyleMapCollection : StyleSelector, ICollection<Pair>
     {
         /// <summary>
         /// Gets the number of <see cref="Pair"/>s in this instance.

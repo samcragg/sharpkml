@@ -25,7 +25,7 @@ namespace SharpKml.Dom
     /// calculation uses the Region that is the closest ancestor in the hierarchy.</para>
     /// </remarks>
     [KmlElement("Region")]
-    public sealed class Region : KmlObject
+    public class Region : KmlObject
     {
         private LatLonAltBox box;
         private Lod lod;

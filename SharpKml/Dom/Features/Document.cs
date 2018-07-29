@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     [KmlElement("Document")]
     [ChildType(typeof(Schema), 1)]
     [ChildType(typeof(Feature), 2)]
-    public sealed class Document : Container
+    public class Document : Container
     {
         /// <summary>
         /// Gets a collection of <see cref="Schema"/> contained by this instance.

@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// <see cref="Feature.Description"/>, if it exists.</para>
     /// </remarks>
     [KmlElement("Snippet")]
-    public sealed class Snippet : Element, IHtmlContent
+    public class Snippet : Element, IHtmlContent
     {
         /// <summary>
         /// The default value that should be used for <see cref="MaximumLines"/>.

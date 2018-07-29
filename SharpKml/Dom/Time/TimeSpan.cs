@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 15.2</remarks>
     [KmlElement("TimeSpan")]
-    public sealed class TimeSpan : TimePrimitive
+    public class TimeSpan : TimePrimitive
     {
         /// <summary>
         /// Gets or sets the beginning instant of a time period.

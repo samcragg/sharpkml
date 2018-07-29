@@ -18,7 +18,7 @@ namespace SharpKml.Dom
     [KmlElement("SchemaData")]
     [ChildType(typeof(SimpleData), 1)]
     [ChildType(typeof(GX.SimpleArrayData), 2)]
-    public sealed class SchemaData : KmlObject
+    public class SchemaData : KmlObject
     {
         /// <summary>
         /// Gets a collection of value arrays.

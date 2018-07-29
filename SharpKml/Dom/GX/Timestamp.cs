@@ -17,7 +17,7 @@ namespace SharpKml.Dom.GX
     /// <see cref="AbstractView"/>.</para>
     /// </remarks>
     [KmlElement("TimeStamp", KmlNamespaces.GX22Namespace)]
-    public sealed class Timestamp : TimePrimitive
+    public class Timestamp : TimePrimitive
     {
         /// <summary>
         /// Gets or sets the moment in time.

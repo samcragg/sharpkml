@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.8.3.4</remarks>
     [KmlElement("hotSpot")]
-    public sealed class Hotspot : VectorType
+    public class Hotspot : VectorType
     {
         // Intentionally left blank - this is a simple concrete implementation of VectorType.
     }

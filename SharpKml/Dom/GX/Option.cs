@@ -14,7 +14,7 @@ namespace SharpKml.Dom.GX
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("Option", KmlNamespaces.GX22Namespace)]
-    public sealed class Option : Element
+    public class Option : Element
     {
         /// <summary>
         /// Gets or sets the name of the viewing mode.

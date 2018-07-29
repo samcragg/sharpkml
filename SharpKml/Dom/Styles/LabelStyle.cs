@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.10</remarks>
     [KmlElement("LabelStyle")]
-    public sealed class LabelStyle : ColorStyle
+    public class LabelStyle : ColorStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="Scale"/>.

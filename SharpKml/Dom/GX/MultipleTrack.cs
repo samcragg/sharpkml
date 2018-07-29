@@ -15,7 +15,7 @@ namespace SharpKml.Dom.GX
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("MultiTrack", KmlNamespaces.GX22Namespace)]
     [ChildType(typeof(Track), 1)]
-    public sealed class MultipleTrack : Geometry
+    public class MultipleTrack : Geometry
     {
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.

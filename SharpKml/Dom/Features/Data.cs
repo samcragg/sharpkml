@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.3</remarks>
     [KmlElement("Data")]
-    public sealed class Data : KmlObject
+    public class Data : KmlObject
     {
         /// <summary>
         /// Gets or sets an alternate display name.

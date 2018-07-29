@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 15.3</remarks>
     [KmlElement("TimeStamp")]
-    public sealed class Timestamp : TimePrimitive
+    public class Timestamp : TimePrimitive
     {
         /// <summary>
         /// Gets or sets the moment in time.

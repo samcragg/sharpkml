@@ -12,7 +12,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("FlyTo", KmlNamespaces.GX22Namespace)]
-    public sealed class FlyTo : TourPrimitive
+    public class FlyTo : TourPrimitive
     {
         private AbstractView view;
 

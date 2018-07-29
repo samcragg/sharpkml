@@ -14,7 +14,7 @@ namespace SharpKml.Dom.Xal
     /// Can define multiple addresses, including tracking address history.
     /// </remarks>
     [KmlElement("AddressDetails", KmlNamespaces.XalNamespace)]
-    public sealed class AddressDetails : Element
+    public class AddressDetails : Element
     {
         private Country country;
 

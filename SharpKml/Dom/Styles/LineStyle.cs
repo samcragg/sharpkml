@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// OGC KML 2.2 Section 12.11
     /// </remarks>
     [KmlElement("LineStyle")]
-    public sealed class LineStyle : ColorStyle
+    public class LineStyle : ColorStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="Width"/>.

@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// <para>Can be used to specify views of the earth or of objects in space.</para>
     /// </remarks>
     [KmlElement("Camera")]
-    public sealed class Camera : AbstractView
+    public class Camera : AbstractView
     {
         /// <summary>
         /// Gets or sets the distance of the camera from the Earth's surface,

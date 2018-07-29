@@ -17,7 +17,7 @@ namespace SharpKml.Dom.GX
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("SimpleArrayData", KmlNamespaces.GX22Namespace)]
     [ChildType(typeof(ValueElement), 1)]
-    public sealed class SimpleArrayData : Element
+    public class SimpleArrayData : Element
     {
         private static readonly XmlComponent ValueComponent = new XmlComponent(null, "value", KmlNamespaces.GX22Namespace);
 

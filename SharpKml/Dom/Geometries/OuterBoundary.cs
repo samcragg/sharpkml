@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.8.3.4</remarks>
     [KmlElement("outerBoundaryIs")]
-    public sealed class OuterBoundary : Element
+    public class OuterBoundary : Element
     {
         private LinearRing ring;
 

@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// a wide-angle lens, focuses on a large part of the scene.</para>
     /// </remarks>
     [KmlElement("ViewVolume")]
-    public sealed class ViewVolume : KmlObject
+    public class ViewVolume : KmlObject
     {
         /// <summary>
         /// Gets or sets the angle, in decimal degrees, from the bottom side

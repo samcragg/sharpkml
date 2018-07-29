@@ -16,7 +16,7 @@ namespace SharpKml.Dom.Atom
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("content", KmlNamespaces.AtomNamespace)]
-    public sealed class Content : Element
+    public class Content : Element
     {
         /// <summary>Gets or sets the MIME media type of the content.</summary>
         /// <remarks>

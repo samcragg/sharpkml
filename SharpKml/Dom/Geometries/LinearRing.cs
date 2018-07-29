@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// <see cref="LinearRing.AltitudeMode"/> should not be specified.</para>
     /// </remarks>
     [KmlElement("LinearRing")]
-    public sealed class LinearRing : Geometry, IBoundsInformation
+    public class LinearRing : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
         private CoordinateCollection coords;

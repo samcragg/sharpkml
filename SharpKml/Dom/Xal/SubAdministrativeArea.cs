@@ -16,7 +16,7 @@ namespace SharpKml.Dom.Xal
     /// this case, one becomes sub-administrative area.
     /// </remarks>
     [KmlElement("SubAdministrativeArea", KmlNamespaces.XalNamespace)]
-    public sealed class SubAdministrativeArea : Element
+    public class SubAdministrativeArea : Element
     {
         private Locality locality;
 

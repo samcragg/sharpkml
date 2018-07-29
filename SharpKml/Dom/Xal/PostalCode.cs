@@ -11,7 +11,7 @@ namespace SharpKml.Dom.Xal
     /// Represents a container for either simple or complex (extended) postal codes.
     /// </summary>
     [KmlElement("PostalCode", KmlNamespaces.XalNamespace)]
-    public sealed class PostalCode : Element
+    public class PostalCode : Element
     {
         /// <summary>
         /// Gets or sets the postcode.

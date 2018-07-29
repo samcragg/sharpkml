@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// efficiently load and display large datasets.</para>
     /// </remarks>
     [KmlElement("NetworkLink")]
-    public sealed class NetworkLink : Feature
+    public class NetworkLink : Feature
     {
         private Link link;
 

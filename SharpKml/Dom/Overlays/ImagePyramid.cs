@@ -25,7 +25,7 @@ namespace SharpKml.Dom
     /// for creating an Image Pyramid.</para>
     /// </remarks>
     [KmlElement("ImagePyramid")]
-    public sealed class ImagePyramid : KmlObject
+    public class ImagePyramid : KmlObject
     {
         /// <summary>
         /// The default value that should be used for <see cref="TileSize"/>.

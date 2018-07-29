@@ -15,7 +15,7 @@ namespace SharpKml.Dom
     /// <remarks>OGC KML 2.2 Section 12.13</remarks>
     [KmlElement("ListStyle")]
     [ChildType(typeof(ItemIcon), 1)]
-    public sealed class ListStyle : SubStyle
+    public class ListStyle : SubStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="MaximumSnippetLines"/>.

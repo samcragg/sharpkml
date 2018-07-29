@@ -12,7 +12,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Tour", KmlNamespaces.GX22Namespace)]
-    public sealed class Tour : Feature
+    public class Tour : Feature
     {
         private Playlist playlist;
 

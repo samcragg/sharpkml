@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.12</remarks>
     [KmlElement("PolyStyle")]
-    public sealed class PolygonStyle : ColorStyle
+    public class PolygonStyle : ColorStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="Fill"/>.

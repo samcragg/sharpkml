@@ -15,7 +15,7 @@ namespace SharpKml.Dom.Atom
     /// RFC 4287 Section 4.2.7 (see http://atompub.org/rfc4287.html)
     /// </remarks>
     [KmlElement("link", KmlNamespaces.AtomNamespace)]
-    public sealed class Link : Element
+    public class Link : Element
     {
         /// <summary>
         /// Gets or sets the Link's URI.

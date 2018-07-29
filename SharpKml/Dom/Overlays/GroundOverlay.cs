@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 11.2</remarks>
     [KmlElement("GroundOverlay")]
-    public sealed class GroundOverlay : Overlay
+    public class GroundOverlay : Overlay
     {
         private LatLonBox box;
         private GX.LatLonQuad quad;

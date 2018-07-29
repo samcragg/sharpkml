@@ -15,7 +15,7 @@ namespace SharpKml.Dom.GX
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("SoundCue", KmlNamespaces.GX22Namespace)]
-    public sealed class SoundCue : TourPrimitive
+    public class SoundCue : TourPrimitive
     {
         /// <summary>
         /// Gets or sets the location of the sound file.

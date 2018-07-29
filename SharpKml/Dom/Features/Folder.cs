@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// <remarks>OGC KML 2.2 Section 9.10</remarks>
     [KmlElement("Folder")]
     [ChildType(typeof(Feature), 1)]
-    public sealed class Folder : Container
+    public class Folder : Container
     {
     }
 }

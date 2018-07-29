@@ -14,7 +14,7 @@ namespace SharpKml.Dom.Xal
     /// Typically this includes: cities, reservations and any other built-up areas.
     /// </remarks>
     [KmlElement("Locality", KmlNamespaces.XalNamespace)]
-    public sealed class Locality : Element
+    public class Locality : Element
     {
         private PostalCode code;
         private Thoroughfare thoroughfare;

@@ -19,7 +19,7 @@ namespace SharpKml.Dom.Atom
     [KmlElement("entry", KmlNamespaces.AtomNamespace)]
     [ChildType(typeof(Category), 1)]
     [ChildType(typeof(Link), 2)]
-    public sealed class Entry : Element
+    public class Entry : Element
     {
         private Content content;
 

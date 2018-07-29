@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.9</remarks>
     [KmlElement("Model")]
-    public sealed class Model : Geometry, IBoundsInformation
+    public class Model : Geometry, IBoundsInformation
     {
         private Link link;
         private Location location;

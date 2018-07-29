@@ -23,7 +23,7 @@ namespace SharpKml.Dom
     [KmlElement("ExtendedData")]
     [ChildType(typeof(Data), 1)]
     [ChildType(typeof(SchemaData), 2)]
-    public sealed class ExtendedData : Element
+    public class ExtendedData : Element
     {
         /// <summary>
         /// Gets a collection of untyped name/value pairs.

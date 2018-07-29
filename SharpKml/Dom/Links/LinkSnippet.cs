@@ -18,7 +18,7 @@ namespace SharpKml.Dom
     /// </para>
     /// </remarks>
     [KmlElement("linkSnippet")]
-    public sealed class LinkSnippet : Element, IHtmlContent
+    public class LinkSnippet : Element, IHtmlContent
     {
         /// <summary>
         /// The default value that should be used for <see cref="MaximumLines"/>.

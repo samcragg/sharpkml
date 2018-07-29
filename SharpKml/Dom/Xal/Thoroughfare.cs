@@ -12,7 +12,7 @@ namespace SharpKml.Dom.Xal
     /// </summary>
     /// <remarks>A thoroughfare could be a road, street, canal, river, etc.</remarks>
     [KmlElement("Thoroughfare", KmlNamespaces.XalNamespace)]
-    public sealed class Thoroughfare : Element
+    public class Thoroughfare : Element
     {
         /// <summary>
         /// Gets or sets the name of the thoroughfare.

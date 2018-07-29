@@ -33,7 +33,7 @@ namespace SharpKml.Dom
     /// property.</para>
     /// </remarks>
     [KmlElement("PhotoOverlay")]
-    public sealed class PhotoOverlay : Overlay, IBoundsInformation
+    public class PhotoOverlay : Overlay, IBoundsInformation
     {
         private Point location;
         private ImagePyramid pyramid;

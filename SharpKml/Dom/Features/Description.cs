@@ -17,7 +17,7 @@ namespace SharpKml.Dom
     /// special processing. See the standards for details.</para>
     /// </remarks>
     [KmlElement("description")]
-    public sealed class Description : Element, IHtmlContent
+    public class Description : Element, IHtmlContent
     {
         /// <summary>
         /// Gets or sets the content of this instance.

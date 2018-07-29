@@ -12,7 +12,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("LatLonQuad", KmlNamespaces.GX22Namespace)]
-    public sealed class LatLonQuad : KmlObject
+    public class LatLonQuad : KmlObject
     {
         private CoordinateCollection coords;
 

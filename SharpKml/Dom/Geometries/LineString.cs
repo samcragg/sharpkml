@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.7</remarks>
     [KmlElement("LineString")]
-    public sealed class LineString : Geometry, IBoundsInformation
+    public class LineString : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
         private CoordinateCollection coords;

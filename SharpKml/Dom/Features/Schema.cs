@@ -18,7 +18,7 @@ namespace SharpKml.Dom
     [KmlElement("Schema")]
     [ChildType(typeof(SimpleField), 1)]
     [ChildType(typeof(GX.SimpleArrayField), 2)]
-    public sealed class Schema : KmlObject
+    public class Schema : KmlObject
     {
         /// <summary>
         /// Gets a collection of <see cref="GX.SimpleArrayField"/> contained by this instance.

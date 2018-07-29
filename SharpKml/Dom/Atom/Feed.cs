@@ -20,7 +20,7 @@ namespace SharpKml.Dom.Atom
     [ChildType(typeof(Category), 1)]
     [ChildType(typeof(Entry), 2)]
     [ChildType(typeof(Link), 3)]
-    public sealed class Feed : Element
+    public class Feed : Element
     {
         /// <summary>
         /// Gets the categories associated with this instance.

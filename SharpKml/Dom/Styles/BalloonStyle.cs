@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.6</remarks>
     [KmlElement("BalloonStyle")]
-    public sealed class BalloonStyle : SubStyle
+    public class BalloonStyle : SubStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="BackgroundColor"/>.

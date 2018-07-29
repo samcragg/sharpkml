@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// The image sizing is determined by <see cref="Size"/>.</para>
     /// </remarks>
     [KmlElement("ScreenOverlay")]
-    public sealed class ScreenOverlay : Overlay
+    public class ScreenOverlay : Overlay
     {
         private OverlayVector overlay;
         private RotationVector rotation;

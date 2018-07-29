@@ -20,7 +20,7 @@ namespace SharpKml.Dom.GX
     [ChildType(typeof(WhenElement), 1)]
     [ChildType(typeof(CoordElement), 2)]
     [ChildType(typeof(AnglesElement), 3)]
-    public sealed class Track : Geometry
+    public class Track : Geometry
     {
         private static readonly XmlComponent AnglesComponent = new XmlComponent(null, "angles", KmlNamespaces.GX22Namespace);
         private static readonly XmlComponent CoordComponent = new XmlComponent(null, "coord", KmlNamespaces.GX22Namespace);

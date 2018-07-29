@@ -12,7 +12,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("TourControl", KmlNamespaces.GX22Namespace)]
-    public sealed class TourControl : TourPrimitive
+    public class TourControl : TourPrimitive
     {
         /// <summary>
         /// Gets or sets whether to pause the tour.

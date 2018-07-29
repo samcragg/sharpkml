@@ -13,7 +13,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Wait", KmlNamespaces.GX22Namespace)]
-    public sealed class Wait : TourPrimitive
+    public class Wait : TourPrimitive
     {
         /// <summary>
         /// Gets or sets the amount of time, in seconds.

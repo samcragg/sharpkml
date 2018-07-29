@@ -14,7 +14,7 @@ namespace SharpKml.Dom.Xal
     /// Examples of include provinces, counties, special regions (such as "Rijnmond").
     /// </remarks>
     [KmlElement("AdministrativeArea", KmlNamespaces.XalNamespace)]
-    public sealed class AdministrativeArea : Element
+    public class AdministrativeArea : Element
     {
         private Locality locality;
         private SubAdministrativeArea subArea;

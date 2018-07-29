@@ -12,7 +12,7 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("SimpleArrayField", KmlNamespaces.GX22Namespace)]
-    public sealed class SimpleArrayField : Element
+    public class SimpleArrayField : Element
     {
         /// <summary>
         /// Gets or sets an alternate display name.

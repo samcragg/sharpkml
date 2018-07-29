@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.3</remarks>
     [KmlElement("Point")]
-    public sealed class Point : Geometry, IBoundsInformation
+    public class Point : Geometry, IBoundsInformation
     {
         private CoordinateCollection coords;
 

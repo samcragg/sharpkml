@@ -22,7 +22,7 @@ namespace SharpKml.Dom
     /// </remarks>
     [KmlElement("ResourceMap")]
     [ChildType(typeof(Alias), 1)]
-    public sealed class ResourceMap : KmlObject
+    public class ResourceMap : KmlObject
     {
         /// <summary>
         /// Gets a collection of untyped name/value pairs.

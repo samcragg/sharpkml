@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// </para>
     /// </remarks>
     [KmlElement("LookAt")]
-    public sealed class LookAt : AbstractView
+    public class LookAt : AbstractView
     {
         /// <summary>
         /// Gets or sets the altitude in meters, interpreted according to

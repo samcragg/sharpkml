@@ -40,7 +40,7 @@ namespace SharpKml.Dom
     ///     opacity = 0 // Not visible
     /// </code></example>
     [KmlElement("Lod")]
-    public sealed class Lod : KmlObject
+    public class Lod : KmlObject
     {
         /// <summary>
         /// The default value that should be used for <see cref="MaximumPixels"/>.

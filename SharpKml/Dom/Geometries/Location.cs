@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.10</remarks>
     [KmlElement("Location")]
-    public sealed class Location : KmlObject
+    public class Location : KmlObject
     {
         /// <summary>
         /// Gets or sets the altitude of origin measured in meters.

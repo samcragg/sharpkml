@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.15</remarks>
     [KmlElement("LatLonAltBox")]
-    public sealed class LatLonAltBox : AbstractLatLonBox
+    public class LatLonAltBox : AbstractLatLonBox
     {
         /// <summary>
         /// Gets or sets how <see cref="MinimumAltitude"/> and

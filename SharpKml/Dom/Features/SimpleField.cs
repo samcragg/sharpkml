@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.9</remarks>
     [KmlElement("SimpleField")]
-    public sealed class SimpleField : Element
+    public class SimpleField : Element
     {
         /// <summary>
         /// Gets or sets an alternate display name.

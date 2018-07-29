@@ -15,7 +15,7 @@ namespace SharpKml.Dom.GX
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Playlist", KmlNamespaces.GX22Namespace)]
     [ChildType(typeof(TourPrimitive), 1)]
-    public sealed class Playlist : KmlObject
+    public class Playlist : KmlObject
     {
         /// <summary>
         /// Gets the <see cref="TourPrimitive"/>s stored by this instance.

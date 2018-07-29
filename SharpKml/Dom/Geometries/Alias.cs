@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.14</remarks>
     [KmlElement("Alias")]
-    public sealed class Alias : KmlObject
+    public class Alias : KmlObject
     {
         /// <summary>
         /// Gets or sets the path for the texture file within the textured 3D object.

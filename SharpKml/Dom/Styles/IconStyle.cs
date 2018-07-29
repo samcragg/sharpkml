@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// is blended with the color of the icon.</para>
     /// </remarks>
     [KmlElement("IconStyle")]
-    public sealed class IconStyle : ColorStyle
+    public class IconStyle : ColorStyle
     {
         /// <summary>
         /// The default value that should be used for <see cref="Scale"/>.

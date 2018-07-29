@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.11</remarks>
     [KmlElement("Orientation")]
-    public sealed class Orientation : KmlObject
+    public class Orientation : KmlObject
     {
         /// <summary>
         /// Gets or sets the rotation about the z axis.

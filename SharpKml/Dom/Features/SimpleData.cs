@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.5</remarks>
     [KmlElement("SimpleData")]
-    public sealed class SimpleData : Element, IHtmlContent
+    public class SimpleData : Element, IHtmlContent
     {
         /// <summary>
         /// Gets or sets a value acting as an identifier.

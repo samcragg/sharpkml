@@ -19,7 +19,7 @@ namespace SharpKml.Dom
     /// their styles shall be merged.</para>
     /// </remarks>
     [KmlElement("Pair")]
-    public sealed class Pair : KmlObject
+    public class Pair : KmlObject
     {
         private StyleSelector selector;
 

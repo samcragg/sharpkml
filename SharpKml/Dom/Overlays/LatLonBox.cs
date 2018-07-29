@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 11.3</remarks>
     [KmlElement("LatLonBox")]
-    public sealed class LatLonBox : AbstractLatLonBox
+    public class LatLonBox : AbstractLatLonBox
     {
         /// <summary>
         /// Gets or sets a rotation of the overlay about its center, in decimal

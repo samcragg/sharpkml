@@ -26,7 +26,7 @@ namespace SharpKml.Dom
     [ChildType(typeof(ChangeCollection), 1)]
     [ChildType(typeof(CreateCollection), 2)]
     [ChildType(typeof(DeleteCollection), 3)]
-    public sealed class Update : Element
+    public class Update : Element
     {
         /// <summary>
         /// Gets or sets the URL for the target KML resource that has been

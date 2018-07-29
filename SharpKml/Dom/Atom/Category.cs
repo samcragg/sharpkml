@@ -16,7 +16,7 @@ namespace SharpKml.Dom.Atom
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("category", KmlNamespaces.AtomNamespace)]
-    public sealed class Category : Element
+    public class Category : Element
     {
         /// <summary>
         /// Gets or sets the human-readable label for display in end-user applications.
