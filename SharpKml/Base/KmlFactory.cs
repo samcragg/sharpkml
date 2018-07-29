@@ -101,6 +101,23 @@ namespace SharpKml.Base
             RegisterType(xml.Clone(), typeof(T)); // Don't store what the user passed us
         }
 
+        /// <summary>
+        /// Replaces the registration of the specified type with another.
+        /// </summary>
+        /// <typeparam name="TExisting">The existing element type.</typeparam>
+        /// <typeparam name="TNew">The type to replace it with.</typeparam>
+        public static void Replace<TExisting, TNew>()
+        {
+            if (!Names.TryGetValue(typeof(TExisting), out XmlComponent xml))
+            {
+                throw new ArgumentException("Unable to find existing registration.");
+            }
+
+            Names.Remove(typeof(TExisting));
+            Names.Add(typeof(TNew), xml);
+            Types[xml] = typeof(TNew);
+        }
+
         private static void RegisterAssembly(Assembly assembly)
         {
             foreach (Type type in assembly.ExportedTypes)
