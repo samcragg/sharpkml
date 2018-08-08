@@ -152,8 +152,9 @@ namespace UnitTests.Engine
             target.AddFeature(new Placemark { Id = "Placemark2" });
 
             target.Merge(source);
-            Assert.That(target.Features.Count(), Is.EqualTo(4));
-            Assert.That(target.Features.ElementAt(3).Id, Is.EqualTo("SubFolder2"));
+            Assert.That(
+                target.Features.Select(f => f.Id),
+                Is.EqualTo(new[] { "Placemark1", "Placemark2", "SubFolder1", "SubFolder2" }));
         }
 
         [Test]

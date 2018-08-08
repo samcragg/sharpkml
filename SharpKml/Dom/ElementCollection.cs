@@ -45,11 +45,11 @@ namespace SharpKml.Dom
             }
             else
             {
-                // We've found an item of the same type - insert this element
-                // after all the elements of the same type
+                // We've found an item of the same order - insert this element
+                // after all the elements that compare equal
                 for (index++; index < this.elements.Count; index++)
                 {
-                    if (this.elements[index].GetType() != element.GetType())
+                    if (this.elementComparer.Compare(this.elements[index], element) != 0)
                     {
                         break;
                     }
