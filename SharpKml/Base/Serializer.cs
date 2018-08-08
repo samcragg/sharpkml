@@ -170,7 +170,7 @@ namespace SharpKml.Base
 
                 // Write the child elements: serialized, children then unknown children.
                 WriteElements(writer, manager, element);
-                SerializeElements(writer, manager, element.OrderedChildren);
+                SerializeElements(writer, manager, element.Children);
                 SerializeElements(writer, manager, element.Orphans);
 
                 writer.WriteEndElement();

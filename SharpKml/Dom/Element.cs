@@ -21,9 +21,17 @@ namespace SharpKml.Dom
             new Dictionary<Type, Dictionary<TypeInfo, int>>();
 
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
-        private readonly List<Element> children = new List<Element>();
+        private readonly ElementCollection children;
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
         private readonly List<Element> orphans = new List<Element>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Element"/> class.
+        /// </summary>
+        protected Element()
+        {
+            this.children = new ElementCollection(GetChildTypesFor(this.GetType()));
+        }
 
         /// <summary>
         /// Gets the parent Element of this instance.
@@ -39,12 +47,6 @@ namespace SharpKml.Dom
         internal IEnumerable<XmlComponent> Attributes => this.attributes;
 
         /// <summary>
-        /// Gets the child elements of this instance, in their serialization order.
-        /// </summary>
-        internal IEnumerable<Element> OrderedChildren =>
-            this.children.OrderBy(e => e.GetType().GetTypeInfo(), new ChildTypeComparer(GetChildTypesFor(this.GetType())));
-
-        /// <summary>
         /// Gets invalid child Elements found during parsing.
         /// </summary>
         internal IEnumerable<Element> Orphans => this.orphans;
@@ -52,7 +54,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the child elements of this instance.
         /// </summary>
-        protected internal IReadOnlyList<Element> Children => this.children;
+        protected internal IReadOnlyCollection<Element> Children => this.children;
 
         /// <summary>
         /// Gets the inner text of the XML element.
@@ -268,27 +270,6 @@ namespace SharpKml.Dom
                 }
 
                 return childTypes;
-            }
-        }
-
-        /// <summary>
-        /// Private class used to sort the Children by the order the type
-        /// was registered.
-        /// </summary>
-        private class ChildTypeComparer : IComparer<TypeInfo>
-        {
-            private readonly Dictionary<TypeInfo, int> childTypes;
-
-            public ChildTypeComparer(Dictionary<TypeInfo, int> childTypes)
-            {
-                this.childTypes = childTypes;
-            }
-
-            public int Compare(TypeInfo typeA, TypeInfo typeB)
-            {
-                int indexA = this.childTypes[typeA];
-                int indexB = this.childTypes[typeB];
-                return indexA.CompareTo(indexB);
             }
         }
     }
