@@ -74,6 +74,32 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
+        /// Removes the specified Element from the <see cref="Children"/> collection.
+        /// </summary>
+        /// <param name="child">The Element to remove.</param>
+        /// <returns>
+        /// true if the value parameter is successfully removed; otherwise,
+        /// false. This method also returns false if item was not found in
+        /// <c>Children</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">child is null.</exception>
+        public bool RemoveChild(Element child)
+        {
+            if (child == null)
+            {
+                throw new ArgumentNullException("child");
+            }
+
+            if ((child.Parent == this) && this.children.Remove(child))
+            {
+                child.Parent = null;
+                return true;
+            }
+
+            return false; // Not ours
+        }
+
+        /// <summary>
         /// Gets the known child types for the specified type.
         /// </summary>
         /// <param name="type">The type to get the registered children for.</param>
@@ -154,32 +180,6 @@ namespace SharpKml.Dom
         {
             return this.namespaces.Where(kvp => kvp.Key != "xml")
                 .ToDictionary(k => k.Key, v => v.Value);
-        }
-
-        /// <summary>
-        /// Removes the specified Element from the <see cref="Children"/> collection.
-        /// </summary>
-        /// <param name="child">The Element to remove.</param>
-        /// <returns>
-        /// true if the value parameter is successfully removed; otherwise,
-        /// false. This method also returns false if item was not found in
-        /// <c>Children</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">child is null.</exception>
-        protected internal bool RemoveChild(Element child)
-        {
-            if (child == null)
-            {
-                throw new ArgumentNullException("child");
-            }
-
-            if ((child.Parent == this) && this.children.Remove(child))
-            {
-                child.Parent = null;
-                return true;
-            }
-
-            return false; // Not ours
         }
 
         /// <summary>
