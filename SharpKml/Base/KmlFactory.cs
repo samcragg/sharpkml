@@ -58,23 +58,6 @@ namespace SharpKml.Base
         }
 
         /// <summary>
-        /// Registers the specified type as being a valid child of another.
-        /// </summary>
-        /// <typeparam name="TElement">The type of the element to extend.</typeparam>
-        /// <typeparam name="TExtension">The type of the extension elements.</typeparam>
-        public static void RegisterExtension<TElement, TExtension>()
-        {
-            Dictionary<TypeInfo, int> childTypes = Element.GetChildTypesFor(typeof(TElement));
-            int index = 1;
-            if (childTypes.Count > 0)
-            {
-                index = childTypes.Values.Max() + 1;
-            }
-
-            childTypes.Add(typeof(TExtension).GetTypeInfo(), index);
-        }
-
-        /// <summary>
         /// Gets the XML information associated with the specified type.
         /// </summary>
         /// <param name="type">The type to search for.</param>
@@ -120,6 +103,28 @@ namespace SharpKml.Base
         }
 
         /// <summary>
+        /// Registers the specified type as being a valid child of another.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the element to extend.</typeparam>
+        /// <typeparam name="TExtension">The type of the extension elements.</typeparam>
+        public static void RegisterExtension<TElement, TExtension>()
+        {
+            if (!Names.ContainsKey(typeof(TExtension)))
+            {
+                RegisterElement(typeof(TExtension));
+            }
+
+            Dictionary<TypeInfo, int> childTypes = Element.GetChildTypesFor(typeof(TElement));
+            int index = 1;
+            if (childTypes.Count > 0)
+            {
+                index = childTypes.Values.Max() + 1;
+            }
+
+            childTypes.Add(typeof(TExtension).GetTypeInfo(), index);
+        }
+
+        /// <summary>
         /// Replaces the registration of the specified type with another.
         /// </summary>
         /// <typeparam name="TExisting">The existing element type.</typeparam>
@@ -140,16 +145,20 @@ namespace SharpKml.Base
         {
             foreach (Type type in assembly.ExportedTypes)
             {
-                TypeInfo typeInfo = type.GetTypeInfo();
-                if (typeInfo.IsSubclassOf(typeof(Element)))
+                if (type.GetTypeInfo().IsSubclassOf(typeof(Element)))
                 {
-                    KmlElementAttribute element = TypeBrowser.GetElement(typeInfo);
-                    if (element != null)
-                    {
-                        var xml = new XmlComponent(null, element.ElementName, element.Namespace);
-                        RegisterType(xml, type);
-                    }
+                    RegisterElement(type);
                 }
+            }
+        }
+
+        private static void RegisterElement(Type type)
+        {
+            KmlElementAttribute element = TypeBrowser.GetElement(type.GetTypeInfo());
+            if (element != null)
+            {
+                var xml = new XmlComponent(null, element.ElementName, element.Namespace);
+                RegisterType(xml, type);
             }
         }
 

@@ -82,11 +82,32 @@
                 Assert.That(children, Is.EqualTo(new[] { typeof(NotRegisteredElement).GetTypeInfo() }));
             }
 
+            [Test]
+            public void ShouldRegisterTheExtensionType()
+            {
+                Assert.That(KmlFactory.FindType(typeof(ExtensionElement)), Is.Null);
+
+                KmlFactory.RegisterExtension<NotRegisteredElement, ExtensionElement>();
+                XmlComponent result = KmlFactory.FindType(typeof(ExtensionElement));
+
+                Assert.That(result.Name, Is.EqualTo("extension_name"));
+
+                // We should be able to register the extension on other types
+                Assert.That(
+                    () => KmlFactory.RegisterExtension<ManuallyRegisteredElement, ExtensionElement>(),
+                    Throws.Nothing);
+            }
+
             private static IEnumerable<TypeInfo> GetChildrenFor<T>()
             {
                 return Element.GetChildTypesFor(typeof(T))
                     .OrderBy(kvp => kvp.Value)
                     .Select(kvp => kvp.Key);
+            }
+
+            [KmlElement("extension_name")]
+            private class ExtensionElement
+            {
             }
 
             private class NoChildrenElement : Element
