@@ -33,7 +33,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddGeometry(Geometry geometry)
         {
-            this.AddChild(geometry);
+            this.TryAddChild(geometry);
         }
     }
 }

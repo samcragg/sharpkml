@@ -40,7 +40,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Container item)
         {
-            this.AddChild(item);
+            this.TryAddChild(item);
         }
 
         /// <summary>

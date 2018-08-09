@@ -101,7 +101,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddInnerBoundary(InnerBoundary boundary)
         {
-            this.AddChild(boundary);
+            this.TryAddChild(boundary);
         }
     }
 }

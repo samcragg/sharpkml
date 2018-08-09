@@ -213,7 +213,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddStyle(StyleSelector selector)
         {
-            this.AddChild(selector);
+            this.TryAddChild(selector);
         }
 
         /// <summary>

@@ -91,7 +91,7 @@ namespace SharpKml.Dom.GX
                 throw new ArgumentNullException("value");
             }
 
-            this.AddChild(new AnglesElement(value));
+            this.TryAddChild(new AnglesElement(value));
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SharpKml.Dom.GX
                 throw new ArgumentNullException("value");
             }
 
-            this.AddChild(new CoordElement(value));
+            this.TryAddChild(new CoordElement(value));
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace SharpKml.Dom.GX
         /// <param name="value">The value to add.</param>
         public void AddWhen(DateTime value)
         {
-            this.AddChild(new WhenElement(value));
+            this.TryAddChild(new WhenElement(value));
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace SharpKml.Dom.GX
                 Element child = ConvertUnknown(unknown);
                 if (child != null)
                 {
-                    this.AddChild(child);
+                    this.TryAddChild(child);
                     return;
                 }
             }

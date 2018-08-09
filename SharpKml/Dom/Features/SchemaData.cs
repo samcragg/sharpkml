@@ -51,7 +51,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddArray(GX.SimpleArrayData array)
         {
-            this.AddChild(array);
+            this.TryAddChild(array);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddData(SimpleData data)
         {
-            this.AddChild(data);
+            this.TryAddChild(data);
         }
     }
 }

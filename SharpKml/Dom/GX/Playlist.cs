@@ -34,7 +34,7 @@ namespace SharpKml.Dom.GX
         /// </exception>
         public void AddTourPrimitive(TourPrimitive tour)
         {
-            this.AddChild(tour);
+            this.TryAddChild(tour);
         }
     }
 }

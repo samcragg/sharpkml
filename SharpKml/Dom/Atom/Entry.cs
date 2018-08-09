@@ -86,7 +86,7 @@ namespace SharpKml.Dom.Atom
         /// </exception>
         public void AddCategory(Category category)
         {
-            this.AddChild(category);
+            this.TryAddChild(category);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace SharpKml.Dom.Atom
         /// </exception>
         public void AddLink(Link link)
         {
-            this.AddChild(link);
+            this.TryAddChild(link);
         }
     }
 }

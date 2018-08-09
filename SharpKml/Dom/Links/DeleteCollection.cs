@@ -39,7 +39,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Feature item)
         {
-            this.AddChild(item);
+            this.TryAddChild(item);
         }
 
         /// <summary>

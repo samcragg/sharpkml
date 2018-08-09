@@ -50,7 +50,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddData(Data data)
         {
-            this.AddChild(data);
+            this.TryAddChild(data);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddSchemaData(SchemaData data)
         {
-            this.AddChild(data);
+            this.TryAddChild(data);
         }
     }
 }

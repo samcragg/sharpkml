@@ -60,7 +60,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddGXOption(GX.Option option)
         {
-            this.AddChild(option);
+            this.TryAddChild(option);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddItemIcon(ItemIcon icon)
         {
-            this.AddChild(icon);
+            this.TryAddChild(icon);
         }
     }
 }

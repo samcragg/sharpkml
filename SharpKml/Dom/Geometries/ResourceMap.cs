@@ -39,7 +39,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddAlias(Alias alias)
         {
-            this.AddChild(alias);
+            this.TryAddChild(alias);
         }
     }
 }

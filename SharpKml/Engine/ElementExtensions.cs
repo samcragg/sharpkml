@@ -146,7 +146,7 @@ namespace SharpKml.Engine
             {
                 foreach (Element child in source.Children)
                 {
-                    element.AddChild(child.Clone());
+                    element.TryAddChild(child.Clone());
                 }
 
                 Merge(source, element, source.GetType());

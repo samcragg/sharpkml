@@ -51,7 +51,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(ChangeCollection update)
         {
-            this.AddChild(update);
+            this.TryAddChild(update);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(CreateCollection update)
         {
-            this.AddChild(update);
+            this.TryAddChild(update);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(DeleteCollection update)
         {
-            this.AddChild(update);
+            this.TryAddChild(update);
         }
     }
 }

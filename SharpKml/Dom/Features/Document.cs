@@ -33,7 +33,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddSchema(Schema schema)
         {
-            this.AddChild(schema);
+            this.TryAddChild(schema);
         }
     }
 }

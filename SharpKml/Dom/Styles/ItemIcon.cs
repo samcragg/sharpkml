@@ -29,7 +29,7 @@ namespace SharpKml.Dom
         /// </summary>
         public ItemIcon()
         {
-            this.AddChild(this.state);
+            this.TryAddChild(this.state);
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace SharpKml.Dom.GX
                 throw new ArgumentNullException("value");
             }
 
-            this.AddChild(new ValueElement(value));
+            this.TryAddChild(new ValueElement(value));
         }
 
         /// <summary>

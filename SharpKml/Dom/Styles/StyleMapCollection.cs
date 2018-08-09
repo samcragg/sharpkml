@@ -46,7 +46,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Pair item)
         {
-            this.AddChild(item);
+            this.TryAddChild(item);
         }
 
         /// <summary>

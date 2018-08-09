@@ -182,7 +182,7 @@ namespace SharpKml.Base
 
         private bool AddChildToParent(Element parent, Element child)
         {
-            if (parent.AddChild(child))
+            if (parent.TryAddChild(child))
             {
                 return true;
             }

@@ -51,7 +51,7 @@ namespace SharpKml.Dom.GX
         /// </exception>
         public void AddTrack(Track track)
         {
-            this.AddChild(track);
+            this.TryAddChild(track);
         }
     }
 }

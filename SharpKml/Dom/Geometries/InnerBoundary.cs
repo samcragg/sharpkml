@@ -27,19 +27,19 @@ namespace SharpKml.Dom
         }
 
         /// <inheritdoc />
-        protected internal override bool AddChild<T>(T child)
+        protected internal override bool TryAddChild<T>(T child)
         {
             if (child is LinearRing linearRing &&
                 (this.ring != null) &&
                 (this.Parent != null))
             {
-                return this.Parent.AddChild(new InnerBoundary
+                return this.Parent.TryAddChild(new InnerBoundary
                 {
                     LinearRing = linearRing
                 });
             }
 
-            return base.AddChild(child);
+            return base.TryAddChild(child);
         }
     }
 }
