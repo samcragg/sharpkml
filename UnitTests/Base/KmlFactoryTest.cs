@@ -1,6 +1,9 @@
 ﻿namespace UnitTests.Base
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
     using NUnit.Framework;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -50,6 +53,49 @@
                 Assert.That(
                     () => KmlFactory.FindType(null),
                     Throws.TypeOf<ArgumentNullException>());
+            }
+        }
+
+        public sealed class RegisterExtensionTests : KmlFactoryTest
+        {
+            [Test]
+            public void ShouldRegisterExtensionsAfterChildren()
+            {
+                KmlFactory.RegisterExtension<OneChildElement, NotRegisteredElement>();
+
+                IEnumerable<TypeInfo> children = GetChildrenFor<OneChildElement>();
+
+                Assert.That(children, Is.EqualTo(new[]
+                {
+                    typeof(ManuallyRegisteredElement).GetTypeInfo(),
+                    typeof(NotRegisteredElement).GetTypeInfo()
+                }));
+            }
+
+            [Test]
+            public void ShouldRegisterExtensionsAsChildren()
+            {
+                KmlFactory.RegisterExtension<NoChildrenElement, NotRegisteredElement>();
+
+                IEnumerable<TypeInfo> children = GetChildrenFor<NoChildrenElement>();
+
+                Assert.That(children, Is.EqualTo(new[] { typeof(NotRegisteredElement).GetTypeInfo() }));
+            }
+
+            private static IEnumerable<TypeInfo> GetChildrenFor<T>()
+            {
+                return Element.GetChildTypesFor(typeof(T))
+                    .OrderBy(kvp => kvp.Value)
+                    .Select(kvp => kvp.Key);
+            }
+
+            private class NoChildrenElement : Element
+            {
+            }
+
+            [ChildType(typeof(ManuallyRegisteredElement), 2)]
+            private class OneChildElement : Element
+            {
             }
         }
 

@@ -7,6 +7,7 @@ namespace SharpKml.Base
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using SharpKml.Dom;
 
@@ -54,6 +55,23 @@ namespace SharpKml.Base
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Registers the specified type as being a valid child of another.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the element to extend.</typeparam>
+        /// <typeparam name="TExtension">The type of the extension elements.</typeparam>
+        public static void RegisterExtension<TElement, TExtension>()
+        {
+            Dictionary<TypeInfo, int> childTypes = Element.GetChildTypesFor(typeof(TElement));
+            int index = 1;
+            if (childTypes.Count > 0)
+            {
+                index = childTypes.Values.Max() + 1;
+            }
+
+            childTypes.Add(typeof(TExtension).GetTypeInfo(), index);
         }
 
         /// <summary>
