@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.4.0] - 2018-08-09
+### Added
+- `KmlFactory` can now register additional valid child types
+### Changed
+- Element children are stored in serialization order (slightly improves
+  parsing/serialization performance)
+- Element children are now exposed publically
+
 ## [3.3.0] - 2018-07-29
 ### Added
 - Registered types can now be replaced (via `KmlFactory.Replace`)
