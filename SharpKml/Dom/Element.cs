@@ -209,10 +209,9 @@ namespace SharpKml.Dom
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
 
-            Dictionary<TypeInfo, int> childTypes = GetChildTypesFor(this.GetType());
             TypeInfo childType = child.GetType().GetTypeInfo();
-            if (!childTypes.ContainsKey(childType) &&
-                !TryRegisterAsDerivedClass(childTypes, childType))
+            if (!this.children.HasOrderFor(childType) &&
+                !this.children.RegisterAsDerivedClass(childType))
             {
                 return false;
             }

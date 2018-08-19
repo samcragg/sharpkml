@@ -5,6 +5,7 @@
 
 namespace SharpKml.Dom
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Reflection;
@@ -14,20 +15,24 @@ namespace SharpKml.Dom
     /// </summary>
     internal sealed class ElementCollection : ICollection<Element>, IReadOnlyCollection<Element>
     {
-        private readonly IComparer<Element> elementComparer;
-        private readonly List<Element> elements = new List<Element>();
+        private const int InitialSize = 4;
+        private static readonly Element[] EmptyElements = new Element[0];
+
+        private readonly IDictionary<TypeInfo, int> order;
+        private Element[] elements = EmptyElements;
+        private long[] orderMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementCollection"/> class.
         /// </summary>
         /// <param name="typeOrder">Represents the order of the elements.</param>
-        public ElementCollection(IReadOnlyDictionary<TypeInfo, int> typeOrder)
+        public ElementCollection(IDictionary<TypeInfo, int> typeOrder)
         {
-            this.elementComparer = new ChildTypeComparer(typeOrder);
+            this.order = typeOrder;
         }
 
         /// <inheritdoc/>
-        public int Count => this.elements.Count;
+        public int Count { get; private set; }
 
         /// <inheritdoc/>
         bool ICollection<Element>.IsReadOnly => true;
@@ -35,58 +40,63 @@ namespace SharpKml.Dom
         /// <inheritdoc/>
         public void Add(Element element)
         {
-            int index = this.elements.BinarySearch(element, this.elementComparer);
-            if (index < 0)
-            {
-                // If binary search doesn't find the element then it returns "a
-                // negative number that is the bitwise complement of the index
-                // of the next element that is larger than item"
-                index = ~index;
-            }
-            else
-            {
-                // We've found an item of the same order - insert this element
-                // after all the elements that compare equal
-                for (index++; index < this.elements.Count; index++)
-                {
-                    if (this.elementComparer.Compare(this.elements[index], element) != 0)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            this.elements.Insert(index, element);
+            this.EnsureFreeSpace();
+            this.orderMap = null;
+            this.elements[this.Count++] = element;
         }
 
         /// <inheritdoc/>
         public void Clear()
         {
-            this.elements.Clear();
+            this.elements = EmptyElements;
+            this.orderMap = null;
+            this.Count = 0;
         }
 
         /// <inheritdoc/>
         public bool Contains(Element item)
         {
-            return this.elements.Contains(item);
+            return Array.IndexOf(this.elements, item, 0, this.Count) >= 0;
         }
 
         /// <inheritdoc/>
         public void CopyTo(Element[] array, int arrayIndex)
         {
-            this.elements.CopyTo(array, arrayIndex);
+            Array.Copy(this.elements, 0, array, arrayIndex, this.Count);
         }
 
         /// <inheritdoc/>
         public IEnumerator<Element> GetEnumerator()
         {
-            return this.elements.GetEnumerator();
+            this.EnsureMapIsValid();
+            for (int i = 0; i < this.Count; i++)
+            {
+                // We store the [order | index] in the 64 bit map, so truncate
+                // it to just get the index
+                yield return this.elements[(int)this.orderMap[i]];
+            }
         }
 
         /// <inheritdoc/>
         public bool Remove(Element child)
         {
-            return this.elements.Remove(child);
+            int index = Array.IndexOf(this.elements, child, 0, this.Count);
+            if (index < 0)
+            {
+                return false;
+            }
+
+            this.orderMap = null;
+            this.Count--;
+
+            // Quick check if we've removed the item at the end
+            if (index < this.Count)
+            {
+                Array.Copy(this.elements, index + 1, this.elements, index, this.Count - index);
+            }
+
+            this.elements[this.Count] = null;
+            return true;
         }
 
         /// <inheritdoc/>
@@ -95,20 +105,63 @@ namespace SharpKml.Dom
             return this.GetEnumerator();
         }
 
-        private class ChildTypeComparer : IComparer<Element>
+        /// <summary>
+        /// Determines whether the specified type has serialization order information.
+        /// </summary>
+        /// <param name="elementType">The type of the element.</param>
+        /// <returns><c>true</c> if the type is known; otherwise, <c>false</c>.</returns>
+        internal bool HasOrderFor(TypeInfo elementType)
         {
-            private readonly IReadOnlyDictionary<TypeInfo, int> typeOrder;
+            return this.order.ContainsKey(elementType);
+        }
 
-            public ChildTypeComparer(IReadOnlyDictionary<TypeInfo, int> typeOrder)
+        /// <summary>
+        /// Registers the specified type as a derived class of one that does have order.
+        /// </summary>
+        /// <param name="elementType">The type of the element.</param>
+        /// <returns><c>true</c> if the type was registered; otherwise, <c>false</c>.</returns>
+        internal bool RegisterAsDerivedClass(TypeInfo elementType)
+        {
+            foreach (KeyValuePair<TypeInfo, int> type in this.order)
             {
-                this.typeOrder = typeOrder;
+                if (type.Key.IsAssignableFrom(elementType))
+                {
+                    // This is a derived class so add it to the child type
+                    // collection with the same index. Note it's OK to change
+                    // the collection as we're breaking out of the iteration.
+                    this.order[elementType] = type.Value;
+                    return true;
+                }
             }
 
-            public int Compare(Element elementA, Element elementB)
+            // We couldn't find a a type that childType inherits from
+            return false;
+        }
+
+        private void EnsureFreeSpace()
+        {
+            if (this.elements.Length == 0)
             {
-                int indexA = this.typeOrder[elementA.GetType().GetTypeInfo()];
-                int indexB = this.typeOrder[elementB.GetType().GetTypeInfo()];
-                return indexA.CompareTo(indexB);
+                this.elements = new Element[InitialSize];
+            }
+            else if (this.elements.Length == this.Count)
+            {
+                Array.Resize(ref this.elements, this.elements.Length * 2);
+            }
+        }
+
+        private void EnsureMapIsValid()
+        {
+            if (this.orderMap == null)
+            {
+                this.orderMap = new long[this.Count];
+                for (int i = 0; i < this.orderMap.Length; i++)
+                {
+                    int order = this.order[this.elements[i].GetType().GetTypeInfo()];
+                    this.orderMap[i] = ((long)order << 32) | (uint)i;
+                }
+
+                Array.Sort(this.orderMap);
             }
         }
     }
