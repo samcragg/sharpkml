@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\SharpKml.snk</AssemblyOriginatorKeyFile>
-    <Version>3.4.0</Version>
+    <Version>4.0.0</Version>
     <Authors>Samuel Cragg</Authors>
     <Company />
     <Description>SharpKML is an implementation of the Open Geospatial Consortium KML 2.2 standard developed in C#, able to read and write KML and KMZ files.</Description>

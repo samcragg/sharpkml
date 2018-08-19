@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.0] - 2018-08-19
+### Changed
+- Parsing is now more performant (upto 50% in certain scenarios)
+- Parsing/serialization now only supports properties on `Element`s with both
+  getters and setters
+- Parsing of coordinate collections now stops further processing if the correct
+  tuple separator (whitespace) is not present
+### Fixed
+- Extension elements can now be used in derived classes
+
 ## [3.4.0] - 2018-08-09
 ### Added
 - `KmlFactory` can now register additional valid child types
