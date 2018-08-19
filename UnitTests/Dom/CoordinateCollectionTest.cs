@@ -104,12 +104,10 @@ namespace UnitTests.Dom
             Vector[] vectors = ParseVector("bad,input");
             Assert.That(vectors.Length, Is.EqualTo(0));
 
-            // Not really bad but the KML specification states tuples should be seperated by space
-            vectors = ParseVector("1,2,3,4,5,6,7,8,9");
-            Assert.That(vectors.Length, Is.EqualTo(3));
+            // Not really bad but the KML specification states tuples should be separated by space
+            vectors = ParseVector("1,2,3,4,5");
+            Assert.That(vectors.Length, Is.EqualTo(1));
             AssertVector(vectors.ElementAt(0), 2.0, 1.0, 3.0);
-            AssertVector(vectors.ElementAt(1), 5.0, 4.0, 6.0);
-            AssertVector(vectors.ElementAt(2), 8.0, 7.0, 9.0);
         }
 
         [Test]

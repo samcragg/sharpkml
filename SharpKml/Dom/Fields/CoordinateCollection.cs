@@ -7,9 +7,7 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Text;
-    using System.Text.RegularExpressions;
     using System.Xml;
     using SharpKml.Base;
 
@@ -20,7 +18,6 @@ namespace SharpKml.Dom
     [KmlElement("coordinates")]
     public class CoordinateCollection : Element, ICollection<Vector>, ICustomElement
     {
-        private static readonly Regex Expression = CreateRegex();
         private readonly List<Vector> points;
 
         /// <summary>
@@ -224,44 +221,58 @@ namespace SharpKml.Dom
             this.Parse(this.InnerText);
         }
 
-        private static Regex CreateRegex()
+        private static bool SkipSeparator(string value, ref int index)
         {
-            // 16.9.1 coordinatesType description
-            // String representing one or more coordinate tuples, with each tuple
-            // consisting of decimal values for geodetic longitude, geodetic
-            // latitude, and altitude. The altitude component is optional. The
-            // coordinate separator is a comma and the tuple separator is a
-            // whitespace. Longitude and latitude coordinates are expressed in
-            // decimal degrees only.
-            const string Seperator = @"\s*,\s*";
-            const string Token = @"[^\s,]+";
-            const string Longitude = "(?<lon>" + Token + ")" + Seperator;
-            const string Latitude = "(?<lat>" + Token + ")";
-            const string Altitude = "(?:" + Seperator + "(?<alt>" + Token + "))?"; // Optional
-            const string Expression = Longitude + Latitude + Altitude + "\\b";
+            SkipWhitespace(value, ref index);
+            if ((index < value.Length) && (value[index] == ','))
+            {
+                index++;
+                SkipWhitespace(value, ref index);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-            return new Regex(Expression, RegexOptions.CultureInvariant);
+        private static void SkipWhitespace(string value, ref int index)
+        {
+            while (index < value.Length)
+            {
+                if (!char.IsWhiteSpace(value[index]))
+                {
+                    break;
+                }
+
+                index++;
+            }
         }
 
         private void Parse(string input)
         {
             this.points.Clear();
-            foreach (Match match in Expression.Matches(input))
+            for (int i = 0; i < input.Length;)
             {
-                // Minimum required fields for a valid coordinate are latitude and longitude.
-                if (double.TryParse(match.Groups["lat"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double latitude) &&
-                    double.TryParse(match.Groups["lon"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double longitude))
+                SkipWhitespace(input, ref i);
+                if (!DecimalDegree.Parse(input, ref i, out double longitude))
                 {
-                    Group altitudeGroup = match.Groups["alt"];
-                    if (altitudeGroup.Success)
-                    {
-                        if (double.TryParse(altitudeGroup.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double altitude))
-                        {
-                            this.points.Add(new Vector(latitude, longitude, altitude));
-                            continue; // Success!
-                        }
-                    }
+                    break;
+                }
 
+                if (!SkipSeparator(input, ref i) ||
+                    !DecimalDegree.Parse(input, ref i, out double latitude))
+                {
+                    break;
+                }
+
+                if (SkipSeparator(input, ref i) &&
+                    DecimalDegree.Parse(input, ref i, out double altitude))
+                {
+                    this.points.Add(new Vector(latitude, longitude, altitude));
+                }
+                else
+                {
                     this.points.Add(new Vector(latitude, longitude));
                 }
             }
