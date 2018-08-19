@@ -112,7 +112,7 @@ namespace SharpKml.Dom
             {
                 if (!ChildTypes.TryGetValue(type, out Dictionary<TypeInfo, int> childTypes))
                 {
-                    childTypes = new Dictionary<TypeInfo, int>();
+                    childTypes = new Dictionary<TypeInfo, int>(GetChildTypesFromBaseClass(type));
                     AddChildTypesFromAttributes(type.GetTypeInfo(), childTypes);
                     ChildTypes.Add(type, childTypes);
                 }
@@ -254,12 +254,6 @@ namespace SharpKml.Dom
 
         private static void AddChildTypesFromAttributes(TypeInfo type, Dictionary<TypeInfo, int> childTypes)
         {
-            Type baseType = type.BaseType;
-            if (baseType != null)
-            {
-                AddChildTypesFromAttributes(baseType.GetTypeInfo(), childTypes);
-            }
-
             // Offset the order by the number of attributes we've added from
             // base classes (i.e. their children are ordered before ours)
             int offset = 0;
@@ -273,6 +267,18 @@ namespace SharpKml.Dom
                 childTypes.Add(
                     attribute.ChildType.GetTypeInfo(),
                     offset + attribute.Order);
+            }
+        }
+
+        private static IDictionary<TypeInfo, int> GetChildTypesFromBaseClass(Type type)
+        {
+            if (type == typeof(Element))
+            {
+                return new Dictionary<TypeInfo, int>();
+            }
+            else
+            {
+                return GetChildTypesFor(type.GetTypeInfo().BaseType);
             }
         }
 
