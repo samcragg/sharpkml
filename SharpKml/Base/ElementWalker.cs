@@ -51,13 +51,13 @@ namespace SharpKml.Base
 
                 // Explore the properties
                 var browser = TypeBrowser.Create(element.GetType());
-                foreach (Tuple<PropertyInfo, KmlElementAttribute> property in browser.Elements)
+                foreach (TypeBrowser.ElementInfo info in browser.Elements)
                 {
                     // All properties with their ElementName set to null will be Elements
                     // Check here to avoid the GetValue the property is not an Element.
-                    if (property.Item2.ElementName == null)
+                    if (string.IsNullOrEmpty(info.Component.Name))
                     {
-                        object value = property.Item1.GetValue(element, null);
+                        object value = info.GetValue(element);
                         if (value != null)
                         {
                             foreach (Element e in WalkElement((Element)value))

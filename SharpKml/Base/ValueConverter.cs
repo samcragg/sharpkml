@@ -16,7 +16,11 @@ namespace SharpKml.Base
     /// </summary>
     internal static class ValueConverter
     {
-        private static readonly Dictionary<Type, Func<string, object>> Converters = new Dictionary<Type, Func<string, object>>();
+        private static readonly Dictionary<Type, Func<string, object>> Converters =
+            new Dictionary<Type, Func<string, object>>();
+
+        private static readonly Dictionary<Type, Dictionary<string, object>> EnumMaps =
+            new Dictionary<Type, Dictionary<string, object>>();
 
         // These are the only valid DateTime formats
         private static readonly string[] DateTimeFormats =
@@ -80,10 +84,9 @@ namespace SharpKml.Base
             }
             else
             {
-                TypeInfo typeInfo = type.GetTypeInfo();
-                if (typeInfo.IsEnum)
+                if (type.GetTypeInfo().IsEnum)
                 {
-                    value = GetEnum(typeInfo, text);
+                    value = GetEnum(type, text);
                 }
                 else
                 {
@@ -140,22 +143,36 @@ namespace SharpKml.Base
             return null;
         }
 
-        private static object GetEnum(TypeInfo typeInfo, string value)
+        private static Dictionary<string, object> GetEnumValues(TypeInfo enumType)
         {
-            if (value != null)
+            var lookup = new Dictionary<string, object>(StringComparer.Ordinal);
+            foreach (FieldInfo field in enumType.DeclaredFields.Where(f => f.IsStatic))
             {
-                value = value.Trim();
-                foreach (FieldInfo field in typeInfo.DeclaredFields.Where(f => f.IsStatic))
+                KmlElementAttribute element = TypeBrowser.GetElement(field);
+                if (element != null)
                 {
-                    KmlElementAttribute element = TypeBrowser.GetElement(field);
-                    if (element != null && string.Equals(element.ElementName, value, StringComparison.Ordinal))
-                    {
-                        return field.GetValue(null);
-                    }
+                    lookup.Add(element.ElementName, field.GetValue(null));
                 }
             }
 
-            return null;
+            return lookup;
+        }
+
+        private static object GetEnum(Type enumType, string value)
+        {
+            Dictionary<string, object> lookup;
+
+            lock (EnumMaps)
+            {
+                if (!EnumMaps.TryGetValue(enumType, out lookup))
+                {
+                    lookup = GetEnumValues(enumType.GetTypeInfo());
+                    EnumMaps.Add(enumType, lookup);
+                }
+            }
+
+            lookup.TryGetValue(value.Trim(), out object converted);
+            return converted;
         }
     }
 }

@@ -72,7 +72,7 @@ namespace UnitTests.Base
 
             // Should ignore anything after the second colon
             xml = new XmlComponent(null, "too:many:colons", null);
-            Assert.That(xml.Name, Is.EqualTo("many"));
+            Assert.That(xml.Name, Is.EqualTo("many:colons"));
             Assert.That(xml.Prefix, Is.EqualTo("too"));
 
             // Test a known namespace

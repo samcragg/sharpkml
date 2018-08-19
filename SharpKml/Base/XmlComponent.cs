@@ -136,19 +136,18 @@ namespace SharpKml.Base
                 uri = string.Empty;
             }
 
-            string[] names = (local ?? string.Empty).Split(':');
-
-            // No colon found?
-            if (names.Length == 1)
+            local = local ?? string.Empty;
+            int colon = local.IndexOf(':');
+            if (colon < 0)
             {
-                this.Name = names[0];
+                this.Name = local;
                 this.NamespaceUri = uri;
             }
             else
             {
-                this.Name = names[1];
-                this.NamespaceUri = KmlNamespaces.FindNamespace(names[0]) ?? uri;
-                this.Prefix = names[0];
+                this.Name = local.Substring(colon + 1);
+                this.Prefix = local.Substring(0, colon);
+                this.NamespaceUri = KmlNamespaces.FindNamespace(this.Prefix) ?? uri;
             }
         }
     }

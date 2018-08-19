@@ -8,6 +8,7 @@ namespace SharpKml.Base
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
     using SharpKml.Dom;
 
@@ -16,10 +17,11 @@ namespace SharpKml.Base
     /// </summary>
     public static class KmlFactory
     {
-        private static readonly Dictionary<Type, XmlComponent> Names = new Dictionary<Type, XmlComponent>();
+        private static readonly Dictionary<Type, XmlComponent> Names =
+            new Dictionary<Type, XmlComponent>();
 
-        // We need two so we can do reverse lookups
-        private static readonly Dictionary<XmlComponent, Type> Types = new Dictionary<XmlComponent, Type>();
+        private static readonly Dictionary<XmlComponent, Func<Element>> Types =
+            new Dictionary<XmlComponent, Func<Element>>();
 
         /// <summary>
         /// Initializes static members of the <see cref="KmlFactory"/> class.
@@ -49,9 +51,9 @@ namespace SharpKml.Base
         /// </exception>
         public static Element CreateElement(XmlComponent xml)
         {
-            if (Types.TryGetValue(xml, out Type type))
+            if (Types.TryGetValue(xml, out Func<Element> constructor))
             {
-                return (Element)Activator.CreateInstance(type);
+                return constructor();
             }
 
             return null;
@@ -138,7 +140,12 @@ namespace SharpKml.Base
 
             Names.Remove(typeof(TExisting));
             Names.Add(typeof(TNew), xml);
-            Types[xml] = typeof(TNew);
+            Types[xml] = ConstructType(typeof(TNew));
+        }
+
+        private static Func<Element> ConstructType(Type type)
+        {
+            return Expression.Lambda<Func<Element>>(Expression.New(type)).Compile();
         }
 
         private static void RegisterAssembly(Assembly assembly)
@@ -176,7 +183,7 @@ namespace SharpKml.Base
             }
 
             Names.Add(type, xml);
-            Types.Add(xml, type);
+            Types.Add(xml, ConstructType(type));
         }
     }
 }

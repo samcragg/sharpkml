@@ -106,7 +106,7 @@
             }
 
             [KmlElement("extension_name")]
-            private class ExtensionElement
+            private class ExtensionElement : Element
             {
             }
 

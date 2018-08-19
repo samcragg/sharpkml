@@ -206,14 +206,14 @@ namespace SharpKml.Base
         private static void WriteAttributesForElement(XmlWriter writer, Element element)
         {
             var browser = TypeBrowser.Create(element.GetType());
-            foreach (Tuple<PropertyInfo, KmlAttributeAttribute> property in browser.Attributes)
+            foreach (TypeBrowser.ElementInfo attribute in browser.Attributes)
             {
-                object value = property.Item1.GetValue(element, null);
+                object value = attribute.GetValue(element);
 
                 // Make sure it needs saving
                 if (value != null)
                 {
-                    writer.WriteAttributeString(property.Item2.AttributeName, GetString(value));
+                    writer.WriteAttributeString(attribute.Component.Name, GetString(value));
                 }
             }
         }
@@ -248,21 +248,21 @@ namespace SharpKml.Base
         {
             var browser = TypeBrowser.Create(element.GetType());
 
-            foreach (Tuple<PropertyInfo, KmlElementAttribute> property in browser.Elements)
+            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
             {
-                object value = property.Item1.GetValue(element, null);
+                object value = elementInfo.GetValue(element);
 
                 // Make sure it needs saving
                 if (value != null)
                 {
                     // Is this an element?
-                    if (property.Item2.ElementName == null)
+                    if (string.IsNullOrEmpty(elementInfo.Component.Name))
                     {
                         SerializeElement(writer, manager, (Element)value);
                     }
                     else
                     {
-                        writer.WriteStartElement(property.Item2.ElementName, property.Item2.Namespace);
+                        writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
                         WriteData(writer, GetString(value));
                         writer.WriteEndElement();
                     }
@@ -280,7 +280,7 @@ namespace SharpKml.Base
                 customElement.CreateStartElement(writer);
                 if (!customElement.ProcessChildren)
                 {
-                    return false; // Don't need to to any more work.
+                    return false; // Don't need to do any more work.
                 }
             }
             else

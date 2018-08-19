@@ -8,44 +8,48 @@ namespace SharpKml.Base
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
 
     /// <summary>
     /// Helper class for extracting properties with a KmlAttribute/KmlElement
     /// assigned to them, searching the entire inheritance hierarchy of the type.
     /// </summary>
-    internal class TypeBrowser
+    internal sealed class TypeBrowser
     {
         // Used for a cache. This is very important for performance as it reduces
         // the amount of work done in reflection, as the attributes associated
-        // with a Type won't change during the lifetime of the program (ignoring
-        // funky Emit etc. vodoo which this library doesn't use)
+        // with a Type won't change during the lifetime of the program
         private static readonly Dictionary<Type, TypeBrowser> Types = new Dictionary<Type, TypeBrowser>();
         private static readonly object TypesLock = new object();
 
-        private readonly Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>> attributes =
-            new Dictionary<XmlComponent, Tuple<PropertyInfo, KmlAttributeAttribute>>();
+        private readonly Dictionary<XmlComponent, ElementInfo> attributes = new Dictionary<XmlComponent, ElementInfo>();
+        private readonly Dictionary<XmlComponent, ElementInfo> elements = new Dictionary<XmlComponent, ElementInfo>();
 
-        // Needs to be ordered
-        private readonly List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>> elements =
-            new List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>>();
+        // We need to also store it in the correct order when iterating
+        private readonly List<ElementInfo> orderedElements = new List<ElementInfo>();
 
         private TypeBrowser(Type type)
         {
             this.ExtractAttributes(type);
+
+            // Go in reverse so we store the first element
+            for (int i = this.orderedElements.Count - 1; i >= 0; i--)
+            {
+                ElementInfo info = this.orderedElements[i];
+                this.elements[info.Component] = info;
+            }
         }
 
         /// <summary>
         /// Gets the properties with a KmlAttribute attribute.
         /// </summary>
-        public IEnumerable<Tuple<PropertyInfo, KmlAttributeAttribute>> Attributes =>
-            this.attributes.Values;
+        public IEnumerable<ElementInfo> Attributes => this.attributes.Values;
 
         /// <summary>
         /// Gets the properties with a KmlElement attribute.
         /// </summary>
-        public IEnumerable<Tuple<PropertyInfo, KmlElementAttribute>> Elements =>
-            this.elements.Select(e => Tuple.Create(e.Item2, e.Item3));
+        public IEnumerable<ElementInfo> Elements => this.orderedElements;
 
         /// <summary>
         /// Creates TypeBrowser representing the specified type.
@@ -67,22 +71,6 @@ namespace SharpKml.Base
             }
 
             return browser;
-        }
-
-        /// <summary>
-        /// Gets a KmlAttribute attribute associated with the specified
-        /// MemberInfo.
-        /// </summary>
-        /// <param name="member">
-        /// The MemberInfo to retrieve the attribute from.
-        /// </param>
-        /// <returns>
-        /// A KmlAttributeAttribute associated with the specified value parameter
-        /// if one was found; otherwise, null.
-        /// </returns>
-        public static KmlAttributeAttribute GetAttribute(MemberInfo member)
-        {
-            return GetAttribute<KmlAttributeAttribute>(member);
         }
 
         /// <summary>
@@ -134,17 +122,13 @@ namespace SharpKml.Base
         /// </summary>
         /// <param name="xml">The XML information to find.</param>
         /// <returns>
-        /// A PropertyInfo for the first property found matching the specified
+        /// The information for the first property found matching the specified
         /// information or null if no matches were found.
         /// </returns>
-        public PropertyInfo FindAttribute(XmlComponent xml)
+        public ElementInfo FindAttribute(XmlComponent xml)
         {
-            if (this.attributes.TryGetValue(xml, out Tuple<PropertyInfo, KmlAttributeAttribute> property))
-            {
-                return property.Item1;
-            }
-
-            return null;
+            this.attributes.TryGetValue(xml, out ElementInfo info);
+            return info;
         }
 
         /// <summary>
@@ -155,12 +139,10 @@ namespace SharpKml.Base
         /// A PropertyInfo for the first property found matching the specified
         /// information or null if no matches were found.
         /// </returns>
-        public PropertyInfo FindElement(XmlComponent xml)
+        public ElementInfo FindElement(XmlComponent xml)
         {
-            return this.elements
-                .Where(e => e.Item1.Equals(xml))
-                .Select(e => e.Item2)
-                .FirstOrDefault();
+            this.elements.TryGetValue(xml, out ElementInfo info);
+            return info;
         }
 
         private static T GetAttribute<T>(MemberInfo provider)
@@ -184,14 +166,26 @@ namespace SharpKml.Base
             // Look at the base type first as the KML schema specifies <sequence>
             // This will also find private fields in the base classes, which can't
             // be seen through a derived class.
-            TypeInfo typeInfo = type.GetTypeInfo();
-            this.ExtractAttributes(typeInfo.BaseType);
+            this.ExtractAttributes(type.GetTypeInfo().BaseType);
 
-            // Store the found elements here so we can add them in order later
-            var elements = new List<Tuple<XmlComponent, PropertyInfo, KmlElementAttribute>>();
-            foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(p => !p.GetMethod.IsStatic))
+            // Add the elements in order
+            IEnumerable<ElementInfo> elementInfos =
+                this.ExtractPropertyElements(type.GetTypeInfo())
+                    .OrderBy(e => e.Order);
+
+            this.orderedElements.AddRange(elementInfos);
+        }
+
+        private IEnumerable<ElementInfo> ExtractPropertyElements(TypeInfo typeInfo)
+        {
+            bool IsInstanceReadWriteProperty(PropertyInfo property)
             {
-                KmlAttributeAttribute attribute = GetAttribute(property);
+                return property.CanRead && property.CanWrite && !property.GetMethod.IsStatic;
+            }
+
+            foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(IsInstanceReadWriteProperty))
+            {
+                KmlAttributeAttribute attribute = GetAttribute<KmlAttributeAttribute>(property);
                 if (attribute != null)
                 {
                     var component = new XmlComponent(null, attribute.AttributeName, null);
@@ -200,22 +194,104 @@ namespace SharpKml.Base
                     // Ignore later properties - i.e. don't throw an exception.
                     if (!this.attributes.ContainsKey(component))
                     {
-                        this.attributes.Add(component, Tuple.Create(property, attribute));
+                        this.attributes.Add(component, new ElementInfo(property, attribute));
                     }
                 }
                 else
                 {
-                    KmlElementAttribute element = GetElement(property);
-                    if (element != null)
+                    KmlElementAttribute kmlElement = GetElement(property);
+                    if (kmlElement != null)
                     {
-                        var component = new XmlComponent(null, element.ElementName, element.Namespace);
-                        elements.Add(Tuple.Create(component, property, element));
+                        yield return new ElementInfo(property, kmlElement);
                     }
                 }
             }
+        }
 
-            // Now add the elements in order
-            this.elements.AddRange(elements.OrderBy((Tuple<XmlComponent, PropertyInfo, KmlElementAttribute> e) => e.Item3.Order));
+        /// <summary>
+        /// Represents information about a property.
+        /// </summary>
+        internal sealed class ElementInfo
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ElementInfo"/> class.
+            /// </summary>
+            /// <param name="property">The property information.</param>
+            /// <param name="kmlAttribute">The KML attribute information.</param>
+            public ElementInfo(PropertyInfo property, KmlAttributeAttribute kmlAttribute)
+                : this(property)
+            {
+                this.Component = new XmlComponent(null, kmlAttribute.AttributeName, null);
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ElementInfo"/> class.
+            /// </summary>
+            /// <param name="property">The property information.</param>
+            /// <param name="kmlElement">The KML element information.</param>
+            public ElementInfo(PropertyInfo property, KmlElementAttribute kmlElement)
+                : this(property)
+            {
+                this.Component = new XmlComponent(null, kmlElement.ElementName, kmlElement.Namespace);
+                this.Order = kmlElement.Order;
+            }
+
+            private ElementInfo(PropertyInfo property)
+            {
+                this.GetValue = CreateGetValueDelegate(property);
+                this.SetValue = CreateSetValueDelegate(property);
+                this.ValueType = property.PropertyType;
+            }
+
+            /// <summary>
+            /// Gets the XML information for the property.
+            /// </summary>
+            public XmlComponent Component { get; }
+
+            /// <summary>
+            /// Gets a delegate that can read the property value for a given instance.
+            /// </summary>
+            public Func<object, object> GetValue { get; }
+
+            /// <summary>
+            /// Gets a delegate that can write the property value for a given instance.
+            /// </summary>
+            public Action<object, object> SetValue { get; }
+
+            /// <summary>
+            /// Gets the type the property represents.
+            /// </summary>
+            public Type ValueType { get; }
+
+            /// <summary>
+            /// Gets the order the property should be serialized in.
+            /// </summary>
+            internal int Order { get; }
+
+            private static Func<object, object> CreateGetValueDelegate(PropertyInfo property)
+            {
+                ParameterExpression instance = Expression.Parameter(typeof(object));
+                Expression getAndConvert = Expression.Convert(
+                    Expression.Property(
+                        Expression.Convert(instance, property.DeclaringType),
+                        property),
+                    typeof(object));
+
+                return Expression.Lambda<Func<object, object>>(getAndConvert, instance).Compile();
+            }
+
+            private static Action<object, object> CreateSetValueDelegate(PropertyInfo property)
+            {
+                ParameterExpression instance = Expression.Parameter(typeof(object));
+                ParameterExpression value = Expression.Parameter(typeof(object));
+                Expression convertAndSet = Expression.Assign(
+                    Expression.Property(
+                        Expression.Convert(instance, property.DeclaringType),
+                        property),
+                    Expression.Convert(value, property.PropertyType));
+
+                return Expression.Lambda<Action<object, object>>(convertAndSet, instance, value).Compile();
+            }
         }
     }
 }

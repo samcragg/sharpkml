@@ -118,15 +118,10 @@ namespace SharpKml.Base
             }
         }
 
-        private static void AssignValue(object instance, PropertyInfo property, string text)
+        private static void AssignValue(object instance, TypeBrowser.ElementInfo elementInfo, string text)
         {
-            if (!property.CanWrite)
-            {
-                return; // Can't do anything
-            }
-
             // Get the type, checking if it's nullable, as TryParse doesn't exist on "int?"
-            Type type = property.PropertyType;
+            Type type = elementInfo.ValueType;
             Type nullableType = Nullable.GetUnderlyingType(type);
             if (nullableType != null)
             {
@@ -137,11 +132,11 @@ namespace SharpKml.Base
             {
                 if (value != null)
                 {
-                    property.SetValue(instance, value, null);
+                    elementInfo.SetValue(instance, value);
                 }
                 else if ((nullableType != null) || !type.GetTypeInfo().IsValueType)
                 {
-                    property.SetValue(instance, null, null);
+                    elementInfo.SetValue(instance, null);
                 }
             }
         }
@@ -153,14 +148,14 @@ namespace SharpKml.Base
             if (child is UnknownElement)
             {
                 var browser = TypeBrowser.Create(parent.GetType());
-                PropertyInfo property = browser.FindElement(this.GetXmlComponent());
-                if (property != null)
+                TypeBrowser.ElementInfo elementInfo = browser.FindElement(this.GetXmlComponent());
+                if (elementInfo != null)
                 {
                     // We're not going to add it to the parent, which has the potential to
                     // lose any attributes/child elements assigned to the unknown, but this
                     // is the behaviour of the C++ version.
                     this.PopulateElement(child);
-                    AssignValue(parent, property, child.InnerText);
+                    AssignValue(parent, elementInfo, child.InnerText);
                     return;
                 }
 
@@ -191,11 +186,11 @@ namespace SharpKml.Base
                 // Search for a property that we can assign to
                 TypeInfo typeInfo = child.GetType().GetTypeInfo();
                 var browser = TypeBrowser.Create(parent.GetType());
-                foreach (PropertyInfo property in browser.Elements.Select(x => x.Item1))
+                foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
                 {
-                    if (property.PropertyType.GetTypeInfo().IsAssignableFrom(typeInfo))
+                    if (elementInfo.ValueType.GetTypeInfo().IsAssignableFrom(typeInfo))
                     {
-                        property.SetValue(parent, child, null);
+                        elementInfo.SetValue(parent, child);
                         return true;
                     }
                 }
@@ -336,8 +331,9 @@ namespace SharpKml.Base
                 }
                 else
                 {
-                    // just a normal attribute
-                    PropertyInfo property = browser.FindAttribute(new XmlComponent(null, this.reader.LocalName, null)); // Attributes never have namespace info.
+                    // Just a normal attribute
+                    TypeBrowser.ElementInfo property = browser.FindAttribute(
+                        new XmlComponent(null, this.reader.LocalName, null)); // Attributes never have namespace info
                     if (property != null)
                     {
                         AssignValue(element, property, this.reader.Value);
