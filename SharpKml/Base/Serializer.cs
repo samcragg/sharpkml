@@ -6,6 +6,7 @@
 namespace SharpKml.Base
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
@@ -170,7 +171,6 @@ namespace SharpKml.Base
 
                 // Write the child elements: serialized, children then unknown children.
                 WriteElements(writer, manager, element);
-                SerializeElements(writer, manager, element.Children);
                 SerializeElements(writer, manager, element.Orphans);
 
                 writer.WriteEndElement();
@@ -258,7 +258,14 @@ namespace SharpKml.Base
                     // Is this an element?
                     if (string.IsNullOrEmpty(elementInfo.Component.Name))
                     {
-                        SerializeElement(writer, manager, (Element)value);
+                        if (value is IEnumerable<Element>)
+                        {
+                            SerializeElements(writer, manager, (IEnumerable<Element>)value);
+                        }
+                        else
+                        {
+                            SerializeElement(writer, manager, (Element)value);
+                        }
                     }
                     else
                     {

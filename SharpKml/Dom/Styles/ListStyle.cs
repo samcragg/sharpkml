@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.13</remarks>
     [KmlElement("ListStyle")]
-    [ChildType(typeof(ItemIcon), 1)]
+    [ChildType(typeof(ItemIcon), 5)]
     public class ListStyle : SubStyle
     {
         /// <summary>

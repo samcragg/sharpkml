@@ -17,6 +17,9 @@ namespace SharpKml.Base
     /// </summary>
     internal sealed class TypeBrowser
     {
+        // Used to stored child types in the right order
+        private const int DepthMultiplier = 100;
+
         // Used for a cache. This is very important for performance as it reduces
         // the amount of work done in reflection, as the attributes associated
         // with a Type won't change during the lifetime of the program
@@ -28,6 +31,9 @@ namespace SharpKml.Base
 
         // We need to also store it in the correct order when iterating
         private readonly List<ElementInfo> orderedElements = new List<ElementInfo>();
+
+        // Current depth of inheritance
+        private int depth = 0;
 
         private TypeBrowser(Type type)
         {
@@ -174,6 +180,8 @@ namespace SharpKml.Base
                     .OrderBy(e => e.Order);
 
             this.orderedElements.AddRange(elementInfos);
+
+            this.depth++;
         }
 
         private IEnumerable<ElementInfo> ExtractPropertyElements(TypeInfo typeInfo)
@@ -202,8 +210,24 @@ namespace SharpKml.Base
                     KmlElementAttribute kmlElement = GetElement(property);
                     if (kmlElement != null)
                     {
-                        yield return new ElementInfo(property, kmlElement);
+                        yield return new ElementInfo(property, null, kmlElement.ElementName, kmlElement.Namespace, kmlElement.Order + (this.depth * DepthMultiplier));
                     }
+                }
+            }
+
+            Dictionary<TypeInfo, Dom.ChildTypeInfo> childTypes = Dom.Element.GetChildTypesFor(typeInfo.AsType());
+
+            foreach (KeyValuePair<TypeInfo, Dom.ChildTypeInfo> kvp in childTypes.Where(kvp => kvp.Value.ParentType == typeInfo))
+            {
+                KmlElementAttribute kmlElement = GetElement(kvp.Key);
+
+                if (kmlElement != null)
+                {
+                    yield return new ElementInfo(kvp.Key, null, null, kmlElement.Namespace, kvp.Value.Order + (this.depth * DepthMultiplier));
+                }
+                else
+                {
+                    yield return new ElementInfo(kvp.Key, null, null, null, kvp.Value.Order + (this.depth * DepthMultiplier));
                 }
             }
         }
@@ -228,12 +252,30 @@ namespace SharpKml.Base
             /// Initializes a new instance of the <see cref="ElementInfo"/> class.
             /// </summary>
             /// <param name="property">The property information.</param>
-            /// <param name="kmlElement">The KML element information.</param>
-            public ElementInfo(PropertyInfo property, KmlElementAttribute kmlElement)
+            /// <param name="prefix">The namespace prefix</param>
+            /// <param name="local">Local name in the namespace</param>
+            /// <param name="uri">Namespace Uri</param>
+            /// <param name="order">Element order</param>
+            public ElementInfo(PropertyInfo property, string prefix, string local, string uri, int order)
                 : this(property)
             {
-                this.Component = new XmlComponent(null, kmlElement.ElementName, kmlElement.Namespace);
-                this.Order = kmlElement.Order;
+                this.Component = new XmlComponent(prefix, local, uri);
+                this.Order = order;
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ElementInfo"/> class.
+            /// </summary>
+            /// <param name="childType">The child type information.</param>
+            /// <param name="prefix">The namespace prefix</param>
+            /// <param name="local">Local name in the namespace</param>
+            /// <param name="uri">Namespace Uri</param>
+            /// <param name="order">Element order</param>
+            public ElementInfo(TypeInfo childType, string prefix, string local, string uri, int order)
+               : this(childType)
+            {
+                this.Component = new XmlComponent(prefix, local, uri);
+                this.Order = order;
             }
 
             private ElementInfo(PropertyInfo property)
@@ -241,6 +283,13 @@ namespace SharpKml.Base
                 this.GetValue = CreateGetValueDelegate(property);
                 this.SetValue = CreateSetValueDelegate(property);
                 this.ValueType = property.PropertyType;
+            }
+
+            private ElementInfo(TypeInfo childType)
+            {
+                this.GetValue = CreateGetValueDelegate(childType);
+                this.SetValue = new Action<object, object>((instance, value) => { throw new InvalidOperationException("Child type must be added through Element.TryAddChild()"); });
+                this.ValueType = childType.AsType();
             }
 
             /// <summary>
@@ -278,6 +327,14 @@ namespace SharpKml.Base
                     typeof(object));
 
                 return Expression.Lambda<Func<object, object>>(getAndConvert, instance).Compile();
+            }
+
+            private static Func<object, object> CreateGetValueDelegate(TypeInfo childType)
+            {
+                return new Func<object, object>((instance) =>
+                {
+                    return ((Dom.Element)instance).Children.Where(c => childType.IsAssignableFrom(c.GetType().GetTypeInfo()));
+                });
             }
 
             private static Action<object, object> CreateSetValueDelegate(PropertyInfo property)

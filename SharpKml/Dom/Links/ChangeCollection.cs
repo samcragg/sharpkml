@@ -89,7 +89,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(KmlObject[] array, int arrayIndex)
         {
-            ((ElementCollection)this.Children).CopyTo(array, arrayIndex);
+            ((ICollection<Element>)this.Children).CopyTo(array, arrayIndex);
         }
 
         /// <summary>

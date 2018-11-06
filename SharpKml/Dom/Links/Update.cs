@@ -32,7 +32,7 @@ namespace SharpKml.Dom
         /// Gets or sets the URL for the target KML resource that has been
         /// previously retrieved via <see cref="NetworkLink"/>.
         /// </summary>
-        [KmlElement("targetHref", 1)]
+        [KmlElement("targetHref")]
         public Uri Target { get; set; }
 
         /// <summary>

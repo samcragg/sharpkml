@@ -111,19 +111,19 @@ namespace SharpKml.Base
         /// <typeparam name="TExtension">The type of the extension elements.</typeparam>
         public static void RegisterExtension<TElement, TExtension>()
         {
-            if (!Names.ContainsKey(typeof(TExtension)))
+            Type type = typeof(TExtension);
+            TypeInfo typeInfo = type.GetTypeInfo();
+
+            if (!Names.ContainsKey(type))
             {
-                RegisterElement(typeof(TExtension));
+                RegisterElement(type);
             }
 
-            Dictionary<TypeInfo, int> childTypes = Element.GetChildTypesFor(typeof(TElement));
-            int index = 1;
-            if (childTypes.Count > 0)
-            {
-                index = childTypes.Values.Max() + 1;
-            }
+            KmlElementAttribute element = TypeBrowser.GetElement(typeInfo);
 
-            childTypes.Add(typeof(TExtension).GetTypeInfo(), index);
+            Dictionary<TypeInfo, ChildTypeInfo> childTypes = Element.GetChildTypesFor(typeof(TElement));
+
+            childTypes.Add(typeInfo, new ChildTypeInfo(element.Order, typeof(TElement).GetTypeInfo()));
         }
 
         /// <summary>

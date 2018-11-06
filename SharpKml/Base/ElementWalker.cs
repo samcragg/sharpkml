@@ -40,15 +40,6 @@ namespace SharpKml.Base
             {
                 yield return element; // Is a valid Element
 
-                // Explore the children
-                foreach (Element child in element.Children)
-                {
-                    foreach (Element e in WalkElement(child))
-                    {
-                        yield return e;
-                    }
-                }
-
                 // Explore the properties
                 var browser = TypeBrowser.Create(element.GetType());
                 foreach (TypeBrowser.ElementInfo info in browser.Elements)
@@ -58,7 +49,18 @@ namespace SharpKml.Base
                     if (string.IsNullOrEmpty(info.Component.Name))
                     {
                         object value = info.GetValue(element);
-                        if (value != null)
+
+                        if (value is IEnumerable<Element>)
+                        {
+                            foreach (Element child in (IEnumerable<Element>)value)
+                            {
+                                foreach (Element e in WalkElement(child))
+                                {
+                                    yield return e;
+                                }
+                            }
+                        }
+                        else if (value != null)
                         {
                             foreach (Element e in WalkElement((Element)value))
                             {

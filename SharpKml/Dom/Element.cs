@@ -17,11 +17,11 @@ namespace SharpKml.Dom
     public abstract class Element
     {
         // Will store the child type and it's order for each Element type.
-        private static readonly Dictionary<Type, Dictionary<TypeInfo, int>> ChildTypes =
-            new Dictionary<Type, Dictionary<TypeInfo, int>>();
+        private static readonly Dictionary<Type, Dictionary<TypeInfo, ChildTypeInfo>> ChildTypes =
+            new Dictionary<Type, Dictionary<TypeInfo, ChildTypeInfo>>();
 
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
-        private readonly ElementCollection children;
+        private readonly List<Element> children;
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
         private readonly List<Element> orphans = new List<Element>();
 
@@ -30,7 +30,7 @@ namespace SharpKml.Dom
         /// </summary>
         protected Element()
         {
-            this.children = new ElementCollection(GetChildTypesFor(this.GetType()));
+            this.children = new List<Element>();
         }
 
         /// <summary>
@@ -106,13 +106,13 @@ namespace SharpKml.Dom
         /// <returns>
         /// A dictionary containing the registered children and their order.
         /// </returns>
-        internal static Dictionary<TypeInfo, int> GetChildTypesFor(Type type)
+        internal static Dictionary<TypeInfo, ChildTypeInfo> GetChildTypesFor(Type type)
         {
             lock (ChildTypes)
             {
-                if (!ChildTypes.TryGetValue(type, out Dictionary<TypeInfo, int> childTypes))
+                if (!ChildTypes.TryGetValue(type, out Dictionary<TypeInfo, ChildTypeInfo> childTypes))
                 {
-                    childTypes = new Dictionary<TypeInfo, int>(GetChildTypesFromBaseClass(type));
+                    childTypes = new Dictionary<TypeInfo, ChildTypeInfo>(GetChildTypesFromBaseClass(type));
                     AddChildTypesFromAttributes(type.GetTypeInfo(), childTypes);
                     ChildTypes.Add(type, childTypes);
                 }
@@ -210,8 +210,8 @@ namespace SharpKml.Dom
             }
 
             TypeInfo childType = child.GetType().GetTypeInfo();
-            if (!this.children.HasOrderFor(childType) &&
-                !this.children.RegisterAsDerivedClass(childType))
+
+            if (!this.IsValidChild(childType))
             {
                 return false;
             }
@@ -219,6 +219,45 @@ namespace SharpKml.Dom
             this.children.Add(child);
             child.Parent = this;
             return true;
+        }
+
+        /// <summary>
+        /// Returns whether the given <paramref name="childType"/> is a valid child for this element (including inherited types).
+        /// </summary>
+        /// <param name="childType">Child type</param>
+        /// <returns>True if child type is valid for this element.</returns>
+        protected bool IsValidChild(TypeInfo childType)
+        {
+            Dictionary<TypeInfo, ChildTypeInfo> childTypes = GetChildTypesFor(this.GetType());
+
+            if (childTypes.ContainsKey(childType))
+            {
+                return true;
+            }
+
+            foreach (KeyValuePair<TypeInfo, ChildTypeInfo> type in childTypes)
+            {
+                if (type.Key.IsAssignableFrom(childType))
+                {
+                    // This is a derived class so add it to the child type
+                    // collection with the same index. Note it's OK to change
+                    // the collection as we're breaking out of the iteration.
+                    childTypes.Add(childType, type.Value);
+
+                    // We also need to add this type to the actual parent type collection
+                    Dictionary<TypeInfo, ChildTypeInfo> parentChildTypes = GetChildTypesFor(type.Value.ParentType.AsType());
+
+                    if (!parentChildTypes.ContainsKey(childType))
+                    {
+                        parentChildTypes.Add(childType, type.Value);
+                    }
+
+                    return true;
+                }
+            }
+
+            // We couldn't find a a type that childType inherits from
+            return false;
         }
 
         /// <summary>
@@ -252,52 +291,28 @@ namespace SharpKml.Dom
             element = value;
         }
 
-        private static void AddChildTypesFromAttributes(TypeInfo type, Dictionary<TypeInfo, int> childTypes)
+        private static void AddChildTypesFromAttributes(TypeInfo type, Dictionary<TypeInfo, ChildTypeInfo> childTypes)
         {
-            // Offset the order by the number of attributes we've added from
-            // base classes (i.e. their children are ordered before ours)
-            int offset = 0;
-            if (childTypes.Count > 0)
-            {
-                offset = childTypes.Values.Max() + 1;
-            }
-
             foreach (ChildTypeAttribute attribute in type.GetCustomAttributes(typeof(ChildTypeAttribute)))
             {
+                TypeInfo childType = attribute.ChildType.GetTypeInfo();
+
                 childTypes.Add(
-                    attribute.ChildType.GetTypeInfo(),
-                    offset + attribute.Order);
+                    childType,
+                    new ChildTypeInfo(attribute.Order, type));
             }
         }
 
-        private static IDictionary<TypeInfo, int> GetChildTypesFromBaseClass(Type type)
+        private static IDictionary<TypeInfo, ChildTypeInfo> GetChildTypesFromBaseClass(Type type)
         {
             if (type == typeof(Element))
             {
-                return new Dictionary<TypeInfo, int>();
+                return new Dictionary<TypeInfo, ChildTypeInfo>();
             }
             else
             {
                 return GetChildTypesFor(type.GetTypeInfo().BaseType);
             }
-        }
-
-        private static bool TryRegisterAsDerivedClass(Dictionary<TypeInfo, int> childTypes, TypeInfo childType)
-        {
-            foreach (KeyValuePair<TypeInfo, int> type in childTypes)
-            {
-                if (type.Key.IsAssignableFrom(childType))
-                {
-                    // This is a derived class so add it to the child type
-                    // collection with the same index. Note it's OK to change
-                    // the collection as we're breaking out of the iteration.
-                    childTypes[childType] = type.Value;
-                    return true;
-                }
-            }
-
-            // We couldn't find a a type that childType inherits from
-            return false;
         }
     }
 }

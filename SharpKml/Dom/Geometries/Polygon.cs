@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.8</remarks>
     [KmlElement("Polygon")]
-    [ChildType(typeof(InnerBoundary), 1)]
+    [ChildType(typeof(InnerBoundary), 6)]
     public class Polygon : Geometry, IBoundsInformation
     {
         private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();

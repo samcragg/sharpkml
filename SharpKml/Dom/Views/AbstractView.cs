@@ -15,7 +15,7 @@ namespace SharpKml.Dom
     /// <remarks>
     /// OGC KML 2.2 Section 14.1
     /// </remarks>
-    [ChildType(typeof(GX.Option), 1)]
+    [ChildType(typeof(GX.Option), 3)]
     public abstract class AbstractView : KmlObject
     {
         private TimePrimitive primitive;

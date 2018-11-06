@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// Represents a KML AbstractFeatureGroup
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.1</remarks>
-    [ChildType(typeof(StyleSelector), 1)]
+    [ChildType(typeof(StyleSelector), 14)]
     public abstract class Feature : KmlObject
     {
         /// <summary>
