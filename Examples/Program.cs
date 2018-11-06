@@ -19,7 +19,8 @@ namespace Examples
             Tuple.Create("ParseKml.cs", typeof(ParseKml)),
             Tuple.Create("ShowStyles.cs", typeof(ShowStyles)),
             Tuple.Create("SortPlacemarks.cs", typeof(SortPlacemarks)),
-            Tuple.Create("SplitStyles.cs", typeof(SplitStyles))
+            Tuple.Create("SplitStyles.cs", typeof(SplitStyles)),
+            Tuple.Create("ExtendKml.cs", typeof(ExtendKml))
         };
 
         public static void Main(string[] args)
