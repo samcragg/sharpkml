@@ -239,19 +239,7 @@ namespace SharpKml.Dom
             {
                 if (type.Key.IsAssignableFrom(childType))
                 {
-                    // This is a derived class so add it to the child type
-                    // collection with the same index. Note it's OK to change
-                    // the collection as we're breaking out of the iteration.
-                    childTypes.Add(childType, type.Value);
-
-                    // We also need to add this type to the actual parent type collection
-                    Dictionary<TypeInfo, ChildTypeInfo> parentChildTypes = GetChildTypesFor(type.Value.ParentType.AsType());
-
-                    if (!parentChildTypes.ContainsKey(childType))
-                    {
-                        parentChildTypes.Add(childType, type.Value);
-                    }
-
+                    // adding derived children here messes up serialization
                     return true;
                 }
             }

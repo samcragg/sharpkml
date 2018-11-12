@@ -121,6 +121,11 @@ namespace SharpKml.Base
 
             KmlElementAttribute element = TypeBrowser.GetElement(typeInfo);
 
+            if (element == null)
+            {
+                throw new ArgumentException("The TExtension class must be decorated with KmlElementAttribute");
+            }
+
             Dictionary<TypeInfo, ChildTypeInfo> childTypes = Element.GetChildTypesFor(typeof(TElement));
 
             childTypes.Add(typeInfo, new ChildTypeInfo(element.Order, typeof(TElement).GetTypeInfo()));

@@ -57,6 +57,7 @@
         {
         }
 
+        [KmlElement("ExtensionElement", 1)]
         private class ExtensionElement : Element
         {
         }

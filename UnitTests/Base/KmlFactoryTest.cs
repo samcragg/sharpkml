@@ -101,7 +101,6 @@
             private static IEnumerable<TypeInfo> GetChildrenFor<T>()
             {
                 return Element.GetChildTypesFor(typeof(T))
-                    .OrderBy(kvp => kvp.Value)
                     .Select(kvp => kvp.Key);
             }
 
@@ -114,7 +113,7 @@
             {
             }
 
-            [ChildType(typeof(ManuallyRegisteredElement), 2)]
+            [ChildType(typeof(ManuallyRegisteredElement), 1)]
             private class OneChildElement : Element
             {
             }
@@ -194,6 +193,7 @@
         {
         }
 
+        [KmlElement("NotRegisteredElement", 2)]
         private class NotRegisteredElement : Element
         {
         }
