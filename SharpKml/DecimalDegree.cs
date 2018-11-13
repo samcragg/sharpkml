@@ -13,7 +13,7 @@ namespace SharpKml
     internal static class DecimalDegree
     {
         private const int Emin = 308;
-        private const int MaxSignificandDigits = 18;
+        private const int MaxSignificandDigits = 17;
 
         // We use 18 as that's the maximum amount of significant digits for a
         // double - if it's greater we'll fall back to Math.Pow
@@ -110,7 +110,7 @@ namespace SharpKml
                 }
 
                 number.Digits++;
-                if (number.Digits >= MaxSignificandDigits)
+                if (number.Digits > MaxSignificandDigits)
                 {
                     continue;
                 }
@@ -167,26 +167,36 @@ namespace SharpKml
         {
             int originalIndex = index;
             ParseDigits(text, ref index, ref number);
-            if (number.Digits >= MaxSignificandDigits)
-            {
-                // As soon as we get to MaxSignificandDigits we skip the digit,
-                // hence the +1
-                number.Scale += (short)(1 + number.Digits - MaxSignificandDigits);
-            }
+            int integerDigits = number.Digits;
+            int significantZeros = 0;
 
             // Is there a decimal part as well?
             if ((index < text.Length) && (text[index] == '.'))
             {
                 index++; // Skip the separator
-                int integerStart = index;
+                int fractionalStart = index;
                 ParseDigits(text, ref index, ref number);
-                number.Scale -= (short)(index - integerStart);
+
+                if (integerDigits == 0)
+                {
+                    significantZeros = index - fractionalStart - number.Digits;
+                }
 
                 // Check it's not just a decimal point
                 if ((index - originalIndex) == 1)
                 {
                     index = originalIndex;
                 }
+            }
+
+            int totalDigits = Math.Min((int)number.Digits, MaxSignificandDigits);
+            if (significantZeros > 0)
+            {
+                number.Scale = (short)(-totalDigits - significantZeros);
+            }
+            else
+            {
+                number.Scale = (short)(integerDigits - totalDigits);
             }
 
             return index != originalIndex;

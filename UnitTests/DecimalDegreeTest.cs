@@ -63,6 +63,21 @@
                 Assert.That(index, Is.EqualTo(4));
                 Assert.That(parsed, Is.EqualTo(123));
             }
+
+            [TestCase("123.456789012345678")]
+            [TestCase("123456789012345678")]
+            [TestCase("123456789012345678.901")]
+            [TestCase("-123.456789012345678")]
+            [TestCase("-123456789012345678")]
+            [TestCase("-123456789012345678.901")]
+            public void ShouldTruncateInsignificantDigits(string value)
+            {
+                int index = 0;
+                bool result = DecimalDegree.Parse(value, ref index, out double parsed);
+
+                Assert.That(result, Is.True);
+                Assert.That(parsed, Is.EqualTo(double.Parse(value)));
+            }
         }
     }
 }
