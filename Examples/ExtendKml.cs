@@ -57,6 +57,7 @@ namespace Examples
 
             Placemark placemark = new Placemark();
             placemark.Name = "Placemark";
+            placemark.Geometry = new Point();
 
             placemark.AddChild(new FeatureExtension()
             {

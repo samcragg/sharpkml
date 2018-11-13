@@ -228,6 +228,7 @@ namespace SharpKml.Dom
         /// <returns>True if child type is valid for this element.</returns>
         protected bool IsValidChild(TypeInfo childType)
         {
+            // looking for direct child types
             Dictionary<TypeInfo, ChildTypeInfo> childTypes = GetChildTypesFor(this.GetType());
 
             if (childTypes.ContainsKey(childType))
@@ -235,11 +236,13 @@ namespace SharpKml.Dom
                 return true;
             }
 
+            // then for derived types
             foreach (KeyValuePair<TypeInfo, ChildTypeInfo> type in childTypes)
             {
                 if (type.Key.IsAssignableFrom(childType))
                 {
-                    // adding derived children here messes up serialization
+                    // We shouldn't store children types anymore
+                    // It's a slight performance drawback but this messes up serialization (types found twice)
                     return true;
                 }
             }

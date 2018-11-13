@@ -186,8 +186,6 @@ namespace UnitTests.Engine
 
                 Assert.That(() => kmz.AddFile(string.Empty, empty), // Empty string
                             Throws.TypeOf<ArgumentException>());
-                Assert.That(() => kmz.AddFile("  ", empty), // Whitespace
-                            Throws.TypeOf<ArgumentException>());
                 Assert.That(() => kmz.AddFile("../invalid.kml", empty), // Path points above the archive
                             Throws.TypeOf<ArgumentException>());
                 Assert.That(() => kmz.AddFile("/also/invalid.kml", empty), // Path is absolute

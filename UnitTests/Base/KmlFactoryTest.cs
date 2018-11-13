@@ -164,7 +164,7 @@
             public void ShouldCheckTheExistingTypeExists()
             {
                 Assert.That(
-                    () => KmlFactory.Replace<NotRegisteredElement, ReplacedElement>(),
+                    () => KmlFactory.Replace<NotRegisteredYetElement, ReplacedElement>(),
                     Throws.TypeOf<ArgumentException>());
             }
 
@@ -178,6 +178,11 @@
                 Element result = KmlFactory.CreateElement(component);
 
                 Assert.That(result, Is.InstanceOf<ReplacedElement>());
+            }
+
+            private class NotRegisteredYetElement : Element
+            {
+
             }
 
             private class ExistingElement : Element

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpKml.Base;
+using SharpKml.Dom;
 
 namespace UnitTests.Base
 {
@@ -144,7 +145,7 @@ namespace UnitTests.Base
             }
         }
 
-        private class BaseClass
+        private class BaseClass : Element
         {
             [KmlElement("Base.Public", null)]
             public int BPublic { get; set; }
