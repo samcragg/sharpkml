@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.1] - 2018-11-13
+### Fixed
+- Parsing of decimal degrees with large numbers of digits
+
 ## [4.0.0] - 2018-08-19
 ### Changed
-- Parsing is now more performant (upto 50% in certain scenarios)
+- Parsing is now more performant (up to 50% in certain scenarios)
 - Parsing/serialization now only supports properties on `Element`s with both
   getters and setters
 - Parsing of coordinate collections now stops further processing if the correct
@@ -23,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Element children are stored in serialization order (slightly improves
   parsing/serialization performance)
-- Element children are now exposed publically
+- Element children are now exposed publicly
 
 ## [3.3.0] - 2018-07-29
 ### Added
@@ -37,7 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.1.0] - 2018-04-29
 ### Added
-- Arithmatic operators for the Vector class (thanks @MikDal002)
+- Arithmetic operators for the Vector class (thanks @MikDal002)
 
 ## [3.0.5] - 2018-04-18
 ### Fixed
