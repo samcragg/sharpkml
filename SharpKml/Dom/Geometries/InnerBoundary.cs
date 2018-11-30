@@ -5,6 +5,7 @@
 
 namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
     using SharpKml.Base;
 
     /// <summary>
@@ -19,27 +20,51 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets or sets the <see cref="LinearRing"/> acting as the boundary.
         /// </summary>
-        [KmlElement(null, 1)]
         public LinearRing LinearRing
         {
             get => this.ring;
             set => this.UpdatePropertyChild(value, ref this.ring);
         }
 
-        /// <inheritdoc />
-        protected internal override bool TryAddChild<T>(T child)
+        // The standard states that there is [0..1] LinearRing elements in this
+        // instance, however, some applications incorrectly generate multiple
+        // LinearRings. We work around this by wrapping the additional
+        // LinearRings in new instances of this class and adding them to the
+        // parent, hence we pretend to support more than one for the sake of
+        // parsing/serialization
+        [KmlElement(null, 1)]
+        private IEnumerable<LinearRing> LinearRings
         {
-            if (child is LinearRing linearRing &&
-                (this.ring != null) &&
-                (this.Parent != null))
+            get
             {
-                return this.Parent.TryAddChild(new InnerBoundary
+                if (this.ring != null)
                 {
-                    LinearRing = linearRing
-                });
+                    yield return this.ring;
+                }
             }
+        }
 
-            return base.TryAddChild(child);
+        private void AddLinearRing(LinearRing linearRing)
+        {
+            if (this.ring == null)
+            {
+                this.LinearRing = linearRing;
+            }
+            else
+            {
+                // Since our LinearRing is set, we need to add it to the parent
+                if (this.Parent is Polygon polygon)
+                {
+                    polygon.AddInnerBoundary(new InnerBoundary
+                    {
+                        LinearRing = linearRing
+                    });
+                }
+                else
+                {
+                    this.AddOrphan(linearRing);
+                }
+            }
         }
     }
 }

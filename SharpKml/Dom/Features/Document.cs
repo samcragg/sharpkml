@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -14,14 +13,19 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.7</remarks>
     [KmlElement("Document")]
-    [ChildType(typeof(Schema), 1)]
-    [ChildType(typeof(Feature), 2)]
     public class Document : Container
     {
+        private readonly List<Schema> schemas = new List<Schema>();
+
+        /// <inheritdoc />
+        [KmlElement(null, 2)]
+        public override IReadOnlyCollection<Feature> Features => this.FeatureList;
+
         /// <summary>
         /// Gets a collection of <see cref="Schema"/> contained by this instance.
         /// </summary>
-        public IEnumerable<Schema> Schemas => this.Children.OfType<Schema>();
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<Schema> Schemas => this.schemas;
 
         /// <summary>
         /// Adds the specified <see cref="Schema"/> to this instance.
@@ -33,7 +37,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddSchema(Schema schema)
         {
-            this.TryAddChild(schema);
+            this.AddAsChild(this.schemas, schema);
         }
     }
 }

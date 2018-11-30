@@ -15,20 +15,22 @@ namespace SharpKml.Dom
     /// <remarks>
     /// <para>OGC KML 2.2 Section 9.2</para>
     /// <para>
-    /// The scope of ExtendedData is restricted to its <see
-    /// cref="Element.Parent"/> only. Child elements support entity substitution
-    /// - see section 6.5 for details.
+    /// The scope of ExtendedData is restricted to its
+    /// <see cref="Element.Parent"/> only. Child elements support entity
+    /// substitution - see section 6.5 for details.
     /// </para>
     /// </remarks>
     [KmlElement("ExtendedData")]
-    [ChildType(typeof(Data), 1)]
-    [ChildType(typeof(SchemaData), 2)]
     public class ExtendedData : Element
     {
+        private readonly List<Data> dataList = new List<Data>();
+        private readonly List<SchemaData> schemaDataList = new List<SchemaData>();
+
         /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>
-        public IEnumerable<Data> Data => this.Children.OfType<Data>();
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<Data> Data => this.dataList;
 
         /// <summary>
         /// Gets a collection of untyped custom data elements.
@@ -38,7 +40,8 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets a collection of <see cref="SchemaData"/> objects.
         /// </summary>
-        public IEnumerable<SchemaData> SchemaData => this.Children.OfType<SchemaData>();
+        [KmlElement(null, 2)]
+        public IReadOnlyCollection<SchemaData> SchemaData => this.schemaDataList;
 
         /// <summary>
         /// Adds the specified <see cref="Data"/> to this instance.
@@ -50,7 +53,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddData(Data data)
         {
-            this.TryAddChild(data);
+            this.AddAsChild(this.dataList, data);
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddSchemaData(SchemaData data)
         {
-            this.TryAddChild(data);
+            this.AddAsChild(this.schemaDataList, data);
         }
     }
 }

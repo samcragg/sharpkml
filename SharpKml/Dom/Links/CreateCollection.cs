@@ -6,8 +6,8 @@
 namespace SharpKml.Dom
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -17,18 +17,20 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.4</remarks>
     [KmlElement("Create")]
-    [ChildType(typeof(Container), 1)]
     public class CreateCollection : Element, ICollection<Container>
     {
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.
         /// </summary>
-        public int Count => this.Children.Count;
+        public int Count => this.Containers.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
         bool ICollection<Container>.IsReadOnly => false;
+
+        [KmlElement(null, 1)]
+        private List<Container> Containers { get; } = new List<Container>();
 
         /// <summary>
         /// Adds a <see cref="Container"/> to this instance.
@@ -40,7 +42,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Container item)
         {
-            this.TryAddChild(item);
+            this.AddAsChild(this.Containers, item);
         }
 
         /// <summary>
@@ -48,10 +50,8 @@ namespace SharpKml.Dom
         /// </summary>
         public void Clear()
         {
-            for (int i = this.Children.Count; i > 0; --i)
-            {
-                this.RemoveChild(this.Children.First());
-            }
+            this.ResetParents(this.Containers);
+            this.Containers.Clear();
         }
 
         /// <summary>
@@ -64,12 +64,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Contains(Container item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.Children.Contains(item);
+            return this.Containers.Contains(item);
         }
 
         /// <summary>
@@ -90,7 +85,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Container[] array, int arrayIndex)
         {
-            ((ElementCollection)this.Children).CopyTo(array, arrayIndex);
+            this.Containers.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -99,7 +94,7 @@ namespace SharpKml.Dom
         /// <returns>An enumerator for this instance.</returns>
         public IEnumerator<Container> GetEnumerator()
         {
-            return this.Children.Cast<Container>().GetEnumerator();
+            return this.Containers.GetEnumerator();
         }
 
         /// <summary>
@@ -113,19 +108,14 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Remove(Container item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.RemoveChild(item);
+            return this.RemoveChild(this.Containers, item);
         }
 
         /// <summary>
         /// Returns an enumerator that iterates through this instance.
         /// </summary>
         /// <returns>An enumerator for this instance.</returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }

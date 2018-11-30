@@ -7,7 +7,6 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Xml;
     using SharpKml.Base;
 
@@ -16,6 +15,8 @@ namespace SharpKml.Dom
     /// </summary>
     public sealed class UnknownElement : Element, ICustomElement
     {
+        private readonly List<UnknownElement> unknownElements = new List<UnknownElement>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownElement"/> class.
         /// </summary>
@@ -23,10 +24,7 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentNullException">data is null.</exception>
         public UnknownElement(XmlComponent data)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException("data");
-            }
+            Check.IsNotNull(data, nameof(data));
 
             this.UnknownData = data.Clone(); // Don't store the data from the user but store a copy instead.
         }
@@ -34,12 +32,12 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the attributes of the element.
         /// </summary>
-        public new IEnumerable<XmlComponent> Attributes => base.Attributes;
+        public new IReadOnlyCollection<XmlComponent> Attributes => base.Attributes;
 
         /// <summary>
         /// Gets the child elements.
         /// </summary>
-        public IEnumerable<UnknownElement> Elements => this.Children.OfType<UnknownElement>();
+        public IReadOnlyCollection<UnknownElement> Elements => this.unknownElements;
 
         /// <summary>
         /// Gets all the XML content, including markup, in the current element.
@@ -68,6 +66,15 @@ namespace SharpKml.Dom
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
             writer.WriteStartElement(this.UnknownData.Prefix, this.UnknownData.Name, this.UnknownData.NamespaceUri);
+        }
+
+        /// <summary>
+        /// Adds an unknown element to this instance.
+        /// </summary>
+        /// <param name="element">The element to add.</param>
+        internal void AddUnknownElement(UnknownElement element)
+        {
+            this.AddAsChild(this.unknownElements, element);
         }
     }
 }

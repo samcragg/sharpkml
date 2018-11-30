@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -21,13 +20,15 @@ namespace SharpKml.Dom
     /// resource.</para>
     /// </remarks>
     [KmlElement("ResourceMap")]
-    [ChildType(typeof(Alias), 1)]
     public class ResourceMap : KmlObject
     {
+        private readonly List<Alias> aliases = new List<Alias>();
+
         /// <summary>
         /// Gets a collection of untyped name/value pairs.
         /// </summary>
-        public IEnumerable<Alias> Aliases => this.Children.OfType<Alias>();
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<Alias> Aliases => this.aliases;
 
         /// <summary>
         /// Adds the specified <see cref="Alias"/> to this instance.
@@ -39,7 +40,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddAlias(Alias alias)
         {
-            this.TryAddChild(alias);
+            this.AddAsChild(this.aliases, alias);
         }
     }
 }

@@ -23,11 +23,10 @@ namespace SharpKml.Dom
     /// <see cref="KmlObject.Id"/>.</para>
     /// </remarks>
     [KmlElement("Update")]
-    [ChildType(typeof(ChangeCollection), 1)]
-    [ChildType(typeof(CreateCollection), 2)]
-    [ChildType(typeof(DeleteCollection), 3)]
     public class Update : Element
     {
+        private readonly List<Element> updates = new List<Element>();
+
         /// <summary>
         /// Gets or sets the URL for the target KML resource that has been
         /// previously retrieved via <see cref="NetworkLink"/>.
@@ -39,7 +38,8 @@ namespace SharpKml.Dom
         /// Gets the update elements (<see cref="ChangeCollection"/>, <see cref="CreateCollection"/>
         /// or <see cref="DeleteCollection"/>) associated with this instance.
         /// </summary>
-        public IEnumerable<Element> Updates => this.Children;
+        [KmlElement(null, 2)]
+        public IReadOnlyCollection<Element> Updates => this.updates;
 
         /// <summary>
         /// Adds the specified <see cref="ChangeCollection"/> to <see cref="Updates"/>.
@@ -51,7 +51,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(ChangeCollection update)
         {
-            this.TryAddChild(update);
+            this.AddAsChild(this.updates, update);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(CreateCollection update)
         {
-            this.TryAddChild(update);
+            this.AddAsChild(this.updates, update);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddUpdate(DeleteCollection update)
         {
-            this.TryAddChild(update);
+            this.AddAsChild(this.updates, update);
         }
     }
 }

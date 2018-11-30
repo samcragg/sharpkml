@@ -6,8 +6,8 @@
 namespace SharpKml.Dom
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -16,18 +16,20 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.5</remarks>
     [KmlElement("Delete")]
-    [ChildType(typeof(Feature), 1)]
-    public class DeleteCollection : Element, ICollection<Feature>
+    public class DeleteCollection : Element, ICollection<Feature>, IReadOnlyCollection<Feature>
     {
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.
         /// </summary>
-        public int Count => this.Children.Count;
+        public int Count => this.Features.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
         bool ICollection<Feature>.IsReadOnly => false;
+
+        [KmlElement(null, 1)]
+        private List<Feature> Features { get; } = new List<Feature>();
 
         /// <summary>
         /// Adds a <see cref="Feature"/> to this instance.
@@ -39,7 +41,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Feature item)
         {
-            this.TryAddChild(item);
+            this.AddAsChild(this.Features, item);
         }
 
         /// <summary>
@@ -47,10 +49,8 @@ namespace SharpKml.Dom
         /// </summary>
         public void Clear()
         {
-            for (int i = this.Children.Count; i > 0; --i)
-            {
-                this.RemoveChild(this.Children.First());
-            }
+            this.ResetParents(this.Features);
+            this.Features.Clear();
         }
 
         /// <summary>
@@ -63,12 +63,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Contains(Feature item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.Children.Contains(item);
+            return this.Features.Contains(item);
         }
 
         /// <summary>
@@ -89,7 +84,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Feature[] array, int arrayIndex)
         {
-            ((ElementCollection)this.Children).CopyTo(array, arrayIndex);
+            this.Features.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -98,7 +93,7 @@ namespace SharpKml.Dom
         /// <returns>An enumerator for this instance.</returns>
         public IEnumerator<Feature> GetEnumerator()
         {
-            return this.Children.Cast<Feature>().GetEnumerator();
+            return this.Features.GetEnumerator();
         }
 
         /// <summary>
@@ -112,19 +107,14 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Remove(Feature item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.RemoveChild(item);
+            return this.RemoveChild(this.Features, item);
         }
 
         /// <summary>
         /// Returns an enumerator that iterates through this instance.
         /// </summary>
         /// <returns>An enumerator for this instance.</returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }

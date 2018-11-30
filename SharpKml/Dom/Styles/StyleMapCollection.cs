@@ -7,7 +7,6 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -23,18 +22,20 @@ namespace SharpKml.Dom
     /// <see cref="StyleState.Highlight"/>.</para>
     /// </remarks>
     [KmlElement("StyleMap")]
-    [ChildType(typeof(Pair), 1)]
-    public class StyleMapCollection : StyleSelector, ICollection<Pair>
+    public class StyleMapCollection : StyleSelector, ICollection<Pair>, IReadOnlyCollection<Pair>
     {
         /// <summary>
         /// Gets the number of <see cref="Pair"/>s in this instance.
         /// </summary>
-        public int Count => this.Children.Count;
+        public int Count => this.Pairs.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
         bool ICollection<Pair>.IsReadOnly => false;
+
+        [KmlElement(null, 1)]
+        private List<Pair> Pairs { get; } = new List<Pair>();
 
         /// <summary>
         /// Adds a <see cref="Pair"/> to this instance.
@@ -46,7 +47,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(Pair item)
         {
-            this.TryAddChild(item);
+            this.AddAsChild(this.Pairs, item);
         }
 
         /// <summary>
@@ -54,10 +55,8 @@ namespace SharpKml.Dom
         /// </summary>
         public void Clear()
         {
-            for (int i = this.Children.Count; i > 0; --i)
-            {
-                this.RemoveChild(this.Children.First());
-            }
+            this.ResetParents(this.Pairs);
+            this.Pairs.Clear();
         }
 
         /// <summary>
@@ -70,12 +69,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Contains(Pair item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.Children.Contains(item);
+            return this.Pairs.Contains(item);
         }
 
         /// <summary>
@@ -96,7 +90,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(Pair[] array, int arrayIndex)
         {
-            ((ElementCollection)this.Children).CopyTo(array, arrayIndex);
+            this.Pairs.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -105,7 +99,7 @@ namespace SharpKml.Dom
         /// <returns>An enumerator for this instance.</returns>
         public IEnumerator<Pair> GetEnumerator()
         {
-            return this.Children.Cast<Pair>().GetEnumerator();
+            return this.Pairs.GetEnumerator();
         }
 
         /// <summary>
@@ -119,12 +113,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Remove(Pair item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.RemoveChild(item);
+            return this.RemoveChild(this.Pairs, item);
         }
 
         /// <summary>

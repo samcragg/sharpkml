@@ -16,20 +16,14 @@ namespace SharpKml.Dom
     public abstract class Container : Feature
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Container"/> class.
-        /// </summary>
-        internal Container()
-        {
-            // Cannot be inherited outside of this assembly because of the
-            // need to register Feature as a valid child. This is because
-            // in the Kml spec Features belongs in Document/Folder but the
-            // C++ version has it here
-        }
-
-        /// <summary>
         /// Gets the <see cref="Feature"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<Feature> Features => this.Children.OfType<Feature>();
+        public abstract IReadOnlyCollection<Feature> Features { get; }
+
+        /// <summary>
+        /// Gets the mutable list of features.
+        /// </summary>
+        protected List<Feature> FeatureList { get; } = new List<Feature>();
 
         /// <summary>
         /// Adds the specified <see cref="Feature"/> to this instance.
@@ -41,7 +35,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddFeature(Feature feature)
         {
-            this.TryAddChild(feature);
+            this.AddAsChild(this.FeatureList, feature);
         }
 
         /// <summary>
@@ -55,12 +49,9 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentNullException">id is null.</exception>
         public Feature FindFeature(string id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException("id");
-            }
+            Check.IsNotNull(id, nameof(id));
 
-            return this.Features.FirstOrDefault(f => string.Equals(f.Id, id, StringComparison.Ordinal));
+            return this.FeatureList.FirstOrDefault(f => string.Equals(f.Id, id, StringComparison.Ordinal));
         }
 
         /// <summary>
@@ -75,13 +66,17 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentNullException">id is null.</exception>
         public bool RemoveFeature(string id)
         {
-            Feature feature = this.FindFeature(id); // Will throw is id is null.
-            if (feature != null)
+            Check.IsNotNull(id, nameof(id));
+
+            Feature feature = this.FindFeature(id);
+            if (feature == null)
             {
-                return this.RemoveChild(feature);
+                return false;
             }
 
-            return false;
+            this.ResetParent(feature);
+            this.FeatureList.Remove(feature);
+            return true;
         }
     }
 }

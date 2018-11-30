@@ -14,10 +14,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.8</remarks>
     [KmlElement("Polygon")]
-    [ChildType(typeof(InnerBoundary), 1)]
     public class Polygon : Geometry, IBoundsInformation
     {
-        private static readonly IEnumerable<Vector> EmptyCoordinates = Enumerable.Empty<Vector>();
+        private readonly List<InnerBoundary> innerBoundaries = new List<InnerBoundary>();
         private OuterBoundary outer;
 
         /// <summary>
@@ -51,7 +50,8 @@ namespace SharpKml.Dom
         /// Gets a collection of <see cref="InnerBoundary"/> elements.
         /// </summary>
         /// <remarks>It is advised that the rings not cross each other.</remarks>
-        public IEnumerable<InnerBoundary> InnerBoundary => this.Children.OfType<InnerBoundary>();
+        [KmlElement(null, 5)]
+        public IReadOnlyCollection<InnerBoundary> InnerBoundary => this.innerBoundaries;
 
         /// <summary>
         /// Gets or sets the exterior boundary.
@@ -85,7 +85,7 @@ namespace SharpKml.Dom
                     return ((IBoundsInformation)this.OuterBoundary.LinearRing).Coordinates;
                 }
 
-                return EmptyCoordinates;
+                return Enumerable.Empty<Vector>();
             }
         }
 
@@ -101,7 +101,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddInnerBoundary(InnerBoundary boundary)
         {
-            this.TryAddChild(boundary);
+            this.AddAsChild(this.innerBoundaries, boundary);
         }
     }
 }

@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -15,9 +14,9 @@ namespace SharpKml.Dom
     /// <remarks>
     /// OGC KML 2.2 Section 14.1
     /// </remarks>
-    [ChildType(typeof(GX.Option), 1)]
     public abstract class AbstractView : KmlObject
     {
+        private readonly List<GX.Option> options = new List<GX.Option>();
         private TimePrimitive primitive;
 
         /// <summary>
@@ -45,7 +44,8 @@ namespace SharpKml.Dom
         /// Gets the <see cref="GX.Option"/>s stored by this instance.
         /// [Google Extension]
         /// </summary>
-        public IEnumerable<GX.Option> ViewerOptions => this.Children.OfType<GX.Option>();
+        [KmlElement(null, 3)]
+        public IReadOnlyCollection<GX.Option> ViewerOptions => this.options;
 
         /// <summary>
         /// Adds the specified <see cref="GX.Option"/> to this instance.
@@ -60,7 +60,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddGXOption(GX.Option option)
         {
-            this.TryAddChild(option);
+            this.AddAsChild(this.options, option);
         }
     }
 }

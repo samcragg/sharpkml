@@ -8,7 +8,6 @@ namespace SharpKml.Dom
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using SharpKml.Base;
 
     /// <summary>
@@ -16,27 +15,9 @@ namespace SharpKml.Dom
     /// </summary>
     public abstract class Element
     {
-        // Will store the child type and it's order for each Element type.
-        private static readonly Dictionary<Type, Dictionary<TypeInfo, int>> ChildTypes =
-            new Dictionary<Type, Dictionary<TypeInfo, int>>();
-
         private readonly List<XmlComponent> attributes = new List<XmlComponent>();
-        private readonly ElementCollection children;
         private readonly Dictionary<string, string> namespaces = new Dictionary<string, string>();
         private readonly List<Element> orphans = new List<Element>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Element"/> class.
-        /// </summary>
-        protected Element()
-        {
-            this.children = new ElementCollection(GetChildTypesFor(this.GetType()));
-        }
-
-        /// <summary>
-        /// Gets the child elements of this instance.
-        /// </summary>
-        public IReadOnlyCollection<Element> Children => this.children;
 
         /// <summary>
         /// Gets the parent Element of this instance.
@@ -49,77 +30,17 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets unknown attributes found during parsing.
         /// </summary>
-        internal IEnumerable<XmlComponent> Attributes => this.attributes;
+        internal IReadOnlyCollection<XmlComponent> Attributes => this.attributes;
 
         /// <summary>
         /// Gets invalid child Elements found during parsing.
         /// </summary>
-        internal IEnumerable<Element> Orphans => this.orphans;
+        internal IReadOnlyCollection<Element> Orphans => this.orphans;
 
         /// <summary>
         /// Gets the inner text of the XML element.
         /// </summary>
         protected internal string InnerText { get; private set; } = string.Empty;
-
-        /// <summary>
-        /// Adds the specified element to this instance.
-        /// </summary>
-        /// <param name="child">The child to add.</param>
-        public void AddChild(Element child)
-        {
-            if (!this.TryAddChild(child))
-            {
-                throw new ArgumentException("Element has not been registered as a valid child type.");
-            }
-        }
-
-        /// <summary>
-        /// Removes the specified Element from the <see cref="Children"/> collection.
-        /// </summary>
-        /// <param name="child">The Element to remove.</param>
-        /// <returns>
-        /// true if the value parameter is successfully removed; otherwise,
-        /// false. This method also returns false if item was not found in
-        /// <c>Children</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">child is null.</exception>
-        public bool RemoveChild(Element child)
-        {
-            if (child == null)
-            {
-                throw new ArgumentNullException("child");
-            }
-
-            if ((child.Parent == this) && this.children.Remove(child))
-            {
-                child.Parent = null;
-                return true;
-            }
-
-            return false; // Not ours
-        }
-
-        /// <summary>
-        /// Gets the known child types for the specified type.
-        /// </summary>
-        /// <param name="type">The type to get the registered children for.</param>
-        /// <returns>
-        /// A dictionary containing the registered children and their order.
-        /// </returns>
-        internal static Dictionary<TypeInfo, int> GetChildTypesFor(Type type)
-        {
-            lock (ChildTypes)
-            {
-                if (!ChildTypes.TryGetValue(type, out Dictionary<TypeInfo, int> childTypes))
-                {
-                    childTypes = new Dictionary<TypeInfo, int>(GetChildTypesFromBaseClass(type));
-                    AddChildTypesFromAttributes(type.GetTypeInfo(), childTypes);
-                    ChildTypes.Add(type, childTypes);
-                }
-
-                return childTypes;
-            }
-        }
 
         /// <summary>
         /// Stores unknown attributes found during parsing for later serialization.
@@ -183,42 +104,30 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Adds a valid child Element to the end of <see cref="Children"/>.
+        /// Validates and adds a child Element to the collection.
         /// </summary>
         /// <typeparam name="T">A type deriving from Element.</typeparam>
+        /// <param name="collection">The collection to add to.</param>
         /// <param name="child">The Element to be added.</param>
-        /// <returns>
-        /// true if the value parameter is a valid child of this instance and,
-        /// therefore, has been added to <c>Children</c>; otherwise, false.
-        /// </returns>
         /// <exception cref="ArgumentNullException">child is null.</exception>
         /// <exception cref="InvalidOperationException">
         /// child belongs to another Element (i.e. the value of it's
         /// <see cref="Parent"/> is not null).
         /// </exception>
-        protected internal virtual bool TryAddChild<T>(T child)
-            where T : Element // Use generics so we don't get a warning from FxCop telling us to use base class Element when a child calls this method
+        protected void AddAsChild<T>(ICollection<T> collection, T child)
+            where T : Element
         {
             if (child == null)
             {
                 throw new ArgumentNullException("child");
             }
-
-            if (child.Parent != null)
+            else if (child.Parent != null)
             {
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
 
-            TypeInfo childType = child.GetType().GetTypeInfo();
-            if (!this.children.HasOrderFor(childType) &&
-                !this.children.RegisterAsDerivedClass(childType))
-            {
-                return false;
-            }
-
-            this.children.Add(child);
+            collection.Add(child);
             child.Parent = this;
-            return true;
         }
 
         /// <summary>
@@ -227,6 +136,57 @@ namespace SharpKml.Dom
         protected void ClearInnerText()
         {
             this.InnerText = string.Empty;
+        }
+
+        /// <summary>
+        /// removes a child Element from the collection.
+        /// </summary>
+        /// <typeparam name="T">A type deriving from Element.</typeparam>
+        /// <param name="collection">The collection to remove from.</param>
+        /// <param name="child">The Element to be removed.</param>
+        /// <returns>
+        /// <c>true</c> if the child was removed; otherwise, <c>false</c>.
+        /// </returns>
+        protected bool RemoveChild<T>(ICollection<T> collection, T child)
+            where T : Element
+        {
+            if (collection.Remove(child))
+            {
+                child.Parent = null;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Resets the parent of the specified element.
+        /// </summary>
+        /// <param name="element">The element to reset.</param>
+        protected void ResetParent(Element element)
+        {
+            Check.IsNotNull(element, nameof(element));
+            if (element.Parent != this)
+            {
+                throw new InvalidOperationException("Can only reset the parent of elements owned by this instance.");
+            }
+
+            element.Parent = null;
+        }
+
+        /// <summary>
+        /// Resets the parent of the specified elements.
+        /// </summary>
+        /// <param name="elements">The elements to reset.</param>
+        protected void ResetParents(IEnumerable<Element> elements)
+        {
+            Check.IsNotNull(elements, nameof(elements));
+            foreach (Element element in elements)
+            {
+                this.ResetParent(element);
+            }
         }
 
         /// <summary>
@@ -250,54 +210,6 @@ namespace SharpKml.Dom
             }
 
             element = value;
-        }
-
-        private static void AddChildTypesFromAttributes(TypeInfo type, Dictionary<TypeInfo, int> childTypes)
-        {
-            // Offset the order by the number of attributes we've added from
-            // base classes (i.e. their children are ordered before ours)
-            int offset = 0;
-            if (childTypes.Count > 0)
-            {
-                offset = childTypes.Values.Max() + 1;
-            }
-
-            foreach (ChildTypeAttribute attribute in type.GetCustomAttributes(typeof(ChildTypeAttribute)))
-            {
-                childTypes.Add(
-                    attribute.ChildType.GetTypeInfo(),
-                    offset + attribute.Order);
-            }
-        }
-
-        private static IDictionary<TypeInfo, int> GetChildTypesFromBaseClass(Type type)
-        {
-            if (type == typeof(Element))
-            {
-                return new Dictionary<TypeInfo, int>();
-            }
-            else
-            {
-                return GetChildTypesFor(type.GetTypeInfo().BaseType);
-            }
-        }
-
-        private static bool TryRegisterAsDerivedClass(Dictionary<TypeInfo, int> childTypes, TypeInfo childType)
-        {
-            foreach (KeyValuePair<TypeInfo, int> type in childTypes)
-            {
-                if (type.Key.IsAssignableFrom(childType))
-                {
-                    // This is a derived class so add it to the child type
-                    // collection with the same index. Note it's OK to change
-                    // the collection as we're breaking out of the iteration.
-                    childTypes[childType] = type.Value;
-                    return true;
-                }
-            }
-
-            // We couldn't find a a type that childType inherits from
-            return false;
         }
     }
 }

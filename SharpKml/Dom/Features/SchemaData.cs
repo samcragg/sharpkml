@@ -7,7 +7,6 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -16,15 +15,17 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.4</remarks>
     [KmlElement("SchemaData")]
-    [ChildType(typeof(SimpleData), 1)]
-    [ChildType(typeof(GX.SimpleArrayData), 2)]
     public class SchemaData : KmlObject
     {
+        private readonly List<GX.SimpleArrayData> arrayData = new List<GX.SimpleArrayData>();
+        private readonly List<SimpleData> dataList = new List<SimpleData>();
+
         /// <summary>
         /// Gets a collection of value arrays.
         /// [Google Extension]
         /// </summary>
-        public IEnumerable<GX.SimpleArrayData> GXSimpleArray => this.Children.OfType<GX.SimpleArrayData>();
+        [KmlElement(null, 2)]
+        public IReadOnlyCollection<GX.SimpleArrayData> GXSimpleArray => this.arrayData;
 
         /// <summary>
         /// Gets or sets a reference to a <see cref="KmlObject.Id"/> belonging
@@ -37,8 +38,11 @@ namespace SharpKml.Dom
         [KmlAttribute("schemaUrl")]
         public Uri SchemaUrl { get; set; }
 
-        /// <summary>Gets a collection of user-defined fields.</summary>
-        public IEnumerable<SimpleData> SimpleData => this.Children.OfType<SimpleData>();
+        /// <summary>
+        /// Gets a collection of user-defined fields.
+        /// </summary>
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<SimpleData> SimpleData => this.dataList;
 
         /// <summary>
         /// Adds the specified <see cref="GX.SimpleArrayData"/> to this instance.
@@ -51,7 +55,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddArray(GX.SimpleArrayData array)
         {
-            this.TryAddChild(array);
+            this.AddAsChild(this.arrayData, array);
         }
 
         /// <summary>
@@ -64,7 +68,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddData(SimpleData data)
         {
-            this.TryAddChild(data);
+            this.AddAsChild(this.dataList, data);
         }
     }
 }

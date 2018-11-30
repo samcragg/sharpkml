@@ -6,7 +6,6 @@
 namespace SharpKml.Dom.Atom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -17,16 +16,17 @@ namespace SharpKml.Dom.Atom
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("entry", KmlNamespaces.AtomNamespace)]
-    [ChildType(typeof(Category), 1)]
-    [ChildType(typeof(Link), 2)]
     public class Entry : Element
     {
+        private readonly List<Category> categories = new List<Category>();
+        private readonly List<Link> links = new List<Link>();
         private Content content;
 
         /// <summary>
         /// Gets the categories associated with this instance.
         /// </summary>
-        public IEnumerable<Category> Categories => this.Children.OfType<Category>();
+        [KmlElement(null)]
+        public IReadOnlyCollection<Category> Categories => this.categories;
 
         /// <summary>
         /// Gets or sets the content of the Entry.
@@ -47,7 +47,8 @@ namespace SharpKml.Dom.Atom
         /// <summary>
         /// Gets the links associated with this instance.
         /// </summary>
-        public IEnumerable<Link> Links => this.Children.OfType<Link>();
+        [KmlElement(null)]
+        public IReadOnlyCollection<Link> Links => this.links;
 
         /// <summary>
         /// Gets or sets a short summary, abstract, or excerpt of an entry.
@@ -86,7 +87,7 @@ namespace SharpKml.Dom.Atom
         /// </exception>
         public void AddCategory(Category category)
         {
-            this.TryAddChild(category);
+            this.AddAsChild(this.categories, category);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace SharpKml.Dom.Atom
         /// </exception>
         public void AddLink(Link link)
         {
-            this.TryAddChild(link);
+            this.AddAsChild(this.links, link);
         }
     }
 }

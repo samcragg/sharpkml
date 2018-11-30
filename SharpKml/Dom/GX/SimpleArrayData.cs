@@ -16,7 +16,6 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("SimpleArrayData", KmlNamespaces.GX22Namespace)]
-    [ChildType(typeof(ValueElement), 1)]
     public class SimpleArrayData : Element
     {
         private static readonly XmlComponent ValueComponent = new XmlComponent(null, "value", KmlNamespaces.GX22Namespace);
@@ -30,8 +29,10 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets the collection of values stored by this instance.
         /// </summary>
-        public IEnumerable<string> Values =>
-            this.Children.OfType<ValueElement>().Select(v => v.Value);
+        public IEnumerable<string> Values => this.ValueElements.Select(v => v.Value);
+
+        [KmlElement(null, 1)]
+        private List<ValueElement> ValueElements { get; } = new List<ValueElement>();
 
         /// <summary>
         /// Adds the specified value to <see cref="Values"/>.</summary>
@@ -39,12 +40,9 @@ namespace SharpKml.Dom.GX
         /// <exception cref="ArgumentNullException">value is null.</exception>
         public void AddValue(string value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+            Check.IsNotNull(value, nameof(value));
 
-            this.TryAddChild(new ValueElement(value));
+            this.AddAsChild(this.ValueElements, new ValueElement(value));
         }
 
         /// <summary>
@@ -63,6 +61,12 @@ namespace SharpKml.Dom.GX
             }
 
             base.AddOrphan(orphan);
+        }
+
+        // Required for the parsing to work
+        private void AddValueElement(ValueElement value)
+        {
+            this.ValueElements.Add(value);
         }
 
         /// <summary>

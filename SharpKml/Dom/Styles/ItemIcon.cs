@@ -18,19 +18,9 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.14</remarks>
     [KmlElement("ItemIcon")]
-    [ChildType(typeof(StateElement), 1)]
     public class ItemIcon : KmlObject
     {
         private static readonly XmlComponent StateComponent = new XmlComponent(null, "state", KmlNamespaces.Kml22Namespace);
-        private readonly StateElement state = new StateElement();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ItemIcon"/> class.
-        /// </summary>
-        public ItemIcon()
-        {
-            this.TryAddChild(this.state);
-        }
 
         /// <summary>
         /// Gets or sets the resource location.
@@ -53,27 +43,20 @@ namespace SharpKml.Dom
         /// </remarks>
         public ItemIconStates State
         {
-            get => this.state.State;
-            set => this.state.State = value;
-        }
-
-        /// <summary>
-        /// Parses the &lt;state&gt; element.
-        /// </summary>
-        /// <param name="orphan">The <see cref="Element"/> to add.</param>
-        protected internal override void AddOrphan(Element orphan)
-        {
-            if (orphan is UnknownElement unknown)
+            get => this.StateData?.State ?? default;
+            set
             {
-                if (StateComponent.Equals(unknown.UnknownData))
+                if (this.StateData == null)
                 {
-                    this.state.Parse(unknown.InnerText);
-                    return;
+                    this.StateData = new StateElement();
                 }
-            }
 
-            base.AddOrphan(orphan);
+                this.StateData.State = value;
+            }
         }
+
+        [KmlElement("state", 1)]
+        private StateElement StateData { get; set; }
 
         /// <summary>
         /// Used to correctly serialize multiple ItemIconStates.

@@ -6,7 +6,6 @@
 namespace SharpKml.Dom.GX
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -14,9 +13,10 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("MultiTrack", KmlNamespaces.GX22Namespace)]
-    [ChildType(typeof(Track), 1)]
     public class MultipleTrack : Geometry
     {
+        private readonly List<Track> tracks = new List<Track>();
+
         /// <summary>
         /// Gets or sets how the altitude value should be interpreted.
         /// </summary>
@@ -39,7 +39,8 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets the <see cref="Track"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<Track> Tracks => this.Children.OfType<Track>();
+        [KmlElement(null)]
+        public IReadOnlyCollection<Track> Tracks => this.tracks;
 
         /// <summary>
         /// Adds the specified <see cref="Track"/> to this instance.
@@ -51,7 +52,7 @@ namespace SharpKml.Dom.GX
         /// </exception>
         public void AddTrack(Track track)
         {
-            this.TryAddChild(track);
+            this.AddAsChild(this.tracks, track);
         }
     }
 }

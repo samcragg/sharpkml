@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -15,13 +14,15 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.2</remarks>
     [KmlElement("MultiGeometry")]
-    [ChildType(typeof(Geometry), 1)]
     public class MultipleGeometry : Geometry
     {
+        private readonly List<Geometry> geometries = new List<Geometry>();
+
         /// <summary>
         /// Gets a collection of <see cref="Geometry"/> elements.
         /// </summary>
-        public IEnumerable<Geometry> Geometry => this.Children.OfType<Geometry>();
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<Geometry> Geometry => this.geometries;
 
         /// <summary>
         /// Adds the specified <see cref="Geometry"/> to this instance.
@@ -33,7 +34,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddGeometry(Geometry geometry)
         {
-            this.TryAddChild(geometry);
+            this.AddAsChild(this.geometries, geometry);
         }
     }
 }

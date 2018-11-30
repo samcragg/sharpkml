@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -16,20 +15,23 @@ namespace SharpKml.Dom
     /// <remarks>OGC KML 2.2 Section 9.8</remarks>
     // This should inherit from Element, but the C++ version inherits from Object
     [KmlElement("Schema")]
-    [ChildType(typeof(SimpleField), 1)]
-    [ChildType(typeof(GX.SimpleArrayField), 2)]
     public class Schema : KmlObject
     {
+        private readonly List<GX.SimpleArrayField> arrayFields = new List<GX.SimpleArrayField>();
+        private readonly List<SimpleField> fields = new List<SimpleField>();
+
         /// <summary>
         /// Gets a collection of <see cref="GX.SimpleArrayField"/> contained by this instance.
         /// [Google extension]
         /// </summary>
-        public IEnumerable<GX.SimpleArrayField> Arrays => this.Children.OfType<GX.SimpleArrayField>();
+        [KmlElement(null, 2)]
+        public IReadOnlyCollection<GX.SimpleArrayField> Arrays => this.arrayFields;
 
         /// <summary>
         /// Gets a collection of <see cref="SimpleField"/> contained by this instance.
         /// </summary>
-        public IEnumerable<SimpleField> Fields => this.Children.OfType<SimpleField>();
+        [KmlElement(null, 1)]
+        public IReadOnlyCollection<SimpleField> Fields => this.fields;
 
         /// <summary>
         /// Gets or sets a value acting as an identifier.
@@ -48,7 +50,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddArray(GX.SimpleArrayField array)
         {
-            this.TryAddChild(array);
+            this.AddAsChild(this.arrayFields, array);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddField(SimpleField field)
         {
-            this.TryAddChild(field);
+            this.AddAsChild(this.fields, field);
         }
     }
 }

@@ -17,9 +17,6 @@ namespace SharpKml.Dom.GX
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("Track", KmlNamespaces.GX22Namespace)]
-    [ChildType(typeof(WhenElement), 1)]
-    [ChildType(typeof(CoordElement), 2)]
-    [ChildType(typeof(AnglesElement), 3)]
     public class Track : Geometry
     {
         private static readonly XmlComponent AnglesComponent = new XmlComponent(null, "angles", KmlNamespaces.GX22Namespace);
@@ -30,21 +27,27 @@ namespace SharpKml.Dom.GX
         private Model model;
 
         /// <summary>
+        /// Gets or sets how the altitude value should be interpreted.
+        /// </summary>
+        [KmlElement("altitudeMode", 1)]
+        public Dom.AltitudeMode? AltitudeMode { get; set; }
+
+        /// <summary>
         /// Gets a collection of <see cref="Angle"/> containing the heading,
         /// tilt and roll for the icons and models.
         /// </summary>
-        public IEnumerable<Angle> Angles =>
-            this.Children.OfType<AnglesElement>().Select(e => e.Value);
+        public IEnumerable<Angle> Angles => this.AngleElements.Select(e => e.Value);
 
-        /// <summary>Gets a collection of coordinates for the Track.</summary>
-        public IEnumerable<Vector> Coordinates =>
-            this.Children.OfType<CoordElement>().Select(e => e.Value);
+        /// <summary>
+        /// Gets a collection of coordinates for the Track.
+        /// </summary>
+        public IEnumerable<Vector> Coordinates => this.CoordElements.Select(e => e.Value);
 
         /// <summary>
         /// Gets or sets custom data elements defined in a <see cref="Schema"/>
         /// earlier in the KML file.
         /// </summary>
-        [KmlElement(null)]
+        [KmlElement(null, 6)]
         public ExtendedData ExtendedData
         {
             get => this.data;
@@ -54,14 +57,14 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets or sets extended altitude mode information.
         /// </summary>
-        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace)]
+        [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 1)]
         public AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Model"/> used to indicate the current
         /// position on the track.
         /// </summary>
-        [KmlElement(null)]
+        [KmlElement(null, 5)]
         public Model Model
         {
             get => this.model;
@@ -71,14 +74,16 @@ namespace SharpKml.Dom.GX
         /// <summary>
         /// Gets a collection of time values that corresponds to a position.
         /// </summary>
-        public IEnumerable<DateTime> When =>
-            this.Children.OfType<WhenElement>().Select(e => e.Value);
+        public IEnumerable<DateTime> When => this.WhenElements.Select(e => e.Value);
 
-        /// <summary>
-        /// Gets or sets how the altitude value should be interpreted.
-        /// </summary>
-        [KmlElement("altitudeMode")]
-        public Dom.AltitudeMode? AltitudeMode { get; set; }
+        [KmlElement(null, 4)]
+        private List<AnglesElement> AngleElements { get; } = new List<AnglesElement>();
+
+        [KmlElement(null, 3)]
+        private List<CoordElement> CoordElements { get; } = new List<CoordElement>();
+
+        [KmlElement(null, 2)]
+        private List<WhenElement> WhenElements { get; } = new List<WhenElement>();
 
         /// <summary>
         /// Adds the specified value to <see cref="Angles"/>.</summary>
@@ -86,12 +91,9 @@ namespace SharpKml.Dom.GX
         /// <exception cref="ArgumentNullException">value is null.</exception>
         public void AddAngle(Angle value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+            Check.IsNotNull(value, nameof(value));
 
-            this.TryAddChild(new AnglesElement(value));
+            this.AddAsChild(this.AngleElements, new AnglesElement(value));
         }
 
         /// <summary>
@@ -100,12 +102,9 @@ namespace SharpKml.Dom.GX
         /// <exception cref="ArgumentNullException">value is null.</exception>
         public void AddCoordinate(Vector value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+            Check.IsNotNull(value, nameof(value));
 
-            this.TryAddChild(new CoordElement(value));
+            this.AddAsChild(this.CoordElements, new CoordElement(value));
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace SharpKml.Dom.GX
         /// <param name="value">The value to add.</param>
         public void AddWhen(DateTime value)
         {
-            this.TryAddChild(new WhenElement(value));
+            this.AddAsChild(this.WhenElements, new WhenElement(value));
         }
 
         /// <summary>
@@ -123,43 +122,58 @@ namespace SharpKml.Dom.GX
         /// <param name="orphan">The <see cref="Element"/> to add.</param>
         protected internal override void AddOrphan(Element orphan)
         {
-            if (orphan is UnknownElement unknown)
+            var unknown = orphan as UnknownElement;
+            if ((unknown == null) || !this.ConvertUnknown(unknown))
             {
-                Element child = ConvertUnknown(unknown);
-                if (child != null)
-                {
-                    this.TryAddChild(child);
-                    return;
-                }
+                base.AddOrphan(orphan);
             }
-
-            base.AddOrphan(orphan);
         }
 
-        private static Element ConvertUnknown(UnknownElement unknown)
+        private void Add(AnglesElement element)
+        {
+            this.AddAsChild(this.AngleElements, element);
+        }
+
+        private void Add(CoordElement element)
+        {
+            this.AddAsChild(this.CoordElements, element);
+        }
+
+        private void Add(WhenElement element)
+        {
+            this.AddAsChild(this.WhenElements, element);
+        }
+
+        // TODO: Is this required?
+        private bool ConvertUnknown(UnknownElement unknown)
         {
             XmlComponent data = unknown.UnknownData;
             if (AnglesComponent.Equals(data))
             {
-                return new AnglesElement(unknown.InnerText);
+                this.AddAsChild(this.AngleElements, new AnglesElement(unknown.InnerText));
+                return true;
             }
-            else if (CoordComponent.Equals(data))
+
+            if (CoordComponent.Equals(data))
             {
-                return new CoordElement(unknown.InnerText);
+                this.AddAsChild(this.CoordElements, new CoordElement(unknown.InnerText));
+                return true;
             }
-            else if (WhenComponent.Equals(data))
+
+            if (WhenComponent.Equals(data))
             {
                 if (DateTime.TryParse(
-                        unknown.InnerText,
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out DateTime value))
+                    unknown.InnerText,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out DateTime value))
                 {
-                    return new WhenElement(value);
+                    this.AddWhen(value);
+                    return true;
                 }
             }
 
-            return null;
+            return false;
         }
 
         /// <summary>

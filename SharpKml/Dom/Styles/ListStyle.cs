@@ -6,7 +6,6 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -14,7 +13,6 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 12.13</remarks>
     [KmlElement("ListStyle")]
-    [ChildType(typeof(ItemIcon), 1)]
     public class ListStyle : SubStyle
     {
         /// <summary>
@@ -27,6 +25,8 @@ namespace SharpKml.Dom
         /// </summary>
         public static readonly Color32 DefaultBackgroundColor = new Color32(255, 255, 255, 255);
 
+        private readonly List<ItemIcon> icons = new List<ItemIcon>();
+
         /// <summary>
         /// Gets or sets the background color of the graphic element.
         /// </summary>
@@ -36,7 +36,8 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the <see cref="ItemIcon"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<ItemIcon> ItemIcons => this.Children.OfType<ItemIcon>();
+        [KmlElement(null, 3)]
+        public IReadOnlyCollection<ItemIcon> ItemIcons => this.icons;
 
         /// <summary>
         /// Gets or sets how a <see cref="Folder"/> and its contents shall be
@@ -62,7 +63,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddItemIcon(ItemIcon icon)
         {
-            this.TryAddChild(icon);
+            this.AddAsChild(this.icons, icon);
         }
     }
 }

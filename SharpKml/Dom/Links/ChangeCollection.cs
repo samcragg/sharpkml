@@ -6,8 +6,8 @@
 namespace SharpKml.Dom
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
@@ -16,18 +16,20 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.6</remarks>
     [KmlElement("Change")]
-    [ChildType(typeof(KmlObject), 1)]
     public class ChangeCollection : Element, ICollection<KmlObject>
     {
         /// <summary>
         /// Gets the number of <see cref="KmlObject"/>s in this instance.
         /// </summary>
-        public int Count => this.Children.Count;
+        public int Count => this.Objects.Count;
 
         /// <summary>
         /// Gets a value indicating whether this instance is read-only.
         /// </summary>
         bool ICollection<KmlObject>.IsReadOnly => false;
+
+        [KmlElement(null, 1)]
+        private List<KmlObject> Objects { get; } = new List<KmlObject>();
 
         /// <summary>
         /// Adds a <see cref="KmlObject"/> to this instance.
@@ -39,7 +41,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void Add(KmlObject item)
         {
-            this.TryAddChild(item);
+            this.AddAsChild(this.Objects, item);
         }
 
         /// <summary>
@@ -47,10 +49,8 @@ namespace SharpKml.Dom
         /// </summary>
         public void Clear()
         {
-            for (int i = this.Children.Count; i > 0; --i)
-            {
-                this.RemoveChild(this.Children.First());
-            }
+            this.ResetParents(this.Objects);
+            this.Objects.Clear();
         }
 
         /// <summary>
@@ -63,12 +63,7 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Contains(KmlObject item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.Children.Contains(item);
+            return this.Objects.Contains(item);
         }
 
         /// <summary>
@@ -89,7 +84,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void CopyTo(KmlObject[] array, int arrayIndex)
         {
-            ((ElementCollection)this.Children).CopyTo(array, arrayIndex);
+            this.Objects.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -98,7 +93,7 @@ namespace SharpKml.Dom
         /// <returns>An enumerator for this instance.</returns>
         public IEnumerator<KmlObject> GetEnumerator()
         {
-            return this.Children.Cast<KmlObject>().GetEnumerator();
+            return this.Objects.GetEnumerator();
         }
 
         /// <summary>
@@ -112,19 +107,14 @@ namespace SharpKml.Dom
         /// </returns>
         public bool Remove(KmlObject item)
         {
-            if (item == null)
-            {
-                return false;
-            }
-
-            return this.RemoveChild(item);
+            return this.RemoveChild(this.Objects, item);
         }
 
         /// <summary>
         /// Returns an enumerator that iterates through this instance.
         /// </summary>
         /// <returns>An enumerator for this instance.</returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }

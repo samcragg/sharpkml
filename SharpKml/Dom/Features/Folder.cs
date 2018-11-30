@@ -5,6 +5,7 @@
 
 namespace SharpKml.Dom
 {
+    using System.Collections.Generic;
     using SharpKml.Base;
 
     /// <summary>
@@ -12,8 +13,10 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.10</remarks>
     [KmlElement("Folder")]
-    [ChildType(typeof(Feature), 1)]
     public class Folder : Container
     {
+        /// <inheritdoc />
+        [KmlElement(null, 1)]
+        public override IReadOnlyCollection<Feature> Features => this.FeatureList;
     }
 }

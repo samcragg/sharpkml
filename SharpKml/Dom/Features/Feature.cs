@@ -7,14 +7,12 @@ namespace SharpKml.Dom
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using SharpKml.Base;
 
     /// <summary>
     /// Represents a KML AbstractFeatureGroup
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.1</remarks>
-    [ChildType(typeof(StyleSelector), 1)]
     public abstract class Feature : KmlObject
     {
         /// <summary>
@@ -22,6 +20,7 @@ namespace SharpKml.Dom
         /// </summary>
         public const bool DefaultVisibility = true;
 
+        private readonly List<StyleSelector> styles = new List<StyleSelector>();
         private Xal.AddressDetails address;
         private Description description;
         private ExtendedData extended;
@@ -153,7 +152,8 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets the <see cref="StyleSelector"/>s contained by this instance.
         /// </summary>
-        public IEnumerable<StyleSelector> Styles => this.Children.OfType<StyleSelector>();
+        [KmlElement(null, 14)]
+        public IReadOnlyCollection<StyleSelector> Styles => this.styles;
 
         /// <summary>
         /// Gets or sets a reference to a <see cref="Style"/> or
@@ -213,7 +213,7 @@ namespace SharpKml.Dom
         /// </exception>
         public void AddStyle(StyleSelector selector)
         {
-            this.TryAddChild(selector);
+            this.AddAsChild(this.styles, selector);
         }
 
         /// <summary>
@@ -221,11 +221,8 @@ namespace SharpKml.Dom
         /// </summary>
         public void ClearStyles()
         {
-            var selectors = this.Styles.ToList();
-            foreach (StyleSelector selector in selectors)
-            {
-                this.RemoveChild(selector);
-            }
+            this.ResetParents(this.styles);
+            this.styles.Clear();
         }
 
         /// <summary>
@@ -242,7 +239,7 @@ namespace SharpKml.Dom
         /// </exception>
         public bool RemoveStyle(StyleSelector selector)
         {
-            return this.RemoveChild(selector);
+            return this.RemoveChild(this.styles, selector);
         }
     }
 }
