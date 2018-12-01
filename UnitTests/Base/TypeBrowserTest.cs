@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using SharpKml.Base;
 
 namespace UnitTests.Base
@@ -102,6 +103,19 @@ namespace UnitTests.Base
             }
 
             [Test]
+            public void ShouldGetIEnumerableValues()
+            {
+                var instance = new DerivedClass();
+                TypeBrowser.ElementInfo info = this.browser.FindElement(
+                    new XmlComponent(null, "Derived.DCollection", null));
+
+                instance.AddString("test");
+                object result = info.GetValue(instance);
+
+                Assert.That(result, Is.EqualTo(new[] { "test" }));
+            }
+
+            [Test]
             public void ShouldGetThePropertyValue()
             {
                 var instance = new DerivedClass { PrivateProperty = 123 };
@@ -142,6 +156,18 @@ namespace UnitTests.Base
 
                 Assert.That(instance.PrivateProperty, Is.EqualTo(123));
             }
+
+            [Test]
+            public void ShouldSetViaTheAddMethodForIEnumerableValues()
+            {
+                var instance = new DerivedClass();
+                TypeBrowser.ElementInfo info = this.browser.FindElement(
+                    new XmlComponent(null, "Derived.DCollection", null));
+
+                info.SetValue(instance, "test");
+
+                Assert.That(instance.DCollection, Is.EqualTo(new[] { "test" }));
+            }
         }
 
         private class BaseClass
@@ -161,8 +187,13 @@ namespace UnitTests.Base
 
         private class DerivedClass : BaseClass
         {
+            private readonly List<string> strings = new List<string>();
+
             [KmlAttribute("Derived.Attribute")]
             public int DAttribute { get; set; }
+
+            [KmlElement("Derived.DCollection", null)]
+            public IEnumerable<string> DCollection => this.strings;
 
             [KmlElement("Derived.Public", null)]
             public int DPublic { get; set; }
@@ -172,6 +203,11 @@ namespace UnitTests.Base
 
             [KmlElement("Derived.ReadOnly", null)]
             public int DReadOnly => 0;
+
+            public void AddString(string value)
+            {
+                this.strings.Add(value);
+            }
         }
     }
 }

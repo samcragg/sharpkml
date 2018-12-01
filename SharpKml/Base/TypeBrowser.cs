@@ -6,6 +6,7 @@
 namespace SharpKml.Base
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
@@ -15,7 +16,7 @@ namespace SharpKml.Base
     /// Helper class for extracting properties with a KmlAttribute/KmlElement
     /// assigned to them, searching the entire inheritance hierarchy of the type.
     /// </summary>
-    internal sealed class TypeBrowser
+    internal sealed partial class TypeBrowser
     {
         // Used for a cache. This is very important for performance as it reduces
         // the amount of work done in reflection, as the attributes associated
@@ -156,6 +157,17 @@ namespace SharpKml.Base
             return provider.GetCustomAttribute<T>(inherit: false);
         }
 
+        private static bool IsEnumerable(PropertyInfo property)
+        {
+            if (property.PropertyType == typeof(string))
+            {
+                return false;
+            }
+
+            TypeInfo propertyType = property.PropertyType.GetTypeInfo();
+            return typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(propertyType);
+        }
+
         private void ExtractAttributes(Type type)
         {
             if (type == null || type == typeof(object))
@@ -178,12 +190,14 @@ namespace SharpKml.Base
 
         private IEnumerable<ElementInfo> ExtractPropertyElements(TypeInfo typeInfo)
         {
-            bool IsInstanceReadWriteProperty(PropertyInfo property)
+            bool IsSerializableProperty(PropertyInfo property)
             {
-                return property.CanRead && property.CanWrite && !property.GetMethod.IsStatic;
+                return property.CanRead &&
+                       !property.GetMethod.IsStatic &&
+                       (property.CanWrite || IsEnumerable(property));
             }
 
-            foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(IsInstanceReadWriteProperty))
+            foreach (PropertyInfo property in typeInfo.DeclaredProperties.Where(IsSerializableProperty))
             {
                 KmlAttributeAttribute attribute = GetAttribute<KmlAttributeAttribute>(property);
                 if (attribute != null)
@@ -205,92 +219,6 @@ namespace SharpKml.Base
                         yield return new ElementInfo(property, kmlElement);
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Represents information about a property.
-        /// </summary>
-        internal sealed class ElementInfo
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ElementInfo"/> class.
-            /// </summary>
-            /// <param name="property">The property information.</param>
-            /// <param name="kmlAttribute">The KML attribute information.</param>
-            public ElementInfo(PropertyInfo property, KmlAttributeAttribute kmlAttribute)
-                : this(property)
-            {
-                this.Component = new XmlComponent(null, kmlAttribute.AttributeName, null);
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ElementInfo"/> class.
-            /// </summary>
-            /// <param name="property">The property information.</param>
-            /// <param name="kmlElement">The KML element information.</param>
-            public ElementInfo(PropertyInfo property, KmlElementAttribute kmlElement)
-                : this(property)
-            {
-                this.Component = new XmlComponent(null, kmlElement.ElementName, kmlElement.Namespace);
-                this.Order = kmlElement.Order;
-            }
-
-            private ElementInfo(PropertyInfo property)
-            {
-                this.GetValue = CreateGetValueDelegate(property);
-                this.SetValue = CreateSetValueDelegate(property);
-                this.ValueType = property.PropertyType;
-            }
-
-            /// <summary>
-            /// Gets the XML information for the property.
-            /// </summary>
-            public XmlComponent Component { get; }
-
-            /// <summary>
-            /// Gets a delegate that can read the property value for a given instance.
-            /// </summary>
-            public Func<object, object> GetValue { get; }
-
-            /// <summary>
-            /// Gets a delegate that can write the property value for a given instance.
-            /// </summary>
-            public Action<object, object> SetValue { get; }
-
-            /// <summary>
-            /// Gets the type the property represents.
-            /// </summary>
-            public Type ValueType { get; }
-
-            /// <summary>
-            /// Gets the order the property should be serialized in.
-            /// </summary>
-            internal int Order { get; }
-
-            private static Func<object, object> CreateGetValueDelegate(PropertyInfo property)
-            {
-                ParameterExpression instance = Expression.Parameter(typeof(object));
-                Expression getAndConvert = Expression.Convert(
-                    Expression.Property(
-                        Expression.Convert(instance, property.DeclaringType),
-                        property),
-                    typeof(object));
-
-                return Expression.Lambda<Func<object, object>>(getAndConvert, instance).Compile();
-            }
-
-            private static Action<object, object> CreateSetValueDelegate(PropertyInfo property)
-            {
-                ParameterExpression instance = Expression.Parameter(typeof(object));
-                ParameterExpression value = Expression.Parameter(typeof(object));
-                Expression convertAndSet = Expression.Assign(
-                    Expression.Property(
-                        Expression.Convert(instance, property.DeclaringType),
-                        property),
-                    Expression.Convert(value, property.PropertyType));
-
-                return Expression.Lambda<Action<object, object>>(convertAndSet, instance, value).Compile();
             }
         }
     }
