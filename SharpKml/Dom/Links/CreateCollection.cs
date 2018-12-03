@@ -17,7 +17,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.4</remarks>
     [KmlElement("Create")]
-    public class CreateCollection : Element, ICollection<Container>
+    public class CreateCollection : Element, ICollection<Container>, IReadOnlyCollection<Container>
     {
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.

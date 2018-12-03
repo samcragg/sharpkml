@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.9</remarks>
     [KmlElement("coordinates")]
-    public class CoordinateCollection : Element, ICollection<Vector>, ICustomElement
+    public class CoordinateCollection : Element, ICollection<Vector>, ICustomElement, IReadOnlyCollection<Vector>
     {
         private readonly List<Vector> points;
 
