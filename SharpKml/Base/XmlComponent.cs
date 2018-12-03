@@ -6,11 +6,13 @@
 namespace SharpKml.Base
 {
     using System;
+    using System.Diagnostics;
     using System.Xml;
 
     /// <summary>
     /// Represents general information about XML attributes and elements.
     /// </summary>
+    [DebuggerDisplay("{Prefix,nq}:{Name,nq}")]
     public class XmlComponent : IEquatable<XmlComponent>
     {
         /// <summary>
@@ -46,16 +48,24 @@ namespace SharpKml.Base
         {
         }
 
-        /// <summary>Gets the local XML name of the component.</summary>
+        /// <summary>
+        /// Gets the local XML name of the component.
+        /// </summary>
         public string Name { get; private set; }
 
-        /// <summary>Gets the XML namespace URI of the component.</summary>
+        /// <summary>
+        /// Gets the XML namespace URI of the component.
+        /// </summary>
         public string NamespaceUri { get; private set; }
 
-        /// <summary>Gets the XML prefix of the component.</summary>
+        /// <summary>
+        /// Gets the XML prefix of the component.
+        /// </summary>
         public string Prefix { get; private set; }
 
-        /// <summary>Gets or sets the value of the component.</summary>
+        /// <summary>
+        /// Gets or sets the value of the component.
+        /// </summary>
         public string Value { get; set; }
 
         /// <summary>

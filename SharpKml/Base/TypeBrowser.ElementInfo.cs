@@ -7,6 +7,7 @@ namespace SharpKml.Base
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -19,6 +20,9 @@ namespace SharpKml.Base
         /// <summary>
         /// Represents information about a property.
         /// </summary>
+#if DEBUG
+        [DebuggerDisplay("{PropertyName,nq}")]
+#endif
         internal sealed class ElementInfo
         {
             /// <summary>
@@ -47,6 +51,9 @@ namespace SharpKml.Base
             private ElementInfo(PropertyInfo property)
             {
                 this.GetValue = CreateGetValueDelegate(property);
+#if DEBUG
+                this.PropertyName = property.Name;
+#endif
                 this.SetValue = CreateSetValueDelegate(property);
                 this.ValueType = property.PropertyType;
             }
@@ -60,6 +67,13 @@ namespace SharpKml.Base
             /// Gets a delegate that can read the property value for a given instance.
             /// </summary>
             public Func<object, object> GetValue { get; }
+
+#if DEBUG
+            /// <summary>
+            /// Gets the name of the property represented by this instance.
+            /// </summary>
+            public string PropertyName { get; }
+#endif
 
             /// <summary>
             /// Gets a delegate that can write the property value for a given instance.
@@ -85,7 +99,7 @@ namespace SharpKml.Base
                 }
 
                 MethodInfo addMethod =
-                    (from method in property.DeclaringType.GetTypeInfo().DeclaredMethods
+                    (from method in property.DeclaringType.GetRuntimeMethods()
                      where method.Name.StartsWith("Add", StringComparison.Ordinal)
                      let parameters = method.GetParameters()
                      where (parameters.Length == 1) && (parameters[0].ParameterType == collectionType)

@@ -34,7 +34,7 @@ namespace SharpKml.Base
         {
             this.ExtractAttributes(type);
 
-            // Go in reverse so we store the first element
+            // Go in reverse so we overwrite with the first element registered
             for (int i = this.orderedElements.Count - 1; i >= 0; i--)
             {
                 ElementInfo info = this.orderedElements[i];

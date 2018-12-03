@@ -168,9 +168,7 @@ namespace SharpKml.Base
 
                 WriteData(writer, element.InnerText);
 
-                // Write the child elements: serialized, children then unknown children.
                 WriteElements(writer, manager, element);
-                SerializeElements(writer, manager, element.Children);
                 SerializeElements(writer, manager, element.Orphans);
 
                 writer.WriteEndElement();
@@ -255,9 +253,13 @@ namespace SharpKml.Base
                 // Make sure it needs saving
                 if (value != null)
                 {
-                    // Is this an element?
-                    if (string.IsNullOrEmpty(elementInfo.Component.Name))
+                    if (value is IEnumerable<Element> collection)
                     {
+                        SerializeElements(writer, manager, collection);
+                    }
+                    else if (string.IsNullOrEmpty(elementInfo.Component.Name))
+                    {
+                        // If the component is null then it's a normal element
                         SerializeElement(writer, manager, (Element)value);
                     }
                     else

@@ -222,7 +222,7 @@ namespace SharpKml.Engine
                         {
                             this.styleMap[style.Id] = style;
                             style.Id = null; // The C++ version clears the id, so we will too...
-                            document.RemoveChild(style);
+                            document.RemoveStyle(style);
                         }
                     }
                 }
