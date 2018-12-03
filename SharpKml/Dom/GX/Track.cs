@@ -144,7 +144,6 @@ namespace SharpKml.Dom.GX
             this.AddAsChild(this.WhenElements, element);
         }
 
-        // TODO: Is this required?
         private bool ConvertUnknown(UnknownElement unknown)
         {
             XmlComponent data = unknown.UnknownData;
@@ -162,13 +161,12 @@ namespace SharpKml.Dom.GX
 
             if (WhenComponent.Equals(data))
             {
-                if (DateTime.TryParse(
+                if (ValueConverter.TryGetValue(
+                    typeof(DateTime),
                     unknown.InnerText,
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
-                    out DateTime value))
+                    out object value))
                 {
-                    this.AddWhen(value);
+                    this.AddWhen((DateTime)value);
                     return true;
                 }
             }
