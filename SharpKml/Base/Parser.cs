@@ -163,7 +163,7 @@ namespace SharpKml.Base
             }
             else
             {
-                isOrphan = !this.AddChildToParent(parent, child);
+                isOrphan = !this.AssignToProperty(parent, child);
             }
 
             this.PopulateElement(child);
@@ -175,24 +175,16 @@ namespace SharpKml.Base
             }
         }
 
-        private bool AddChildToParent(Element parent, Element child)
+        private bool AssignToProperty(Element parent, Element child)
         {
-            if (parent.TryAddChild(child))
+            TypeInfo childType = child.GetType().GetTypeInfo();
+            var browser = TypeBrowser.Create(parent.GetType());
+            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
             {
-                return true;
-            }
-            else
-            {
-                // Search for a property that we can assign to
-                TypeInfo typeInfo = child.GetType().GetTypeInfo();
-                var browser = TypeBrowser.Create(parent.GetType());
-                foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
+                if (elementInfo.ValueType.GetTypeInfo().IsAssignableFrom(childType))
                 {
-                    if (elementInfo.ValueType.GetTypeInfo().IsAssignableFrom(typeInfo))
-                    {
-                        elementInfo.SetValue(parent, child);
-                        return true;
-                    }
+                    elementInfo.SetValue(parent, child);
+                    return true;
                 }
             }
 

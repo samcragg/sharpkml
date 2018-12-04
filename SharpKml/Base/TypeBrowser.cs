@@ -9,8 +9,8 @@ namespace SharpKml.Base
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Reflection;
+    using SharpKml.Dom;
 
     /// <summary>
     /// Helper class for extracting properties with a KmlAttribute/KmlElement
@@ -165,7 +165,8 @@ namespace SharpKml.Base
             }
 
             TypeInfo propertyType = property.PropertyType.GetTypeInfo();
-            return typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(propertyType);
+            return typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(propertyType) &&
+                   !typeof(ICustomElement).GetTypeInfo().IsAssignableFrom(propertyType);
         }
 
         private void ExtractAttributes(Type type)

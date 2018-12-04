@@ -54,8 +54,8 @@ namespace SharpKml.Base
 #if DEBUG
                 this.PropertyName = property.Name;
 #endif
-                this.SetValue = CreateSetValueDelegate(property);
-                this.ValueType = property.PropertyType;
+                this.SetValue = CreateSetValueDelegate(property, out Type valueType);
+                this.ValueType = valueType;
             }
 
             /// <summary>
@@ -90,7 +90,7 @@ namespace SharpKml.Base
             /// </summary>
             internal int Order { get; }
 
-            private static Expression CallAddMethod(PropertyInfo property, Expression instance, Expression value)
+            private static Expression CallAddMethod(PropertyInfo property, Expression instance, Expression value, out Type valueType)
             {
                 Type collectionType = FindCollectionType(property.PropertyType);
                 if (collectionType == null)
@@ -111,14 +111,16 @@ namespace SharpKml.Base
                     throw new InvalidOperationException("Unable to find add method for " + property.Name);
                 }
 
+                valueType = collectionType;
                 return Expression.Call(
                     Expression.Convert(instance, property.DeclaringType),
                     addMethod,
-                    Expression.Convert(value, collectionType));
+                    Expression.Convert(value, valueType));
             }
 
-            private static Expression CallSetProperty(PropertyInfo property, Expression instance, Expression value)
+            private static Expression CallSetProperty(PropertyInfo property, Expression instance, Expression value, out Type valueType)
             {
+                valueType = property.PropertyType;
                 return Expression.Assign(
                     Expression.Property(
                         Expression.Convert(instance, property.DeclaringType),
@@ -138,13 +140,13 @@ namespace SharpKml.Base
                 return Expression.Lambda<Func<object, object>>(getAndConvert, instance).Compile();
             }
 
-            private static Action<object, object> CreateSetValueDelegate(PropertyInfo property)
+            private static Action<object, object> CreateSetValueDelegate(PropertyInfo property, out Type valueType)
             {
                 ParameterExpression instance = Expression.Parameter(typeof(object));
                 ParameterExpression value = Expression.Parameter(typeof(object));
                 Expression setValue = IsEnumerable(property) ?
-                    CallAddMethod(property, instance, value) :
-                    CallSetProperty(property, instance, value);
+                    CallAddMethod(property, instance, value, out valueType) :
+                    CallSetProperty(property, instance, value, out valueType);
 
                 return Expression.Lambda<Action<object, object>>(setValue, instance, value).Compile();
             }

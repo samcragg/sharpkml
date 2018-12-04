@@ -21,6 +21,7 @@ namespace SharpKml.Dom
     public class ItemIcon : KmlObject
     {
         private static readonly XmlComponent StateComponent = new XmlComponent(null, "state", KmlNamespaces.Kml22Namespace);
+        private StateElement state;
 
         /// <summary>
         /// Gets or sets the resource location.
@@ -55,8 +56,25 @@ namespace SharpKml.Dom
             }
         }
 
-        [KmlElement("state", 1)]
-        private StateElement StateData { get; set; }
+        [KmlElement(null, 1)]
+        private StateElement StateData
+        {
+            get => this.state;
+            set => this.UpdatePropertyChild(value, ref this.state);
+        }
+
+        /// <inheritdoc />
+        protected internal override void AddOrphan(Element orphan)
+        {
+            if (orphan is UnknownElement unknown && StateComponent.Equals(unknown.UnknownData))
+            {
+                this.StateData = StateElement.Parse(orphan.InnerText);
+            }
+            else
+            {
+                base.AddOrphan(orphan);
+            }
+        }
 
         /// <summary>
         /// Used to correctly serialize multiple ItemIconStates.
@@ -98,9 +116,10 @@ namespace SharpKml.Dom
             /// Parses the specified value and converts it to an ItemIconState.
             /// </summary>
             /// <param name="value">The string to parse.</param>
-            /// <remarks>Does not clear the existing State.</remarks>
-            public void Parse(string value)
+            /// <returns>A new instance.</returns>
+            internal static StateElement Parse(string value)
             {
+                var instance = new StateElement();
                 if (value != null)
                 {
                     string[] tokens = value.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -109,10 +128,12 @@ namespace SharpKml.Dom
                         ValueConverter.TryGetValue(typeof(ItemIconStates), token, out object state);
                         if (state != null)
                         {
-                            this.State |= (ItemIconStates)state;
+                            instance.State |= (ItemIconStates)state;
                         }
                     }
                 }
+
+                return instance;
             }
 
             private static ItemIconStates[] GetStates()
