@@ -6,8 +6,10 @@
 namespace SharpKml.Engine
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -144,11 +146,6 @@ namespace SharpKml.Engine
             // Make sure we're not playing with ourselves... so to speak
             if (!object.ReferenceEquals(element, source))
             {
-                foreach (Element child in source.Children)
-                {
-                    element.TryAddChild(child.Clone());
-                }
-
                 Merge(source, element, source.GetType());
             }
         }
@@ -217,39 +214,22 @@ namespace SharpKml.Engine
 
         private static void Merge(object source, object target, Type type)
         {
-            if (type == null || type == typeof(Element))
+            var browser = TypeBrowser.Create(type);
+            foreach (TypeBrowser.ElementInfo element in browser.Attributes.Concat(browser.Elements))
             {
-                return; // Can't go any higher.
-            }
-
-            TypeInfo typeInfo = type.GetTypeInfo();
-            foreach (PropertyInfo property in typeInfo.DeclaredProperties)
-            {
-                if (!property.CanWrite || property.GetMethod.IsStatic)
+                object value = element.GetValue(source);
+                if (element.IsCollection)
                 {
-                    continue;
+                    foreach (object item in (IEnumerable)value)
+                    {
+                        MergeValue(element, target, item);
+                    }
                 }
-
-                object newValue = null;
-                object value = property.GetValue(source, null);
-
-                // First check if it's an element and merge any existing info.
-                if (value is Element sourceElement)
+                else
                 {
-                    newValue = MergeElements(sourceElement, (Element)property.GetValue(target, null));
-                }
-                else if (value != null)
-                {
-                    newValue = CreateClone(value);
-                }
-
-                if (newValue != null)
-                {
-                    property.SetValue(target, newValue, null);
+                    MergeValue(element, target, value);
                 }
             }
-
-            Merge(source, target, typeInfo.BaseType);
         }
 
         private static Element MergeElements(Element source, Element target)
@@ -265,6 +245,24 @@ namespace SharpKml.Engine
             // Else merge and return the updated target.
             Merge(target, source);
             return target;
+        }
+
+        private static void MergeValue(TypeBrowser.ElementInfo element, object target, object value)
+        {
+            // First check if it's an element and merge any existing info.
+            if (value is Element sourceElement)
+            {
+                value = MergeElements(sourceElement, element.GetValue(target) as Element);
+            }
+            else if (value != null)
+            {
+                value = CreateClone(value);
+            }
+
+            if (value != null)
+            {
+                element.SetValue(target, value);
+            }
         }
     }
 }

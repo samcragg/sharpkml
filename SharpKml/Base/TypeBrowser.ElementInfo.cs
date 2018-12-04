@@ -51,10 +51,11 @@ namespace SharpKml.Base
             private ElementInfo(PropertyInfo property)
             {
                 this.GetValue = CreateGetValueDelegate(property);
+                this.IsCollection = IsEnumerable(property);
 #if DEBUG
                 this.PropertyName = property.Name;
 #endif
-                this.SetValue = CreateSetValueDelegate(property, out Type valueType);
+                this.SetValue = CreateSetValueDelegate(property, this.IsCollection, out Type valueType);
                 this.ValueType = valueType;
             }
 
@@ -67,6 +68,12 @@ namespace SharpKml.Base
             /// Gets a delegate that can read the property value for a given instance.
             /// </summary>
             public Func<object, object> GetValue { get; }
+
+            /// <summary>
+            /// Gets a value indicating whether this instance represents a
+            /// collection or not.
+            /// </summary>
+            public bool IsCollection { get; }
 
 #if DEBUG
             /// <summary>
@@ -140,11 +147,14 @@ namespace SharpKml.Base
                 return Expression.Lambda<Func<object, object>>(getAndConvert, instance).Compile();
             }
 
-            private static Action<object, object> CreateSetValueDelegate(PropertyInfo property, out Type valueType)
+            private static Action<object, object> CreateSetValueDelegate(
+                PropertyInfo property,
+                bool isCollection,
+                out Type valueType)
             {
                 ParameterExpression instance = Expression.Parameter(typeof(object));
                 ParameterExpression value = Expression.Parameter(typeof(object));
-                Expression setValue = IsEnumerable(property) ?
+                Expression setValue = isCollection ?
                     CallAddMethod(property, instance, value, out valueType) :
                     CallSetProperty(property, instance, value, out valueType);
 
