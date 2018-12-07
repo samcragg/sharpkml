@@ -164,7 +164,7 @@
             <styleUrl>#red-icon</styleUrl>
             <Point>
               <coordinates>
-                -124.351985,42.026641,0
+                -124.351985,42.026641
               </coordinates>
             </Point>
           </Placemark>
@@ -172,7 +172,7 @@
             <name>B</name>
             <Point>
               <coordinates>
-                -117.170966,32.493215,0
+                -117.170966,32.493215
               </coordinates>
             </Point>
           </Placemark>
@@ -180,7 +180,7 @@
             <name>C</name>
             <Point>
               <coordinates>
-                -114.686335,32.749747,0
+                -114.686335,32.749747
               </coordinates>
             </Point>
           </Placemark>
@@ -188,7 +188,7 @@
             <name>D</name>
             <Point>
               <coordinates>
-                -120.049643,42.002328,0
+                -120.049643,42.002328
               </coordinates>
             </Point>
           </Placemark>
@@ -198,8 +198,8 @@
             <LineString id="linestring">
               <tessellate>1</tessellate>
               <coordinates>
-                -124.351985,42.026641,0
-                -117.170966,32.493215,0
+                -124.351985,42.026641
+                -117.170966,32.493215
               </coordinates>
             </LineString>
           </Placemark>
@@ -244,7 +244,7 @@
             <name>A</name>
             <Point>
               <coordinates>
-                -124.351985,42.026641,0
+                -124.351985,42.026641
               </coordinates>
             </Point>
           </Placemark>
@@ -252,7 +252,7 @@
             <name>B</name>
             <Point>
               <coordinates>
-                -117.170966,32.493215,0
+                -117.170966,32.493215
               </coordinates>
             </Point>
           </Placemark>
@@ -260,7 +260,7 @@
             <name>C</name>
             <Point>
               <coordinates>
-                -114.686335,32.749747,0
+                -114.686335,32.749747
               </coordinates>
             </Point>
           </Placemark>
@@ -268,7 +268,7 @@
             <name>D</name>
             <Point>
               <coordinates>
-                -120.049643,42.002328,0
+                -120.049643,42.002328
               </coordinates>
             </Point>
           </Placemark>
@@ -277,8 +277,8 @@
             <LineString id="linestring">
               <tessellate>1</tessellate>
               <coordinates>
-                -124,42,0
-                -117,32,0
+                -124,42
+                -117,32
               </coordinates>
             </LineString>
           </Placemark>
@@ -310,7 +310,7 @@
             <name>B</name>
             <Point>
               <coordinates>
-                -117.170966,32.493215,0
+                -117.170966,32.493215
               </coordinates>
             </Point>
           </Placemark>
@@ -318,7 +318,7 @@
             <name>C</name>
             <Point>
               <coordinates>
-                -114.686335,32.749747,0
+                -114.686335,32.749747
               </coordinates>
             </Point>
           </Placemark>
@@ -327,8 +327,8 @@
             <LineString id="linestring">
               <tessellate>1</tessellate>
               <coordinates>
-                -124.351985,42.026641,0
-                -117.170966,32.493215,0
+                -124.351985,42.026641
+                -117.170966,32.493215
               </coordinates>
             </LineString>
           </Placemark>

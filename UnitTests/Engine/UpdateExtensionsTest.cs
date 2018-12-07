@@ -239,15 +239,21 @@ namespace UnitTests.Engine
 
         private static void RunTestCase(TestCase test, KmlFile file)
         {
+            Element GetFirstFeature(KmlFile kml, string id)
+            {
+                return ((Container)kml.FindObject(id)).Features.First();
+            }
+
             // Need to create a file from the element for Process to use,
             // making sure we pass a copy not the real thing!
             var target = KmlFile.Create(file.FindObject(test.Target).Clone(), false);
 
             // Update is stored as an orphan of the parent folder
-            var update = (Update)(file.FindObject(test.Input).Orphans.ElementAt(0));
-            var expected = file.FindObject(test.Output).Children.ElementAt(0);
+            var update = (Update)file.FindObject(test.Input).Orphans.First();
             update.Process(target);
-            SampleData.CompareElements(expected, target.Root.Children.ElementAt(0));
+
+            Element expected = GetFirstFeature(file, test.Output);
+            SampleData.CompareElements(expected, GetFirstFeature(target, test.Target));
         }
 
         private class TestCase

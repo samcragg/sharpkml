@@ -79,5 +79,28 @@ namespace SharpKml.Dom
         {
             this.AddAsChild(this.updates, update);
         }
+
+        /// <inheritdoc />
+        protected internal override void AddOrphan(Element orphan)
+        {
+            switch (orphan)
+            {
+                case ChangeCollection change:
+                    this.AddUpdate(change);
+                    break;
+
+                case CreateCollection create:
+                    this.AddUpdate(create);
+                    break;
+
+                case DeleteCollection delete:
+                    this.AddUpdate(delete);
+                    break;
+
+                default:
+                    base.AddOrphan(orphan);
+                    break;
+            }
+        }
     }
 }

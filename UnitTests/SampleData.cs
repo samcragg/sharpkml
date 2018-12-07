@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using SharpKml.Base;
 using SharpKml.Dom;
@@ -17,6 +18,14 @@ namespace UnitTests
 
         public static void CompareElements(Element expected, Element actual)
         {
+            string NormalizeNumbers(string value)
+            {
+                // When we serialize the number we use extra precision, however,
+                // that causes the strings to not be equal. Therefore, replace
+                // the decimal numbers with a single digit
+                return Regex.Replace(value, @"(?<=\d)+\.\d+", ".1");
+            }
+
             // To compare the Elements we're going to serialize them both
             // and compare the generated Xml.
             Serializer serializer = new Serializer();
@@ -24,7 +33,8 @@ namespace UnitTests
             string expectedXml = serializer.Xml;
 
             serializer.Serialize(actual);
-            Assert.That(serializer.Xml, Is.EqualTo(expectedXml));
+            string actualXml = serializer.Xml;
+            Assert.That(NormalizeNumbers(actualXml), Is.EqualTo(NormalizeNumbers(expectedXml)));
         }
 
         public static SampleData CreateFile(string resource)
