@@ -158,6 +158,30 @@ namespace UnitTests.Engine
         }
 
         [Test]
+        public void TestMergeHtmlContent()
+        {
+            var source = new Placemark
+            {
+                Description = new Description
+                {
+                    Text = "From source"
+                }
+            };
+
+            var target = new Placemark
+            {
+                Description = new Description
+                {
+                    Text = "Original text"
+                }
+            };
+
+            target.Merge(source);
+
+            Assert.That(target.Description.Text, Is.EqualTo("From source"));
+        }
+
+        [Test]
         public void TestMergeStyle()
         {
             const string SourceStyle =

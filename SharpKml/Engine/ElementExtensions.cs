@@ -230,6 +230,11 @@ namespace SharpKml.Engine
                     MergeValue(element, target, value);
                 }
             }
+
+            if (source is IHtmlContent htmlContent && (htmlContent.Text != null))
+            {
+                ((IHtmlContent)target).Text = htmlContent.Text;
+            }
         }
 
         private static Element MergeElements(Element source, Element target)
