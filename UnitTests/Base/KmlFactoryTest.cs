@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
     using NUnit.Framework;
     using SharpKml.Base;
     using SharpKml.Dom;
@@ -56,30 +54,45 @@
             }
         }
 
-        public sealed class RegisterExtensionTests : KmlFactoryTest
+        public sealed class IsKnownExtensionType : KmlFactoryTest
         {
             [Test]
-            public void ShouldRegisterExtensionsAfterChildren()
+            public void ShouldReturnFalseIfTheExtensionIsNotRegistered()
             {
-                KmlFactory.RegisterExtension<OneChildElement, NotRegisteredElement>();
+                bool result = KmlFactory.IsKnownExtensionType(typeof(DerivedElement), typeof(NotRegisteredElement));
 
-                IEnumerable<TypeInfo> children = GetChildrenFor<OneChildElement>();
-
-                Assert.That(children, Is.EqualTo(new[]
-                {
-                    typeof(ManuallyRegisteredElement).GetTypeInfo(),
-                    typeof(NotRegisteredElement).GetTypeInfo()
-                }));
+                Assert.That(result, Is.False);
             }
 
             [Test]
-            public void ShouldRegisterExtensionsAsChildren()
+            public void ShouldReturnTrueIfTheExtensionHasBeenRegisteredOnABaseClass()
             {
-                KmlFactory.RegisterExtension<NoChildrenElement, NotRegisteredElement>();
+                KmlFactory.RegisterExtension<BaseElement, ManuallyRegisteredElement>();
 
-                IEnumerable<TypeInfo> children = GetChildrenFor<NoChildrenElement>();
+                bool result = KmlFactory.IsKnownExtensionType(typeof(DerivedElement), typeof(ManuallyRegisteredElement));
 
-                Assert.That(children, Is.EqualTo(new[] { typeof(NotRegisteredElement).GetTypeInfo() }));
+                Assert.That(result, Is.True);
+            }
+
+            private class BaseElement : Element
+            {
+            }
+
+            private class DerivedElement : BaseElement
+            {
+            }
+        }
+
+        public sealed class RegisterExtensionTests : KmlFactoryTest
+        {
+            [Test]
+            public void ShouldAddToTheKnownExtensionsForType()
+            {
+                KmlFactory.RegisterExtension<TargetElement, NotRegisteredElement>();
+
+                IEnumerable<Type> children = KmlFactory.GetKnownExtensionTypes(typeof(TargetElement));
+
+                Assert.That(children, Is.EqualTo(new[] { typeof(NotRegisteredElement) }));
             }
 
             [Test]
@@ -98,24 +111,12 @@
                     Throws.Nothing);
             }
 
-            private static IEnumerable<TypeInfo> GetChildrenFor<T>()
-            {
-                return Element.GetChildTypesFor(typeof(T))
-                    .OrderBy(kvp => kvp.Value)
-                    .Select(kvp => kvp.Key);
-            }
-
             [KmlElement("extension_name")]
             private class ExtensionElement : Element
             {
             }
 
-            private class NoChildrenElement : Element
-            {
-            }
-
-            [ChildType(typeof(ManuallyRegisteredElement), 2)]
-            private class OneChildElement : Element
+            private class TargetElement : Element
             {
             }
         }

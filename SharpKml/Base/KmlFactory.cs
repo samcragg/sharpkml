@@ -17,6 +17,9 @@ namespace SharpKml.Base
     /// </summary>
     public static class KmlFactory
     {
+        private static readonly Dictionary<Type, List<Type>> KnownExtensionTypes =
+            new Dictionary<Type, List<Type>>();
+
         private static readonly Dictionary<Type, XmlComponent> Names =
             new Dictionary<Type, XmlComponent>();
 
@@ -96,10 +99,7 @@ namespace SharpKml.Base
         public static void Register<T>(XmlComponent xml)
             where T : Element
         {
-            if (xml == null)
-            {
-                throw new ArgumentNullException("xml");
-            }
+            Check.IsNotNull(xml, nameof(xml));
 
             RegisterType(xml.Clone(), typeof(T)); // Don't store what the user passed us
         }
@@ -116,14 +116,13 @@ namespace SharpKml.Base
                 RegisterElement(typeof(TExtension));
             }
 
-            Dictionary<TypeInfo, int> childTypes = Element.GetChildTypesFor(typeof(TElement));
-            int index = 1;
-            if (childTypes.Count > 0)
+            if (!KnownExtensionTypes.TryGetValue(typeof(TElement), out List<Type> extensions))
             {
-                index = childTypes.Values.Max() + 1;
+                extensions = new List<Type>();
+                KnownExtensionTypes.Add(typeof(TElement), extensions);
             }
 
-            childTypes.Add(typeof(TExtension).GetTypeInfo(), index);
+            extensions.Add(typeof(TExtension));
         }
 
         /// <summary>
@@ -141,6 +140,51 @@ namespace SharpKml.Base
             Names.Remove(typeof(TExisting));
             Names.Add(typeof(TNew), xml);
             Types[xml] = ConstructType(typeof(TNew));
+        }
+
+        /// <summary>
+        /// Gets the registered extensions for the specified type.
+        /// </summary>
+        /// <param name="type">The type to get the extensions of.</param>
+        /// <returns>A series of extension types.</returns>
+        internal static IEnumerable<Type> GetKnownExtensionTypes(Type type)
+        {
+            if (KnownExtensionTypes.TryGetValue(type, out List<Type> extensions))
+            {
+                return extensions;
+            }
+            else
+            {
+                return Enumerable.Empty<Type>();
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the specified extension has been registered for
+        /// the element type (or its any of its base classes).
+        /// </summary>
+        /// <param name="elementType">The type of the element.</param>
+        /// <param name="extensionType">The type of the extension.</param>
+        /// <returns>
+        /// <c>true</c> if <c>extensionType</c> has been registered; otherwise,
+        /// <c>false</c>.
+        /// </returns>
+        internal static bool IsKnownExtensionType(Type elementType, Type extensionType)
+        {
+            if ((elementType == null) || (elementType == typeof(object)))
+            {
+                return false;
+            }
+
+            if (KnownExtensionTypes.TryGetValue(elementType, out List<Type> extensions) &&
+                extensions.Contains(extensionType))
+            {
+                return true;
+            }
+            else
+            {
+                return IsKnownExtensionType(elementType.GetTypeInfo().BaseType, extensionType);
+            }
         }
 
         private static Func<Element> ConstructType(Type type)
