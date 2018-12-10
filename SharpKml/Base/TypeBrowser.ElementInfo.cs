@@ -20,9 +20,7 @@ namespace SharpKml.Base
         /// <summary>
         /// Represents information about a property.
         /// </summary>
-#if DEBUG
-        [DebuggerDisplay("{PropertyName,nq}")]
-#endif
+        [DebuggerDisplay("{Property.Name,nq}")]
         internal sealed class ElementInfo
         {
             /// <summary>
@@ -52,9 +50,7 @@ namespace SharpKml.Base
             {
                 this.GetValue = CreateGetValueDelegate(property);
                 this.IsCollection = IsEnumerable(property);
-#if DEBUG
-                this.PropertyName = property.Name;
-#endif
+                this.Property = property;
                 this.SetValue = CreateSetValueDelegate(property, this.IsCollection, out Type valueType);
                 this.ValueType = valueType;
             }
@@ -75,12 +71,10 @@ namespace SharpKml.Base
             /// </summary>
             public bool IsCollection { get; }
 
-#if DEBUG
             /// <summary>
-            /// Gets the name of the property represented by this instance.
+            /// Gets the property represented by this instance.
             /// </summary>
-            public string PropertyName { get; }
-#endif
+            public PropertyInfo Property { get; }
 
             /// <summary>
             /// Gets a delegate that can write the property value for a given instance.

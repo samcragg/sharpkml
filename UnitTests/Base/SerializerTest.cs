@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using NUnit.Framework;
 using SharpKml.Base;
 using SharpKml.Dom;
@@ -55,6 +56,9 @@ namespace UnitTests.Base
         {
             KmlFactory.Register<ChildElement>(new XmlComponent(null, ChildElementName, XmlNamespace));
             KmlFactory.Register<TestElement>(new XmlComponent(null, TestElementName, XmlNamespace));
+            KmlFactory.Register<BaseElement>(new XmlComponent(null, nameof(BaseElement), KmlNamespaces.Kml22Namespace));
+            KmlFactory.Register<DerivedElement>(new XmlComponent(null, nameof(DerivedElement), KmlNamespaces.Kml22Namespace));
+            KmlFactory.RegisterExtension<BaseElement, BaseElementExtension>();
         }
 
         [Test]
@@ -169,6 +173,50 @@ namespace UnitTests.Base
             Assert.That(serializer.Xml, Contains.Substring("<" + ChildElementName + ">"));
         }
 
+        [Test]
+        public void ShouldSerializeBaseExtensionsAfterBaseProperties()
+        {
+            var element = new BaseElement
+            {
+                BaseLocation = new Point()
+            };
+            element.AddChild(new BaseElementExtension());
+
+            var serializer = new Serializer();
+            serializer.SerializeRaw(element);
+
+            XDocument actual = XmlTestHelper.Normalize(XDocument.Parse(serializer.Xml));
+            XDocument expected = XmlTestHelper.Normalize(XDocument.Parse(
+@"<BaseElement xmlns=""http://www.opengis.net/kml/2.2"">
+    <Point/>
+    <baseExtension/>
+</BaseElement>"));
+
+            Assert.That(XNode.DeepEquals(actual, expected), Is.True);
+        }
+
+        [Test]
+        public void ShouldSerializeBaseExtensionsBeforeDerivedProperties()
+        {
+            var element = new DerivedElement
+            {
+                DerivedLocation = new Point { Id = "derivedLocation" },
+            };
+            element.AddChild(new BaseElementExtension());
+
+            var serializer = new Serializer();
+            serializer.SerializeRaw(element);
+
+            XDocument actual = XmlTestHelper.Normalize(XDocument.Parse(serializer.Xml));
+            XDocument expected = XmlTestHelper.Normalize(XDocument.Parse(
+@"<DerivedElement xmlns=""http://www.opengis.net/kml/2.2"">
+    <baseExtension/>
+    <Point id=""derivedLocation""/>
+</DerivedElement>"));
+
+            Assert.That(XNode.DeepEquals(actual, expected), Is.True);
+        }
+
         private static bool FindNode(string xml, string name, Action<XmlReader> callback)
         {
             using (var stringReader = new StringReader(xml))
@@ -186,6 +234,35 @@ namespace UnitTests.Base
             }
 
             return false;
+        }
+
+        private class BaseElement : Element
+        {
+            private Point location;
+
+            [KmlElement(null, 1)]
+            public Point BaseLocation
+            {
+                get => this.location;
+                set => this.UpdatePropertyChild(value, ref this.location);
+            }
+        }
+
+        [KmlElement("baseExtension")]
+        private class BaseElementExtension : Element
+        {
+        }
+
+        private class DerivedElement : BaseElement
+        {
+            private Point location;
+
+            [KmlElement(null, 1)]
+            public Point DerivedLocation
+            {
+                get => this.location;
+                set => this.UpdatePropertyChild(value, ref this.location);
+            }
         }
     }
 }

@@ -8,29 +8,22 @@
     [TestFixture]
     public class ElementTest
     {
+        static ElementTest()
+        {
+            KmlFactory.Register<BaseElement>(new XmlComponent(null, nameof(BaseElement), nameof(ElementTest)));
+            KmlFactory.Register<DerivedElement>(new XmlComponent(null, nameof(DerivedElement), nameof(ElementTest)));
+            KmlFactory.RegisterExtension<BaseElement, BaseElementExtension>();
+        }
+
         public sealed class AddChildTests : ElementTest
         {
             [Test]
             public void ShouldBeAbleToAddAnExtensionToADerivedClass()
             {
-                KmlFactory.Register<BaseElement>(new XmlComponent(null, nameof(BaseElement), nameof(ElementTest)));
-                KmlFactory.Register<DerivedElement>(new XmlComponent(null, nameof(DerivedElement), nameof(ElementTest)));
-                KmlFactory.RegisterExtension<BaseElement, ExtensionElement>();
-
                 var parent = new DerivedElement();
-                var child = new ExtensionElement();
+                var child = new BaseElementExtension();
+
                 parent.AddChild(child);
-
-                Assert.That(parent.Children, Has.Member(child));
-            }
-
-            [Test]
-            public void ShouldBeAbleToAddAValidChild()
-            {
-                var child = new Placemark();
-                var parent = new Folder();
-
-                parent.AddFeature(child);
 
                 Assert.That(parent.Children, Has.Member(child));
             }
@@ -53,11 +46,11 @@
         {
         }
 
-        private class DerivedElement : BaseElement
+        private class BaseElementExtension : Element
         {
         }
 
-        private class ExtensionElement : Element
+        private class DerivedElement : BaseElement
         {
         }
     }

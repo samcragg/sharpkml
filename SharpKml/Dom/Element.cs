@@ -20,6 +20,12 @@ namespace SharpKml.Dom
         private readonly List<Element> orphans = new List<Element>();
 
         /// <summary>
+        /// Gets the collection of extension elements added to this instance.
+        /// </summary>
+        public IEnumerable<Element> Children =>
+            this.orphans.Where(x => KmlFactory.IsKnownExtensionType(this.GetType(), x.GetType()));
+
+        /// <summary>
         /// Gets the parent Element of this instance.
         /// </summary>
         /// <remarks>
@@ -41,6 +47,46 @@ namespace SharpKml.Dom
         /// Gets the inner text of the XML element.
         /// </summary>
         protected internal string InnerText { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Adds the specified element to this instance.
+        /// </summary>
+        /// <param name="child">The child to add.</param>
+        /// <exception cref="ArgumentNullException">child is null.</exception>
+        public void AddChild(Element child)
+        {
+            Check.IsNotNull(child, nameof(child));
+
+            if (!KmlFactory.IsKnownExtensionType(this.GetType(), child.GetType()))
+            {
+                throw new ArgumentException("Element has not been registered as a valid child type.");
+            }
+
+            this.AddAsChild(this.orphans, child);
+        }
+
+        /// <summary>
+        /// Removes the specified Element from the <see cref="Children"/> collection.
+        /// </summary>
+        /// <param name="child">The Element to remove.</param>
+        /// <returns>
+        /// true if the value parameter is successfully removed; otherwise,
+        /// false. This method also returns false if item was not found in
+        /// <c>Children</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">child is null.</exception>
+        public bool RemoveChild(Element child)
+        {
+            Check.IsNotNull(child, nameof(child));
+
+            if ((child.Parent == this) && this.orphans.Remove(child))
+            {
+                child.Parent = null;
+                return true;
+            }
+
+            return false; // Not ours
+        }
 
         /// <summary>
         /// Stores unknown attributes found during parsing for later serialization.

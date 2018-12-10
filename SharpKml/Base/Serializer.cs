@@ -16,7 +16,7 @@ namespace SharpKml.Base
     /// <summary>
     /// Serializes a derived class of <see cref="Element"/> into XML data.
     /// </summary>
-    public class Serializer
+    public partial class Serializer
     {
         /// <summary>
         /// Gets the XML content after the most recent call to
@@ -167,21 +167,18 @@ namespace SharpKml.Base
                 }
 
                 WriteData(writer, element.InnerText);
-
-                WriteElements(writer, manager, element);
-                SerializeElements(writer, manager, element.Orphans);
+                SerializeElements(writer, manager, element);
 
                 writer.WriteEndElement();
                 manager.PopScope();
             }
         }
 
-        private static void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, IEnumerable<Element> elements)
+        private static void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, Element element)
         {
-            foreach (Element element in elements)
-            {
-                SerializeElement(writer, manager, element);
-            }
+            var elementSerializer = new ElementSerializer(writer, manager, element.GetType());
+            elementSerializer.SerializeElements(element, element.GetType());
+            elementSerializer.SerializeOrphans(element);
         }
 
         private static void WriteAttributes(XmlWriter writer, XmlNamespaceManager manager, Element element)
@@ -242,32 +239,34 @@ namespace SharpKml.Base
             }
         }
 
-        private static void WriteElements(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        private static void WriteElement(
+            XmlWriter writer,
+            XmlNamespaceManager manager,
+            Element element,
+            TypeBrowser.ElementInfo elementInfo)
         {
-            var browser = TypeBrowser.Create(element.GetType());
+            object value = elementInfo.GetValue(element);
 
-            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
+            // Make sure it needs saving
+            if (value != null)
             {
-                object value = elementInfo.GetValue(element);
-
-                // Make sure it needs saving
-                if (value != null)
+                if (value is IEnumerable<Element> collection)
                 {
-                    if (value is IEnumerable<Element> collection)
+                    foreach (Element child in collection)
                     {
-                        SerializeElements(writer, manager, collection);
+                        SerializeElement(writer, manager, child);
                     }
-                    else if (string.IsNullOrEmpty(elementInfo.Component.Name))
-                    {
-                        // If the component is null then it's a normal element
-                        SerializeElement(writer, manager, (Element)value);
-                    }
-                    else
-                    {
-                        writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
-                        WriteData(writer, GetString(value));
-                        writer.WriteEndElement();
-                    }
+                }
+                else if (string.IsNullOrEmpty(elementInfo.Component.Name))
+                {
+                    // If the component is null then it's a normal element
+                    SerializeElement(writer, manager, (Element)value);
+                }
+                else
+                {
+                    writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
+                    WriteData(writer, GetString(value));
+                    writer.WriteEndElement();
                 }
             }
         }
