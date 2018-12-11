@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SharpKml.Base;
 using SharpKml.Dom;
 
@@ -13,7 +9,7 @@ namespace Examples
     {
         public const string XmlPrefix = "tst";
 
-        public const string XmlNamespace = "http://www.test.com/test";
+        public const string XmlNamespace = "http://www.example.com/test";
 
         [KmlAttribute("attribute")]
         public string Attribute { get; set; }
@@ -55,8 +51,10 @@ namespace Examples
             KmlFactory.RegisterExtension<Feature, FeatureExtension>();
             KmlFactory.RegisterExtension<Placemark, PlacemarkExtension>();
 
-            Placemark placemark = new Placemark();
-            placemark.Name = "Placemark";
+            Placemark placemark = new Placemark
+            {
+                Name = "Placemark"
+            };
 
             placemark.AddChild(new FeatureExtension()
             {
@@ -80,14 +78,14 @@ namespace Examples
             });
 
             // This is the root element of the file
-            Kml kml = new Kml();
-            kml.Feature = placemark;
+            Kml kml = new Kml
+            {
+                Feature = placemark
+            };
 
             Serializer serializer = new Serializer();
             serializer.Serialize(kml);
             Console.WriteLine(serializer.Xml);
-
-            Console.WriteLine("\nReading Xml...");
         }
     }
 }
