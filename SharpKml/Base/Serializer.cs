@@ -19,6 +19,34 @@ namespace SharpKml.Base
     public class Serializer
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Serializer"/> class.
+        /// </summary>
+        /// <param name="preservePrecision">Whether or not to preserve the precision of <see cref="double"/> and
+        /// <see cref="float"/> values. See <see cref="PreservePrecision"/> for more detail.</param>
+        public Serializer(bool preservePrecision)
+        {
+            this.PreservePrecision = preservePrecision;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Serializer"/> class.
+        /// </summary>
+        public Serializer()
+            : this(false)
+        {
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether <see cref="double"/> and <see cref="float"/> values will retain their original precision when serialized.
+        /// </summary>
+        /// <remarks>
+        /// A value of true will potentially result in invalid values after roundtrips. That is, when serializing
+        /// certain values and subsequently deserializing them, the deserialzied value is not necessarily guaranteed
+        /// to be the same as the original value due to the loss in precision.
+        /// </remarks>
+        public bool PreservePrecision { get; private set; }
+
+        /// <summary>
         /// Gets the XML content after the most recent call to
         /// <see cref="Serialize(Element)"/>.
         /// </summary>
@@ -72,7 +100,7 @@ namespace SharpKml.Base
                 NamespaceHandling = NamespaceHandling.OmitDuplicates
             };
 
-            Serialize(root, stream, settings);
+            Serialize(root, stream, settings, this.PreservePrecision);
         }
 
         /// <summary>
@@ -115,7 +143,7 @@ namespace SharpKml.Base
             return string.Empty;
         }
 
-        private static string GetString(object value)
+        private static string GetString(object value, bool preservePrecision)
         {
             TypeInfo typeInfo = value.GetType().GetTypeInfo();
             if (typeInfo.IsEnum)
@@ -127,6 +155,11 @@ namespace SharpKml.Base
                 }
             }
 
+            if (preservePrecision && (value is double || value is float))
+            {
+                return string.Format(KmlFormatter.Instance, "{0:G}", value);
+            }
+
             return string.Format(KmlFormatter.Instance, "{0}", value);
         }
 
@@ -135,7 +168,7 @@ namespace SharpKml.Base
             return input.StartsWith("<![CDATA[") && input.EndsWith("]]>");
         }
 
-        private static void Serialize(Element root, Stream stream, XmlWriterSettings settings)
+        private static void Serialize(Element root, Stream stream, XmlWriterSettings settings, bool preservePrecision)
         {
             // We check here so the public functions don't need to
             if (root == null)
@@ -147,17 +180,17 @@ namespace SharpKml.Base
             using (var writer = XmlWriter.Create(stream, settings))
             {
                 var manager = new XmlNamespaceManager(new NameTable());
-                SerializeElement(writer, manager, root);
+                SerializeElement(writer, manager, root, preservePrecision);
                 writer.Flush();
             }
         }
 
-        private static void SerializeElement(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        private static void SerializeElement(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
         {
             if (WriteStartTag(writer, manager, element, out string ns))
             {
                 manager.PushScope();
-                WriteAttributes(writer, manager, element);
+                WriteAttributes(writer, manager, element, preservePrecision);
 
                 // Add the default namespace (if there is one) here so that it
                 // takes precedence over other prefixes with the same namespace
@@ -169,24 +202,24 @@ namespace SharpKml.Base
                 WriteData(writer, element.InnerText);
 
                 // Write the child elements: serialized, children then unknown children.
-                WriteElements(writer, manager, element);
-                SerializeElements(writer, manager, element.Children);
-                SerializeElements(writer, manager, element.Orphans);
+                WriteElements(writer, manager, element, preservePrecision);
+                SerializeElements(writer, manager, element.Children, preservePrecision);
+                SerializeElements(writer, manager, element.Orphans, preservePrecision);
 
                 writer.WriteEndElement();
                 manager.PopScope();
             }
         }
 
-        private static void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, IEnumerable<Element> elements)
+        private static void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, IEnumerable<Element> elements, bool preservePrecision)
         {
             foreach (Element element in elements)
             {
-                SerializeElement(writer, manager, element);
+                SerializeElement(writer, manager, element, preservePrecision);
             }
         }
 
-        private static void WriteAttributes(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        private static void WriteAttributes(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
         {
             // Write the attributes in this order: unknown, serialized and then namespaces.
             foreach (XmlComponent att in element.Attributes)
@@ -194,7 +227,7 @@ namespace SharpKml.Base
                 writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
             }
 
-            WriteAttributesForElement(writer, element);
+            WriteAttributesForElement(writer, element, preservePrecision);
 
             foreach (KeyValuePair<string, string> ns in element.GetNamespaces())
             {
@@ -203,7 +236,7 @@ namespace SharpKml.Base
             }
         }
 
-        private static void WriteAttributesForElement(XmlWriter writer, Element element)
+        private static void WriteAttributesForElement(XmlWriter writer, Element element, bool preservePrecision)
         {
             var browser = TypeBrowser.Create(element.GetType());
             foreach (TypeBrowser.ElementInfo attribute in browser.Attributes)
@@ -213,7 +246,7 @@ namespace SharpKml.Base
                 // Make sure it needs saving
                 if (value != null)
                 {
-                    writer.WriteAttributeString(attribute.Component.Name, GetString(value));
+                    writer.WriteAttributeString(attribute.Component.Name, GetString(value, preservePrecision));
                 }
             }
         }
@@ -244,7 +277,7 @@ namespace SharpKml.Base
             }
         }
 
-        private static void WriteElements(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        private static void WriteElements(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
         {
             var browser = TypeBrowser.Create(element.GetType());
 
@@ -258,12 +291,12 @@ namespace SharpKml.Base
                     // Is this an element?
                     if (string.IsNullOrEmpty(elementInfo.Component.Name))
                     {
-                        SerializeElement(writer, manager, (Element)value);
+                        SerializeElement(writer, manager, (Element)value, preservePrecision);
                     }
                     else
                     {
                         writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
-                        WriteData(writer, GetString(value));
+                        WriteData(writer, GetString(value, preservePrecision));
                         writer.WriteEndElement();
                     }
                 }
@@ -306,7 +339,7 @@ namespace SharpKml.Base
             using (var stream = new MemoryStream())
             {
                 this.Xml = null;
-                Serialize(root, stream, settings);
+                Serialize(root, stream, settings, this.PreservePrecision);
                 this.Xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
             }
         }

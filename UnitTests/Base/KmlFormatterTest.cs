@@ -32,9 +32,16 @@ namespace UnitTests.Base
         [TestCase(double.NegativeInfinity, ExpectedResult = "-INF")]
         [TestCase(double.NaN, ExpectedResult = "NaN")]
         [TestCase(double.PositiveInfinity, ExpectedResult = "INF")]
+        [TestCase(1.17, ExpectedResult = "1.1699999999999999")]
         public string ShouldOutputSpecialDoublesCorrectly(double value)
         {
             return string.Format(KmlFormatter.Instance, "{0}", value);
+        }
+
+        [TestCase(1.17, ExpectedResult = "1.17")]
+        public string OutputShouldMatchInput(double value)
+        {
+            return string.Format(KmlFormatter.Instance, "{0:G}", value);
         }
 
         private void TestDateTime(DateTime date)

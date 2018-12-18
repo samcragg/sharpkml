@@ -30,9 +30,15 @@ namespace UnitTests.Base
             [KmlAttribute("EnumAtt")]
             public ColorMode? EnumAtt { get; set; }
 
+            [KmlElement("Double", null)]
+            public double Double { get; set; }
+
             // Also test that NamespaceUri doesn't matter if its string.Empty or null
             [KmlElement("Enum", "")]
             public ColorMode Enum { get; set; }
+
+            [KmlElement("Float", null)]
+            public float Float { get; set; }
 
             [KmlElement("Int", null)]
             public int Int { get; set; }
@@ -167,6 +173,29 @@ namespace UnitTests.Base
             serializer.SerializeRaw(element);
 
             Assert.That(serializer.Xml, Contains.Substring("<" + ChildElementName + ">"));
+        }
+
+        [Test]
+        public void SerializerPrecision()
+        {
+            var element = new TestElement
+            {
+                Double = 1.17,
+                Float = 1.17F
+            };
+
+            // turn on precision preservation
+            var serializer = new Serializer(true);
+            serializer.Serialize(element);
+
+            Assert.That(serializer.Xml, Contains.Substring("1.17</Double>"));
+            Assert.That(serializer.Xml, Contains.Substring("1.17</Float>"));
+
+            serializer = new Serializer();
+            serializer.Serialize(element);
+
+            Assert.That(serializer.Xml, Contains.Substring("1.1699999999999999</Double>"));
+            Assert.That(serializer.Xml, Contains.Substring("1.1699999570846558</Float>"));
         }
 
         private static bool FindNode(string xml, string name, Action<XmlReader> callback)
