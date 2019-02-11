@@ -21,30 +21,24 @@ namespace SharpKml.Base
         /// <summary>
         /// Initializes a new instance of the <see cref="Serializer"/> class.
         /// </summary>
-        /// <param name="preservePrecision">Whether or not to preserve the precision of <see cref="double"/> and
-        /// <see cref="float"/> values. See <see cref="PreservePrecision"/> for more detail.</param>
-        public Serializer(bool preservePrecision)
+        public Serializer()
+            : this(SerializerOptions.Default)
         {
-            this.PreservePrecision = preservePrecision;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Serializer"/> class.
         /// </summary>
-        public Serializer()
-            : this(false)
+        /// <param name="options">The options to use when serializing values.</param>
+        public Serializer(SerializerOptions options)
         {
+            this.Options = options;
         }
 
         /// <summary>
-        /// Gets a value indicating whether <see cref="double"/> and <see cref="float"/> values will retain their original precision when serialized.
+        /// Gets the options to use when serializing an element.
         /// </summary>
-        /// <remarks>
-        /// A value of true will potentially result in invalid values after roundtrips. That is, when serializing
-        /// certain values and subsequently deserializing them, the deserialzied value is not necessarily guaranteed
-        /// to be the same as the original value due to the loss in precision.
-        /// </remarks>
-        public bool PreservePrecision { get; private set; }
+        public SerializerOptions Options { get; }
 
         /// <summary>
         /// Gets the XML content after the most recent call to
@@ -100,7 +94,7 @@ namespace SharpKml.Base
                 NamespaceHandling = NamespaceHandling.OmitDuplicates
             };
 
-            Serialize(root, stream, settings, this.PreservePrecision);
+            this.Serialize(root, stream, settings);
         }
 
         /// <summary>
@@ -143,112 +137,9 @@ namespace SharpKml.Base
             return string.Empty;
         }
 
-        private static string GetString(object value, bool preservePrecision)
-        {
-            TypeInfo typeInfo = value.GetType().GetTypeInfo();
-            if (typeInfo.IsEnum)
-            {
-                KmlElementAttribute att = TypeBrowser.GetEnum((Enum)value);
-                if (att != null)
-                {
-                    return att.ElementName;
-                }
-            }
-
-            if (preservePrecision && (value is double || value is float))
-            {
-                return string.Format(KmlFormatter.Instance, "{0:G}", value);
-            }
-
-            return string.Format(KmlFormatter.Instance, "{0}", value);
-        }
-
         private static bool IsCData(string input)
         {
             return input.StartsWith("<![CDATA[") && input.EndsWith("]]>");
-        }
-
-        private static void Serialize(Element root, Stream stream, XmlWriterSettings settings, bool preservePrecision)
-        {
-            // We check here so the public functions don't need to
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
-
-            settings.Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
-            using (var writer = XmlWriter.Create(stream, settings))
-            {
-                var manager = new XmlNamespaceManager(new NameTable());
-                SerializeElement(writer, manager, root, preservePrecision);
-                writer.Flush();
-            }
-        }
-
-        private static void SerializeElement(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
-        {
-            if (WriteStartTag(writer, manager, element, out string ns))
-            {
-                manager.PushScope();
-                WriteAttributes(writer, manager, element, preservePrecision);
-
-                // Add the default namespace (if there is one) here so that it
-                // takes precedence over other prefixes with the same namespace
-                if (ns != null)
-                {
-                    manager.AddNamespace(string.Empty, ns);
-                }
-
-                WriteData(writer, element.InnerText);
-
-                // Write the child elements: serialized, children then unknown children.
-                WriteElements(writer, manager, element, preservePrecision);
-                SerializeElements(writer, manager, element.Children, preservePrecision);
-                SerializeElements(writer, manager, element.Orphans, preservePrecision);
-
-                writer.WriteEndElement();
-                manager.PopScope();
-            }
-        }
-
-        private static void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, IEnumerable<Element> elements, bool preservePrecision)
-        {
-            foreach (Element element in elements)
-            {
-                SerializeElement(writer, manager, element, preservePrecision);
-            }
-        }
-
-        private static void WriteAttributes(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
-        {
-            // Write the attributes in this order: unknown, serialized and then namespaces.
-            foreach (XmlComponent att in element.Attributes)
-            {
-                writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
-            }
-
-            WriteAttributesForElement(writer, element, preservePrecision);
-
-            foreach (KeyValuePair<string, string> ns in element.GetNamespaces())
-            {
-                writer.WriteAttributeString("xmlns", ns.Key, string.Empty, ns.Value);
-                manager.AddNamespace(ns.Key, ns.Value);
-            }
-        }
-
-        private static void WriteAttributesForElement(XmlWriter writer, Element element, bool preservePrecision)
-        {
-            var browser = TypeBrowser.Create(element.GetType());
-            foreach (TypeBrowser.ElementInfo attribute in browser.Attributes)
-            {
-                object value = attribute.GetValue(element);
-
-                // Make sure it needs saving
-                if (value != null)
-                {
-                    writer.WriteAttributeString(attribute.Component.Name, GetString(value, preservePrecision));
-                }
-            }
         }
 
         private static void WriteData(XmlWriter writer, string data)
@@ -273,32 +164,6 @@ namespace SharpKml.Base
                 {
                     // Just write normal.
                     writer.WriteString(data);
-                }
-            }
-        }
-
-        private static void WriteElements(XmlWriter writer, XmlNamespaceManager manager, Element element, bool preservePrecision)
-        {
-            var browser = TypeBrowser.Create(element.GetType());
-
-            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
-            {
-                object value = elementInfo.GetValue(element);
-
-                // Make sure it needs saving
-                if (value != null)
-                {
-                    // Is this an element?
-                    if (string.IsNullOrEmpty(elementInfo.Component.Name))
-                    {
-                        SerializeElement(writer, manager, (Element)value, preservePrecision);
-                    }
-                    else
-                    {
-                        writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
-                        WriteData(writer, GetString(value, preservePrecision));
-                        writer.WriteEndElement();
-                    }
                 }
             }
         }
@@ -334,13 +199,145 @@ namespace SharpKml.Base
             return true;
         }
 
+        private string GetString(object value)
+        {
+            TypeInfo typeInfo = value.GetType().GetTypeInfo();
+            if (typeInfo.IsEnum)
+            {
+                KmlElementAttribute att = TypeBrowser.GetEnum((Enum)value);
+                if (att != null)
+                {
+                    return att.ElementName;
+                }
+            }
+
+            if (((this.Options & SerializerOptions.ReadableFloatingPoints) != 0) &&
+                (value is double || value is float))
+            {
+                return string.Format(KmlFormatter.Instance, "{0:G}", value);
+            }
+            else
+            {
+                return string.Format(KmlFormatter.Instance, "{0}", value);
+            }
+        }
+
+        private void Serialize(Element root, Stream stream, XmlWriterSettings settings)
+        {
+            // We check here so the public functions don't need to
+            if (root == null)
+            {
+                throw new ArgumentNullException("root");
+            }
+
+            settings.Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            using (var writer = XmlWriter.Create(stream, settings))
+            {
+                var manager = new XmlNamespaceManager(new NameTable());
+                this.SerializeElement(writer, manager, root);
+                writer.Flush();
+            }
+        }
+
         private void Serialize(Element root, XmlWriterSettings settings)
         {
             using (var stream = new MemoryStream())
             {
                 this.Xml = null;
-                Serialize(root, stream, settings, this.PreservePrecision);
+                this.Serialize(root, stream, settings);
                 this.Xml = Encoding.UTF8.GetString(stream.ToArray(), 0, (int)stream.Length);
+            }
+        }
+
+        private void SerializeElement(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        {
+            if (WriteStartTag(writer, manager, element, out string ns))
+            {
+                manager.PushScope();
+                this.WriteAttributes(writer, manager, element);
+
+                // Add the default namespace (if there is one) here so that it
+                // takes precedence over other prefixes with the same namespace
+                if (ns != null)
+                {
+                    manager.AddNamespace(string.Empty, ns);
+                }
+
+                WriteData(writer, element.InnerText);
+
+                // Write the child elements: serialized, children then unknown children.
+                this.WriteElements(writer, manager, element);
+                this.SerializeElements(writer, manager, element.Children);
+                this.SerializeElements(writer, manager, element.Orphans);
+
+                writer.WriteEndElement();
+                manager.PopScope();
+            }
+        }
+
+        private void SerializeElements(XmlWriter writer, XmlNamespaceManager manager, IEnumerable<Element> elements)
+        {
+            foreach (Element element in elements)
+            {
+                this.SerializeElement(writer, manager, element);
+            }
+        }
+
+        private void WriteAttributes(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        {
+            // Write the attributes in this order: unknown, serialized and then namespaces.
+            foreach (XmlComponent att in element.Attributes)
+            {
+                writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
+            }
+
+            this.WriteAttributesForElement(writer, element);
+
+            foreach (KeyValuePair<string, string> ns in element.GetNamespaces())
+            {
+                writer.WriteAttributeString("xmlns", ns.Key, string.Empty, ns.Value);
+                manager.AddNamespace(ns.Key, ns.Value);
+            }
+        }
+
+        private void WriteAttributesForElement(XmlWriter writer, Element element)
+        {
+            var browser = TypeBrowser.Create(element.GetType());
+            foreach (TypeBrowser.ElementInfo attribute in browser.Attributes)
+            {
+                object value = attribute.GetValue(element);
+
+                // Make sure it needs saving
+                if (value != null)
+                {
+                    writer.WriteAttributeString(attribute.Component.Name, this.GetString(value));
+                }
+            }
+        }
+
+        private void WriteElements(XmlWriter writer, XmlNamespaceManager manager, Element element)
+        {
+            var browser = TypeBrowser.Create(element.GetType());
+
+            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
+            {
+                object value = elementInfo.GetValue(element);
+
+                // Make sure it needs saving
+                if (value != null)
+                {
+                    // Is this an element?
+                    if (string.IsNullOrEmpty(elementInfo.Component.Name))
+                    {
+                        this.SerializeElement(writer, manager, (Element)value);
+                    }
+                    else
+                    {
+                        writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
+                        WriteData(writer, this.GetString(value));
+                        writer.WriteEndElement();
+                    }
+                }
             }
         }
     }

@@ -184,14 +184,13 @@ namespace UnitTests.Base
                 Float = 1.17F
             };
 
-            // turn on precision preservation
-            var serializer = new Serializer(true);
+            var serializer = new Serializer(SerializerOptions.ReadableFloatingPoints);
             serializer.Serialize(element);
 
             Assert.That(serializer.Xml, Contains.Substring("1.17</Double>"));
             Assert.That(serializer.Xml, Contains.Substring("1.17</Float>"));
 
-            serializer = new Serializer();
+            serializer = new Serializer(SerializerOptions.Default);
             serializer.Serialize(element);
 
             Assert.That(serializer.Xml, Contains.Substring("1.1699999999999999</Double>"));
