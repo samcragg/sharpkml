@@ -5,10 +5,11 @@
 
 namespace SharpKml.Dom.GX
 {
+    using System.Diagnostics.CodeAnalysis;
     using SharpKml.Base;
 
     /// <summary>
-    /// Allows nonrectangular quadrilateral ground overlays.
+    /// Allows non-rectangular quadrilateral ground overlays.
     /// </summary>
     /// <remarks>This is not part of the OGC KML 2.2 standard.</remarks>
     [KmlElement("LatLonQuad", KmlNamespaces.GX22Namespace)]
@@ -28,6 +29,7 @@ namespace SharpKml.Dom.GX
         /// <para>All altitude values are ignored.</para>
         /// </remarks>
         [KmlElement(null)]
+        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "This object is a DTO")]
         public CoordinateCollection Coordinates
         {
             get => this.coords;

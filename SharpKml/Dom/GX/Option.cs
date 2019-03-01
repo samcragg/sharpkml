@@ -5,6 +5,7 @@
 
 namespace SharpKml.Dom.GX
 {
+    using System.Diagnostics.CodeAnalysis;
     using SharpKml.Base;
 
     /// <summary>
@@ -14,6 +15,7 @@ namespace SharpKml.Dom.GX
     /// This is not part of the OGC KML 2.2 standard.
     /// </remarks>
     [KmlElement("Option", KmlNamespaces.GX22Namespace)]
+    [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Matches the name in the KML standard")]
     public class Option : Element
     {
         /// <summary>

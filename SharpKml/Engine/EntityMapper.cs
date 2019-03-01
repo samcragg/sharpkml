@@ -29,10 +29,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">file is null.</exception>
         public EntityMapper(KmlFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException("file");
-            }
+            Check.IsNotNull(file, nameof(file));
 
             this.file = file;
         }
@@ -135,10 +132,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">feature is null.</exception>
         public void ParseEntityFields(Feature feature)
         {
-            if (feature == null)
-            {
-                throw new ArgumentNullException("feature");
-            }
+            Check.IsNotNull(feature, nameof(feature));
 
             this.fieldMap.Clear();
             this.map.Clear();

@@ -9,6 +9,7 @@ namespace SharpKml.Dom
     using System.Collections.Generic;
     using System.Linq;
     using SharpKml.Base;
+    using static System.Diagnostics.Debug;
 
     /// <summary>
     /// Represents the base class of all KML elements.
@@ -116,10 +117,10 @@ namespace SharpKml.Dom
         /// Adds an XML namespace to the element.
         /// </summary>
         /// <param name="prefix">The namespace prefix</param>
-        /// <param name="uri">The namespace URI</param>
-        protected internal void AddNamespace(string prefix, string uri)
+        /// <param name="ns">The namespace URI</param>
+        protected internal void AddNamespace(string prefix, string ns)
         {
-            this.namespaces[prefix] = uri;
+            this.namespaces[prefix] = ns;
         }
 
         /// <summary>
@@ -163,11 +164,8 @@ namespace SharpKml.Dom
         protected void AddAsChild<T>(ICollection<T> collection, T child)
             where T : Element
         {
-            if (child == null)
-            {
-                throw new ArgumentNullException("child");
-            }
-            else if (child.Parent != null)
+            Check.IsNotNull(child, nameof(child));
+            if (child.Parent != null)
             {
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
             }
@@ -196,6 +194,7 @@ namespace SharpKml.Dom
         protected bool RemoveChild<T>(ICollection<T> collection, T child)
             where T : Element
         {
+            Assert(child.Parent == this, "Should only be called on children attached to this instance");
             if (collection.Remove(child))
             {
                 child.Parent = null;

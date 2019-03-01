@@ -50,33 +50,26 @@ namespace SharpKml.Dom
         /// <param name="prefix">
         /// The prefix to associate with the namespace being added.
         /// </param>
-        /// <param name="uri">The namespace to add.</param>
+        /// <param name="ns">The namespace to add.</param>
         /// <exception cref="ArgumentException">
         /// The value for prefix is an empty string, "xml" or "xmlns".
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// prefix/uri is null.
         /// </exception>
-        public void AddNamespacePrefix(string prefix, string uri)
+        public void AddNamespacePrefix(string prefix, string ns)
         {
-            if (prefix == null)
-            {
-                throw new ArgumentNullException("prefix");
-            }
+            Check.IsNotNull(prefix, nameof(prefix));
+            Check.IsNotNull(ns, nameof(ns));
 
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
-
-            if ((prefix == string.Empty) ||
+            if ((prefix.Length == 0) ||
                 (prefix == "xml") ||
                 (prefix == "xmlns"))
             {
-                throw new ArgumentException("Invalid prefix.", "prefix");
+                throw new ArgumentException("Invalid prefix.", nameof(prefix));
             }
 
-            this.AddNamespace(prefix, uri);
+            this.AddNamespace(prefix, ns);
         }
     }
 }

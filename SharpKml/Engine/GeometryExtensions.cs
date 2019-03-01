@@ -24,10 +24,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">geometry is null.</exception>
         public static BoundingBox CalculateBounds(this Geometry geometry)
         {
-            if (geometry == null)
-            {
-                throw new ArgumentNullException("geometry");
-            }
+            Check.IsNotNull(geometry, nameof(geometry));
 
             var box = new BoundingBox();
             ExpandBox(geometry, box);

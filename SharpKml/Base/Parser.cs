@@ -7,7 +7,6 @@ namespace SharpKml.Base
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Xml;
     using SharpKml.Dom;
@@ -108,14 +107,36 @@ namespace SharpKml.Base
                 }
                 else
                 {
+                    var settings = new XmlReaderSettings
+                    {
+                        ConformanceLevel = ConformanceLevel.Fragment,
+                        DtdProcessing = DtdProcessing.Ignore,
+                    };
+
                     this.defaultNamespace = KmlNamespaces.Kml22Namespace;
                     this.Parse(
                         XmlReader.Create(
                         stream,
-                        new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment },
+                        settings,
                         new XmlParserContext(null, new IgnoreNamespaceManager(), null, XmlSpace.Default)));
                 }
             }
+        }
+
+        private static bool AssignToProperty(Element parent, Element child)
+        {
+            TypeInfo childType = child.GetType().GetTypeInfo();
+            var browser = TypeBrowser.Create(parent.GetType());
+            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
+            {
+                if (elementInfo.ValueType.GetTypeInfo().IsAssignableFrom(childType))
+                {
+                    elementInfo.SetValue(parent, child);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void AssignValue(object instance, TypeBrowser.ElementInfo elementInfo, string text)
@@ -163,7 +184,7 @@ namespace SharpKml.Base
             }
             else
             {
-                isOrphan = !this.AssignToProperty(parent, child);
+                isOrphan = !AssignToProperty(parent, child);
             }
 
             this.PopulateElement(child);
@@ -173,22 +194,6 @@ namespace SharpKml.Base
             {
                 parent.AddOrphan(child); // Save for later serialization
             }
-        }
-
-        private bool AssignToProperty(Element parent, Element child)
-        {
-            TypeInfo childType = child.GetType().GetTypeInfo();
-            var browser = TypeBrowser.Create(parent.GetType());
-            foreach (TypeBrowser.ElementInfo elementInfo in browser.Elements)
-            {
-                if (elementInfo.ValueType.GetTypeInfo().IsAssignableFrom(childType))
-                {
-                    elementInfo.SetValue(parent, child);
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private Element CreateElement()

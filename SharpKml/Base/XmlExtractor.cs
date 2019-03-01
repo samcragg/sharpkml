@@ -5,6 +5,7 @@
 
 namespace SharpKml.Base
 {
+    using System.Globalization;
     using System.Text;
     using System.Xml;
 
@@ -50,7 +51,11 @@ namespace SharpKml.Base
             var sb = new StringBuilder();
             while (this.reader.MoveToNextAttribute())
             {
-                sb.AppendFormat(" {0}=\"{1}\"", this.reader.Name, this.reader.Value);
+                sb.AppendFormat(
+                    CultureInfo.InvariantCulture,
+                    " {0}=\"{1}\"",
+                    this.reader.Name,
+                    this.reader.Value);
             }
 
             return sb.ToString();
@@ -66,13 +71,26 @@ namespace SharpKml.Base
                         // Check here before we access attributes.
                         if (this.reader.IsEmptyElement)
                         {
-                            this.xml.AppendFormat("<{0}{1} />", this.reader.Name, this.GetAttributes());
+                            this.xml.AppendFormat(
+                                CultureInfo.InvariantCulture,
+                                "<{0}{1} />",
+                                this.reader.Name,
+                                this.GetAttributes());
                         }
                         else
                         {
-                            this.xml.AppendFormat("<{0}{1}>", this.reader.Name, this.GetAttributes());
+                            this.xml.AppendFormat(
+                                CultureInfo.InvariantCulture,
+                                "<{0}{1}>",
+                                this.reader.Name,
+                                this.GetAttributes());
+
                             this.ProcessChild();
-                            this.xml.AppendFormat("</{0}>", this.reader.Name);
+
+                            this.xml.AppendFormat(
+                                CultureInfo.InvariantCulture,
+                                "</{0}>",
+                                this.reader.Name);
                         }
 
                         break;

@@ -75,15 +75,8 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">feature/file is null.</exception>
         public static Style CreateResolvedStyle(Feature feature, KmlFile file, StyleState state, IFileResolver resolver)
         {
-            if (feature == null)
-            {
-                throw new ArgumentNullException("feature");
-            }
-
-            if (file == null)
-            {
-                throw new ArgumentNullException("file");
-            }
+            Check.IsNotNull(feature, nameof(feature));
+            Check.IsNotNull(file, nameof(file));
 
             var instance = new StyleResolver(file.StyleMap)
             {

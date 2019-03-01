@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.6</remarks>
     [KmlElement("Change")]
-    public class ChangeCollection : Element, ICollection<KmlObject>, IReadOnlyCollection<KmlObject>
+    public sealed class ChangeCollection : Element, ICollection<KmlObject>, IReadOnlyCollection<KmlObject>
     {
         /// <summary>
         /// Gets the number of <see cref="KmlObject"/>s in this instance.

@@ -22,7 +22,7 @@ namespace SharpKml.Dom
     /// <see cref="StyleState.Highlight"/>.</para>
     /// </remarks>
     [KmlElement("StyleMap")]
-    public class StyleMapCollection : StyleSelector, ICollection<Pair>, IReadOnlyCollection<Pair>
+    public sealed class StyleMapCollection : StyleSelector, ICollection<Pair>, IReadOnlyCollection<Pair>
     {
         /// <summary>
         /// Gets the number of <see cref="Pair"/>s in this instance.

@@ -122,6 +122,51 @@ namespace SharpKml.Base
         }
 
         /// <summary>
+        /// Adds two vectors together.
+        /// </summary>
+        /// <param name="left">The first vector to add.</param>
+        /// <param name="right">The second vector to add.</param>
+        /// <returns>The summed vector.</returns>
+        public static Vector Add(Vector left, Vector right)
+        {
+            return left + right;
+        }
+
+        /// <summary>
+        /// Multiples a vector by a scalar value.
+        /// </summary>
+        /// <param name="left">The vector.</param>
+        /// <param name="right">The scalar value.</param>
+        /// <returns>The scaled vector.</returns>
+        public static Vector Multiply(Vector left, double right)
+        {
+            return left * right;
+        }
+
+        /// <summary>
+        /// Negates the specified vector.
+        /// </summary>
+        /// <param name="item">The vector to negate.</param>
+        /// <returns>The negated vector.</returns>
+        public static Vector Negate(Vector item)
+        {
+            return -item;
+        }
+
+        /// <summary>
+        /// Subtracts the second vector from the first.
+        /// </summary>
+        /// <param name="left">The first vector.</param>
+        /// <param name="right">The second vector.</param>
+        /// <returns>
+        /// The vector that results from subtracting <c>right</c> from <c>left</c>.
+        /// </returns>
+        public static Vector Subtract(Vector left, Vector right)
+        {
+            return left - right;
+        }
+
+        /// <summary>
         /// Determines whether this instance and the specified object have the
         /// same value.
         /// </summary>

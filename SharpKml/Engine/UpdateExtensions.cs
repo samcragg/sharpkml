@@ -23,10 +23,8 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">file is null.</exception>
         public static void Process(this Update update, KmlFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException("file");
-            }
+            Check.IsNotNull(update, nameof(update));
+            Check.IsNotNull(file, nameof(file));
 
             foreach (Element child in update.Updates)
             {

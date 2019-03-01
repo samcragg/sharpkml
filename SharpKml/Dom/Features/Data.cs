@@ -5,6 +5,7 @@
 
 namespace SharpKml.Dom
 {
+    using System.Diagnostics.CodeAnalysis;
     using SharpKml.Base;
 
     /// <summary>
@@ -12,6 +13,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 9.3</remarks>
     [KmlElement("Data")]
+    [SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "Matches the name in the KML standard")]
     public class Data : KmlObject
     {
         /// <summary>

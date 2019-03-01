@@ -67,7 +67,7 @@ namespace UnitTests.Base
         {
             XmlComponent xml = new XmlComponent("random", "pre:local", "uri");
             Assert.That(xml.Name, Is.EqualTo("local"));
-            Assert.That(xml.NamespaceUri, Is.EqualTo("uri"));
+            Assert.That(xml.Namespace, Is.EqualTo("uri"));
             Assert.That(xml.Prefix, Is.EqualTo("pre")); // Make sure prefix was overloaded
 
             // Should ignore anything after the second colon
@@ -78,7 +78,7 @@ namespace UnitTests.Base
             // Test a known namespace
             xml = new XmlComponent(null, "gx:known", "ignore me");
             Assert.That(xml.Name, Is.EqualTo("known"));
-            Assert.That(xml.NamespaceUri, Is.EqualTo(KmlNamespaces.GX22Namespace));
+            Assert.That(xml.Namespace, Is.EqualTo(KmlNamespaces.GX22Namespace));
             Assert.That(xml.Prefix, Is.EqualTo(KmlNamespaces.GX22Prefix));
         }
     }

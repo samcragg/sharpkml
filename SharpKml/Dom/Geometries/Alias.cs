@@ -6,6 +6,7 @@
 namespace SharpKml.Dom
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using SharpKml.Base;
 
     /// <summary>
@@ -13,6 +14,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 10.14</remarks>
     [KmlElement("Alias")]
+    [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Matches the name in the KML standard")]
     public class Alias : KmlObject
     {
         /// <summary>

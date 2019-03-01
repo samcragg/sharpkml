@@ -40,10 +40,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">feature is null.</exception>
         public static BoundingBox CalculateBounds(this Feature feature)
         {
-            if (feature == null)
-            {
-                throw new ArgumentNullException("feature");
-            }
+            Check.IsNotNull(feature, nameof(feature));
 
             var box = new BoundingBox();
             ExpandBox(feature, box);

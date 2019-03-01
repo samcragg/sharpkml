@@ -91,12 +91,27 @@ namespace SharpKml.Base
         /// <param name="colorA">The first Color32 to compare.</param>
         /// <param name="colorB">The second Color32 to compare.</param>
         /// <returns>
-        /// true is the value of colorA is less than the value of colorB;
+        /// true if the value of colorA is less than the value of colorB;
         /// otherwise, false.
         /// </returns>
         public static bool operator <(Color32 colorA, Color32 colorB)
         {
             return colorA.CompareTo(colorB) < 0;
+        }
+
+        /// <summary>
+        /// Determines whether the first specified Color32 is less than or equal
+        /// to the second.
+        /// </summary>
+        /// <param name="colorA">The first Color32 to compare.</param>
+        /// <param name="colorB">The second Color32 to compare.</param>
+        /// <returns>
+        /// true if the value of colorA is less than of equal to the value of
+        /// colorB; otherwise, false.
+        /// </returns>
+        public static bool operator <=(Color32 colorA, Color32 colorB)
+        {
+            return colorA.CompareTo(colorB) <= 0;
         }
 
         /// <summary>
@@ -124,6 +139,21 @@ namespace SharpKml.Base
         public static bool operator >(Color32 colorA, Color32 colorB)
         {
             return colorA.CompareTo(colorB) > 0;
+        }
+
+        /// <summary>
+        /// Determines whether the first specified Color32 is greater than or
+        /// equal to the second.
+        /// </summary>
+        /// <param name="colorA">The first Color32 to compare.</param>
+        /// <param name="colorB">The second Color32 to compare.</param>
+        /// <returns>
+        /// true is the value of colorA is greater than or equal to the value
+        /// of colorB; otherwise, false.
+        /// </returns>
+        public static bool operator >=(Color32 colorA, Color32 colorB)
+        {
+            return colorA.CompareTo(colorB) >= 0;
         }
 
         /// <summary>

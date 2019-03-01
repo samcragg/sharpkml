@@ -17,7 +17,7 @@ namespace SharpKml.Dom
     public sealed class Url : LinkType
     {
         /// <summary>
-        /// Converts the specified Url into a <see cref="Link"/>.
+        /// Converts the specified <see cref="Url"/> into a <see cref="Link"/>.
         /// </summary>
         /// <param name="url">The value to convert.</param>
         /// <returns>
@@ -25,18 +25,31 @@ namespace SharpKml.Dom
         /// </returns>
         public static explicit operator Link(Url url)
         {
-            Link output = new Link();
-            output.Href = url.Href;
-            output.HttpQuery = url.HttpQuery;
-            output.Id = url.Id;
-            output.RefreshInterval = url.RefreshInterval;
-            output.RefreshMode = url.RefreshMode;
-            output.TargetId = url.TargetId;
-            output.ViewBoundScale = url.ViewBoundScale;
-            output.ViewFormat = url.ViewFormat;
-            output.ViewRefreshMode = url.ViewRefreshMode;
-            output.ViewRefreshTime = url.ViewRefreshTime;
-            return output;
+            return new Link
+            {
+                Href = url.Href,
+                HttpQuery = url.HttpQuery,
+                Id = url.Id,
+                RefreshInterval = url.RefreshInterval,
+                RefreshMode = url.RefreshMode,
+                TargetId = url.TargetId,
+                ViewBoundScale = url.ViewBoundScale,
+                ViewFormat = url.ViewFormat,
+                ViewRefreshMode = url.ViewRefreshMode,
+                ViewRefreshTime = url.ViewRefreshTime
+            };
+        }
+
+        /// <summary>
+        /// Converts the specified <see cref="Url"/> into a <see cref="Link"/>.
+        /// </summary>
+        /// <param name="url">The value to convert.</param>
+        /// <returns>
+        /// A copy of the specified value parameter as a <c>Link</c>.
+        /// </returns>
+        public static Link FromUrl(Url url)
+        {
+            return (Link)url;
         }
     }
 }

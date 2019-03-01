@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 13.5</remarks>
     [KmlElement("Delete")]
-    public class DeleteCollection : Element, ICollection<Feature>, IReadOnlyCollection<Feature>
+    public sealed class DeleteCollection : Element, ICollection<Feature>, IReadOnlyCollection<Feature>
     {
         /// <summary>
         /// Gets the number of <see cref="Container"/>s in this instance.

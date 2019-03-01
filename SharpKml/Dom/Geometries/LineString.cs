@@ -6,6 +6,7 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using SharpKml.Base;
 
@@ -30,6 +31,7 @@ namespace SharpKml.Dom
         /// </summary>
         /// <remarks>Should contain two or more coordinates.</remarks>
         [KmlElement(null, 4)]
+        [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "This object is a DTO")]
         public CoordinateCollection Coordinates
         {
             get => this.coords;

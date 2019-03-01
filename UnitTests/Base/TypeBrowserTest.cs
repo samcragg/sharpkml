@@ -98,8 +98,8 @@ namespace UnitTests.Base
                 TypeBrowser.ElementInfo withNamespace = this.browser.FindElement(
                     new XmlComponent(null, "Derived.Public", "ns"));
 
-                Assert.That(noNamespace.Component.NamespaceUri, Is.Empty);
-                Assert.That(withNamespace.Component.NamespaceUri, Is.EqualTo("ns"));
+                Assert.That(noNamespace.Component.Namespace, Is.Empty);
+                Assert.That(withNamespace.Component.Namespace, Is.EqualTo("ns"));
             }
 
             [Test]

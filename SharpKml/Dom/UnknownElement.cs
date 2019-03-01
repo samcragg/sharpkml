@@ -65,7 +65,7 @@ namespace SharpKml.Dom
         /// <param name="writer">An <see cref="XmlWriter"/> to write to.</param>
         void ICustomElement.CreateStartElement(XmlWriter writer)
         {
-            writer.WriteStartElement(this.UnknownData.Prefix, this.UnknownData.Name, this.UnknownData.NamespaceUri);
+            writer.WriteStartElement(this.UnknownData.Prefix, this.UnknownData.Name, this.UnknownData.Namespace);
         }
 
         /// <summary>

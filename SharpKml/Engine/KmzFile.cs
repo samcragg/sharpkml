@@ -170,7 +170,7 @@ namespace SharpKml.Engine
             if (!string.IsNullOrEmpty(Path.GetPathRoot(path)) ||
                 path.StartsWith(".", StringComparison.Ordinal))
             {
-                throw new ArgumentException("path is invalid.", "path");
+                throw new ArgumentException("path is invalid.", nameof(path));
             }
 
             ZipArchiveEntry entry = this.zip.CreateEntry(path);
@@ -245,7 +245,7 @@ namespace SharpKml.Engine
                 ZipArchiveEntry file = this.zip.GetEntry(path);
                 if (file != null)
                 {
-                    return this.ExtractResource(file);
+                    return ExtractResource(file);
                 }
             }
 
@@ -375,13 +375,7 @@ namespace SharpKml.Engine
             }
         }
 
-        private void CreateZipArchive()
-        {
-            this.zipStream.Position = 0;
-            this.zip = new ZipArchive(this.zipStream, ZipArchiveMode.Update, leaveOpen: true);
-        }
-
-        private byte[] ExtractResource(ZipArchiveEntry entry)
+        private static byte[] ExtractResource(ZipArchiveEntry entry)
         {
             using (var ms = new MemoryStream())
             using (Stream stream = entry.Open())
@@ -389,6 +383,12 @@ namespace SharpKml.Engine
                 stream.CopyTo(ms);
                 return ms.ToArray();
             }
+        }
+
+        private void CreateZipArchive()
+        {
+            this.zipStream.Position = 0;
+            this.zip = new ZipArchive(this.zipStream, ZipArchiveMode.Update, leaveOpen: true);
         }
 
         private void ThrowIfDisposed()

@@ -83,10 +83,7 @@ namespace SharpKml.Base
         /// <exception cref="ArgumentNullException">root or stream is null.</exception>
         public void Serialize(Element root, Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
+            Check.IsNotNull(stream, nameof(stream));
 
             var settings = new XmlWriterSettings
             {
@@ -139,7 +136,8 @@ namespace SharpKml.Base
 
         private static bool IsCData(string input)
         {
-            return input.StartsWith("<![CDATA[") && input.EndsWith("]]>");
+            return input.StartsWith("<![CDATA[", StringComparison.Ordinal)
+                && input.EndsWith("]]>", StringComparison.Ordinal);
         }
 
         private static void WriteData(XmlWriter writer, string data)
@@ -191,9 +189,9 @@ namespace SharpKml.Base
                     return false;
                 }
 
-                ns = component.NamespaceUri;
+                ns = component.Namespace;
                 string prefix = FindPrefix(manager, ns);
-                writer.WriteStartElement(prefix, component.Name, component.NamespaceUri);
+                writer.WriteStartElement(prefix, component.Name, component.Namespace);
             }
 
             return true;
@@ -225,10 +223,7 @@ namespace SharpKml.Base
         private void Serialize(Element root, Stream stream, XmlWriterSettings settings)
         {
             // We check here so the public functions don't need to
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
+            Check.IsNotNull(root, nameof(root));
 
             settings.Encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
             using (var writer = XmlWriter.Create(stream, settings))
@@ -283,7 +278,7 @@ namespace SharpKml.Base
             // Write the attributes in this order: unknown, serialized and then namespaces.
             foreach (XmlComponent att in element.Attributes)
             {
-                writer.WriteAttributeString(att.Prefix, att.Name, att.NamespaceUri, att.Value);
+                writer.WriteAttributeString(att.Prefix, att.Name, att.Namespace, att.Value);
             }
 
             this.WriteAttributesForElement(writer, element);
@@ -335,7 +330,7 @@ namespace SharpKml.Base
                 }
                 else
                 {
-                    writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.NamespaceUri);
+                    writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.Namespace);
                     WriteData(writer, this.GetString(value));
                     writer.WriteEndElement();
                 }

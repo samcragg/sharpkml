@@ -103,10 +103,7 @@ namespace SharpKml.Base
         /// <exception cref="ArgumentNullException">value is null.</exception>
         public static KmlElementAttribute GetEnum(Enum value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+            Check.IsNotNull(value, nameof(value));
 
             Type type = value.GetType();
             string name = Enum.GetName(type, value);

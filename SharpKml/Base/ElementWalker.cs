@@ -22,10 +22,7 @@ namespace SharpKml.Base
         /// <returns>An IEnumerable collection of the Elements.</returns>
         public static IEnumerable<Element> Walk(Element root)
         {
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
+            Check.IsNotNull(root, nameof(root));
 
             return WalkElement(root);
         }

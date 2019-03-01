@@ -6,6 +6,7 @@
 namespace SharpKml.Dom
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using SharpKml.Base;
 
     /// <summary>
@@ -15,6 +16,7 @@ namespace SharpKml.Dom
     /// <remarks>OGC KML 2.2 Section 9.8</remarks>
     // This should inherit from Element, but the C++ version inherits from Object
     [KmlElement("Schema")]
+    [SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "Matches the name in the KML standard")]
     public class Schema : KmlObject
     {
         private readonly List<GX.SimpleArrayField> arrayFields = new List<GX.SimpleArrayField>();

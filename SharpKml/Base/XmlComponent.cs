@@ -35,11 +35,11 @@ namespace SharpKml.Base
         /// </summary>
         /// <param name="prefix">The XML prefix.</param>
         /// <param name="local">The XML local name.</param>
-        /// <param name="uri">The XML namespace.</param>
-        public XmlComponent(string prefix, string local, string uri)
+        /// <param name="ns">The XML namespace.</param>
+        public XmlComponent(string prefix, string local, string ns)
         {
             this.Prefix = prefix ?? string.Empty;
-            this.SetName(local, uri);
+            this.SetName(local, ns);
             this.Value = string.Empty;
         }
 
@@ -56,7 +56,7 @@ namespace SharpKml.Base
         /// <summary>
         /// Gets the XML namespace URI of the component.
         /// </summary>
-        public string NamespaceUri { get; private set; }
+        public string Namespace { get; private set; }
 
         /// <summary>
         /// Gets the XML prefix of the component.
@@ -78,7 +78,7 @@ namespace SharpKml.Base
             return new XmlComponent
             {
                 Name = this.Name,
-                NamespaceUri = this.NamespaceUri,
+                Namespace = this.Namespace,
                 Prefix = this.Prefix,
                 Value = this.Value
             };
@@ -102,14 +102,14 @@ namespace SharpKml.Base
                 if (string.Equals(this.Name, other.Name, StringComparison.Ordinal))
                 {
                     // Do we need to compare the namespaces?
-                    if (string.Equals(this.NamespaceUri, Parser.IgnoreNamespace, StringComparison.Ordinal) ||
-                        string.Equals(other.NamespaceUri, Parser.IgnoreNamespace, StringComparison.Ordinal))
+                    if (string.Equals(this.Namespace, Parser.IgnoreNamespace, StringComparison.Ordinal) ||
+                        string.Equals(other.Namespace, Parser.IgnoreNamespace, StringComparison.Ordinal))
                     {
                         return true;
                     }
                     else
                     {
-                        return string.Equals(this.NamespaceUri, other.NamespaceUri, StringComparison.Ordinal);
+                        return string.Equals(this.Namespace, other.Namespace, StringComparison.Ordinal);
                     }
                 }
             }
@@ -136,7 +136,7 @@ namespace SharpKml.Base
         public override int GetHashCode()
         {
             return this.Name.GetHashCode() ^
-                   this.NamespaceUri.GetHashCode();
+                   this.Namespace.GetHashCode();
         }
 
         private void SetName(string local, string uri)
@@ -151,13 +151,13 @@ namespace SharpKml.Base
             if (colon < 0)
             {
                 this.Name = local;
-                this.NamespaceUri = uri;
+                this.Namespace = uri;
             }
             else
             {
                 this.Name = local.Substring(colon + 1);
                 this.Prefix = local.Substring(0, colon);
-                this.NamespaceUri = KmlNamespaces.FindNamespace(this.Prefix) ?? uri;
+                this.Namespace = KmlNamespaces.FindNamespace(this.Prefix) ?? uri;
             }
         }
     }

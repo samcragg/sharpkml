@@ -23,10 +23,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static string GetFragment(this Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             if (uri.IsAbsoluteUri)
             {
@@ -52,10 +49,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static string GetPath(this Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             if (uri.IsAbsoluteUri)
             {
@@ -85,10 +79,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static Uri Normalize(this Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             // Absolute paths are already normalized
             if (!uri.IsAbsoluteUri)
@@ -119,10 +110,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static Uri Relative(this Uri uri, Uri target)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             if (target == null)
             {
@@ -146,10 +134,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static Uri Resolve(this Uri uri, Uri geometry, Uri target)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             Uri geo = Relative(uri, geometry);
             return geo == null ? null : Relative(geo, target);
@@ -167,10 +152,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">uri is null.</exception>
         public static Tuple<Uri, Uri> SplitKmz(this Uri uri)
         {
-            if (uri == null)
-            {
-                throw new ArgumentNullException("uri");
-            }
+            Check.IsNotNull(uri, nameof(uri));
 
             string path = uri.AbsolutePath;
             int index = path.IndexOf(".kmz", StringComparison.OrdinalIgnoreCase);

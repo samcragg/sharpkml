@@ -63,10 +63,7 @@ namespace SharpKml.Engine
         /// </exception>
         public static KmlFile Create(Element root, bool duplicates)
         {
-            if (root == null)
-            {
-                throw new ArgumentNullException("root");
-            }
+            Check.IsNotNull(root, nameof(root));
 
             var file = new KmlFile
             {
@@ -109,10 +106,7 @@ namespace SharpKml.Engine
         /// </exception>
         public static KmlFile Load(Stream input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
+            Check.IsNotNull(input, nameof(input));
 
             using (var reader = new StreamReader(input))
             {
@@ -140,10 +134,7 @@ namespace SharpKml.Engine
         /// </exception>
         public static KmlFile Load(TextReader reader)
         {
-            if (reader == null)
-            {
-                throw new ArgumentNullException("reader");
-            }
+            Check.IsNotNull(reader, nameof(reader));
 
             var file = new KmlFile();
             file.Parse(reader);
@@ -162,10 +153,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">id is null.</exception>
         public KmlObject FindObject(string id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException("id");
-            }
+            Check.IsNotNull(id, nameof(id));
 
             if (this.objects.TryGetValue(id, out KmlObject obj))
             {
@@ -187,10 +175,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">id is null.</exception>
         public StyleSelector FindStyle(string id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException("id");
-            }
+            Check.IsNotNull(id, nameof(id));
 
             if (this.styles.TryGetValue(id, out StyleSelector style))
             {

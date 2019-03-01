@@ -71,15 +71,8 @@ namespace SharpKml.Base
         /// <exception cref="ArgumentNullException">point1 or point2 is null.</exception>
         public static double Distance(Vector point1, Vector point2)
         {
-            if (point1 == null)
-            {
-                throw new ArgumentNullException("point1");
-            }
-
-            if (point2 == null)
-            {
-                throw new ArgumentNullException("point2");
-            }
+            Check.IsNotNull(point1, nameof(point1));
+            Check.IsNotNull(point2, nameof(point2));
 
             if ((point1.Altitude == null) || (point2.Altitude == null))
             {

@@ -6,6 +6,7 @@
 namespace SharpKml.Dom
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Xml;
     using SharpKml.Base;
 
@@ -82,11 +83,10 @@ namespace SharpKml.Dom
             }
         }
 
-        // This is declared like this in the XSD as a nested type in IconStyle
-
         /// <summary>
         /// Specifies an icon resource location.
         /// </summary>
+        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "This is declared like this in the XSD as a nested type in IconStyle")]
         public sealed class IconLink : BasicLink, ICustomElement
         {
             /// <summary>

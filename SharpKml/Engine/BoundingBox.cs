@@ -96,10 +96,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">quadTree is null.</exception>
         public void Align(BoundingBox quadTree, int maxDepth)
         {
-            if (quadTree == null)
-            {
-                throw new ArgumentNullException("quadTree");
-            }
+            Check.IsNotNull(quadTree, nameof(quadTree));
 
             Vector center = quadTree.Center;
             if (this.ContainedBy(new BoundingBox(quadTree.North, center.Latitude, quadTree.East, center.Longitude)))
@@ -145,10 +142,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">box is null.</exception>
         public bool ContainedBy(BoundingBox box)
         {
-            if (box == null)
-            {
-                throw new ArgumentNullException("box");
-            }
+            Check.IsNotNull(box, nameof(box));
 
             return (box.North >= this.North) &&
                    (box.South <= this.South) &&
@@ -180,10 +174,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">box is null.</exception>
         public void Expand(BoundingBox box)
         {
-            if (box == null)
-            {
-                throw new ArgumentNullException("box");
-            }
+            Check.IsNotNull(box, nameof(box));
 
             this.ExpandLatitude(box.North);
             this.ExpandLatitude(box.South);

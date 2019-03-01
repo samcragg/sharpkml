@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// </summary>
     /// <remarks>OGC KML 2.2 Section 16.9</remarks>
     [KmlElement("coordinates")]
-    public class CoordinateCollection : Element, ICollection<Vector>, ICustomElement, IReadOnlyCollection<Vector>
+    public sealed class CoordinateCollection : Element, ICollection<Vector>, ICustomElement, IReadOnlyCollection<Vector>
     {
         private readonly List<Vector> points;
 
@@ -35,10 +35,7 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentNullException">points is null.</exception>
         public CoordinateCollection(IEnumerable<Vector> points)
         {
-            if (points == null)
-            {
-                throw new ArgumentNullException("points");
-            }
+            Check.IsNotNull(points, nameof(points));
 
             this.points = new List<Vector>(points);
         }
@@ -80,10 +77,7 @@ namespace SharpKml.Dom
         /// <exception cref="ArgumentNullException">item is null.</exception>
         public void Add(Vector item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
+            Check.IsNotNull(item, nameof(item));
 
             this.points.Add(item);
         }

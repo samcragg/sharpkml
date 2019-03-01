@@ -29,10 +29,7 @@ namespace SharpKml.Engine
         public static T Clone<T>(this T element)
             where T : Element
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
+            Check.IsNotNull(element, nameof(element));
 
             // Special case as IconStyle has the same Kml name as Icon
             if (element is IconStyle.IconLink iconLink)
@@ -54,10 +51,7 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">element is null.</exception>
         public static IEnumerable<Element> Flatten(this Element element)
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
+            Check.IsNotNull(element, nameof(element));
 
             return ElementWalker.Walk(element);
         }
@@ -76,10 +70,7 @@ namespace SharpKml.Engine
         public static T GetParent<T>(this Element element)
             where T : Element
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
+            Check.IsNotNull(element, nameof(element));
 
             Element parent = element.Parent;
             while (parent != null)
@@ -127,15 +118,8 @@ namespace SharpKml.Engine
         public static void Merge<T>(this T element, T source)
             where T : Element
         {
-            if (element == null)
-            {
-                throw new ArgumentNullException("element");
-            }
-
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+            Check.IsNotNull(element, nameof(element));
+            Check.IsNotNull(source, nameof(source));
 
             // Check that one isn't a more derived class
             if (element.GetType() != source.GetType())
