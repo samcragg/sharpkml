@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.2;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\SharpKml.snk</AssemblyOriginatorKeyFile>
@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/samcragg/sharpkml</RepositoryUrl>
     <PackageProjectUrl>https://github.com/samcragg/sharpkml</PackageProjectUrl>
     <Product>SharpKml.Core</Product>
-    <PackageLicenseUrl>https://github.com/samcragg/sharpkml/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
