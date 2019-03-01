@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Fixed
 - Serialization of elements should match the order in the specification
 
+## [4.1.0] - 2019-02-11
+### Added
+- New constructor to `Serializer` that can be used to specify options for when
+  floating numbers are serialized
+
 ## [4.0.1] - 2018-11-13
 ### Fixed
 - Parsing of decimal degrees with large numbers of digits

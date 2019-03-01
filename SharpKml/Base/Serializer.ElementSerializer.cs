@@ -23,13 +23,15 @@ namespace SharpKml.Base
         {
             private readonly XmlNamespaceManager manager;
             private readonly HashSet<Element> serializedElements;
+            private readonly Serializer serializer;
             private readonly TypeBrowser typeBrowser;
             private readonly XmlWriter writer;
 
-            public ElementSerializer(XmlWriter writer, XmlNamespaceManager manager, Type elementType)
+            public ElementSerializer(Serializer serializer, XmlWriter writer, XmlNamespaceManager manager, Type elementType)
             {
                 this.manager = manager;
                 this.serializedElements = new HashSet<Element>();
+                this.serializer = serializer;
                 this.typeBrowser = TypeBrowser.Create(elementType);
                 this.writer = writer;
             }
@@ -48,7 +50,7 @@ namespace SharpKml.Base
                 {
                     if (elementInfo.Property.DeclaringType == elementType)
                     {
-                        WriteElement(
+                        this.serializer.WriteElement(
                             this.writer,
                             this.manager,
                             element,
@@ -65,7 +67,7 @@ namespace SharpKml.Base
                 {
                     if (!this.serializedElements.Contains(orphan))
                     {
-                        SerializeElement(this.writer, this.manager, orphan);
+                        this.serializer.SerializeElement(this.writer, this.manager, orphan);
                     }
                 }
             }
@@ -80,7 +82,7 @@ namespace SharpKml.Base
                         // by adding it to the set
                         if ((orphan.GetType() == type) && this.serializedElements.Add(orphan))
                         {
-                            SerializeElement(this.writer, this.manager, orphan);
+                            this.serializer.SerializeElement(this.writer, this.manager, orphan);
                         }
                     }
                 }
