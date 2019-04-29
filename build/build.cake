@@ -12,9 +12,21 @@ void UploadTestResults(FilePath result)
     using (var client = new System.Net.WebClient())
     {
         string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
-        client.UploadFile(
-            "https://ci.appveyor.com/api/testresults/mstest/" + jobId,
-            result.FullPath);
+        try
+        {
+            client.UploadFile(
+                "https://ci.appveyor.com/api/testresults/mstest/" + jobId,
+                result.FullPath);
+        }
+        catch (Exception ex)
+        {
+            Warning("Unable to upload test results");
+            while (ex != null)
+            {
+                Warning("    " + ex.Message);
+                ex = ex.InnerException;
+            }
+        }
     }
 }
 
