@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.1] - 2019-04-29
+### Fixed
+- Serialization of decimal values is now consistent across cultures
+
 ## [5.0.0] - 2019-03-01
 ### Fixed
 - Serialization of elements should match the order in the specification
