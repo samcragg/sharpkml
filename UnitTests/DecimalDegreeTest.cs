@@ -1,5 +1,6 @@
 ﻿namespace UnitTests
 {
+    using System.Globalization;
     using NUnit.Framework;
     using SharpKml;
 
@@ -76,7 +77,7 @@
                 bool result = DecimalDegree.Parse(value, ref index, out double parsed);
 
                 Assert.That(result, Is.True);
-                Assert.That(parsed, Is.EqualTo(double.Parse(value)));
+                Assert.That(parsed, Is.EqualTo(double.Parse(value, NumberFormatInfo.InvariantInfo)));
             }
         }
     }

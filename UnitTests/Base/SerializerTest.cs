@@ -224,6 +224,7 @@ namespace UnitTests.Base
         }
 
         [Test]
+        [SetCulture("DE-de")]
         public void SerializerPrecision()
         {
             var element = new TestElement

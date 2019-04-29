@@ -5,6 +5,7 @@ using SharpKml.Base;
 
 namespace UnitTests.Base
 {
+    [SetCulture("DE-de")]
     [TestFixture]
     public class KmlFormatterTest
     {
@@ -12,21 +13,21 @@ namespace UnitTests.Base
         public void TestLocalDateTime()
         {
             var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Local);
-            TestDateTime(date);
+            this.TestDateTime(date);
         }
 
         [Test]
         public void TestUnspecifiedDateTime()
         {
             var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Unspecified);
-            TestDateTime(date);
+            this.TestDateTime(date);
         }
 
         [Test]
         public void TestUtcDateTime()
         {
             var date = new DateTime(2012, 11, 10, 9, 8, 7, DateTimeKind.Utc);
-            TestDateTime(date);
+            this.TestDateTime(date);
         }
 
         [TestCase(double.NegativeInfinity, ExpectedResult = "-INF")]
@@ -48,7 +49,7 @@ namespace UnitTests.Base
         {
             string formatted = string.Format(KmlFormatter.Instance, "{0}", date);
 
-            DateTime parsed = DateTime.Parse(
+            var parsed = DateTime.Parse(
                 formatted,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.AdjustToUniversal);

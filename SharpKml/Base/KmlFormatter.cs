@@ -81,8 +81,14 @@ namespace SharpKml.Base
             {
                 return this;
             }
-
-            return null;
+            else if (formatType == typeof(NumberFormatInfo))
+            {
+                return NumberFormatInfo.InvariantInfo;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private static string GetBool(bool value)
