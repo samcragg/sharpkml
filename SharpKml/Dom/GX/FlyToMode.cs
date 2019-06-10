@@ -22,6 +22,6 @@ namespace SharpKml.Dom.GX
         /// FlyTos allow for an unbroken flight from point to point to point (and on).
         /// </summary>
         [KmlElement("smooth")]
-        Smooth
+        Smooth,
     }
 }

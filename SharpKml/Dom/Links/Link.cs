@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the location and handling of a resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 13.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 13.1.</remarks>
     [KmlElement("Link")]
     public class Link : LinkType
     {

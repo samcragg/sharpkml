@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies the orientation of the model coordinate axes relative to a
     /// local earth-fixed reference frame.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.11</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.11.</remarks>
     [KmlElement("Orientation")]
     public class Orientation : KmlObject
     {

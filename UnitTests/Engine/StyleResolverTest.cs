@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SharpKml.Base;
@@ -58,15 +59,17 @@ namespace UnitTests.Engine
         [Test]
         public void TestInlineStyleUrl()
         {
-            var placemark = new Placemark();
-            placemark.StyleUrl = new Uri("http://example.com/style.kml#cool-style");
+            var placemark = new Placemark
+            {
+                StyleUrl = new Uri("http://example.com/style.kml#cool-style")
+            };
 
-            var output = StyleResolver.InlineStyles(placemark);
-            Assert.That(((Placemark)output).StyleUrl, Is.EqualTo(placemark.StyleUrl));
+            Placemark output = StyleResolver.InlineStyles(placemark);
+            Assert.That(output.StyleUrl, Is.EqualTo(placemark.StyleUrl));
 
             placemark.StyleUrl = new Uri("#non-existent-local-reference", UriKind.Relative);
             output = StyleResolver.InlineStyles(placemark);
-            Assert.That(((Placemark)output).StyleUrl, Is.EqualTo(placemark.StyleUrl));
+            Assert.That(output.StyleUrl, Is.EqualTo(placemark.StyleUrl));
 
             var document = new Document();
             document.AddStyle(new Style { Id = "non-existent-local-reference" });
@@ -83,13 +86,12 @@ namespace UnitTests.Engine
             var document = new Document();
             document.AddStyle(new Style { Id = "style0" });
 
-            var create = new CreateCollection();
-            create.Add(document);
+            var create = new CreateCollection { document };
 
             var update = new Update();
             update.AddUpdate(create);
 
-            var output = StyleResolver.InlineStyles(update);
+            Update output = StyleResolver.InlineStyles(update);
 
             // Make sure it didn't change anything
             SampleData.CompareElements(update, output);
@@ -98,10 +100,10 @@ namespace UnitTests.Engine
         [Test]
         public void TestInlineComplex()
         {
-            using (var data = SampleData.CreateStream("Engine.Data.Style Data.kml"))
-            using (var output = SampleData.CreateStream("Engine.Data.Style Output.kml"))
+            using (Stream data = SampleData.CreateStream("Engine.Data.Style Data.kml"))
+            using (Stream output = SampleData.CreateStream("Engine.Data.Style Output.kml"))
             {
-                Parser parser = new Parser();
+                var parser = new Parser();
                 parser.Parse(data);
                 Document actual = GetDocument((Document)(((Kml)parser.Root).Feature), "InlineStylesTest");
 
@@ -116,17 +118,17 @@ namespace UnitTests.Engine
         [Test]
         public void TestResolver()
         {
-            using (var data = SampleData.CreateStream("Engine.Data.Style Data.kml"))
-            using (var output = SampleData.CreateStream("Engine.Data.Style Output.kml"))
+            using (Stream data = SampleData.CreateStream("Engine.Data.Style Data.kml"))
+            using (Stream output = SampleData.CreateStream("Engine.Data.Style Output.kml"))
             {
-                Parser parser = new Parser();
+                var parser = new Parser();
                 parser.Parse(data);
-                Document dataDoc = (Document)(((Kml)parser.Root).Feature);
+                var dataDoc = (Document)((Kml)parser.Root).Feature;
 
                 parser.Parse(output);
-                Document outputDoc = (Document)(((Kml)parser.Root).Feature);
+                var outputDoc = (Document)((Kml)parser.Root).Feature;
 
-                foreach (var test in TestCases)
+                foreach (TestCase test in TestCases)
                 {
                     Document doc = GetDocument(dataDoc, test.Input);
                     Style expected = null;
@@ -235,11 +237,11 @@ namespace UnitTests.Engine
         {
             var parser = new Parser();
             parser.ParseString(expected, false);
-            var expectedElement = parser.Root;
+            Element expectedElement = parser.Root;
             Assert.That(expectedElement, Is.Not.Null);
 
             parser.ParseString(actual, false);
-            var actualElement = parser.Root;
+            Element actualElement = parser.Root;
             Assert.That(actualElement,Is.Not.Null);
 
             SampleData.CompareElements(expectedElement, function(actualElement));
@@ -247,7 +249,7 @@ namespace UnitTests.Engine
 
         private static Document GetDocument(Document parent, string id)
         {
-            foreach (var feature in parent.Features)
+            foreach (Feature feature in parent.Features)
             {
                 if (string.Equals(feature.Id, id, StringComparison.Ordinal))
                 {
@@ -259,11 +261,11 @@ namespace UnitTests.Engine
 
         private static void RunTestCase(Document data, string id, StyleState state, Style expected)
         {
-            KmlFile file = KmlFile.Create(data, true);
-            Feature feature = file.FindObject(id) as Feature;
+            var file = KmlFile.Create(data, true);
+            var feature = file.FindObject(id) as Feature;
             Assert.That(feature, Is.Not.Null); // Make sure the test data is ok
 
-            var style = StyleResolver.CreateResolvedStyle(feature, file, state);
+            Style style = StyleResolver.CreateResolvedStyle(feature, file, state);
             if (expected == null)
             {
                 // Make sure everything is null

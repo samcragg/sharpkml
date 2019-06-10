@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// Specifies modifications to zero or more <see cref="Feature"/>s in the
     /// target resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 13.6</remarks>
+    /// <remarks>OGC KML 2.2 Section 13.6.</remarks>
     [KmlElement("Change")]
     public sealed class ChangeCollection : Element, ICollection<KmlObject>, IReadOnlyCollection<KmlObject>
     {

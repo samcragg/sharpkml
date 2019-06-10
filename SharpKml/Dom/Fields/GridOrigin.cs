@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies where to begin numbering the tiles in a layer of an
     /// <see cref="ImagePyramid"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.12</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.12.</remarks>
     public enum GridOrigin
     {
         /// <summary>
@@ -24,6 +24,6 @@ namespace SharpKml.Dom
         /// Begin numbering the tiles in a layer from the upper left corner.
         /// </summary>
         [KmlElement("upperLeft")]
-        UpperLeft
+        UpperLeft,
     }
 }

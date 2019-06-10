@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how altitude components are interpreted.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.1.</remarks>
     public enum AltitudeMode
     {
         /// <summary>
@@ -30,6 +30,6 @@ namespace SharpKml.Dom
         /// vertical datum.
         /// </summary>
         [KmlElement("absolute")]
-        Absolute
+        Absolute,
     }
 }

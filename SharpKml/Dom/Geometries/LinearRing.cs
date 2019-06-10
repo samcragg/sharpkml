@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// Defines a closed line string that should not cross itself.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 10.5</para>
+    /// <para>OGC KML 2.2 Section 10.5.</para>
     /// <para>If LinearRing is used to define a boundary for a <see cref="Polygon"/>
     /// then <see cref="Extrude"/>, <see cref="Tessellate"/> and
     /// <see cref="LinearRing.AltitudeMode"/> should not be specified.</para>
@@ -61,14 +61,14 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 5)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets or sets an offset (in meters) to apply to all the points
-        /// without modifying them. [Google Extension]
+        /// without modifying them. [Google Extension].
         /// </summary>
         [KmlElement("altitudeOffset", KmlNamespaces.GX22Namespace, 6)]
         public double? GXAltitudeOffset { get; set; }

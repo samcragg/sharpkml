@@ -31,6 +31,6 @@ namespace SharpKml.Dom.GX
         /// will instead clamp to ground.
         /// </remarks>
         [KmlElement("relativeToSeaFloor")]
-        RelativeToSeafloor
+        RelativeToSeafloor,
     }
 }

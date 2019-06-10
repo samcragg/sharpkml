@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// is visible.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 11.5</para>
+    /// <para>OGC KML 2.2 Section 11.5.</para>
     /// <para>Specifying the field of view is analogous to specifying the lens
     /// opening in a physical camera. A small field of view, like a telephoto
     /// lens, focuses on a small part of the scene. A large field of view, like

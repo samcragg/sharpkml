@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// References a KML resource on a local or remote network.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 9.12</para>
+    /// <para>OGC KML 2.2 Section 9.12.</para>
     /// <para>May be used in combination with <see cref="Region"/> elements to
     /// efficiently load and display large datasets.</para>
     /// </remarks>

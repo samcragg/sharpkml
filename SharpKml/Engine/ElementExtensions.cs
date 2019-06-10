@@ -157,7 +157,7 @@ namespace SharpKml.Engine
                 {
                     var parent = new IconStyle
                     {
-                        Icon = iconLink
+                        Icon = iconLink,
                     };
                     serializer.Serialize(parent, stream);
                     parent.Icon = null; // Sets the Icon's Parent property back to null

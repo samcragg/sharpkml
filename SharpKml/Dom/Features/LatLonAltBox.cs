@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the extent of a 3D bounding box.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.15</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.15.</remarks>
     [KmlElement("LatLonAltBox")]
     public class LatLonAltBox : AbstractLatLonBox
     {
@@ -49,7 +49,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 4)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }

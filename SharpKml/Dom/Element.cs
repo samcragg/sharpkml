@@ -116,8 +116,8 @@ namespace SharpKml.Dom
         /// <summary>
         /// Adds an XML namespace to the element.
         /// </summary>
-        /// <param name="prefix">The namespace prefix</param>
-        /// <param name="ns">The namespace URI</param>
+        /// <param name="prefix">The namespace prefix.</param>
+        /// <param name="ns">The namespace URI.</param>
         protected internal void AddNamespace(string prefix, string ns)
         {
             this.namespaces[prefix] = ns;
@@ -164,7 +164,9 @@ namespace SharpKml.Dom
         protected void AddAsChild<T>(ICollection<T> collection, T child)
             where T : Element
         {
+            Check.IsNotNull(collection, nameof(collection));
             Check.IsNotNull(child, nameof(child));
+
             if (child.Parent != null)
             {
                 throw new InvalidOperationException("Cannot add child element to this instance because it belongs to another instance.");
@@ -194,6 +196,9 @@ namespace SharpKml.Dom
         protected bool RemoveChild<T>(ICollection<T> collection, T child)
             where T : Element
         {
+            Check.IsNotNull(collection, nameof(collection));
+            Check.IsNotNull(child, nameof(child));
+
             Assert(child.Parent == this, "Should only be called on children attached to this instance");
             if (collection.Remove(child))
             {

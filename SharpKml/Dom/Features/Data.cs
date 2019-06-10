@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents an untyped name/value pair.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.3</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.3.</remarks>
     [KmlElement("Data")]
     [SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "Matches the name in the KML standard")]
     public class Data : KmlObject

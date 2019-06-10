@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how the description balloon for a <see cref="Feature"/> is drawn.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.6</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.6.</remarks>
     [KmlElement("BalloonStyle")]
     public class BalloonStyle : SubStyle
     {

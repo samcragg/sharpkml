@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents a KML AbstractContainerGroup.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.6</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.6.</remarks>
     public abstract class Container : Feature
     {
         /// <summary>

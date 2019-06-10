@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// from a virtual camera.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 14.3</para>
+    /// <para>OGC KML 2.2 Section 14.3.</para>
     /// <para>The LookAt class is more limited in scope than <see cref="Camera"/>
     /// and should establish a view direction that intersects the Earth's surface.
     /// </para>
@@ -84,7 +84,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 8)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }

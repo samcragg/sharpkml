@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Provides elements for specifying the color and color mode
     /// of style types that derive from it.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.7</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.7.</remarks>
     public abstract class ColorStyle : SubStyle
     {
         /// <summary>

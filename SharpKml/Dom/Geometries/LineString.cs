@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Defines a list of one or more contiguous line segments.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.7</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.7.</remarks>
     [KmlElement("LineString")]
     public class LineString : Geometry, IBoundsInformation
     {
@@ -53,21 +53,21 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 5)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
 
         /// <summary>
         /// Gets or sets an offset (in meters) to apply to all the points
-        /// without modifying them. [Google Extension]
+        /// without modifying them. [Google Extension].
         /// </summary>
         [KmlElement("altitudeOffset", KmlNamespaces.GX22Namespace, 6)]
         public double? GXAltitudeOffset { get; set; }
 
         /// <summary>
         /// Gets or sets the order for drawing multiple line strings.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("drawOrder", KmlNamespaces.GX22Namespace, 7)]
         public int? GXDrawOrder { get; set; }

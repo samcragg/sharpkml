@@ -12,13 +12,13 @@ namespace SharpKml.Dom
     /// lower resolution (towards the top of the pyramid).
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 11.6</para>
+    /// <para>OGC KML 2.2 Section 11.6.</para>
     /// <para>Each image in the pyramid is subdivided into tiles so only the
     /// portions in view are loaded.</para>
     /// <para>The pixel size of the original image is specified by
     /// <see cref="Width"/> and <see cref="Height"/>. The width and height
     /// can be any size and do not need to be a power of 2. You can fill out the
-    /// remaining pixels with blank pixels (as described in Section 11.6.3)</para>
+    /// remaining pixels with blank pixels (as described in Section 11.6.3).</para>
     /// <para>Tiles must be square, and the <see cref="TileSize"/> must be a
     /// power of 2. A tile size of 256 (the default) or 512 is recommended.</para>
     /// <para>See Section 11.4.3 for handling large images and Section 11.6.3

@@ -23,7 +23,7 @@ namespace Examples
             Tuple.Create("ExtendKml.cs", typeof(ExtendKml))
         };
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             CreateSampleData();
 
@@ -115,7 +115,7 @@ namespace Examples
         {
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
             {
-                using (var file = File.OpenWrite(destination))
+                using (FileStream file = File.OpenWrite(destination))
                 {
                     stream.CopyTo(file);
                 }
@@ -135,19 +135,18 @@ namespace Examples
         {
             Console.WriteLine(" 0 - Exit the program.\n");
             int index = 1;
-            foreach (var sample in Samples)
+            foreach (Tuple<string, Type> sample in Samples)
             {
                 Console.WriteLine("{0,2} - {1}", index++, sample.Item1);
             }
             Console.WriteLine();
-
-            // Keep looping until we get a sensible value
-            int choice = 0;
             while (true)
             {
                 Console.Write("Please enter a number: ");
                 string input = Console.ReadLine();
-                if (int.TryParse(input, out choice))
+
+                // Keep looping until we get a sensible value
+                if (int.TryParse(input, out int choice))
                 {
                     if ((choice >= 0) && (choice <= Samples.Length))
                     {

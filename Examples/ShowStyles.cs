@@ -12,8 +12,6 @@ namespace Examples
     /// </summary>
     public class ShowStyles
     {
-        private const string InputFile = "Sample.kml";
-
         public static void Run()
         {
             KmlFile file = Program.OpenFile("Enter a file to show the styles of:");
@@ -25,7 +23,7 @@ namespace Examples
             Console.WriteLine("Style names:");
             // We're going to extend the first style later
             StyleSelector firstStyle = null;
-            foreach (var style in file.Styles.OrderBy(s => s.Id)) // Use the Linq extension to order them by Id
+            foreach (StyleSelector style in file.Styles.OrderBy(s => s.Id))
             {
                 if (firstStyle == null)
                 {
@@ -38,7 +36,7 @@ namespace Examples
             if (firstStyle != null)
             {
                 Console.WriteLine("\nExpanding '{0}':", firstStyle.Id);
-                Serializer serializer = new Serializer();
+                var serializer = new Serializer();
                 serializer.Serialize(firstStyle);
                 Console.WriteLine(serializer.Xml);
             }

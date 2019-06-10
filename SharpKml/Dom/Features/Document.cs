@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents a container for KML features, shared styles and user-defined schemas.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.7</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.7.</remarks>
     [KmlElement("Document")]
     public class Document : Container
     {

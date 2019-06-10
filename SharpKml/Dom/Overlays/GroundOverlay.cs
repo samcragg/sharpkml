@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how to display an image draped over the terrain.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 11.2</remarks>
+    /// <remarks>OGC KML 2.2 Section 11.2.</remarks>
     [KmlElement("GroundOverlay")]
     public class GroundOverlay : Overlay
     {
@@ -46,7 +46,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 4)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
@@ -54,7 +54,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets or sets used the value used for nonrectangular quadrilateral
         /// ground overlays.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement(null, KmlNamespaces.GX22Namespace, 5)]
         public GX.LatLonQuad GXLatLonQuad

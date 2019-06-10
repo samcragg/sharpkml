@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how a <see cref="Feature"/> is displayed in the list view.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.13</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.13.</remarks>
     [KmlElement("ListStyle")]
     public class ListStyle : SubStyle
     {

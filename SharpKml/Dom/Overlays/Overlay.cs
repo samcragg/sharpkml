@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how to display an image specified by <see cref="Icon"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 11.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 11.1.</remarks>
     public abstract class Overlay : Feature
     {
         /// <summary>

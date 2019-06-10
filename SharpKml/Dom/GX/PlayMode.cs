@@ -16,6 +16,6 @@ namespace SharpKml.Dom.GX
         /// Waits for user action to continue the tour.
         /// </summary>
         [KmlElement("pause")]
-        Pause = 0
+        Pause = 0,
     }
 }

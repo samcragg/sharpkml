@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a resource location.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.9</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.9.</remarks>
     public abstract class BasicLink : KmlObject
     {
         /// <summary>

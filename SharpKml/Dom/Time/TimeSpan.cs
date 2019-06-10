@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies an extent in time bounded by begin and end temporal values.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 15.2</remarks>
+    /// <remarks>OGC KML 2.2 Section 15.2.</remarks>
     [KmlElement("TimeSpan")]
     public class TimeSpan : TimePrimitive
     {

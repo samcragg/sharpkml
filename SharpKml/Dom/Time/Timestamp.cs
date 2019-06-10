@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a single moment in time.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 15.3</remarks>
+    /// <remarks>OGC KML 2.2 Section 15.3.</remarks>
     [KmlElement("TimeStamp")]
     public class Timestamp : TimePrimitive
     {

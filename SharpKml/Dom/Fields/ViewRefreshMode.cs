@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies how the link is refreshed when the geographic view changes.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.22</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.22.</remarks>
     public enum ViewRefreshMode
     {
         /// <summary>
@@ -39,6 +39,6 @@ namespace SharpKml.Dom
         /// Refresh the resource if a <see cref="Region"/> becomes active.
         /// </summary>
         [KmlElement("onRegion")]
-        OnRegion
+        OnRegion,
     }
 }

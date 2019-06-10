@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// pair that maps a mode to the predefined <see cref="Feature.StyleUrl"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 12.3</para>
+    /// <para>OGC KML 2.2 Section 12.3.</para>
     /// <para>A StyleMap may be used to provide separate normal and highlighted
     /// styles for a <see cref="Placemark"/>. StyleMap should contain two
     /// <see cref="Pair"/> objects, one with a <see cref="Pair.State"/> value of

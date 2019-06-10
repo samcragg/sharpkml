@@ -64,10 +64,12 @@ namespace SharpKml.Dom.GX
         }
 
         // Required for the parsing to work
+#pragma warning disable IDE0051 // Remove unused private members
         private void AddValueElement(ValueElement value)
         {
             this.ValueElements.Add(value);
         }
+#pragma warning restore IDE0051 // Remove unused private members
 
         /// <summary>
         /// Used to correctly serialize the strings in Values.

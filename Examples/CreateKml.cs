@@ -14,24 +14,30 @@ namespace Examples
             Console.WriteLine("Creating a point at 37.42052549 latitude and -122.0816695 longitude.\n");
 
             // This will be used for the placemark
-            Point point = new Point();
-            point.Coordinate = new Vector(37.42052549, -122.0816695);
+            var point = new Point
+            {
+                Coordinate = new Vector(37.42052549, -122.0816695)
+            };
 
-            Placemark placemark = new Placemark();
-            placemark.Name = "Cool Statue";
-            placemark.Geometry = point;
+            var placemark = new Placemark
+            {
+                Name = "Cool Statue",
+                Geometry = point
+            };
 
             // This is the root element of the file
-            Kml kml = new Kml();
-            kml.Feature = placemark;
+            var kml = new Kml
+            {
+                Feature = placemark
+            };
 
-            Serializer serializer = new Serializer();
+            var serializer = new Serializer();
             serializer.Serialize(kml);
             Console.WriteLine(serializer.Xml);
 
             Console.WriteLine("\nReading Xml...");
 
-            Parser parser = new Parser();
+            var parser = new Parser();
             parser.ParseString(serializer.Xml, true);
 
             kml = (Kml)parser.Root;

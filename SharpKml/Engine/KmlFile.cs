@@ -67,7 +67,7 @@ namespace SharpKml.Engine
 
             var file = new KmlFile
             {
-                strict = !duplicates
+                strict = !duplicates,
             };
 
             foreach (Element element in ElementWalker.Walk(root))
@@ -254,7 +254,7 @@ namespace SharpKml.Engine
                 // id that is a child of a Document.
                 if (element is StyleSelector style)
                 {
-                    if (element.Parent is Document document)
+                    if (element.Parent is Document)
                     {
                         this.AddToDictionary(style, this.styles);
                     }

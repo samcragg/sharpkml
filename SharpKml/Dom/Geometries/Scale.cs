@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Scales a <see cref="Model"/> along the x, y, and z axes in the
     /// <c>Model</c>'s coordinate space.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.12</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.12.</remarks>
     [KmlElement("Scale")]
     public class Scale : KmlObject
     {

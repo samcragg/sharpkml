@@ -11,8 +11,6 @@ namespace Examples
     /// </summary>
     public static class SortPlacemarks
     {
-        private const string InputFile = "Sample.kml";
-
         public static void Run()
         {
             KmlFile file = Program.OpenFile("Enter a file to show the placemarks of:");
@@ -22,17 +20,16 @@ namespace Examples
             }
 
             // It's good practice for the root element of the file to be a Kml element
-            Kml kml = file.Root as Kml;
-            if (kml != null)
+            if (file.Root is Kml kml)
             {
-                List<Placemark> placemarks = new List<Placemark>();
+                var placemarks = new List<Placemark>();
                 ExtractPlacemarks(kml.Feature, placemarks);
 
                 // Sort using their names
                 placemarks.Sort((a, b) => string.Compare(a.Name, b.Name));
 
                 // Display the results
-                foreach (var placemark in placemarks)
+                foreach (Placemark placemark in placemarks)
                 {
                     Console.WriteLine(placemark.Name);
                 }
@@ -42,19 +39,17 @@ namespace Examples
         private static void ExtractPlacemarks(Feature feature, List<Placemark> placemarks)
         {
             // Is the passed in value a Placemark?
-            Placemark placemark = feature as Placemark;
-            if (placemark != null)
+            if (feature is Placemark placemark)
             {
                 placemarks.Add(placemark);
             }
             else
             {
                 // Is it a Container, as the Container might have a child Placemark?
-                Container container = feature as Container;
-                if (container != null)
+                if (feature is Container container)
                 {
                     // Check each Feature to see if it's a Placemark or another Container
-                    foreach (var f in container.Features)
+                    foreach (Feature f in container.Features)
                     {
                         ExtractPlacemarks(f, placemarks);
                     }

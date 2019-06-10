@@ -24,7 +24,7 @@ namespace SharpKml.Base
     internal class XmlExtractor
     {
         private readonly XmlReader reader;
-        private StringBuilder xml = new StringBuilder();
+        private readonly StringBuilder xml = new StringBuilder();
 
         private XmlExtractor(XmlReader reader)
         {

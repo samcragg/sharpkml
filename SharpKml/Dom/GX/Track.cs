@@ -129,6 +129,7 @@ namespace SharpKml.Dom.GX
             }
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private void Add(AnglesElement element)
         {
             this.AddAsChild(this.AngleElements, element);
@@ -143,6 +144,7 @@ namespace SharpKml.Dom.GX
         {
             this.AddAsChild(this.WhenElements, element);
         }
+#pragma warning restore IDE0051 // Remove unused private members
 
         private bool ConvertUnknown(UnknownElement unknown)
         {

@@ -92,7 +92,7 @@ namespace SharpKml.Engine
                 AltitudeMode = AltitudeMode.RelativeToGround,
                 Latitude = center.Latitude,
                 Longitude = center.Longitude,
-                Range = Math.Max(range, MinimumRange) // Clamp value
+                Range = Math.Max(range, MinimumRange), // Clamp value
             };
         }
 

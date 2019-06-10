@@ -10,10 +10,10 @@ namespace SharpKml.Dom
     using SharpKml.Base;
 
     /// <summary>
-    /// Represents a KML AbstractFeatureGroup
+    /// Represents a KML AbstractFeatureGroup.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 9.2</para>
+    /// <para>OGC KML 2.2 Section 9.2.</para>
     /// <para>
     /// The scope of ExtendedData is restricted to its
     /// <see cref="Element.Parent"/> only. Child elements support entity

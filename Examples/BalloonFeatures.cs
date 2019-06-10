@@ -9,19 +9,16 @@ namespace Examples
     /// </summary>
     public static class BalloonFeatures
     {
-        private const string InputFile = "Sample.kml";
-
         public static void Run()
         {
             KmlFile file = Program.OpenFile("Enter a file to show the features of:");
 
             if ((file != null) && (file.Root != null))
             {
-                EntityMapper mapper = new EntityMapper(file);
-                foreach (var element in file.Root.Flatten())
+                var mapper = new EntityMapper(file);
+                foreach (Element element in file.Root.Flatten())
                 {
-                    Feature feature = element as Feature;
-                    if (feature != null)
+                    if (element is Feature feature)
                     {
                         string name = feature.Name ?? "Unnamed feature";
                         string balloon = mapper.CreateBalloonText(feature);

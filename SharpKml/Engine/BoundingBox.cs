@@ -64,7 +64,7 @@ namespace SharpKml.Engine
         public double East { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance is empty or not;
+        /// Gets a value indicating whether this instance is empty or not;.
         /// </summary>
         public bool IsEmpty =>
             (this.East == -180) && (this.North == -180) && (this.South == 180) && (this.West == 180);

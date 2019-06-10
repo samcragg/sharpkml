@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// <see cref="Feature"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 12.2</para>
+    /// <para>OGC KML 2.2 Section 12.2.</para>
     /// <para>Styles affect how a <see cref="Geometry"/> is presented in the
     /// geographic view and how a <c>Feature</c> appears in the list view.</para>
     /// </remarks>

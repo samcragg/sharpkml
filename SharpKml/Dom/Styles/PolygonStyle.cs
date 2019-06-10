@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies the drawing style for a <see cref="Polygon"/>, including the
     /// extruded portion of a <c>Polygon</c> or <see cref="LineString"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.12</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.12.</remarks>
     [KmlElement("PolyStyle")]
     public class PolygonStyle : ColorStyle
     {

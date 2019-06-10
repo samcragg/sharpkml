@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the style state inside a <see cref="Pair"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.18</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.18.</remarks>
     public enum StyleState
     {
         /// <summary>
@@ -23,6 +23,6 @@ namespace SharpKml.Dom
         /// Specifies a highlighted style for a <see cref="Placemark"/>.
         /// </summary>
         [KmlElement("highlight")]
-        Highlight
+        Highlight,
     }
 }

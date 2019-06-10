@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// <see cref="StyleUrl"/> and/or a <see cref="StyleSelector"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 12.4</para>
+    /// <para>OGC KML 2.2 Section 12.4.</para>
     /// <para>If both <c>StyleUrl</c> and <see cref="Selector"/> exist then
     /// their styles shall be merged.</para>
     /// </remarks>

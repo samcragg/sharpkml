@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies the Level Of Detail to use when displaying a <see cref="Region"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 9.18</para>
+    /// <para>OGC KML 2.2 Section 9.18.</para>
     /// <para>An earth browser should calculate the size of the <see cref="Region"/>
     /// when projected onto screen space then compute the square root of the
     /// <c>Region</c>'s area. For example, if an untiled <c>Region</c> is square
@@ -62,7 +62,7 @@ namespace SharpKml.Dom
         /// Gets or sets a measurement (in pixels) that represents the maximum
         /// limit of the visibility range.
         /// </summary>
-        /// <remarks>A value of -1.0 indicates "active to infinite size."</remarks>
+        /// <remarks>A value of -1.0 indicates "active to infinite size.".</remarks>
         [KmlElement("maxLodPixels", 2)]
         public double? MaximumPixels { get; set; }
 

@@ -161,7 +161,7 @@ namespace SharpKml.Engine
                 index += 4; // Add ".kmz"
                 var builder = new UriBuilder(uri)
                 {
-                    Path = path.Substring(0, index)
+                    Path = path.Substring(0, index),
                 };
 
                 // -1 to allow for '/'

@@ -232,7 +232,7 @@ namespace SharpKml.Base
         /// <summary>
         /// Converts the specified angle in radians to meters.
         /// </summary>
-        /// <param name="radians">The angle in radians</param>
+        /// <param name="radians">The angle in radians.</param>
         /// <returns>The specified angle converted to meters.</returns>
         public static double RadiansToMeters(double radians)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NUnit.Framework;
 using SharpKml.Base;
 using SharpKml.Dom;
@@ -32,11 +33,13 @@ namespace UnitTests.Engine
             placemark = new Placemark();
             Assert.That(placemark.CalculateLookAt(), Is.Null); // Nothing to look at
 
-            Point point = new Point();
-            point.Coordinate = new Vector(37, -122);
+            var point = new Point
+            {
+                Coordinate = new Vector(37, -122)
+            };
             placemark.Geometry = point;
 
-            var lookat = placemark.CalculateLookAt();
+            LookAt lookat = placemark.CalculateLookAt();
             Assert.That(lookat, Is.Not.Null);
             Assert.That(lookat.Latitude, Is.EqualTo(37.0));
             Assert.That(lookat.Longitude, Is.EqualTo(-122.0));
@@ -46,13 +49,19 @@ namespace UnitTests.Engine
             Assert.That(lookat.Heading, Is.Null);
             Assert.That(lookat.Tilt, Is.Null);
 
-            LineString line = new LineString();
-            line.Coordinates = new CoordinateCollection();
-            line.Coordinates.Add(new Vector(37, -122));
-            line.Coordinates.Add(new Vector(38, -121));
+            var line = new LineString
+            {
+                Coordinates = new CoordinateCollection
+                {
+                    new Vector(37, -122),
+                    new Vector(38, -121)
+                }
+            };
 
-            placemark = new Placemark();
-            placemark.Geometry = line;
+            placemark = new Placemark
+            {
+                Geometry = line
+            };
 
             lookat = placemark.CalculateLookAt();
             Assert.That(lookat.Latitude, Is.EqualTo(37.5));
@@ -63,29 +72,39 @@ namespace UnitTests.Engine
         [Test]
         public void TestCalculateLookAtFolder()
         {
-            Location location = new Location();
-            location.Latitude = 0;
-            location.Longitude = 0;
+            var location = new Location
+            {
+                Latitude = 0,
+                Longitude = 0
+            };
 
-            Model model = new Model();
-            model.Location = location;
+            var model = new Model
+            {
+                Location = location
+            };
 
-            Placemark placemark = new Placemark();
-            placemark.Geometry = model;
+            var placemark = new Placemark
+            {
+                Geometry = model
+            };
 
-            Folder folder = new Folder();
+            var folder = new Folder();
             folder.AddFeature(placemark);
 
-            var lookat = folder.CalculateLookAt();
+            LookAt lookat = folder.CalculateLookAt();
             Assert.That(lookat.Latitude, Is.EqualTo(0.0));
             Assert.That(lookat.Longitude, Is.EqualTo(0.0));
             Assert.That(lookat.Range, Is.EqualTo(1000.0));
 
-            Point point = new Point();
-            point.Coordinate = new Vector(10, 10);
+            var point = new Point
+            {
+                Coordinate = new Vector(10, 10)
+            };
 
-            PhotoOverlay overlay = new PhotoOverlay();
-            overlay.Location = point;
+            var overlay = new PhotoOverlay
+            {
+                Location = point
+            };
 
             folder.AddFeature(overlay);
             lookat = folder.CalculateLookAt();
@@ -104,10 +123,10 @@ namespace UnitTests.Engine
             placemark = new Placemark();
             Assert.That(placemark.CalculateBounds(), Is.Null);
 
-            using (var stream = SampleData.CreateStream("Engine.Data.Bounds.kml"))
+            using (Stream stream = SampleData.CreateStream("Engine.Data.Bounds.kml"))
             {
-                KmlFile file = KmlFile.Load(stream);
-                foreach (var test in TestCases)
+                var file = KmlFile.Load(stream);
+                foreach (TestCase test in TestCases)
                 {
                     RunTestCase(file, test.Id, test.Box);
                 }
@@ -116,10 +135,10 @@ namespace UnitTests.Engine
 
         private static void RunTestCase(KmlFile file, string id, BoundingBox box)
         {
-            Feature feature = file.FindObject(id) as Feature;
+            var feature = file.FindObject(id) as Feature;
             Assert.That(feature, Is.Not.Null); // Verify the test data
 
-            var bounds = feature.CalculateBounds();
+            BoundingBox bounds = feature.CalculateBounds();
             Assert.That(bounds, Is.Not.Null);
             Assert.That(bounds.East, Is.EqualTo(box.East));
             Assert.That(bounds.North, Is.EqualTo(box.North));

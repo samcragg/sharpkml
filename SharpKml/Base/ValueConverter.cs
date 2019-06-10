@@ -30,7 +30,7 @@ namespace SharpKml.Base
             "yyyy-MM-dd", // xsd:date
             "yyyy-MM-ddTHH:mm:ss.FFFFFFF", // xsd:dateTime
             "yyyy-MM-ddTHH:mm:ss.FFFFFFFZ", // xsd:dateTime
-            "yyyy-MM-ddTHH:mm:ss.FFFFFFFzzzzzz" // xsd:dateTime
+            "yyyy-MM-ddTHH:mm:ss.FFFFFFFzzzzzz", // xsd:dateTime
         };
 
         static ValueConverter()

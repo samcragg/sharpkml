@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// Specifies a user-defined schema that is used to add user-defined data
     /// encoded within a child <see cref="ExtendedData"/> element of a <see cref="Feature"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.8</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.8.</remarks>
     // This should inherit from Element, but the C++ version inherits from Object
     [KmlElement("Schema")]
     [SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "Matches the name in the KML standard")]
@@ -24,7 +24,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets a collection of <see cref="GX.SimpleArrayField"/> contained by this instance.
-        /// [Google extension]
+        /// [Google extension].
         /// </summary>
         [KmlElement(null, 2)]
         public IReadOnlyCollection<GX.SimpleArrayField> Arrays => this.arrayFields;
@@ -43,7 +43,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Adds the specified <see cref="GX.SimpleArrayField"/> to this instance.
-        /// [Google extension]
+        /// [Google extension].
         /// </summary>
         /// <param name="array">The <c>SimpleArrayField</c> to add to this instance.</param>
         /// <exception cref="System.ArgumentNullException">array is null.</exception>

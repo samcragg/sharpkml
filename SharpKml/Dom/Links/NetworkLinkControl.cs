@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Controls the behavior of a <see cref="NetworkLink"/> that references
     /// the KML resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 13.2</remarks>
+    /// <remarks>OGC KML 2.2 Section 13.2.</remarks>
     [KmlElement("NetworkLinkControl")]
     public class NetworkLinkControl : Element
     {

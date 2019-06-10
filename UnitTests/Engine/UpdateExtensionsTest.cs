@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using SharpKml.Base;
 using SharpKml.Dom;
@@ -125,12 +126,14 @@ namespace UnitTests.Engine
             }
             Assert.That(folder.Features.Count(), Is.EqualTo(NumberOfFolders));
 
-            KmlFile file = KmlFile.Create(folder, false);
+            var file = KmlFile.Create(folder, false);
             var update = new Update();
             for (int i = 0; i < NumberOfFolders; ++i)
             {
-                var delete = new DeleteCollection();
-                delete.Add(CreateFeature(i, false)); // This time set the TargetId
+                var delete = new DeleteCollection
+                {
+                    CreateFeature(i, false) // This time set the TargetId
+                };
                 update.AddUpdate(delete);
             }
             update.Process(file);
@@ -142,13 +145,17 @@ namespace UnitTests.Engine
         public void TestChangeCoordinates()
         {
             // Create the target
-            var point = new Point();
-            point.Coordinate = new Vector(38.38, -122.122);
+            var point = new Point
+            {
+                Coordinate = new Vector(38.38, -122.122)
+            };
 
-            var placemark = new Placemark();
-            placemark.Id = "placemark123";
-            placemark.Geometry = point;
-            placemark.Name = "placemark name";
+            var placemark = new Placemark
+            {
+                Id = "placemark123",
+                Geometry = point,
+                Name = "placemark name"
+            };
 
             var file = KmlFile.Create(placemark, false);
 
@@ -156,15 +163,18 @@ namespace UnitTests.Engine
             const double latitude = -38.38;
             const double longitude = 122.122;
 
-            point = new Point();
-            point.Coordinate = new Vector(latitude, longitude);
+            point = new Point
+            {
+                Coordinate = new Vector(latitude, longitude)
+            };
 
-            placemark = new Placemark();
-            placemark.Geometry = point;
-            placemark.TargetId = "placemark123";
+            placemark = new Placemark
+            {
+                Geometry = point,
+                TargetId = "placemark123"
+            };
 
-            var change = new ChangeCollection();
-            change.Add(placemark);
+            var change = new ChangeCollection { placemark };
 
             var update = new Update();
             update.AddUpdate(change);
@@ -186,11 +196,11 @@ namespace UnitTests.Engine
         [Test]
         public void TestUpdateOperations()
         {
-            using (var stream = SampleData.CreateStream("Engine.Data.Update.kml"))
+            using (Stream stream = SampleData.CreateStream("Engine.Data.Update.kml"))
             {
                 var file = KmlFile.Load(stream);
 
-                foreach (var test in TestCases)
+                foreach (TestCase test in TestCases)
                 {
                     RunTestCase(test, file);
                 }

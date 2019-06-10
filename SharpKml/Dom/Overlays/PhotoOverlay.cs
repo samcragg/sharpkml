@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// to define field-of-view parameters.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 11.4</para>
+    /// <para>OGC KML 2.2 Section 11.4.</para>
     /// <para>The PhotoOverlay may be rendered on one of three shapes
     /// (as determined by <see cref="Shape"/>):
     /// <list type="bullet">

@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies an image coordinate system.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.21</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.21.</remarks>
     public abstract class VectorType : Element
     {
         /// <summary>

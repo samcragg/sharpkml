@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a time-based refresh mode.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.16</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.16.</remarks>
     public enum RefreshMode
     {
         /// <summary>
@@ -31,6 +31,6 @@ namespace SharpKml.Dom
         /// Refresh the resource when the expiration time is reached.
         /// </summary>
         [KmlElement("onExpire")]
-        OnExpire
+        OnExpire,
     }
 }

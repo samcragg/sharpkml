@@ -12,7 +12,7 @@ namespace SharpKml.Dom.Atom
     /// Represents a Person construct that indicates the author of the entry or feed.
     /// </summary>
     /// <remarks>
-    /// RFC 4287 Section 4.2.1 (see http://atompub.org/rfc4287.html)
+    /// RFC 4287 Section 4.2.1 (see http://atompub.org/rfc4287.html).
     /// </remarks>
     [KmlElement("author", KmlNamespaces.AtomNamespace)]
     public class Author : Element

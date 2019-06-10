@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// Specifies the deletion of zero or more <see cref="Feature"/>s in the
     /// target resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 13.5</remarks>
+    /// <remarks>OGC KML 2.2 Section 13.5.</remarks>
     [KmlElement("Delete")]
     public sealed class DeleteCollection : Element, ICollection<Feature>, IReadOnlyCollection<Feature>
     {

@@ -23,6 +23,8 @@ namespace SharpKml.Engine
         /// <param name="kml">The input to parse.</param>
         public LinkResolver(KmlFile kml)
         {
+            Check.IsNotNull(kml, nameof(kml));
+
             var set = new HashSet<Uri>();
             foreach (Element child in kml.Root.Flatten())
             {

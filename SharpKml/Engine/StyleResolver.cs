@@ -81,7 +81,7 @@ namespace SharpKml.Engine
             var instance = new StyleResolver(file.StyleMap)
             {
                 fileResolver = resolver,
-                state = state
+                state = state,
             };
             instance.Merge(feature.StyleUrl);
 
@@ -166,7 +166,7 @@ namespace SharpKml.Engine
             return new Pair
             {
                 State = state,
-                Selector = this.style
+                Selector = this.style,
             };
         }
 
@@ -176,7 +176,7 @@ namespace SharpKml.Engine
             return new StyleMapCollection
             {
                 this.CreatePair(StyleState.Normal, url),
-                this.CreatePair(StyleState.Highlight, url)
+                this.CreatePair(StyleState.Highlight, url),
             };
         }
 

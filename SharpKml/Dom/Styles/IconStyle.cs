@@ -15,7 +15,7 @@ namespace SharpKml.Dom
     /// with a Point geometry are drawn in an earth browser's list and geographic views.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 12.8</para>
+    /// <para>OGC KML 2.2 Section 12.8.</para>
     /// <para>The color specified in the <see cref="ColorStyle.Color"/> property
     /// is blended with the color of the icon.</para>
     /// </remarks>
@@ -92,7 +92,7 @@ namespace SharpKml.Dom
             /// <summary>
             /// Initializes a new instance of the <see cref="IconLink"/> class.
             /// </summary>
-            /// <param name="href">The value for <see cref="BasicLink.Href"/></param>
+            /// <param name="href">The value for <see cref="BasicLink.Href"/>.</param>
             public IconLink(Uri href)
             {
                 this.Href = href;
@@ -100,28 +100,28 @@ namespace SharpKml.Dom
 
             /// <summary>
             /// Gets or sets the height, in pixels, of the icon to use.
-            /// [Google Extension]
+            /// [Google Extension].
             /// </summary>
             [KmlElement("h", KmlNamespaces.GX22Namespace, 4)]
             public double? Height { get; set; }
 
             /// <summary>
             /// Gets or sets the width, in pixels, of the icon to use.
-            /// [Google Extension]
+            /// [Google Extension].
             /// </summary>
             [KmlElement("w", KmlNamespaces.GX22Namespace, 3)]
             public double? Width { get; set; }
 
             /// <summary>
             /// Gets or sets the offset, in pixels, from the left edge of the
-            /// icon palette. [Google Extension]
+            /// icon palette. [Google Extension].
             /// </summary>
             [KmlElement("x", KmlNamespaces.GX22Namespace, 1)]
             public double? X { get; set; }
 
             /// <summary>
             /// Gets or sets the offset, in pixels, from the bottom edge of the
-            /// icon palette. [Google Extension]
+            /// icon palette. [Google Extension].
             /// </summary>
             [KmlElement("y", KmlNamespaces.GX22Namespace, 2)]
             public double? Y { get; set; }

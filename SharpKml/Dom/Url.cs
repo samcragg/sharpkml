@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the location and handling of a resource.
     /// </summary>
-    /// <remarks>Legacy API - not part of OGC KML 2.2</remarks>
+    /// <remarks>Legacy API - not part of OGC KML 2.2.</remarks>
     [Obsolete("Url deprecated in 2.2")]
     [KmlElement("Url")]
     public sealed class Url : LinkType
@@ -25,6 +25,8 @@ namespace SharpKml.Dom
         /// </returns>
         public static explicit operator Link(Url url)
         {
+            Check.IsNotNull(url, nameof(url));
+
             return new Link
             {
                 Href = url.Href,
@@ -36,7 +38,7 @@ namespace SharpKml.Dom
                 ViewBoundScale = url.ViewBoundScale,
                 ViewFormat = url.ViewFormat,
                 ViewRefreshMode = url.ViewRefreshMode,
-                ViewRefreshTime = url.ViewRefreshTime
+                ViewRefreshTime = url.ViewRefreshTime,
             };
         }
 

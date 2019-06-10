@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Contains a mapping from SourceHref to TargetHref.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.14</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.14.</remarks>
     [KmlElement("Alias")]
     [SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "Matches the name in the KML standard")]
     public class Alias : KmlObject

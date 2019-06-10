@@ -143,8 +143,7 @@ namespace SharpKml.Base
         /// </returns>
         public static string FindNamespace(string prefix)
         {
-            string output;
-            if (Namespaces.TryGetValue(prefix ?? string.Empty, out output))
+            if (Namespaces.TryGetValue(prefix ?? string.Empty, out string output))
             {
                 return output;
             }
@@ -166,7 +165,7 @@ namespace SharpKml.Base
             foreach (FieldInfo field in fields)
             {
                 string name = field.Name.Substring(0, field.Name.Length - 9); // Remove the "Namespace" part
-                var prefix = kmlInfo.GetDeclaredField(name + "Prefix");
+                FieldInfo prefix = kmlInfo.GetDeclaredField(name + "Prefix");
 
                 output.Add((string)prefix.GetValue(null), (string)field.GetValue(null));
             }

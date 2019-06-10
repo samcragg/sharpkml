@@ -62,7 +62,7 @@ namespace SharpKml.Base
             var settings = new XmlWriterSettings
             {
                 Indent = true,
-                NamespaceHandling = NamespaceHandling.OmitDuplicates
+                NamespaceHandling = NamespaceHandling.OmitDuplicates,
             };
 
             this.Serialize(root, settings);
@@ -88,7 +88,7 @@ namespace SharpKml.Base
             var settings = new XmlWriterSettings
             {
                 Indent = true,
-                NamespaceHandling = NamespaceHandling.OmitDuplicates
+                NamespaceHandling = NamespaceHandling.OmitDuplicates,
             };
 
             this.Serialize(root, stream, settings);
@@ -109,7 +109,7 @@ namespace SharpKml.Base
         {
             var settings = new XmlWriterSettings
             {
-                OmitXmlDeclaration = true
+                OmitXmlDeclaration = true,
             };
 
             this.Serialize(root, settings);

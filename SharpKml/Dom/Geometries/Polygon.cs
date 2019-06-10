@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents a polygon with inner and outer boundaries.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.8</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.8.</remarks>
     [KmlElement("Polygon")]
     public class Polygon : Geometry, IBoundsInformation
     {
@@ -41,7 +41,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 5)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }

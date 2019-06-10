@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Represents a collection of resource aliases.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 10.13</para>
+    /// <para>OGC KML 2.2 Section 10.13.</para>
     /// <para>This element allows texture files to be moved and renamed without
     /// having to update the original textured 3D object file that references
     /// those textures. One ResourceMap element can contain multiple mappings

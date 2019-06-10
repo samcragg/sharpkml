@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents an AbstractObjectGroup.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 8.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 8.1.</remarks>
     public abstract class KmlObject : Element
     {
         /// <summary>

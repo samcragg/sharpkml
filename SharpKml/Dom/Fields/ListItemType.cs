@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies how a <see cref="Feature"/> and its contents shall be
     /// displayed as items in a list view.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.15</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.15.</remarks>
     public enum ListItemType
     {
         /// <summary>
@@ -47,6 +47,6 @@ namespace SharpKml.Dom
         /// for <c>Container</c>'s containing large amounts of data.
         /// </remarks>
         [KmlElement("checkHideChildren")]
-        CheckHideChildren
+        CheckHideChildren,
     }
 }

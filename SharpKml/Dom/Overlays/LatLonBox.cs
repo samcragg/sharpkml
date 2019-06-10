@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the extent of a 2D bounding box.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 11.3</remarks>
+    /// <remarks>OGC KML 2.2 Section 11.3.</remarks>
     [KmlElement("LatLonBox")]
     public class LatLonBox : AbstractLatLonBox
     {

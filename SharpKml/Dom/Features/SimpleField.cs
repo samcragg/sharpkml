@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a user-defined field.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.9</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.9.</remarks>
     [KmlElement("SimpleField")]
     public class SimpleField : Element
     {

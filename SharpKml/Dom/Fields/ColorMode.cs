@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies the color mode for a graphic element.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 16.7</para>
+    /// <para>OGC KML 2.2 Section 16.7.</para>
     /// <para>If the value is <see cref="Random"/> then the color components are
     /// modified as follows:</para>
     /// <list type="bullet">
@@ -39,6 +39,6 @@ namespace SharpKml.Dom
         /// Use a random color value.
         /// </summary>
         [KmlElement("random")]
-        Random
+        Random,
     }
 }

@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the exterior boundary of a <see cref="Polygon"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.8.3.4</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.8.3.4.</remarks>
     [KmlElement("outerBoundaryIs")]
     public class OuterBoundary : Element
     {

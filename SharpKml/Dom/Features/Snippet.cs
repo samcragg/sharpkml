@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies a short description for a <see cref="Feature"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Sections 9.1.3.9 and 16.19</para>
+    /// <para>OGC KML 2.2 Sections 9.1.3.9 and 16.19.</para>
     /// <para>This content should be used instead of
     /// <see cref="Feature.Description"/>, if it exists.</para>
     /// </remarks>

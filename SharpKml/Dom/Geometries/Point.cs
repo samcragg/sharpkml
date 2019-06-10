@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Represents a geographic location defined by a single geodetic longitude,
     /// geodetic latitude, and (optional) altitude coordinate tuple.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.3</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.3.</remarks>
     [KmlElement("Point")]
     public class Point : Geometry, IBoundsInformation
     {
@@ -73,7 +73,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 4)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }
@@ -97,7 +97,7 @@ namespace SharpKml.Dom
         /// </summary>
         /// <remarks>
         /// Use a non-public (cannot be private as that can't be accessed under
-        /// partial trust) property to enable automatic parsing/serialization
+        /// partial trust) property to enable automatic parsing/serialization.
         /// </remarks>
         [KmlElement(null, 3)]
         internal CoordinateCollection Coordinates

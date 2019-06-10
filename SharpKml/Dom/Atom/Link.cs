@@ -12,7 +12,7 @@ namespace SharpKml.Dom.Atom
     /// Defines a reference from an entry or feed to a Web resource.
     /// </summary>
     /// <remarks>
-    /// RFC 4287 Section 4.2.7 (see http://atompub.org/rfc4287.html)
+    /// RFC 4287 Section 4.2.7 (see http://atompub.org/rfc4287.html).
     /// </remarks>
     [KmlElement("link", KmlNamespaces.AtomNamespace)]
     public class Link : Element

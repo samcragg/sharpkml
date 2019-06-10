@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a point about which a rotation occurs.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 11.7.3.3</remarks>
+    /// <remarks>OGC KML 2.2 Section 11.7.3.3.</remarks>
     [KmlElement("rotationXY")]
     public class RotationVector : VectorType
     {

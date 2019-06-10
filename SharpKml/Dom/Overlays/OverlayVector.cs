@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies a point on (or outside of) an image.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 11.7.3.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 11.7.3.1.</remarks>
     [KmlElement("overlayXY")]
     public class OverlayVector : VectorType
     {

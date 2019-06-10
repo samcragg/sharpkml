@@ -69,11 +69,14 @@ namespace SharpKml.Base
         /// <returns>The summed vector.</returns>
         public static Vector operator +(Vector left, Vector right)
         {
+            Check.IsNotNull(left, nameof(left));
+            Check.IsNotNull(right, nameof(right));
+
             return new Vector
             {
                 Altitude = right.Altitude + left.Altitude,
                 Longitude = right.Longitude + left.Longitude,
-                Latitude = right.Latitude + left.Latitude
+                Latitude = right.Latitude + left.Latitude,
             };
         }
 
@@ -84,11 +87,13 @@ namespace SharpKml.Base
         /// <returns>The negated vector.</returns>
         public static Vector operator -(Vector value)
         {
+            Check.IsNotNull(value, nameof(value));
+
             return new Vector
             {
                 Altitude = -value.Altitude,
                 Longitude = -value.Longitude,
-                Latitude = -value.Latitude
+                Latitude = -value.Latitude,
             };
         }
 
@@ -113,11 +118,14 @@ namespace SharpKml.Base
         /// <returns>The scaled vector.</returns>
         public static Vector operator *(Vector left, double right)
         {
+            Check.IsNotNull(left, nameof(left));
+            Check.IsNotNull(right, nameof(right));
+
             return new Vector
             {
                 Altitude = left.Altitude * right,
                 Longitude = left.Longitude * right,
-                Latitude = left.Latitude * right
+                Latitude = left.Latitude * right,
             };
         }
 

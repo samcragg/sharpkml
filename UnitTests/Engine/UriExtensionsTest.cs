@@ -47,7 +47,7 @@ namespace UnitTests.Engine
         [Test]
         public void TestGeneralCases()
         {
-            foreach (var test in TestCases)
+            foreach (TestCase test in TestCases)
             {
                 Uri uri = test.Base.Relative(test.Target);
                 Assert.That(uri, Is.EqualTo(test.Resolved));
@@ -89,7 +89,7 @@ namespace UnitTests.Engine
                         Throws.TypeOf<ArgumentNullException>()); // uri hasn't been created yet
 
             uri = CreateUri("http://host.com/bldgs/model-macky.kmz/photos/bh-flowers.jpg");
-            var kmz = uri.SplitKmz();
+            Tuple<Uri, Uri> kmz = uri.SplitKmz();
 
             Assert.That(kmz.Item1, Is.EqualTo(CreateUri("http://host.com/bldgs/model-macky.kmz")));
             Assert.That(kmz.Item2, Is.EqualTo(CreateUri("photos/bh-flowers.jpg")));
@@ -194,8 +194,7 @@ namespace UnitTests.Engine
         {
             // UriKind.RelativeOrAbsolute doesn't work too well under OS X (and possible Linux) so
             // firt try a relative then an absolute uri
-            Uri output;
-            if (!Uri.TryCreate(uri, UriKind.Relative, out output))
+            if (!Uri.TryCreate(uri, UriKind.Relative, out Uri output))
             {
                 Uri.TryCreate(uri, UriKind.Absolute, out output);
             }
@@ -207,17 +206,17 @@ namespace UnitTests.Engine
             public TestCase(string _base, string _target, string _resolved, string _kBase, string _kRel)
                 : this(_base, _target, _resolved)
             {
-                KmzBase = CreateUri(_kBase);
-                KmzRelative = CreateUri(_kRel);
+                this.KmzBase = CreateUri(_kBase);
+                this.KmzRelative = CreateUri(_kRel);
             }
 
             public TestCase(string _base, string _target, string _resolved)
             {
-                Base = CreateUri(_base);
-                Target = CreateUri(_target);
+                this.Base = CreateUri(_base);
+                this.Target = CreateUri(_target);
                 if (_resolved != null)
                 {
-                    Resolved = CreateUri(_resolved);
+                    this.Resolved = CreateUri(_resolved);
                 }
             }
 

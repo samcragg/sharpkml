@@ -61,7 +61,8 @@ namespace SharpKml.Engine
         /// </remarks>
         public string CreateBalloonText(Feature feature)
         {
-            this.ParseEntityFields(feature); // Will throw is feature is null
+            Check.IsNotNull(feature, nameof(feature));
+            this.ParseEntityFields(feature);
 
             Style style = StyleResolver.CreateResolvedStyle(feature, this.file, StyleState.Normal);
             if ((style.Balloon != null) && (style.Balloon.Text != null))

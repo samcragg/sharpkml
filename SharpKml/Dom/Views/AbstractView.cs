@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Represents an AbstractViewGroup.
     /// </summary>
     /// <remarks>
-    /// OGC KML 2.2 Section 14.1
+    /// OGC KML 2.2 Section 14.1.
     /// </remarks>
     public abstract class AbstractView : KmlObject
     {
@@ -21,14 +21,14 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets the horizontal field of view of the AbstractView
-        /// during a tour. [Google Extension]
+        /// during a tour. [Google Extension].
         /// </summary>
         [KmlElement("horizFov", KmlNamespaces.GX22Namespace, 2)]
         public double? GXHorizontalFOV { get; set; }
 
         /// <summary>
         /// Gets or sets the associated time primitive.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         /// <remarks>
         /// The time primitive must be in the Google Extension namespace.
@@ -42,14 +42,14 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets the <see cref="GX.Option"/>s stored by this instance.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement(null, 3)]
         public IReadOnlyCollection<GX.Option> ViewerOptions => this.options;
 
         /// <summary>
         /// Adds the specified <see cref="GX.Option"/> to this instance.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         /// <param name="option">
         /// The <c>Option</c> to add to this instance.

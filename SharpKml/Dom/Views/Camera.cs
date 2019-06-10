@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Specifies the position and orientation of a virtual camera.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 14.2</para>
+    /// <para>OGC KML 2.2 Section 14.2.</para>
     /// <para>Can be used to specify views of the earth or of objects in space.</para>
     /// </remarks>
     [KmlElement("Camera")]
@@ -85,7 +85,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 8)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }

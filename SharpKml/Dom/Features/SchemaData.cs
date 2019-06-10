@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// Encodes an instance of a user-defined data type defined by a referenced
     /// <see cref="Schema"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.4</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.4.</remarks>
     [KmlElement("SchemaData")]
     public class SchemaData : KmlObject
     {
@@ -22,7 +22,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets a collection of value arrays.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement(null, 2)]
         public IReadOnlyCollection<GX.SimpleArrayData> GXSimpleArray => this.arrayData;
@@ -46,7 +46,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Adds the specified <see cref="GX.SimpleArrayData"/> to this instance.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         /// <param name="array">The <c>SimpleArrayData</c> to add to this instance.</param>
         /// <exception cref="ArgumentNullException">array is null.</exception>

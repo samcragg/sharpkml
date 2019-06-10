@@ -15,7 +15,7 @@ namespace SharpKml.Dom
     /// identified <see cref="Folder"/> or <see cref="Document"/> in the
     /// target resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 13.4</remarks>
+    /// <remarks>OGC KML 2.2 Section 13.4.</remarks>
     [KmlElement("Create")]
     public sealed class CreateCollection : Element, ICollection<Container>, IReadOnlyCollection<Container>
     {

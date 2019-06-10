@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies an inner boundary of a <see cref="Polygon"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.8.3.5</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.8.3.5.</remarks>
     [KmlElement("innerBoundaryIs")]
     public class InnerBoundary : Element
     {
@@ -32,6 +32,7 @@ namespace SharpKml.Dom
         // LinearRings in new instances of this class and adding them to the
         // parent, hence we pretend to support more than one for the sake of
         // parsing/serialization
+#pragma warning disable IDE0051 // Remove unused private members
         [KmlElement(null, 1)]
         private IEnumerable<LinearRing> LinearRings
         {
@@ -57,7 +58,7 @@ namespace SharpKml.Dom
                 {
                     polygon.AddInnerBoundary(new InnerBoundary
                     {
-                        LinearRing = linearRing
+                        LinearRing = linearRing,
                     });
                 }
                 else
@@ -66,5 +67,6 @@ namespace SharpKml.Dom
                 }
             }
         }
+#pragma warning restore IDE0051 // Remove unused private members
     }
 }

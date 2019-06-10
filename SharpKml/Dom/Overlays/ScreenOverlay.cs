@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies an image overlay to be displayed fixed to the screen.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 11.7</para>
+    /// <para>OGC KML 2.2 Section 11.7.</para>
     /// <para> The image position is determined by mapping a point relative to
     /// the image (<see cref="Origin"/>) to a point relative to the screen
     /// (<see cref="Screen"/>). The image may be rotated by <see cref="Rotation"/>

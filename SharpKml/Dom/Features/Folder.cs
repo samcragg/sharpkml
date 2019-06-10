@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Used to organize <see cref="Feature"/> elements hierarchically.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.10</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.10.</remarks>
     [KmlElement("Folder")]
     public class Folder : Container
     {

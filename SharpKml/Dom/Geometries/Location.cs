@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the coordinates of a location.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.10</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.10.</remarks>
     [KmlElement("Location")]
     public class Location : KmlObject
     {

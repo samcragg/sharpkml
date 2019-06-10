@@ -12,7 +12,7 @@ namespace SharpKml.Dom
     /// Represents a container for zero or more <see cref="Geometry"/> elements
     /// associated with the same KML feature.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.2</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.2.</remarks>
     [KmlElement("MultiGeometry")]
     public class MultipleGeometry : Geometry
     {

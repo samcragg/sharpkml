@@ -13,7 +13,7 @@ namespace SharpKml.Dom
     /// <see cref="Folder"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 16.13</para>
+    /// <para>OGC KML 2.2 Section 16.13.</para>
     /// <para>This enumeration has a <see cref="FlagsAttribute"/> attribute
     /// that allows a bitwise combination of its member values.</para>
     /// </remarks>
@@ -59,6 +59,6 @@ namespace SharpKml.Dom
         /// Represents a fetch state of 2.
         /// </summary>
         [KmlElement("fetching2")]
-        Fetching2 = 0x20
+        Fetching2 = 0x20,
     }
 }

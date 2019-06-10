@@ -14,7 +14,7 @@ namespace SharpKml.Dom
     /// previously been retrieved via <see cref="NetworkLink"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 13.3</para>
+    /// <para>OGC KML 2.2 Section 13.3.</para>
     /// <para>Update does not affect the KML resource itself; rather it updates
     /// its representation within the earth browser only.</para>
     /// <para>All KML objects within an update context, that is a grandchild of

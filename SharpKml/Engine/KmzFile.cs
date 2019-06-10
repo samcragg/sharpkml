@@ -190,6 +190,8 @@ namespace SharpKml.Engine
                 this.zip.Dispose();
                 this.zip = null;
             }
+
+            this.zipStream.Dispose();
         }
 
         /// <summary>

@@ -10,9 +10,9 @@ namespace SharpKml.Dom
     using SharpKml.Base;
 
     /// <summary>
-    /// Represents a KML AbstractFeatureGroup
+    /// Represents a KML AbstractFeatureGroup.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.1</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.1.</remarks>
     public abstract class Feature : KmlObject
     {
         /// <summary>
@@ -57,7 +57,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets or sets the author of the Feature.
         /// </summary>
-        /// <remarks>This value is inheritable - see section 9.6.2</remarks>
+        /// <remarks>This value is inheritable - see section 9.6.2.</remarks>
         [KmlElement(null, 4)]
         public Atom.Author AtomAuthor { get; set; }
 
@@ -100,7 +100,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets the visibility of a description balloon.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("balloonVisibility", KmlNamespaces.GX22Namespace, 17)]
         public bool? GXBalloonVisibility { get; set; }
@@ -128,7 +128,7 @@ namespace SharpKml.Dom
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> of the Feature.
         /// </summary>
-        /// <remarks>This value is inheritable - see section 9.6.2</remarks>
+        /// <remarks>This value is inheritable - see section 9.6.2.</remarks>
         [KmlElement(null, 15)]
         public Region Region
         {
@@ -170,7 +170,7 @@ namespace SharpKml.Dom
         /// Gets or sets a <see cref="TimePrimitive"/> that affects the visibility
         /// of the Feature.
         /// </summary>
-        /// <remarks>This value is inheritable - see section 9.6.2</remarks>
+        /// <remarks>This value is inheritable - see section 9.6.2.</remarks>
         [KmlElement(null, 12)]
         public TimePrimitive Time
         {

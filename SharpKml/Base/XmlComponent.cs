@@ -24,6 +24,8 @@ namespace SharpKml.Base
         /// </param>
         public XmlComponent(XmlReader reader)
         {
+            Check.IsNotNull(reader, nameof(reader));
+
             // Important to set Prefix first in case SetName finds one.
             this.Prefix = reader.Prefix;
             this.SetName(reader.LocalName, reader.NamespaceURI);
@@ -80,7 +82,7 @@ namespace SharpKml.Base
                 Name = this.Name,
                 Namespace = this.Namespace,
                 Prefix = this.Prefix,
-                Value = this.Value
+                Value = this.Value,
             };
         }
 

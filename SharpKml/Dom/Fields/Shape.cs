@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the projection mode for a shape.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.17</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.17.</remarks>
     public enum Shape
     {
         /// <summary>
@@ -29,6 +29,6 @@ namespace SharpKml.Dom
         /// Represents spherical panoramas.
         /// </summary>
         [KmlElement("sphere")]
-        Sphere
+        Sphere,
     }
 }

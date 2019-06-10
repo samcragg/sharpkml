@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Affects the visibility of a <see cref="Feature"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Section 9.13</para>
+    /// <para>OGC KML 2.2 Section 9.13.</para>
     /// <para>Regions define both culling and level-of-detail control over the
     /// display of the <see cref="Feature"/>, including elements that are defined
     /// lower in the hierarchy.</para>

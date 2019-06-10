@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies to display or hide the balloon.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 16.11</remarks>
+    /// <remarks>OGC KML 2.2 Section 16.11.</remarks>
     public enum DisplayMode
     {
         /// <summary>
@@ -23,6 +23,6 @@ namespace SharpKml.Dom
         /// Specifies to hide the balloon.
         /// </summary>
         [KmlElement("hide")]
-        Hide
+        Hide,
     }
 }

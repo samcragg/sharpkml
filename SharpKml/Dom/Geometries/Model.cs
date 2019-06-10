@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Specifies the location and orientation of a textured 3D object resource.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 10.9</remarks>
+    /// <remarks>OGC KML 2.2 Section 10.9.</remarks>
     [KmlElement("Model")]
     public class Model : Geometry, IBoundsInformation
     {
@@ -29,7 +29,7 @@ namespace SharpKml.Dom
 
         /// <summary>
         /// Gets or sets extended altitude mode information.
-        /// [Google Extension]
+        /// [Google Extension].
         /// </summary>
         [KmlElement("altitudeMode", KmlNamespaces.GX22Namespace, 7)]
         public GX.AltitudeMode? GXAltitudeMode { get; set; }

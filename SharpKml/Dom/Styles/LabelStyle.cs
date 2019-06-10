@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies how the name of a <see cref="Feature"/> is drawn in the
     /// geographic view.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.10</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.10.</remarks>
     [KmlElement("LabelStyle")]
     public class LabelStyle : ColorStyle
     {

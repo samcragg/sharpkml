@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Encodes an instance of a user-defined field defined by a referenced
     /// <see cref="SimpleField"/>.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.5</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.5.</remarks>
     [KmlElement("SimpleData")]
     public class SimpleData : Element, IHtmlContent
     {

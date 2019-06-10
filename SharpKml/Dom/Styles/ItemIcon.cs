@@ -16,7 +16,7 @@ namespace SharpKml.Dom
     /// state of the <see cref="Folder"/> or <see cref="NetworkLink"/> to which
     /// it is associated.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 12.14</remarks>
+    /// <remarks>OGC KML 2.2 Section 12.14.</remarks>
     [KmlElement("ItemIcon")]
     public class ItemIcon : KmlObject
     {
@@ -66,6 +66,8 @@ namespace SharpKml.Dom
         /// <inheritdoc />
         protected internal override void AddOrphan(Element orphan)
         {
+            Check.IsNotNull(orphan, nameof(orphan));
+
             if (orphan is UnknownElement unknown && StateComponent.Equals(unknown.UnknownData))
             {
                 this.StateData = StateElement.Parse(orphan.InnerText);

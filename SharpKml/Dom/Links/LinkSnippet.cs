@@ -11,7 +11,7 @@ namespace SharpKml.Dom
     /// Specifies a short description for a <see cref="NetworkLinkControl"/>.
     /// </summary>
     /// <remarks>
-    /// <para>OGC KML 2.2 Sections 13.2.3.7 and 16.19</para>
+    /// <para>OGC KML 2.2 Sections 13.2.3.7 and 16.19.</para>
     /// <para>
     /// LinkSnippet content shall take precedence over the
     /// <see cref="Feature.Snippet"/> value.

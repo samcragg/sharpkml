@@ -10,7 +10,7 @@ namespace SharpKml.Dom
     /// <summary>
     /// Represents a KML AbstractLatLonAltBox.
     /// </summary>
-    /// <remarks>OGC KML 2.2 Section 9.14</remarks>
+    /// <remarks>OGC KML 2.2 Section 9.14.</remarks>
     public abstract class AbstractLatLonBox : KmlObject
     {
         /// <summary>
