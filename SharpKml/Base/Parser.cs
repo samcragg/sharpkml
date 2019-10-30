@@ -44,6 +44,9 @@ namespace SharpKml.Base
         /// <see cref="Element"/>.
         /// </summary>
         /// <param name="input">The stream containing the XML data.</param>
+        /// <param name="namespaces">
+        /// true to allow namespace support; false to ignore namespaces.
+        /// </param>
         /// <exception cref="ArgumentNullException">input is null.</exception>
         /// <exception cref="InvalidOperationException">
         /// The XML is nested too deeply.
@@ -55,11 +58,29 @@ namespace SharpKml.Base
         /// <exception cref="XmlException">
         /// An error occurred while parsing the XML.
         /// </exception>
-        public void Parse(Stream input)
+        public void Parse(Stream input, bool namespaces = true)
         {
-            this.defaultNamespace = null; // This method is strict about namespaces
-            var reader = XmlReader.Create(input);
-            this.Parse(reader);
+            if (namespaces)
+            {
+                this.defaultNamespace = null; // This method is strict about namespaces
+                var reader = XmlReader.Create(input);
+                this.Parse(reader);
+            }
+            else
+            {
+                var settings = new XmlReaderSettings
+                {
+                    ConformanceLevel = ConformanceLevel.Fragment,
+                    DtdProcessing = DtdProcessing.Ignore,
+                };
+
+                this.defaultNamespace = KmlNamespaces.Kml22Namespace;
+                this.Parse(
+                    XmlReader.Create(
+                    input,
+                    settings,
+                    new XmlParserContext(null, new IgnoreNamespaceManager(), null, XmlSpace.Default)));
+            }
         }
 
         /// <summary>
@@ -69,6 +90,9 @@ namespace SharpKml.Base
         /// <param name="input">
         /// The <see cref="TextReader"/> containing the XML data.
         /// </param>
+        /// <param name="namespaces">
+        /// true to allow namespace support; false to ignore namespaces.
+        /// </param>
         /// <exception cref="ArgumentNullException">input is null.</exception>
         /// <exception cref="InvalidOperationException">
         /// The XML is nested too deeply.
@@ -76,11 +100,29 @@ namespace SharpKml.Base
         /// <exception cref="XmlException">
         /// An error occurred while parsing the XML.
         /// </exception>
-        public void Parse(TextReader input)
+        public void Parse(TextReader input, bool namespaces = true)
         {
-            this.defaultNamespace = null; // This method is strict about namespaces
-            var reader = XmlReader.Create(input);
-            this.Parse(reader);
+            if (namespaces)
+            {
+                this.defaultNamespace = null; // This method is strict about namespaces
+                var reader = XmlReader.Create(input);
+                this.Parse(reader);
+            }
+            else
+            {
+                var settings = new XmlReaderSettings
+                {
+                    ConformanceLevel = ConformanceLevel.Fragment,
+                    DtdProcessing = DtdProcessing.Ignore,
+                };
+
+                this.defaultNamespace = KmlNamespaces.Kml22Namespace;
+                this.Parse(
+                    XmlReader.Create(
+                    input,
+                    settings,
+                    new XmlParserContext(null, new IgnoreNamespaceManager(), null, XmlSpace.Default)));
+            }
         }
 
         /// <summary>
