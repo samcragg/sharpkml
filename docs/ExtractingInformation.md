@@ -9,7 +9,7 @@ KmlFile file = KmlFile.Load("YourKmlFile.kml");
 
 // Kmz (compressed Kml files) can also be loaded:
 KmzFile kmz = KmzFile.Open("YourKmzFile.kmz");
-KmlFile file = KmlFile.LoadFromKmz(kmz);
+KmlFile file = kmz.GetDefaultKmlFile();
 ```
 
 Once the file is loaded you can iterate over the elements inside. Here's a quick
