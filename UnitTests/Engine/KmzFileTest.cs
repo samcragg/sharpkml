@@ -179,9 +179,9 @@ namespace UnitTests.Engine
                 byte[] empty = new byte[] { };
                 Assert.That(() => kmz.AddFile(null, empty),
                             Throws.TypeOf<ArgumentNullException>());
-                Assert.That(() => kmz.AddFile(string.Empty, (byte[])null),
+                Assert.That(() => kmz.AddFile("x", (byte[])null),
                             Throws.TypeOf<ArgumentNullException>());
-                Assert.That(() => kmz.AddFile(string.Empty, (Stream)null),
+                Assert.That(() => kmz.AddFile("x", (Stream)null),
                             Throws.TypeOf<ArgumentNullException>());
 
                 Assert.That(() => kmz.AddFile(string.Empty, empty), // Empty string

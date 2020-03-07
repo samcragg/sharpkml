@@ -159,7 +159,7 @@ namespace SharpKml.Engine
         public void AddFile(string path, Stream stream)
         {
             this.ThrowIfDisposed();
-            Check.IsNotNull(path, nameof(path));
+            Check.IsNotNullOrWhitespace(path, nameof(path));
             Check.IsNotNull(stream, nameof(stream));
 
             // GetPathRoot will validate the path for us. If an absolute path
