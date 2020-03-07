@@ -165,18 +165,18 @@ namespace SharpKml.Base
         /// <returns>A Color32 representing the value parameter.</returns>
         public static Color32 Parse(string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 return new Color32(0);
             }
 
-            uint converted = 0;
-            int start = 0;
-            if ((value.Length > 0) && (value[0] == '#'))
+            int start = SkipWhitespace(value, 0);
+            if ((start < value.Length) && (value[start] == '#'))
             {
-                start = 1;
+                start++;
             }
 
+            uint converted = 0;
             int max = Math.Min(value.Length, start + 8); // We consider only the first eight characters significant.
             for (int i = start; i < max; ++i)
             {
@@ -298,6 +298,21 @@ namespace SharpKml.Base
             {
                 return 0;
             }
+        }
+
+        private static int SkipWhitespace(string value, int index)
+        {
+            while (index < value.Length)
+            {
+                if (!char.IsWhiteSpace(value[index]))
+                {
+                    break;
+                }
+
+                index++;
+            }
+
+            return index;
         }
     }
 }

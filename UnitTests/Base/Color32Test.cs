@@ -112,7 +112,14 @@ namespace UnitTests.Base
         [Test]
         public void ShouldIgnoreLeadingHashCharacter()
         {
-            Color32 color = Color32.Parse("#aabbccdd");
+            var color = Color32.Parse("#aabbccdd");
+            Assert.That(color.ToString(), Is.EqualTo("aabbccdd"));
+        }
+
+        [Test]
+        public void ShouldIgnoreLeadingWhitespace()
+        {
+            var color = Color32.Parse("\t\n\r aabbccdd");
             Assert.That(color.ToString(), Is.EqualTo("aabbccdd"));
         }
     }
