@@ -21,6 +21,9 @@ page.
 If you need to do some advanced work with KML data, you may want to look at how
 you can [extend the elements](Extending.md).
 
+Although the library targets .NET Standard, you'll need to do a little extra
+work to get it to [work with Unity](Unity.md).
+
 For more examples, please see the [Examples folder](../Examples), which includes:
 
 | File               | Description                                                                                                                                                                                 |
