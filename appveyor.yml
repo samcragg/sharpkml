@@ -7,4 +7,4 @@ build_script:
   - ps: ./build.ps1
 
 artifacts:
-  - path: 'build/artifacts/*.nupkg'
+  - path: 'build/artifacts/*'
