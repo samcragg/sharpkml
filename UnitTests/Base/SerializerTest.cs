@@ -11,14 +11,28 @@ namespace UnitTests.Base
     [TestFixture]
     public class SerializerTest
     {
+        private const string RootXmlNamespace = "http://www.example.com/root";
         private const string XmlNamespace = "http://www.example.com";
         private const string ChildElementName = "ChildElementS";
+        private const string RootElementName = "Root";
         private const string TestElementName = "TestElementS";
 
         public class ChildElement : Element
         {
             [KmlElement("counter")]
             public int Counter { get; set; }
+        }
+
+        public class RootElement : Element
+        {
+            private TestElement child;
+
+            [KmlElement(null)]
+            public TestElement Child
+            {
+                get => this.child;
+                set => this.UpdatePropertyChild(value, ref this.child);
+            }
         }
 
         public class TestElement : Element
@@ -61,6 +75,7 @@ namespace UnitTests.Base
         static SerializerTest()
         {
             KmlFactory.Register<ChildElement>(new XmlComponent(null, ChildElementName, XmlNamespace));
+            KmlFactory.Register<RootElement>(new XmlComponent(null, RootElementName, RootXmlNamespace));
             KmlFactory.Register<TestElement>(new XmlComponent(null, TestElementName, XmlNamespace));
             KmlFactory.Register<BaseElement>(new XmlComponent(null, nameof(BaseElement), KmlNamespaces.Kml22Namespace));
             KmlFactory.Register<DerivedElement>(new XmlComponent(null, nameof(DerivedElement), KmlNamespaces.Kml22Namespace));
@@ -177,6 +192,24 @@ namespace UnitTests.Base
             serializer.SerializeRaw(element);
 
             Assert.That(serializer.Xml, Contains.Substring("<" + ChildElementName + ">"));
+        }
+
+        [Test]
+        public void SerializeShouldPrefixChildElements()
+        {
+            var root = new RootElement
+            {
+                Child = new TestElement
+                {
+                    Child = new ChildElement()
+                }
+            };
+            root.AddAttribute(new XmlComponent("xmlns", "e", "") { Value = XmlNamespace });
+
+            var serializer = new Serializer();
+            serializer.SerializeRaw(root);
+
+            Assert.That(serializer.Xml, Contains.Substring("<e:" + ChildElementName + ">"));
         }
 
         [Test]

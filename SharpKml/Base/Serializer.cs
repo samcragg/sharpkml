@@ -248,21 +248,10 @@ namespace SharpKml.Base
         {
             if (WriteStartTag(writer, manager, element, out string ns))
             {
-                manager.PushScope();
                 this.WriteAttributes(writer, manager, element);
-
-                // Add the default namespace (if there is one) here so that it
-                // takes precedence over other prefixes with the same namespace
-                if (ns != null)
-                {
-                    manager.AddNamespace(string.Empty, ns);
-                }
-
                 WriteData(writer, element.InnerText);
                 this.SerializeElements(writer, manager, element);
-
                 writer.WriteEndElement();
-                manager.PopScope();
             }
         }
 
@@ -330,7 +319,15 @@ namespace SharpKml.Base
                 }
                 else
                 {
-                    writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.Namespace);
+                    if (string.IsNullOrEmpty(elementInfo.Component.Namespace))
+                    {
+                        writer.WriteStartElement(elementInfo.Component.Name);
+                    }
+                    else
+                    {
+                        writer.WriteStartElement(elementInfo.Component.Name, elementInfo.Component.Namespace);
+                    }
+
                     WriteData(writer, this.GetString(value));
                     writer.WriteEndElement();
                 }

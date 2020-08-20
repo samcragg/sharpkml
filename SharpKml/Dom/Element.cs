@@ -97,7 +97,14 @@ namespace SharpKml.Dom
         {
             if (attribute != null)
             {
-                this.attributes.Add(attribute);
+                if (attribute.Prefix == "xmlns")
+                {
+                    this.namespaces[attribute.Name] = attribute.Value;
+                }
+                else
+                {
+                    this.attributes.Add(attribute);
+                }
             }
         }
 
