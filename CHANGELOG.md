@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.1.3] - 2020-08-20
+### Fixed
+- Prefixes for nested elements are now correctly used
+
 ## [5.1.2] - 2020-06-27
 ### Added
 - SourceLink information for NuGet packages
