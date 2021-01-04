@@ -55,7 +55,7 @@ namespace SharpKml.Dom
         }
 
         /// <summary>
-        /// Removes the specified <see cref="Feature"/> this instance.
+        /// Removes the specified <see cref="Feature"/> from this instance.
         /// </summary>
         /// <param name="id">The Id of the <c>Feature</c> to remove.</param>
         /// <returns>
@@ -68,14 +68,26 @@ namespace SharpKml.Dom
         {
             Check.IsNotNull(id, nameof(id));
 
-            Feature feature = this.FindFeature(id);
-            if (feature == null)
+            return this.RemoveFeature(this.FindFeature(id));
+        }
+
+        /// <summary>
+        /// Removes the specified <see cref="Feature"/> from this instance.
+        /// </summary>
+        /// <param name="feature">The <c>Feature</c> to remove.</param>
+        /// <returns>
+        /// true if the value parameter is successfully removed; otherwise,
+        /// false. This method also returns false if item was not found in
+        /// <see cref="Features"/>.
+        /// </returns>
+        public bool RemoveFeature(Feature feature)
+        {
+            if ((feature == null) || !this.FeatureList.Remove(feature))
             {
                 return false;
             }
 
             this.ResetParent(feature);
-            this.FeatureList.Remove(feature);
             return true;
         }
     }
