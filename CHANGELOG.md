@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.2.0] - 2021-01-04
+### Added
+- New overload of `RemoveFeature` to allow the removal by reference
+
 ## [5.1.3] - 2020-08-20
 ### Fixed
 - Prefixes for nested elements are now correctly used
