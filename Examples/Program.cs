@@ -115,7 +115,7 @@ namespace Examples
         {
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name))
             {
-                using (FileStream file = File.OpenWrite(destination))
+                using (FileStream file = File.Create(destination))
                 {
                     stream.CopyTo(file);
                 }

@@ -19,7 +19,7 @@ namespace Examples
                 KmlFile kml = LoadKml(input);
 
                 using (KmzFile kmz = SaveKmlAndLinkedContentIntoAKmzArchive(kml, input))
-                using (Stream output = File.OpenWrite(OutputPath))
+                using (Stream output = File.Create(OutputPath))
                 {
                     kmz.Save(output);
                     Console.WriteLine("Saved to '{0}'.", OutputPath);
