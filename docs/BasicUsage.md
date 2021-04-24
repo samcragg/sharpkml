@@ -47,7 +47,7 @@ it up in a Kml viewer (such as Google Earth). The following will save the
 ```csharp
 // This allows us to save an Element easily.
 KmlFile kml = KmlFile.Create(placemark, false);
-using (FileStream stream = File.OpenWrite("my placemark.kml"))
+using (FileStream stream = File.Create("my placemark.kml"))
 {
     kml.Save(stream);
 }
@@ -83,7 +83,7 @@ class Program
 
         // This allows us to save and Element easily.
         KmlFile kml = KmlFile.Create(placemark, false);
-        using (var stream = System.IO.File.OpenWrite("my placemark.kml"))
+        using (var stream = System.IO.File.Create("my placemark.kml"))
         {
             kml.Save(stream);
         }
