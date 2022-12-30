@@ -50,6 +50,7 @@ namespace Examples
         {
             KmlFactory.RegisterExtension<Feature, FeatureExtension>();
             KmlFactory.RegisterExtension<Placemark, PlacemarkExtension>();
+            KmlFactory.RegisterExtension<Placemark, Style>();
 
             Placemark placemark = new Placemark
             {
