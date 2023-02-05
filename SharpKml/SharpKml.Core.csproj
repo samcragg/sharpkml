@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.2;netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.2;netstandard2.0;net462</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     
@@ -12,7 +13,7 @@
     <Authors>Samuel Cragg</Authors>
     <Company />
     <Description>SharpKML is an implementation of the Open Geospatial Consortium KML 2.2 standard developed in C#, able to read and write KML and KMZ files.</Description>
-    <Copyright>Copyright 2017</Copyright>
+    <Copyright>Copyright 2023</Copyright>
     <PackageTags>KML KMZ</PackageTags>
     <RepositoryUrl>https://github.com/samcragg/sharpkml</RepositoryUrl>
     <PackageProjectUrl>https://github.com/samcragg/sharpkml</PackageProjectUrl>
@@ -24,12 +25,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
 
