@@ -119,6 +119,14 @@ namespace UnitTests.Dom
         }
 
         [Test]
+        public void ParseShouldParseTrailingSeparator()
+        {
+            Vector[] vectors = ParseVector("1,1, 2,2,");
+            AssertVector(vectors[0], 1, 1);
+            AssertVector(vectors[1], 2, 2);
+        }
+
+        [Test]
         public void TestSerialize()
         {
             var serializer = new Serializer();

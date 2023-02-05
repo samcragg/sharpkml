@@ -221,7 +221,6 @@ namespace SharpKml.Dom
             if ((index < value.Length) && (value[index] == ','))
             {
                 index++;
-                SkipWhitespace(value, ref index);
                 return true;
             }
             else
@@ -230,8 +229,9 @@ namespace SharpKml.Dom
             }
         }
 
-        private static void SkipWhitespace(string value, ref int index)
+        private static bool SkipWhitespace(string value, ref int index)
         {
+            int originalIndex = index;
             while (index < value.Length)
             {
                 if (!char.IsWhiteSpace(value[index]))
@@ -241,6 +241,8 @@ namespace SharpKml.Dom
 
                 index++;
             }
+
+            return index != originalIndex;
         }
 
         private void Parse(string input)
@@ -254,22 +256,34 @@ namespace SharpKml.Dom
                     break;
                 }
 
-                if (!SkipSeparator(input, ref i) ||
-                    !DecimalDegree.Parse(input, ref i, out double latitude))
+                if (!SkipSeparator(input, ref i))
                 {
                     break;
                 }
 
-                if (SkipSeparator(input, ref i) &&
-                    !DecimalDegree.ParseNan(input, ref i) &&
-                    DecimalDegree.Parse(input, ref i, out double altitude))
+                bool whitespaceAfterSeparator = SkipWhitespace(input, ref i);
+                if (!DecimalDegree.Parse(input, ref i, out double latitude))
                 {
-                    this.points.Add(new Vector(latitude, longitude, altitude));
+                    break;
                 }
-                else
+
+                // Try to parse the altitude
+                if (SkipSeparator(input, ref i))
                 {
-                    this.points.Add(new Vector(latitude, longitude));
+                    if (whitespaceAfterSeparator)
+                    {
+                        SkipWhitespace(input, ref i);
+                    }
+
+                    if (!DecimalDegree.ParseNan(input, ref i) && DecimalDegree.Parse(input, ref i, out double altitude))
+                    {
+                        this.points.Add(new Vector(latitude, longitude, altitude));
+                        continue; // Parsed the altitude, go to the net tuple
+                    }
                 }
+
+                // Ignore the altitude part
+                this.points.Add(new Vector(latitude, longitude));
             }
         }
     }
