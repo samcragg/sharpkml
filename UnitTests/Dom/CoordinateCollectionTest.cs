@@ -111,6 +111,14 @@ namespace UnitTests.Dom
         }
 
         [Test]
+        public void ParseShouldIgnoreNanAltitudes()
+        {
+            Vector[] vectors = ParseVector("1,1,NaN 2,2,nAn");
+            AssertVector(vectors[0], 1, 1);
+            AssertVector(vectors[1], 2, 2);
+        }
+
+        [Test]
         public void TestSerialize()
         {
             var serializer = new Serializer();

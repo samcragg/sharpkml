@@ -261,6 +261,7 @@ namespace SharpKml.Dom
                 }
 
                 if (SkipSeparator(input, ref i) &&
+                    !DecimalDegree.ParseNan(input, ref i) &&
                     DecimalDegree.Parse(input, ref i, out double altitude))
                 {
                     this.points.Add(new Vector(latitude, longitude, altitude));

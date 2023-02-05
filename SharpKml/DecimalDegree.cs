@@ -69,6 +69,43 @@ namespace SharpKml
             }
         }
 
+        /// <summary>
+        /// Parses the specified string for a missing double value.
+        /// </summary>
+        /// <param name="text">The text to parse.</param>
+        /// <param name="index">The index to start parsing.</param>
+        /// <returns>
+        /// <c>true</c> if a number was parsed; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool ParseNan(string text, ref int index)
+        {
+            if (index >= text.Length - 3)
+            {
+                return false;
+            }
+
+            char c = text[index];
+            if ((c != 'n') && (c != 'N'))
+            {
+                return false;
+            }
+
+            c = text[index + 1];
+            if ((c != 'a') && (c != 'A'))
+            {
+                return false;
+            }
+
+            c = text[index + 2];
+            if ((c != 'n') && (c != 'N'))
+            {
+                return false;
+            }
+
+            index += 3;
+            return true;
+        }
+
         private static double MakeDouble(in NumberInfo number, int sign)
         {
             long significand = sign * (long)number.Significand;
