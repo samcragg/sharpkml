@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.0.0] - 20233-02-05
+### Added
+- Non standard parsing of coordinates where the altitude is NaN
+## Changes
+- Updated the .NET Framework to the minimum version still in support (.NET 4.6.2)
+### Fixed
+- Parsing of coordinates with a separator but with the altitude missing.
+
 ## [5.2.0] - 2021-01-04
 ### Added
 - New overload of `RemoveFeature` to allow the removal by reference
