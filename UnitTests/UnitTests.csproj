@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\SharpKml.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  
   <ItemGroup>
     <EmbeddedResource Include="Engine\Data\Bounds.kml" />
     <EmbeddedResource Include="Engine\Data\Doc.kmz" />
@@ -18,7 +17,6 @@
     <EmbeddedResource Include="Engine\Data\Style Output.kml" />
     <EmbeddedResource Include="Engine\Data\Update.kml" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\SharpKml\SharpKml.Core.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
