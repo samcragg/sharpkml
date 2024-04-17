@@ -28,12 +28,20 @@ namespace SharpKml.Engine
 
         // The ZipArchive makes changes to the stream when we dispose it but
         // we need access to the stream to copy it to another stream etc.
-        private readonly MemoryStream zipStream;
+        private readonly Stream zipStream;
         private ZipArchive zip;
 
-        private KmzFile(Stream stream = null)
+        private KmzFile(Stream stream = null, Stream targetStream = null)
         {
-            this.zipStream = new MemoryStream();
+            if (targetStream == null)
+            {
+                this.zipStream = new MemoryStream();
+            }
+            else
+            {
+                this.zipStream = targetStream;
+            }
+
             if (stream != null)
             {
                 stream.CopyTo(this.zipStream);
@@ -78,9 +86,33 @@ namespace SharpKml.Engine
         /// <exception cref="ArgumentNullException">kml is null.</exception>
         public static KmzFile Create(KmlFile kml)
         {
+            return Create(kml, null);
+        }
+
+        /// <summary>
+        /// Creates a new KmzFile using the data specified in the KmlFile.
+        /// </summary>
+        /// <param name="kml">The Kml data to add to the archive.</param>
+        /// <param name="targetStream">Stream to be used for the archive.</param>
+        /// <returns>
+        /// A new KmzFile populated with the data specified in the KmlFile.
+        /// </returns>
+        /// <remarks>
+        /// This overloaded version does not resolve any links in the Kml data
+        /// and, therefore, will not add any local references to the archive.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">kml is null.</exception>
+        /// <exception cref="ArgumentException">
+        /// The target stream does not support writing.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// The target stream does not support seeking.
+        /// </exception>
+        public static KmzFile Create(KmlFile kml, Stream targetStream)
+        {
             Check.IsNotNull(kml, nameof(kml));
 
-            var instance = new KmzFile();
+            var instance = new KmzFile(null, targetStream);
             ZipArchiveEntry entry = instance.zip.CreateEntry(DefaultKmlFilename);
             using (Stream stream = entry.Open())
             {
@@ -109,6 +141,31 @@ namespace SharpKml.Engine
             Check.IsNotNull(stream, nameof(stream));
 
             return new KmzFile(stream);
+        }
+
+        /// <summary>Opens a KmzFile from the specified stream.</summary>
+        /// <param name="stream">The stream to read the data from.</param>
+        /// <param name="targetStream">Stream to be used for the archive.</param>
+        /// <returns>A KmzFile representing the specified stream.</returns>
+        /// <exception cref="ArgumentNullException">stream is null.</exception>
+        /// <exception cref="IOException">
+        /// The Kmz archive is not in the expected format.
+        /// </exception>
+        /// <exception cref="IOException">An I/O error occurred.</exception>
+        /// <exception cref="ArgumentException">
+        /// The target stream does not support writing.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// The stream does not support reading. Or target stream does not support seeking.
+        /// </exception>
+        /// <exception cref="ObjectDisposedException">
+        /// The stream was closed.
+        /// </exception>
+        public static KmzFile Open(Stream stream, Stream targetStream)
+        {
+            Check.IsNotNull(stream, nameof(stream));
+
+            return new KmzFile(stream, targetStream);
         }
 
         /// <summary>
@@ -340,6 +397,31 @@ namespace SharpKml.Engine
             {
                 this.zipStream.Position = 0;
                 this.zipStream.CopyTo(stream);
+            }
+            finally
+            {
+                // Try to set things back to how they were
+                this.CreateZipArchive();
+            }
+        }
+
+        /// <summary>
+        /// Flush the archive stream.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">
+        /// <see cref="Dispose"/> has been called on this instance or the
+        /// stream was closed.
+        /// </exception>
+        public void Flush()
+        {
+            this.ThrowIfDisposed();
+
+            // ZipFile doesn't commit the changes until it's disposed
+            this.zip.Dispose();
+
+            try
+            {
+                this.zipStream.Seek(0, SeekOrigin.Begin);
             }
             finally
             {
