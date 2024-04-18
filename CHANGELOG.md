@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [6.0.0] - 20233-02-05
+## [6.1.0] - 2024-04-18
+### Added
+- Ability to provide your own stream for Kmz operations (thanks @p-skakun)
+
+## [6.0.0] - 2023-02-05
 ### Added
 - Non standard parsing of coordinates where the altitude is NaN
 ## Changes
