@@ -92,21 +92,21 @@ namespace UnitTests.Base
             Color32 green = new Color32(OpaqueGreen);
 
             // Inequality operator.
-            Assert.True(black != green);
-            Assert.True(green != black);
-            Assert.True(black != null);
+            Assert.That(black != green, Is.True);
+            Assert.That(green != black, Is.True);
+            Assert.That(black != default, Is.True);
 
             // Equality operator.
-            Assert.True(black == new Color32(OpaqueBlack));
-            Assert.True(green == new Color32(OpaqueGreen));
+            Assert.That(black == new Color32(OpaqueBlack), Is.True);
+            Assert.That(green == new Color32(OpaqueGreen), Is.True);
 
             // Greater-than operator.
-            Assert.True(green > black);
-            Assert.False(black > green);
+            Assert.That(green > black, Is.True);
+            Assert.That(black > green, Is.False);
 
             // Less-than operator.
-            Assert.True(black < green);
-            Assert.False(green < black);
+            Assert.That(black < green, Is.True);
+            Assert.That(green < black, Is.False);
         }
 
         [Test]

@@ -33,13 +33,13 @@ namespace UnitTests.Dom
             Assert.That(counter, Is.EqualTo(2));
             Assert.That(vector.Altitude, Is.EqualTo(4));
 
-            Assert.True(coords.Contains(vector));
-            Assert.False(coords.Contains(new Vector()));
-            Assert.False(coords.Contains(null));
+            Assert.That(coords.Contains(vector), Is.True);
+            Assert.That(coords.Contains(new Vector()), Is.False);
+            Assert.That(coords.Contains(null), Is.False);
 
-            Assert.True(coords.Remove(vector));
-            Assert.False(coords.Remove(new Vector()));
-            Assert.False(coords.Remove(null));
+            Assert.That(coords.Remove(vector), Is.True);
+            Assert.That(coords.Remove(new Vector()), Is.False);
+            Assert.That(coords.Remove(null), Is.False);
 
             Assert.That(coords.Count, Is.EqualTo(1));
 

@@ -91,16 +91,16 @@ namespace UnitTests.Engine
                         Throws.TypeOf<ArgumentNullException>());
 
             placemark = new Placemark();
-            Assert.False(placemark.IsChildOf<Folder>());
+            Assert.That(placemark.IsChildOf<Folder>(), Is.False);
 
             var folder = new Folder();
             folder.AddFeature(placemark);
-            Assert.True(placemark.IsChildOf<Folder>());
-            Assert.False(placemark.IsChildOf<Kml>());
+            Assert.That(placemark.IsChildOf<Folder>(), Is.True);
+            Assert.That(placemark.IsChildOf<Kml>(), Is.False);
 
             var kml = new Kml();
             kml.Feature = folder;
-            Assert.True(placemark.IsChildOf<Kml>());
+            Assert.That(placemark.IsChildOf<Kml>(), Is.True);
         }
 
         [Test]

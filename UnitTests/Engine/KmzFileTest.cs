@@ -248,10 +248,10 @@ namespace UnitTests.Engine
             using (var kmz = CreateArchive(this._streams[targetStream]))
             {
                 Assert.That( kmz.Files.Count(), Is.EqualTo(3));
-                Assert.False(kmz.RemoveFile(null));
-                Assert.False(kmz.RemoveFile("RandomFile"));
-                Assert.True(kmz.RemoveFile("files/new.kml"));
-                Assert.True(kmz.RemoveFile("doc.kml"));
+                Assert.That(kmz.RemoveFile(null), Is.False);
+                Assert.That(kmz.RemoveFile("RandomFile"), Is.False);
+                Assert.That(kmz.RemoveFile("files/new.kml"), Is.True);
+                Assert.That(kmz.RemoveFile("doc.kml"), Is.True);
 
                 Assert.That(kmz.Files.Count(), Is.EqualTo(1));
                 Assert.That(kmz.Files.ElementAt(0), Is.EqualTo("other/blah.kml"));
@@ -278,7 +278,7 @@ namespace UnitTests.Engine
                 // Make sure that an invalid entry isn't added to the archive
                 byte[] empty = new byte[] { };
                 kmz.UpdateFile("unknown.txt", empty);
-                Assert.False(kmz.Files.Contains("unknown.txt"));
+                Assert.That(kmz.Files.Contains("unknown.txt"), Is.False);
 
                 // Try some invalid values
                 Assert.That(() => kmz.UpdateFile(string.Empty, null),
@@ -311,12 +311,12 @@ namespace UnitTests.Engine
             {
                 if (targetStream != NO_STREAM)
                 {
-                    Assert.AreEqual(0, this._streams[targetStream].Length);
+                    Assert.That(this._streams[targetStream].Length, Is.EqualTo(0));
                 }
                 Assert.DoesNotThrow(() => kmz.Flush());
                 if (targetStream != NO_STREAM)
                 {
-                    Assert.AreNotEqual(0, this._streams[targetStream].Length);
+                    Assert.That(this._streams[targetStream].Length, Is.Not.EqualTo(0));
                 }
             }
         }

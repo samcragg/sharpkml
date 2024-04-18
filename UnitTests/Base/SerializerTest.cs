@@ -94,24 +94,30 @@ namespace UnitTests.Base
 
             var serializer = new Serializer();
             serializer.Serialize(element);
-            Assert.True(FindNode(serializer.Xml, TestElementName, r =>
+            Assert.That(
+                FindNode(serializer.Xml, TestElementName, r =>
                 {
                     Assert.That(r.GetAttribute("Attribute"), Is.EqualTo("attribute"));
                     Assert.That(r.GetAttribute("EnumAtt"), Is.EqualTo("random"));
-                }));
+                }),
+                Is.True);
 
             // Try optional elements = make sure they're only serialized if they have a value
             element.Int = 42;
             serializer.Serialize(element);
-            Assert.True(FindNode(serializer.Xml, "Int", r =>
-                Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(42))));
+            Assert.That(
+                FindNode(serializer.Xml, "Int", r =>
+                    Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(42))),
+                Is.True);
 
-            Assert.False(FindNode(serializer.Xml, "OptionalInt", null));
+            Assert.That(FindNode(serializer.Xml, "OptionalInt", null), Is.False);
 
             element.OptionalInt = 0;
             serializer.Serialize(element);
-            Assert.True(FindNode(serializer.Xml, "OptionalInt", r =>
-                Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(0))));
+            Assert.That(
+                FindNode(serializer.Xml, "OptionalInt", r =>
+                    Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(0))),
+                Is.True);
         }
 
         [Test]
@@ -128,8 +134,10 @@ namespace UnitTests.Base
             var serializer = new Serializer();
             serializer.Serialize(element);
 
-            Assert.True(FindNode(serializer.Xml, "counter", r =>
-                Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(1))));
+            Assert.That(
+                FindNode(serializer.Xml, "counter", r =>
+                    Assert.That(r.ReadElementContentAsInt(), Is.EqualTo(1))),
+                Is.True);
         }
 
         [Test]
@@ -139,12 +147,12 @@ namespace UnitTests.Base
             const string Xml = "<?xml version='1.0'?><root><empty/><child attribute='text'>value</child></root>";
 
             string value = null;
-            Assert.True(FindNode(Xml, "child", r => value = r.ReadElementContentAsString()));
+            Assert.That(FindNode(Xml, "child", r => value = r.ReadElementContentAsString()), Is.True);
             Assert.That(value, Is.EqualTo("value"));
 
-            Assert.True(FindNode(Xml, "empty", null));
+            Assert.That(FindNode(Xml, "empty", null), Is.True);
 
-            Assert.False(FindNode(Xml, "invalid", null));
+            Assert.That(FindNode(Xml, "invalid", null), Is.False);
         }
 
         [Test]

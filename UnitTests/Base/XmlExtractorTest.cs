@@ -23,7 +23,7 @@ namespace UnitTests.Base
             using (StringReader input = new StringReader(xml))
             using (XmlReader reader = XmlReader.Create(input))
             {
-                Assert.True(FindRootNode(reader));
+                Assert.That(FindRootNode(reader), Is.True);
                 Assert.That(XmlExtractor.FlattenXml(reader), Is.EqualTo("<><x:child />"));
             }
         }
@@ -42,7 +42,7 @@ namespace UnitTests.Base
             using (StringReader input = new StringReader(xml))
             using (XmlReader reader = XmlReader.Create(input))
             {
-                Assert.True(FindRootNode(reader));
+                Assert.That(FindRootNode(reader), Is.True);
                 Assert.That(XmlExtractor.FlattenXml(reader), Is.EqualTo(child));
 
                 // Make sure it advanced past the last child part

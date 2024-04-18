@@ -90,9 +90,9 @@ namespace UnitTests.Dom
             SharpKml.Dom.Atom.Link link;
             using (var e = links.GetEnumerator())
             {
-                Assert.True(e.MoveNext());
+                Assert.That(e.MoveNext(), Is.True);
                 link = e.Current;
-                Assert.False(e.MoveNext()); // Make sure we've only got one
+                Assert.That(e.MoveNext(), Is.False); // Make sure we've only got one
             }
 
             Assert.That(link, Is.Not.Null); // Make sure we found one

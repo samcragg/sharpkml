@@ -49,10 +49,10 @@ namespace UnitTests.Engine
         {
             BoundingBox first = new BoundingBox(180, -180, 180, -180);
             BoundingBox second = new BoundingBox(1, -1, 1, -1);
-            Assert.True(second.ContainedBy(first));
+            Assert.That(second.ContainedBy(first), Is.True);
 
             second = new BoundingBox(1000, -1, 1, -1);
-            Assert.False(second.ContainedBy(first));
+            Assert.That(second.ContainedBy(first), Is.False);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace UnitTests.Engine
 
             foreach (var point in points)
             {
-                Assert.True(box.Contains(point[0], point[1]));
+                Assert.That(box.Contains(point[0], point[1]), Is.True);
                 box.Expand(point[0], point[1]);
             }
         }

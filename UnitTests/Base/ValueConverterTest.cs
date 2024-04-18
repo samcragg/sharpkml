@@ -61,19 +61,18 @@ namespace UnitTests.Base
         {
             // The type converter must be able to parse these types, even if the
             // passed in string is not valid.
-            object value;
-            Assert.True(ValueConverter.TryGetValue(typeof(AltitudeMode), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(bool), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(Color32), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(DateTime), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(double), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(int), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(string), string.Empty, out value));
-            Assert.True(ValueConverter.TryGetValue(typeof(Uri), string.Empty, out value));
+            Assert.That(ValueConverter.TryGetValue(typeof(AltitudeMode), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(bool), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(Color32), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(DateTime), string.Empty, out _), Is.True  );
+            Assert.That(ValueConverter.TryGetValue(typeof(double), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(int), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(string), string.Empty, out _), Is.True);
+            Assert.That(ValueConverter.TryGetValue(typeof(Uri), string.Empty, out _), Is.True);
 
             // Make sure it's not always returning true and also that is doesn't
             // throw an exception for unknown types.
-            Assert.False(ValueConverter.TryGetValue(this.GetType(), string.Empty, out value));
+            Assert.That(ValueConverter.TryGetValue(this.GetType(), string.Empty, out _), Is.False);
         }
     }
 }
