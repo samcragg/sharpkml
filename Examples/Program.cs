@@ -54,11 +54,6 @@ namespace Examples
                 Console.SetCursorPosition(0, bottom);
                 Console.Write("Sample completed. Press any key to continue...".PadRight(Console.WindowWidth));
                 Console.SetCursorPosition(46, bottom);
-                if (Console.WindowTop != 0)
-                {
-                    Console.WindowTop -= 1; // Filling the whole line causes the console to scroll down for us... scroll back up.
-                }
-
                 Console.ReadKey();
             }
         }
