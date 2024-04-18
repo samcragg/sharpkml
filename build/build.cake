@@ -9,23 +9,18 @@ void UploadTestResults(FilePath result)
         return;
     }
 
-    using (var client = new System.Net.WebClient())
+    string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
+    try
     {
-        string jobId = EnvironmentVariable("APPVEYOR_JOB_ID");
-        try
+        UploadFile($"https://ci.appveyor.com/api/testresults/mstest/{jobId}", result);
+    }
+    catch (Exception ex)
+    {
+        Warning("Unable to upload test results");
+        while (ex != null)
         {
-            client.UploadFile(
-                "https://ci.appveyor.com/api/testresults/mstest/" + jobId,
-                result.FullPath);
-        }
-        catch (Exception ex)
-        {
-            Warning("Unable to upload test results");
-            while (ex != null)
-            {
-                Warning("    " + ex.Message);
-                ex = ex.InnerException;
-            }
+            Warning("    " + ex.Message);
+            ex = ex.InnerException;
         }
     }
 }
@@ -33,7 +28,7 @@ void UploadTestResults(FilePath result)
 Task("Build")
     .Does(() =>
 {
-    DotNetCoreBuild("../SharpKml.sln", new DotNetCoreBuildSettings
+    DotNetBuild("../SharpKml.sln", new DotNetBuildSettings
     {
         Configuration = configuration,
     });
@@ -42,7 +37,7 @@ Task("Build")
 Task("Pack")
     .Does(() =>
 {
-    DotNetCorePack("../SharpKml/SharpKml.Core.csproj", new DotNetCorePackSettings
+    DotNetPack("../SharpKml/SharpKml.Core.csproj", new DotNetPackSettings
     {
         Configuration = configuration,
         NoBuild = true,
@@ -56,10 +51,10 @@ Task("Test")
 {
     try
     {
-        DotNetCoreTest("../UnitTests/UnitTests.csproj", new DotNetCoreTestSettings
+        DotNetTest("../UnitTests/UnitTests.csproj", new DotNetTestSettings
         {
             Configuration = configuration,
-            Logger = "trx;LogFileName=UnitTests.trx",
+            Loggers = ["trx;LogFileName=UnitTests.trx"],
             NoBuild = true,
             NoRestore = true,
             ResultsDirectory = "./TestResults/",
